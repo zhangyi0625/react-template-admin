@@ -41,6 +41,7 @@ export default defineConfig({
         attrs: { lang: 'zh' },
       },
     ],
+    template: './index.html',
   },
   // 配置路径别名
   source: {
@@ -77,10 +78,15 @@ export default defineConfig({
     port: 3005,
     proxy: {
       '/api': {
-        target: 'http://localhost:8090/fusion',
+        target: 'http://dev.zaicang.net/api/',
         changeOrigin: true,
         pathRewrite: (path) => path.replace(/^\/api/, ''),
       },
+      // '/api': {
+      //   target: 'http://localhost:8090',
+      //   changeOrigin: true,
+      //   pathRewrite: (path) => path.replace(/^\/api/, ''),
+      // },
     },
   },
 })

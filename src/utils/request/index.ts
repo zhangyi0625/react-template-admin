@@ -1,18 +1,23 @@
-import { ContentTypeEnum } from '@/enums/httpEnum';
-import { deepMerge } from '../utils';
-import { RAxios } from './Axios';
-import { type CreateAxiosOptions, transform } from './transform';
+import { ContentTypeEnum } from '@/enums/httpEnum'
+import { deepMerge } from '../utils'
+import { RAxios } from './Axios'
+import { type CreateAxiosOptions, transform } from './transform'
 
+const s = sessionStorage.getItem('pickToken')
 /**
  * 封装axios
  */
 function createAxios(opts?: Partial<CreateAxiosOptions>) {
+  console.log(opts, 'opts')
   return new RAxios(
     deepMerge(
       {
         authenticationScheme: '',
         timeout: 10 * 1000,
-        headers: { 'Content-Type': ContentTypeEnum.JSON },
+        headers: {
+          'Content-Type': ContentTypeEnum.FORM_URLENCODED,
+          'x-captcha-answer': s,
+        },
         // 数据处理方式
         transform,
         // 配置项，下面的选项都可以在独立的接口请求中覆盖
@@ -43,10 +48,10 @@ function createAxios(opts?: Partial<CreateAxiosOptions>) {
           encrypt: import.meta.env.MODE === 'development' ? 0 : 1,
         },
       },
-      opts || {},
-    ),
-  );
+      {}
+    )
+  )
 }
 
 // 导出http请求对象
-export const HttpRequest = createAxios();
+export const HttpRequest = createAxios()

@@ -1,6 +1,6 @@
-import { QuestionCircleFilled, SettingOutlined } from '@ant-design/icons';
-import DragModal from '@/components/modal/DragModal';
-import { getDirectory } from '@/services/system/menu/menuApi';
+import { QuestionCircleFilled, SettingOutlined } from '@ant-design/icons'
+import DragModal from '@/components/modal/DragModal'
+import { getDirectory } from '@/services/system/menu/menuApi'
 import {
   Dropdown,
   Form,
@@ -11,10 +11,10 @@ import {
   Switch,
   Tooltip,
   TreeSelect,
-} from 'antd';
-import type React from 'react';
-import { useEffect, useRef, useState } from 'react';
-import IconPanel from '@/components/IconPanel';
+} from 'antd'
+import type React from 'react'
+import { useEffect, useRef, useState } from 'react'
+import IconPanel from '@/components/IconPanel'
 
 /**
  * 菜单信息编辑弹窗
@@ -27,29 +27,29 @@ const MenuInfoModal: React.FC<MenuInfoModalProps> = ({
   onCancel,
 }) => {
   // 表单实例
-  const [form] = Form.useForm();
-  const nameRef = useRef<InputRef>(null);
-  const [menuType, setMenuType] = useState<number>(currentRow?.menuType || 2);
+  const [form] = Form.useForm()
+  const nameRef = useRef<InputRef>(null)
+  const [menuType, setMenuType] = useState<number>(currentRow?.menuType || 2)
   // 目录的dropdown菜单
-  const [directory, setDirectory] = useState<any[]>([]);
+  const [directory, setDirectory] = useState<any[]>([])
   // 设置对话框加载状态
-  const [loading, setLoading] = useState<boolean>(true);
+  const [loading, setLoading] = useState<boolean>(true)
 
   useEffect(() => {
-    if (!visible) return;
+    if (!visible) return
     // 组件挂载查询目录数据
     getDirectory().then((response) => {
-      setDirectory(response);
+      setDirectory(response)
       if (currentRow) {
         // 填充表单数据
-        form.setFieldsValue(currentRow);
+        form.setFieldsValue(currentRow)
       } else {
         // 清空表单数据，表示新增
-        form.resetFields();
+        form.resetFields()
       }
-      setLoading(false);
-    });
-  }, [currentRow, form, visible]);
+      setLoading(false)
+    })
+  }, [currentRow, form, visible])
 
   /**
    * 弹窗打开关闭的回调（打开后默认聚焦到名称输入框）
@@ -57,9 +57,9 @@ const MenuInfoModal: React.FC<MenuInfoModalProps> = ({
    */
   const onAfterOpenChange = (open: boolean) => {
     if (open) {
-      nameRef.current?.focus();
+      nameRef.current?.focus()
     }
-  };
+  }
 
   /**
    * 点击确认的时候先做数据校验
@@ -71,14 +71,14 @@ const MenuInfoModal: React.FC<MenuInfoModalProps> = ({
       .then(() => {
         // 清除所有错误
 
-        onOk(form.getFieldsValue());
+        onOk(form.getFieldsValue())
       })
       .catch((errorInfo) => {
         // 滚动并聚焦到第一个错误字段
-        form.scrollToField(errorInfo.errorFields[0].name);
-        form.focusField(errorInfo.errorFields[0].name);
-      });
-  };
+        form.scrollToField(errorInfo.errorFields[0].name)
+        form.focusField(errorInfo.errorFields[0].name)
+      })
+  }
 
   /**
    * 选中的图标
@@ -86,9 +86,9 @@ const MenuInfoModal: React.FC<MenuInfoModalProps> = ({
    */
   const onSelectIcon = (icon: string) => {
     if (icon) {
-      form.setFieldsValue({ icon });
+      form.setFieldsValue({ icon })
     }
-  };
+  }
 
   return (
     <DragModal
@@ -185,11 +185,11 @@ const MenuInfoModal: React.FC<MenuInfoModalProps> = ({
             addonAfter={
               <Dropdown
                 trigger={['hover']}
-                placement='bottom'
-                dropdownRender={() => <IconPanel onSelect={onSelectIcon} />}
+                placement="bottom"
+                popupRender={() => <IconPanel onSelect={onSelectIcon} />}
                 overlayClassName="w-[360] h-[300] bg-white overflow-y-auto p-2 shadow-xl"
               >
-                <SettingOutlined className='cursor-pointer'/>
+                <SettingOutlined className="cursor-pointer" />
               </Dropdown>
             }
           />
@@ -221,18 +221,18 @@ const MenuInfoModal: React.FC<MenuInfoModalProps> = ({
         </Form.Item>
       </Form>
     </DragModal>
-  );
-};
-export default MenuInfoModal;
+  )
+}
+export default MenuInfoModal
 
 // 菜单信息弹窗的参数
 export type MenuInfoModalProps = {
   // 弹窗可见性
-  visible: boolean;
+  visible: boolean
   // 弹窗需要的数据
-  currentRow: Record<string, any> | null;
+  currentRow: Record<string, any> | null
   // 点击确定的回调
-  onOk: any;
+  onOk: any
   // 点击取消的回调
-  onCancel: any;
-};
+  onCancel: any
+}

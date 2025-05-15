@@ -1,6 +1,6 @@
-import { App, Avatar, Divider, Dropdown, theme, type MenuProps } from 'antd';
-import avatar from '@/assets/images/avatar.png';
-import { useNavigate } from 'react-router-dom';
+import { App, Avatar, Divider, Dropdown, theme, type MenuProps } from 'antd'
+import avatar from '@/assets/images/avatar.png'
+import { useNavigate } from 'react-router-dom'
 import {
   ExclamationCircleOutlined,
   FileMarkdownOutlined,
@@ -9,25 +9,25 @@ import {
   QuestionCircleFilled,
   SyncOutlined,
   UserOutlined,
-} from '@ant-design/icons';
-import { logout } from '@/services/login/loginApi';
-import type { ReactNode } from 'react';
-import React from 'react';
-import { updatePreferences } from '@/stores/store';
-import { useDispatch } from 'react-redux';
+} from '@ant-design/icons'
+import { logout } from '@/services/login/loginApi'
+import type { ReactNode } from 'react'
+import React from 'react'
+import { updatePreferences } from '@/stores/store'
+import { useDispatch } from 'react-redux'
 
-const { useToken } = theme;
+const { useToken } = theme
 
 /**
  * 用户信息下拉框
  * @returns
  */
 const UserDropdown: React.FC = () => {
-  const dispatch = useDispatch();
-  const { token } = useToken();
-  const { modal } = App.useApp();
+  const dispatch = useDispatch()
+  const { token } = useToken()
+  const { modal } = App.useApp()
 
-  const navigate = useNavigate();
+  const navigate = useNavigate()
 
   // 菜单栏
   const items: MenuProps['items'] = [
@@ -69,7 +69,7 @@ const UserDropdown: React.FC = () => {
       label: '锁屏',
       icon: <LockOutlined />,
       onClick: () => {
-        dispatch(updatePreferences('widget', 'lockScreenStatus', true));
+        dispatch(updatePreferences('widget', 'lockScreenStatus', true))
       },
     },
     {
@@ -88,26 +88,26 @@ const UserDropdown: React.FC = () => {
           content: '确认退出登录吗？',
           okText: '确认',
           onOk: () => {
-            const token = sessionStorage.getItem('token');
+            const token = sessionStorage.getItem('token')
 
             // 清除后端的信息
-            logout(token as string);
+            logout(token as string)
             // 清空token
-            sessionStorage.removeItem('token');
-            sessionStorage.removeItem('roleId');
-            sessionStorage.removeItem('isLogin');
-            sessionStorage.removeItem('loginUser');
+            sessionStorage.removeItem('token')
+            sessionStorage.removeItem('roleId')
+            sessionStorage.removeItem('isLogin')
+            sessionStorage.removeItem('loginUser')
 
             // 修改回document.title
-            document.title = 'Fusion Admin - 登录';
+            document.title = 'Fusion Admin - 登录'
             // 退出到登录页面
-            navigate('/login');
+            navigate('/login')
           },
           cancelText: '取消',
-        });
+        })
       },
     },
-  ];
+  ]
 
   /**
    * 内容样式
@@ -116,7 +116,7 @@ const UserDropdown: React.FC = () => {
     backgroundColor: token.colorBgElevated,
     borderRadius: token.borderRadiusLG,
     boxShadow: token.boxShadowSecondary,
-  };
+  }
 
   /**
    * 自定义渲染
@@ -134,14 +134,14 @@ const UserDropdown: React.FC = () => {
           style: { boxShadow: 'none' },
         })}
       </div>
-    );
-  };
+    )
+  }
 
   return (
     <>
       <Dropdown
         menu={{ items }}
-        dropdownRender={renderDropdown}
+        popupRender={renderDropdown}
         placement="bottomLeft"
         overlayStyle={{ width: 240 }}
       >
@@ -153,7 +153,7 @@ const UserDropdown: React.FC = () => {
         </div>
       </Dropdown>
     </>
-  );
-};
+  )
+}
 
-export default UserDropdown;
+export default UserDropdown

@@ -5,43 +5,43 @@ import {
   MailOutlined,
   SearchOutlined,
   SettingOutlined,
-} from '@ant-design/icons';
-import { Badge, Dropdown, Input, Layout, Skeleton, Space, Tooltip } from 'antd';
-import React, { Suspense } from 'react';
-import { memo, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+} from '@ant-design/icons'
+import { Badge, Dropdown, Input, Layout, Skeleton, Space, Tooltip } from 'antd'
+import React, { Suspense } from 'react'
+import { memo, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 
-import MessageBox from './component/MessageBox';
-import FullScreen from './component/FullScreen';
-import BreadcrumbNav from './component/BreadcrumbNav';
-import UserDropdown from './component/UserDropdown';
-import { type RootState, updatePreferences } from '@/stores/store';
+import MessageBox from './component/MessageBox'
+import FullScreen from './component/FullScreen'
+import BreadcrumbNav from './component/BreadcrumbNav'
+import UserDropdown from './component/UserDropdown'
+import { type RootState, updatePreferences } from '@/stores/store'
 
-const Setting = React.lazy(() => import('./component/Setting'));
+const Setting = React.lazy(() => import('./component/Setting'))
 
 /**
  * 顶部布局内容
  */
 const Header: React.FC = memo(() => {
-  const dispatch = useDispatch();
-  const [openSetting, setOpenSetting] = useState<boolean>(false);
+  const dispatch = useDispatch()
+  const [openSetting, setOpenSetting] = useState<boolean>(false)
   // 从全局状态中获取配置是否开启面包屑、图标
-  const { breadcrumb } = useSelector((state: RootState) => state.preferences);
+  const { breadcrumb } = useSelector((state: RootState) => state.preferences)
 
   /**
    * 跳转到github
    */
   const routeGitHub = () => {
-    window.open('https://github.com/yecongling/fusion-admin', '_blank');
-  };
+    window.open('https://github.com/yecongling/fusion-admin', '_blank')
+  }
 
   /**
    * 检索菜单
    * @param name 菜单名
    */
   const searchMenu = (name: string) => {
-    console.log(name);
-  };
+    console.log(name)
+  }
 
   return (
     <>
@@ -75,7 +75,7 @@ const Header: React.FC = memo(() => {
             <LockOutlined
               style={{ cursor: 'pointer', fontSize: '18px' }}
               onClick={() => {
-                dispatch(updatePreferences('widget', 'lockScreenStatus', true));
+                dispatch(updatePreferences('widget', 'lockScreenStatus', true))
               }}
             />
           </Tooltip>
@@ -83,10 +83,7 @@ const Header: React.FC = memo(() => {
           <Badge count={5}>
             <MailOutlined style={{ cursor: 'pointer', fontSize: '18px' }} />
           </Badge>
-          <Dropdown
-            placement="bottomRight"
-            dropdownRender={() => <MessageBox />}
-          >
+          <Dropdown placement="bottomRight" popupRender={() => <MessageBox />}>
             <Badge count={5}>
               <BellOutlined style={{ cursor: 'pointer', fontSize: '18px' }} />
             </Badge>
@@ -107,6 +104,6 @@ const Header: React.FC = memo(() => {
         <Setting open={openSetting} setOpen={setOpenSetting} />
       </Suspense>
     </>
-  );
-});
-export default Header;
+  )
+})
+export default Header

@@ -2,6 +2,7 @@
   "name": "fusion-admin",
   "private": true,
   "version": "1.0.0",
+  "type": "module",
   "scripts": {
     "dev": "rsbuild dev --open",
     "check": "biome check --write",

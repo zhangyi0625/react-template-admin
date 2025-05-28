@@ -22,6 +22,8 @@ const SearchFormItem: React.FC<CustomColumn> = memo((props) => {
 
   const { RangePicker } = DatePicker
 
+  const portNameOptions = ['porCode', 'fndCode', 'porId', 'fndId']
+
   const [defalueOptions, setDefaultOptions] =
     useState<SelectProps['options']>(options)
 
@@ -36,7 +38,7 @@ const SearchFormItem: React.FC<CustomColumn> = memo((props) => {
   }
 
   const selectFoucs = (name: string, API: any, tag: string | undefined) => {
-    if (name === 'porCode' || name === 'fndCode') {
+    if (portNameOptions.includes(name)) {
       console.log('zzzz', name, API)
       fetchSearch({ value: null, name: name, api: API, tag }, setDefaultOptions)
     } else setDefaultOptions(options)
@@ -44,7 +46,7 @@ const SearchFormItem: React.FC<CustomColumn> = memo((props) => {
 
   const selectOptions = () => {
     return (defalueOptions || []).map((item) =>
-      name === 'porCode' || name === 'fndCode'
+      portNameOptions.includes(name)
         ? {
             label: (
               <div className="">
@@ -56,7 +58,10 @@ const SearchFormItem: React.FC<CustomColumn> = memo((props) => {
                 </p>
               </div>
             ),
-            value: item.unlocode,
+            value:
+              name === 'porCode' || name === 'fndCode'
+                ? item.unlocode
+                : item.id,
           }
         : {
             value: item.id,
@@ -85,13 +90,10 @@ const SearchFormItem: React.FC<CustomColumn> = memo((props) => {
             filterOption={false}
             onSearch={(value: string) => handleSearch(value, name, api, tag)}
             onFocus={() => selectFoucs(name, api, tag)}
-            popupMatchSelectWidth={
-              name === 'porCode' || name === 'fndCode' ? 240 : true
-            }
+            popupMatchSelectWidth={portNameOptions.includes(name) ? 240 : true}
             classNames={{
               popup: {
-                root:
-                  name === 'porCode' || name === 'fndCode' ? 'portSelect' : '',
+                root: portNameOptions.includes(name) ? 'portSelect' : '',
               },
             }}
             options={selectOptions()}

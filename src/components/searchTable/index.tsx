@@ -16,14 +16,28 @@ interface SearchTableProps<T = OrderTableObject>
   fetchData: (pagination: TablePaginationConfig | any) => Promise<any>
   searchFilter?: any
   rowKey: string
+  isSelection: boolean
   onUpdatePagination: (pagination: TablePaginationConfig) => void
+  onUpdateSelection?: (arr: string[]) => void
 }
 
 const searchTable: React.FC<SearchTableProps> = memo((props) => {
-  const { columns, fetchData, searchFilter, rowKey, onUpdatePagination } = props
+  const {
+    columns,
+    fetchData,
+    searchFilter,
+    rowKey,
+    isSelection,
+    onUpdatePagination,
+    onUpdateSelection,
+  } = props
 
   const [tableData, setTableData] = useState([])
   const [loading, setLoading] = useState<boolean>(false)
+
+  const [selectionType, setSelectionType] = useState<'checkbox' | 'radio'>(
+    'checkbox'
+  )
 
   const { height } = useParentSize()
 
@@ -64,6 +78,22 @@ const searchTable: React.FC<SearchTableProps> = memo((props) => {
     onUpdatePagination(pagination)
   }
 
+  const rowSelection: TableProps['rowSelection'] = {
+    onChange: (selectedRowKeys: React.Key[], selectedRows: any) => {
+      console.log(
+        `selectedRowKeys: ${selectedRowKeys}`,
+        'selectedRows: ',
+        selectedRows
+      )
+      if (onUpdateSelection && isSelection)
+        onUpdateSelection(selectedRows.map((item: { id: number }) => item.id))
+    },
+    getCheckboxProps: (record: any) => ({
+      disabled: record.name === 'Disabled User', // Column configuration not to be checked
+      name: record.name,
+    }),
+  }
+
   return (
     <Spin spinning={loading}>
       <Table
@@ -73,6 +103,14 @@ const searchTable: React.FC<SearchTableProps> = memo((props) => {
         onChange={handleTableChange}
         rowKey={rowKey}
         scroll={{ x: 'max-content', y: height - 128 }}
+        rowSelection={
+          isSelection
+            ? {
+                type: selectionType,
+                ...rowSelection,
+              }
+            : undefined
+        }
       />
     </Spin>
   )

@@ -149,7 +149,7 @@ const SearchForm: React.FC<SearchFormPorps> = memo((props) => {
         </Row>
       </Form>
       {btnSeparate ? (
-        <div className="flex justify-end">
+        <div className="flex justify-end mt-[10px]">
           <Space>
             <Button
               type="primary"

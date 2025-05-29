@@ -6,6 +6,8 @@ import { RootState } from '@/stores/store'
 import { useSelector } from 'react-redux'
 import SearchFormItem from './searchFormItem'
 import { RedoOutlined, SearchOutlined } from '@ant-design/icons'
+import { filterKeys } from '@/utils/tool'
+import { formatTime } from '@/utils/format'
 
 export interface CustomColumn {
   label: string
@@ -89,7 +91,13 @@ const SearchForm: React.FC<SearchFormPorps> = memo((props) => {
   }
 
   const onSearch = () => {
-    onUpdateSearch(searchForm.getFieldsValue())
+    let date = searchForm.getFieldsValue()['date-picker'] ?? []
+    let params = {
+      ...filterKeys(searchForm.getFieldsValue(), ['date-picker'], false),
+      createdStart: formatTime(date[0], 'Y-M-D h:m:s'),
+      createdEnd: formatTime(date[1], 'Y-M-D h:m:s'),
+    }
+    onUpdateSearch(params)
   }
 
   const onReset = () => {

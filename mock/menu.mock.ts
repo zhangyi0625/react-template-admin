@@ -1,20 +1,20 @@
-import { defineMock } from 'rspack-plugin-mock/helper';
+import { defineMock } from 'rspack-plugin-mock/helper'
 
 // 模拟数据
 export default defineMock([
   {
     url: '/api/system/menu/getMenusByRole',
-    enabled: false,
+    enabled: true,
     method: 'GET',
     body(request) {
-      const query = request.query;
-      const { roleId = 'admin' } = query;
+      const query = request.query
+      const { roleId = 'admin' } = query
       if (roleId !== 'admin') {
         return {
           code: 200,
           message: 'success',
           data: [],
-        };
+        }
       }
       return {
         code: 200,
@@ -387,7 +387,7 @@ export default defineMock([
             },
             children: [
               {
-                id: '11235233479',
+                id: '11235233478',
                 name: 'sys-system',
                 path: '/system/user',
                 component: 'system/User',
@@ -396,6 +396,32 @@ export default defineMock([
                   keepAlive: false,
                   icon: 'UserOutlined',
                   title: '系统用户',
+                  internal: false,
+                },
+              },
+              {
+                id: '11237898909',
+                name: 'sys-system',
+                path: '/system/order',
+                component: 'system/Order',
+                route: '1',
+                meta: {
+                  keepAlive: false,
+                  icon: 'UserOutlined',
+                  title: '普通订单',
+                  internal: false,
+                },
+              },
+              {
+                id: '112378984544',
+                name: 'sys-system',
+                path: '/system/fastorder',
+                component: 'system/FastOrder',
+                route: '1',
+                meta: {
+                  keepAlive: false,
+                  icon: 'UserOutlined',
+                  title: '光速预定',
                   internal: false,
                 },
               },
@@ -642,13 +668,13 @@ export default defineMock([
             ],
           },
         ],
-      };
+      }
     },
   },
   {
     url: '/api/system/menu/getAllMenus',
     method: 'POST',
-    enabled: false,
+    enabled: true,
     body() {
       return {
         code: 200,
@@ -675,7 +701,7 @@ export default defineMock([
             status: '2',
           },
         ],
-      };
+      }
     },
   },
-]);
+])

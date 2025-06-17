@@ -6,7 +6,7 @@ import { RootState } from '@/stores/store'
 import { useSelector } from 'react-redux'
 import SearchFormItem from './searchFormItem'
 import { RedoOutlined, SearchOutlined } from '@ant-design/icons'
-import { filterKeys } from '@/utils/tool'
+import { filterKeys, replaceObjectName } from '@/utils/tool'
 import { formatTime } from '@/utils/format'
 
 export interface CustomColumn {
@@ -18,6 +18,7 @@ export interface CustomColumn {
   publicSettingKey?: string
   span: number
   tag?: string | undefined | 'POR' | 'FND'
+  filterSearch?: boolean
 }
 
 type SearchFormPorps = {
@@ -72,12 +73,24 @@ const SearchForm: React.FC<SearchFormPorps> = memo((props) => {
   const [searchColumns, setSerachColumns] = useState<CustomColumn[]>(columns)
 
   useEffect(() => {
-    searchColumns.map((item: CustomColumn) => {
+    const getData = async (api?: any) => {
+      let result = await replaceObjectName(
+        await api(),
+        ['carrierCode', 'carrierCode'],
+        ['id', 'name']
+      )
+      return result
+    }
+    searchColumns.map(async (item: CustomColumn) => {
+      if (item.filterSearch) item.options = await getData(item.api)
       if (item.publicSettingKey)
         item.options = extendsOptions(publicData[item.publicSettingKey])
+      console.log(item, 'item')
     })
-    setSerachColumns(searchColumns)
-  }, [searchColumns])
+    setTimeout(() => {
+      setSerachColumns([...searchColumns])
+    }, 500)
+  }, [...searchColumns])
 
   const extendsOptions = (options: Record<string, any>) => {
     let arr = []

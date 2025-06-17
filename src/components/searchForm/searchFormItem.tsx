@@ -42,6 +42,7 @@ const SearchFormItem: React.FC<CustomColumn> = memo((props) => {
       console.log('zzzz', name, API)
       fetchSearch({ value: null, name: name, api: API, tag }, setDefaultOptions)
     } else setDefaultOptions(options)
+    console.log(options, 'options')
   }
 
   const selectOptions = () => {

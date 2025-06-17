@@ -85,7 +85,6 @@ const SearchForm: React.FC<SearchFormPorps> = memo((props) => {
       if (item.filterSearch) item.options = await getData(item.api)
       if (item.publicSettingKey)
         item.options = extendsOptions(publicData[item.publicSettingKey])
-      console.log(item, 'item')
     })
     setTimeout(() => {
       setSerachColumns([...searchColumns])

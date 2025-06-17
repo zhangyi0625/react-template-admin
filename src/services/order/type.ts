@@ -6,6 +6,7 @@ type OrderSearchFilter = {
   fndCode: string
   type: string
   status: string
+  affiliateId: string
 }
 
 export interface OrderSearchParams {

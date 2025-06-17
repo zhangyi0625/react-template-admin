@@ -1,6 +1,8 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import type React from 'react'
 import { Button, Card, ConfigProvider, type TableProps, Space, App } from 'antd'
+import { TablePaginationConfig } from 'antd/lib'
+import { DownloadOutlined } from '@ant-design/icons'
 import SearchForm, { CustomColumn } from '@/components/searchForm'
 import SearchTable from '@/components/searchTable'
 import { SelectFastOrderOptions } from './config'
@@ -9,13 +11,11 @@ import {
   downFastOrder,
   downOrderResult,
 } from '@/services/order'
-import { OrderSearchParams } from '@/services/order/type'
-import { TablePaginationConfig } from 'antd/lib'
-import { DownloadOutlined } from '@ant-design/icons'
+import type { OrderSearchParams } from '@/services/order/type'
 import { formatTime } from '@/utils/format'
 
 const FastOrder: React.FC = () => {
-  const { modal, message } = App.useApp()
+  const { message } = App.useApp()
 
   const [searchDefaultForm, setSearchDefault] = useState<OrderSearchParams>({
     pageIndex: 1,

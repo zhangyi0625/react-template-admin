@@ -17,6 +17,7 @@ interface SearchTableProps<T = OrderTableObject>
   searchFilter?: any
   rowKey: string
   isSelection: boolean
+  immediate?: boolean
   onUpdatePagination: (pagination: TablePaginationConfig) => void
   onUpdateSelection?: (arr: string[]) => void
 }
@@ -28,6 +29,7 @@ const searchTable: React.FC<SearchTableProps> = memo((props) => {
     searchFilter,
     rowKey,
     isSelection,
+    immediate,
     onUpdatePagination,
     onUpdateSelection,
   } = props
@@ -62,11 +64,15 @@ const searchTable: React.FC<SearchTableProps> = memo((props) => {
   }
 
   useEffect(() => {
-    loadTableData()
+    if (!immediate) {
+      console.log('立即执行！')
+      loadTableData()
+    }
   }, [
     currentPagination.pageSize,
     currentPagination.pageSizeOptions,
     searchFilter,
+    immediate,
   ])
 
   const handleTableChange = (pagination: TablePaginationConfig) => {

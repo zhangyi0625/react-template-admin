@@ -9,7 +9,7 @@ import { SelectOrderOptions } from './config'
 import { RootState, setPublicData } from '@/stores/store'
 import { getOrderOptions } from '@/services/order'
 import { getPublicData, getPublicSetting } from '@/services/setting'
-import { OrderSearchParams } from '@/services/order/type'
+import type { OrderSearchParams } from '@/services/order/type'
 import { formatTime } from '@/utils/format'
 
 const Order: React.FC = () => {
@@ -51,6 +51,7 @@ const Order: React.FC = () => {
       title: '用户名',
       key: 'customerName',
       align: 'center',
+      width: 80,
     },
     {
       dataIndex: 'phone',
@@ -115,6 +116,7 @@ const Order: React.FC = () => {
       title: '取消状态',
       key: 'cancelStatus',
       align: 'center',
+      width: 100,
       render(text) {
         return publicData['frtOrderCancel'][text]
       },

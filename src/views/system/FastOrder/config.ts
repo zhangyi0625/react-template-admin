@@ -1,6 +1,7 @@
 import type { CustomColumn } from '@/components/searchForm'
 import {
   getSearchAffiliate,
+  getSearchCarrier,
   getSearchCustomer,
   getSearchPort,
 } from '@/services/order'
@@ -33,6 +34,15 @@ export const SelectFastOrderOptions: CustomColumn[] = [
     name: 'date-picker',
     formType: 'date-picker',
     span: 6,
+  },
+  {
+    label: '船公司',
+    name: 'carrier',
+    api: getSearchCarrier,
+    options: [],
+    formType: 'select',
+    span: 6,
+    filterSearch: true,
   },
   {
     label: '起运港名称',

@@ -4,29 +4,29 @@ import axios, {
   type AxiosRequestConfig,
   type AxiosResponse,
   type InternalAxiosRequestConfig,
-} from "axios";
-import { cloneDeep } from "lodash-es";
-import type { RequestOptions } from "@/types/axios";
-import { isFunction } from "@/utils/is";
-import type { CreateAxiosOptions } from "./transform";
-import type { Response } from "@/types/global";
+} from 'axios'
+import { cloneDeep } from 'lodash-es'
+import type { RequestOptions } from '@/types/axios'
+import { isFunction } from '@/utils/is'
+import type { CreateAxiosOptions } from './transform'
+import type { Response } from '@/types/global'
 
 /**
  * Axios请求封装
  */
 export class RAxios {
-  private axiosInstance: AxiosInstance;
-  private readonly options: CreateAxiosOptions;
+  private axiosInstance: AxiosInstance
+  private readonly options: CreateAxiosOptions
 
   constructor(options: CreateAxiosOptions) {
-    this.options = options;
-    this.axiosInstance = axios.create(options);
-    this.setupInterceptors();
+    this.options = options
+    this.axiosInstance = axios.create(options)
+    this.setupInterceptors()
   }
 
   private getTransform() {
-    const { transform } = this.options;
-    return transform;
+    const { transform } = this.options
+    return transform
   }
 
   /**
@@ -35,47 +35,47 @@ export class RAxios {
    * @private
    */
   private setupInterceptors() {
-    const transform = this.getTransform();
+    const transform = this.getTransform()
     if (!transform) {
-      return;
+      return
     }
     const {
       requestInterceptors,
       requestInterceptorsCatch,
       responseInterceptors,
       responseInterceptorsCatch,
-    } = transform;
+    } = transform
     // 请求侦听器配置处理
     this.axiosInstance.interceptors.request.use(
       (config: InternalAxiosRequestConfig) => {
         if (requestInterceptors && isFunction(requestInterceptors)) {
-          return requestInterceptors(config, this.options);
+          return requestInterceptors(config, this.options)
         }
-        return config;
+        return config
       },
       undefined
-    );
+    )
     // 请求拦截器错误捕获
     requestInterceptorsCatch &&
       isFunction(requestInterceptorsCatch) &&
       this.axiosInstance.interceptors.request.use(
         undefined,
         requestInterceptorsCatch
-      );
+      )
     // 响应结果拦截器处理
     this.axiosInstance.interceptors.response.use((res: AxiosResponse<any>) => {
       if (responseInterceptors && isFunction(responseInterceptors)) {
-        return responseInterceptors(res);
+        return responseInterceptors(res)
       }
-      return res;
-    }, undefined);
+      return res
+    }, undefined)
     // 响应结果拦截器错误捕获
     responseInterceptorsCatch &&
       isFunction(responseInterceptorsCatch) &&
       this.axiosInstance.interceptors.response.use(
         undefined,
         responseInterceptorsCatch
-      );
+      )
   }
 
   /**
@@ -87,17 +87,18 @@ export class RAxios {
     config: AxiosRequestConfig,
     options?: RequestOptions
   ): Promise<T> {
-    let conf: CreateAxiosOptions = cloneDeep(config);
-    const transform = this.getTransform();
-    const { requestOptions } = this.options;
-    const opt: RequestOptions = Object.assign({}, requestOptions, options);
+    let conf: CreateAxiosOptions = cloneDeep(config)
+    const transform = this.getTransform()
+    const { requestOptions } = this.options
+    const opt: RequestOptions = Object.assign({}, requestOptions, options)
     // 请求前的数据处理
     const { beforeRequestHook, requestCatchHook, transformResponseHook } =
-      transform || {};
+      transform || {}
     if (beforeRequestHook && isFunction(beforeRequestHook)) {
-      conf = beforeRequestHook(conf, opt);
+      conf = beforeRequestHook(conf, opt)
     }
-    conf.requestOptions = opt;
+
+    conf.requestOptions = opt
 
     return new Promise((resolve, reject) => {
       this.axiosInstance
@@ -105,23 +106,23 @@ export class RAxios {
         .then((res: AxiosResponse<Response>) => {
           if (transformResponseHook && isFunction(transformResponseHook)) {
             try {
-              const ret = transformResponseHook(res, opt);
-              resolve(ret);
+              const ret = transformResponseHook(res, opt)
+              resolve(ret)
             } catch (err) {
-              reject(err || new Error("请求错误！"));
+              reject(err || new Error('请求错误！'))
             }
-            return;
+            return
           }
-          resolve(res as unknown as Promise<T>);
+          resolve(res as unknown as Promise<T>)
         })
         .catch((e: Error | AxiosError) => {
           if (requestCatchHook && isFunction(requestCatchHook)) {
-            reject(requestCatchHook(e, opt));
-            return;
+            reject(requestCatchHook(e, opt))
+            return
           }
-          reject(e);
-        });
-    });
+          reject(e)
+        })
+    })
   }
 
   /**
@@ -133,7 +134,7 @@ export class RAxios {
     config: AxiosRequestConfig,
     options?: RequestOptions
   ): Promise<T> {
-    return this.request({ ...config, method: "GET" }, options);
+    return this.request({ ...config, method: 'GET' }, options)
   }
 
   /**
@@ -146,7 +147,7 @@ export class RAxios {
     config: AxiosRequestConfig,
     options?: RequestOptions
   ): Promise<T> {
-    return this.request({ ...config, method: "POST" }, options);
+    return this.request({ ...config, method: 'POST' }, options)
   }
 
   /**
@@ -158,7 +159,7 @@ export class RAxios {
     config: AxiosRequestConfig,
     options?: RequestOptions
   ): Promise<T> {
-    return this.request({ ...config, method: "DELETE" }, options);
+    return this.request({ ...config, method: 'DELETE' }, options)
   }
 
   /**
@@ -170,6 +171,6 @@ export class RAxios {
     config: AxiosRequestConfig,
     options?: RequestOptions
   ): Promise<T> {
-    return this.request({ ...config, method: "PATCH" }, options);
+    return this.request({ ...config, method: 'PATCH' }, options)
   }
 }

@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import type React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
 import { Button, Card, ConfigProvider, type TableProps, Space } from 'antd'
 import { TablePaginationConfig } from 'antd/lib'
 import SearchForm from '@/components/searchForm'
@@ -14,6 +15,8 @@ import { formatTime } from '@/utils/format'
 
 const Order: React.FC = () => {
   const dispatch = useDispatch()
+
+  const navigate = useNavigate()
 
   useEffect(() => {
     Promise.all([getPublicData(), getPublicSetting()]).then((res) => {
@@ -169,6 +172,7 @@ const Order: React.FC = () => {
           <Space size={0}>
             <Button size="middle" onClick={() => openDetail(record)}>
               查看
+              {/* openDetail(record) */}
             </Button>
           </Space>
         )
@@ -199,8 +203,8 @@ const Order: React.FC = () => {
     })
   }
 
-  const openDetail = (detail: unknown) => {
-    console.log(detail, 'detail')
+  const openDetail = (detail: any) => {
+    navigate(`/system/order/${detail.id}`)
   }
 
   return (
@@ -219,8 +223,9 @@ const Order: React.FC = () => {
             columns={SelectOrderOptions}
             gutterWidth={24}
             labelPosition="left"
-            byHeight={false}
             btnSeparate={true}
+            isShowReset={true}
+            isShowExpend={false}
             onUpdateSearch={onUpdateSearch}
           />
         </Card>

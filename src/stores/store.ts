@@ -4,11 +4,13 @@ import storage from 'redux-persist/lib/storage'
 import { combineReducers } from 'redux'
 import { menuSlice } from './menuReducers'
 import { type Category, preferencesSlice } from './preferencesReducers'
+import { sysSettingSlice } from './settingReducers'
 
 // 组合reducer（这里还可以添加其他的reducer）
 const rootReducer = combineReducers({
   menuState: menuSlice.reducer,
   preferences: preferencesSlice.reducer,
+  publicSetting: sysSettingSlice.reducer,
 })
 
 // 持久化存储配置
@@ -43,3 +45,5 @@ export const { updateSetting, resetPreferences, setPreferences } =
 // 自定义接受三个独立参数的action
 export const updatePreferences = (category: Category, key: any, value: any) =>
   updateSetting({ category, key, value })
+
+export const { setPublicData } = sysSettingSlice.actions

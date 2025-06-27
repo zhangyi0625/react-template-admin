@@ -53,7 +53,7 @@ const OrderDetail: React.FC = memo(() => {
     {
       key: '2',
       label: '订舱结果',
-      children: <BookingResult />,
+      children: <BookingResult orderInfo={orderInfo} />,
     },
     {
       key: '3',
@@ -118,7 +118,6 @@ const OrderDetail: React.FC = memo(() => {
         }
       })
       setBaseInfo(OrderDetailBaseInfo)
-      console.log(OrderDetailBaseInfo, 'OrderDetailBaseInfo', copyData)
     })
   }, [])
 

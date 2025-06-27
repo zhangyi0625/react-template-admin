@@ -222,7 +222,7 @@ export const OrderDetailBaseInfo: OrderDetailBaseInfoType[] = [
   },
 ]
 
-export const ORDER = [
+export const ORDER: string[] = [
   '20GP',
   '40GP',
   '40HQ',

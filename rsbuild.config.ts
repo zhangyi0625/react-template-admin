@@ -1,10 +1,14 @@
-import { defineConfig } from '@rsbuild/core'
+import path from 'node:path'
+import { defineConfig, loadEnv } from '@rsbuild/core'
 import { pluginReact } from '@rsbuild/plugin-react'
 import { pluginSass } from '@rsbuild/plugin-sass'
 import { pluginMockServer } from 'rspack-plugin-mock/rsbuild'
 import { pluginImageCompress } from '@rsbuild/plugin-image-compress'
 import { pluginHtmlMinifierTerser } from 'rsbuild-plugin-html-minifier-terser'
-import path from 'node:path'
+
+const { publicVars } = loadEnv({ prefixes: ['VITE_'] })
+
+console.log(publicVars, 'publicVars', process.env)
 
 export default defineConfig({
   plugins: [
@@ -47,6 +51,7 @@ export default defineConfig({
     alias: {
       '@': path.resolve(__dirname, './src'),
     },
+    define: publicVars,
   },
   dev: {
     // 按需编译
@@ -75,12 +80,19 @@ export default defineConfig({
   // 服务相关
   server: {
     port: 3005,
+    open: false,
     proxy: {
       '/api': {
-        target: 'http://localhost:8090/fusion',
+        // target: 'http://dev.zaicang.net/api/',
+        target: process.env.VITE_BASE_API + '/api/',
         changeOrigin: true,
         pathRewrite: (path) => path.replace(/^\/api/, ''),
       },
+      // '/api': {
+      //   target: 'http://localhost:8090/fusion',
+      //   changeOrigin: true,
+      //   pathRewrite: (path) => path.replace(/^\/api/, ''),
+      // },
     },
   },
 })

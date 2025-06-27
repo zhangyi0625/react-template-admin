@@ -14,3 +14,8 @@ export interface OrderSearchParams {
   pageSize: number
   filter: Partial<OrderSearchFilter>
 }
+
+export interface ShippingScheduleParams
+  extends Pick<OrderSearchFilter, 'fndCode' | 'porCode'> {
+  carrier: string
+}

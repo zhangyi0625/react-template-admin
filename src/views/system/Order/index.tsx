@@ -170,9 +170,11 @@ const Order: React.FC = () => {
       render(_, record) {
         return (
           <Space size={0}>
-            <Button size="middle" onClick={() => openDetail(record)}>
+            <Button
+              size="middle"
+              onClick={() => navigate(`/system/order/${record.id}`)}
+            >
               查看
-              {/* openDetail(record) */}
             </Button>
           </Space>
         )
@@ -201,10 +203,6 @@ const Order: React.FC = () => {
       pageIndex: pagination.current as number,
       pageSize: pagination.pageSize as number,
     })
-  }
-
-  const openDetail = (detail: any) => {
-    navigate(`/system/order/${detail.id}`)
   }
 
   return (

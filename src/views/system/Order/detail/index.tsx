@@ -1,7 +1,6 @@
 import './detail.scss'
 import { memo, useCallback, useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
-import { useNavigate } from 'react-router-dom'
+import { useParams, useNavigate } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 import { RootState } from '@/stores/store'
 import { Button, Timeline, Divider, Tabs, type TabsProps, App } from 'antd'

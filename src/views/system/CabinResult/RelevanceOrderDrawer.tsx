@@ -146,7 +146,7 @@ const RelevanceOrderDrawer: React.FC<RelevanceOrderDrawerType> = memo(
       info?: Pick<OrderSearchParams, 'filter'> | unknown
     ) => {
       const filteredObj = Object.fromEntries(
-        Object.entries(info ?? {}).filter(([key, value]) => !!value)
+        Object.entries(info ?? {}).filter(([, value]) => !!value)
       )
       setSearchDefaultForm({
         ...searchDefaultForm,

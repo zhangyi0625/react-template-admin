@@ -213,7 +213,7 @@ const FastOrder: React.FC = () => {
     info: Pick<OrderSearchParams, 'filter'> | unknown
   ) => {
     const filteredObj = Object.fromEntries(
-      Object.entries(info ?? {}).filter(([key, value]) => !!value)
+      Object.entries(info ?? {}).filter(([, value]) => !!value)
     )
     setSearchDefault({
       ...searchDefaultForm,
@@ -280,8 +280,9 @@ const FastOrder: React.FC = () => {
             columns={SelectFastOrderOptions}
             gutterWidth={24}
             labelPosition="left"
-            byHeight={false}
             btnSeparate={true}
+            isShowReset={true}
+            isShowExpend={false}
             onUpdateSearch={onUpdateSearch}
           />
         </Card>

@@ -1,11 +1,7 @@
-interface CargoReuirementOptionsType {
-  label: string
-  includeCarrier: string
-  key: string
-  value?: string | null
-  replaceFn?: (type: string | any) => string
-  other?: string | null
-}
+import type {
+  CargoReuirementOptionsType,
+  BookingFailReasonType,
+} from '../../../type'
 
 export const CargoReuirementOptions: CargoReuirementOptionsType[] = [
   {
@@ -93,5 +89,26 @@ export const CargoReuirementOptions: CargoReuirementOptionsType[] = [
     label: '额外目的港免箱天数',
     includeCarrier: 'MSK,CMA,ONE',
     key: 'extentDndFreeDays',
+  },
+]
+
+export const BookingFailReason: BookingFailReasonType[] = [
+  {
+    label: '个人原因',
+    reason: [
+      '品名有误',
+      '不允许多柜型',
+      '限价过低',
+      '数量上限',
+      '免箱天设置错误',
+    ],
+  },
+  {
+    label: '账号原因',
+    reason: ['账密有误', '资金不足'],
+  },
+  {
+    label: '船司原因',
+    reason: ['暂无对应船期', '舱位不可订购', '官网价格变动'],
   },
 ]

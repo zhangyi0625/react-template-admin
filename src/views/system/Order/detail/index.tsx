@@ -4,17 +4,28 @@ import { useParams } from 'react-router-dom'
 import { useNavigate } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 import { RootState } from '@/stores/store'
-import { Button, Timeline, Divider, Tabs, type TabsProps } from 'antd'
-import { getOrderDetail } from '@/services/order'
+import { Button, Timeline, Divider, Tabs, type TabsProps, App } from 'antd'
+import {
+  getOrderDetail,
+  postAgreeCancelApply,
+  postCancelBooking,
+  postExecutionBreach,
+} from '@/services/order'
 import { OrderDetailBaseInfo, statusAllList } from '../config'
-import type { OrderDetailTimeLine, OrderDetailBaseInfoType } from '../type'
+import type {
+  OrderDetailTimeLine,
+  OrderDetailBaseInfoType,
+  statusConditionType,
+} from '../type'
 import AreaBaseInfo from './components/table/AreaBaseInfo'
 import BookingResult from './components/table/BookingResult'
 import PayMessage from './components/table/PayMessage'
 import CargoRequirement from './components/modal/CargoRequirement'
 import OrderCarrierAccounts from './components/modal/OrderAccountInfo'
 import BookingFrequency from './components/BookingFrequency'
+import CancelReason from './components/modal/CancelReason'
 import { filterKeys } from '@/utils/tool'
+import { ExclamationCircleOutlined } from '@ant-design/icons'
 
 type ModalContent = {
   visible: boolean
@@ -25,6 +36,8 @@ const OrderDetail: React.FC = memo(() => {
   const params = useParams()
 
   const navigate = useNavigate()
+
+  const { message, modal } = App.useApp()
 
   const [orderInfo, setOrderInfo] = useState<any>()
 
@@ -41,6 +54,8 @@ const OrderDetail: React.FC = memo(() => {
     visible: false,
     editRow: null,
   })
+
+  const [cancelReson, setCancelReson] = useState<boolean>(false)
 
   const [baseInfo, setBaseInfo] = useState(OrderDetailBaseInfo)
 
@@ -63,7 +78,7 @@ const OrderDetail: React.FC = memo(() => {
     {
       key: '4',
       label: '订舱频率',
-      children: <BookingFrequency />,
+      children: <BookingFrequency id={orderInfo?.id} />,
     },
   ]
 
@@ -90,6 +105,10 @@ const OrderDetail: React.FC = memo(() => {
   }, [orderInfo])
 
   useEffect(() => {
+    loadOrderDetail()
+  }, [])
+
+  const loadOrderDetail = () => {
     getOrderDetail(String(params.id)).then((res) => {
       /**
        * Todo：拷贝数据 condition：type 为 BOOKING时
@@ -119,7 +138,7 @@ const OrderDetail: React.FC = memo(() => {
       })
       setBaseInfo(OrderDetailBaseInfo)
     })
-  }, [])
+  }
 
   const getTimeLineInfo = (info: OrderDetailTimeLine[]) => {
     const items = info.map((item) => {
@@ -164,7 +183,9 @@ const OrderDetail: React.FC = memo(() => {
                   key={index}
                 >
                   {item.label}：
-                  <span className="text-dull-grey">{item.value}</span>
+                  <span className="text-dull-grey whitespace-pre-wrap">
+                    {item.value}
+                  </span>
                 </span>
               ))}
         </div>
@@ -219,6 +240,52 @@ const OrderDetail: React.FC = memo(() => {
     )
   }
 
+  const cancelClick = (item: statusConditionType) => {
+    if (item.cancelBtnText === '取消订舱') {
+      setCancelReson(true)
+    } else if (item.cancelBtnText === '订舱执行违约') {
+      postExecutionBreach(orderInfo?.id, { remark: '执行违约' }).then(() => {
+        message.success('操作成功')
+        loadOrderDetail()
+      })
+    } else if (item.cancelBtnText === '同意取消') {
+      postAgreeCancelApply(orderInfo?.id).then(() => {
+        message.success('操作成功')
+        loadOrderDetail()
+      })
+    }
+  }
+
+  const confirmClick = (item: statusConditionType) => {
+    if (!item.confirmHint && item.confirmBtnText === '拒绝取消') {
+      item.confirmApi(orderInfo?.id, { remark: '拒绝取消' }).then(() => {
+        message.success('修改成功')
+        loadOrderDetail()
+      })
+    } else if (item.confirmHint)
+      modal.confirm({
+        title: '提示',
+        icon: <ExclamationCircleOutlined />,
+        content: `${item.confirmHint}`,
+        okText: '确认',
+        onOk: () => {
+          item.confirmApi(orderInfo?.id).then(() => {
+            message.success('修改成功')
+            loadOrderDetail()
+          })
+        },
+        cancelText: '取消',
+      })
+  }
+
+  const cancelBooking = (reason: string) => {
+    postCancelBooking(orderInfo?.id, { remark: reason }).then(() => {
+      message.success('修改成功')
+      setCancelReson(false)
+      loadOrderDetail()
+    })
+  }
+
   return (
     <div className="flex items-start">
       <div className="flex-1 overflow-hidden">
@@ -264,10 +331,18 @@ const OrderDetail: React.FC = memo(() => {
           </div>
           {statusOtions()?.showBtn && (
             <div className="mt-[33px] flex items-center justify-center">
-              <Button size="large" className={'button cancel-type'}>
+              <Button
+                size="large"
+                className={'button cancel-type'}
+                onClick={() => cancelClick(statusOtions())}
+              >
                 {statusOtions()?.cancelBtnText}
               </Button>
-              <Button size="large" className={'button confirm-type ml-[8px]'}>
+              <Button
+                size="large"
+                className={'button confirm-type ml-[8px]'}
+                onClick={() => confirmClick(statusOtions())}
+              >
                 {statusOtions()?.confirmBtnText}
               </Button>
             </div>
@@ -282,6 +357,11 @@ const OrderDetail: React.FC = memo(() => {
       <OrderCarrierAccounts
         params={accountInfo}
         onCancel={() => setAccountInfo({ visible: false, editRow: null })}
+      />
+      <CancelReason
+        visible={cancelReson}
+        onCancel={() => setCancelReson(false)}
+        onOk={cancelBooking}
       />
     </div>
   )

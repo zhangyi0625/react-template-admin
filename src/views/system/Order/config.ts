@@ -3,6 +3,11 @@ import {
   getSearchAffiliate,
   getSearchCustomer,
   getSearchPort,
+  postBookingFinish,
+  postBookingRefund,
+  postBookingSuccess,
+  postRejectCancelApply,
+  postStartBooking,
 } from '@/services/order'
 import type {
   OrderDetailBaseInfoType,
@@ -222,6 +227,91 @@ export const OrderDetailBaseInfo: OrderDetailBaseInfoType[] = [
   },
 ]
 
+export const OrderDetailAreaInfo: Omit<OrderDetailBaseInfoType, 'type'>[] = [
+  {
+    label: '船公司',
+    key: 'carrier',
+  },
+  {
+    label: '创建时间',
+    key: 'createTime',
+    getValue: (value) => formatTime(value, 'Y/M/D h:m:s'),
+  },
+  {
+    label: '起运港',
+    key: 'por',
+    getValue: (value) => value?.name + '-' + value?.localName,
+  },
+  {
+    label: '最近更新时间',
+    key: 'modifyTime',
+    getValue: (value) => formatTime(value, 'Y/M/D h:m:s'),
+  },
+  {
+    label: '目的港',
+    key: 'fnd',
+    getValue: (value) => value?.name + '-' + value?.localName,
+  },
+  {
+    label: '库存',
+    key: 'inventory',
+    getValue: () => '--',
+  },
+  {
+    label: '是否中转',
+    key: 'bookingInfo',
+    getValue: (value) => (value ? '是' : '否'),
+  },
+  {
+    label: '条款',
+    key: 'bookingInfo',
+    getValue: (value) => value?.transClause ?? '',
+  },
+  {
+    label: '起运日期',
+    key: 'bookingInfo',
+    getValue: (value) => formatTime(value?.etd, 'Y/M/D'),
+  },
+  {
+    label: '船名航次',
+    key: 'bookingInfo',
+    getValue: (value) =>
+      value?.vesselName ? value?.vesselName + '/' + value?.voyNo : '/',
+  },
+  {
+    label: '卸港日期',
+    key: 'bookingInfo',
+    getValue: (value) => formatTime(value?.eta, 'Y/M/D h:m'),
+  },
+  {
+    label: '运价有效期',
+    key: 'bookingInfo',
+    getValue: (value) =>
+      formatTime(value?.validFrom, 'Y/M/D') +
+      '至' +
+      formatTime(value?.validTo, 'Y/M/D'),
+  },
+  {
+    label: '预定交货期',
+    key: 'bookingInfo',
+    getValue: (value) => value?.voyDays ?? '',
+  },
+  {
+    label: '费用范围',
+    key: 'range',
+    getValue: () => '--',
+  },
+  {
+    label: '航程',
+    key: 'bookingInfo',
+    getValue: (value) => value?.voyDays ?? '',
+  },
+  {
+    label: '',
+    key: 'down',
+  },
+]
+
 export const ORDER: string[] = [
   '20GP',
   '40GP',
@@ -269,6 +359,16 @@ export const statusAllList: statusConditionType[] = [
     showBtn: false,
   },
   {
+    valueText: '待审核',
+    titleIcon: 'checkPending',
+    conditionFun: (status) => status.status === 'REVIEW',
+    showBtn: true,
+    cancelBtnText: '取消订舱',
+    confirmBtnText: '订舱中',
+    confirmHint: '确认更改状态为订舱中',
+    confirmApi: postStartBooking,
+  },
+  {
     valueText: '已取消，支付超时',
     titleIcon: 'checkPending',
     conditionFun: (status) =>
@@ -280,9 +380,10 @@ export const statusAllList: statusConditionType[] = [
     titleIcon: 'prepareBooking',
     conditionFun: (status) => status.status === 'PREPARE',
     showBtn: true,
-
     cancelBtnText: '取消订舱',
-    confimBtnText: '启动订舱',
+    confirmBtnText: '启动订舱',
+    confirmHint: '确认更改为自动订舱、自动预定',
+    confirmApi: postStartBooking,
   },
   {
     valueText: '订舱中',
@@ -291,9 +392,11 @@ export const statusAllList: statusConditionType[] = [
       status.status === 'RUNNING' &&
       (status.cancelStatus === 'FORBID' || !status.cancelStatus),
     showBtn: true,
-
     cancelBtnText: '取消订舱',
-    confimBtnText: '订舱成功',
+    confirmBtnText: '订舱成功',
+    confirmHint:
+      '此操作将扣除用户服务费，并微信推送用户上传托书，是否确认已订到舱位',
+    confirmApi: postBookingSuccess,
   },
   {
     valueText: '订舱中，申请取消',
@@ -309,9 +412,10 @@ export const statusAllList: statusConditionType[] = [
       status.status === 'SUCCESS' &&
       (status.cancelStatus === 'FORBID' || !status.cancelStatus),
     showBtn: true,
-
     cancelBtnText: '订单执行违约',
-    confimBtnText: '订单执行结束',
+    confirmBtnText: '订单执行结束',
+    confirmHint: '此操作将释放用户全部服务费，是否确认',
+    confirmApi: postBookingFinish,
   },
   {
     valueText: '订舱成功，申请取消',
@@ -319,9 +423,9 @@ export const statusAllList: statusConditionType[] = [
     conditionFun: (status) =>
       status.status === 'SUCCESS' && status.cancelStatus === 'INITIATE',
     showBtn: false,
-
     cancelBtnText: '同意取消',
-    confimBtnText: '拒绝取消',
+    confirmBtnText: '拒绝取消',
+    confirmApi: postRejectCancelApply,
   },
   {
     valueText: '已完成',
@@ -368,16 +472,15 @@ export const statusAllList: statusConditionType[] = [
     conditionFun: (status) =>
       status.status === 'REFUND' && status.cancelStatus === 'PASS',
     showBtn: true,
-
     cancelBtnText: '订单执行违约',
-    confimBtnText: '订单执行退款',
+    confirmBtnText: '订单执行退款',
+    confirmHint: '此操作将退还用户服务费，并释放全部保证金',
+    confirmApi: postBookingRefund,
   },
-  // {
-  //   valueText: '已取消',
-  //   titleIcon: '',
-  //   conditionFun: (status) =>
-  //     status.status === 'CLOSURE' && status.cancelStatus === 'PASS',
-  //   showBtn: false,
-  //
-  // },
+  {
+    valueText: '订舱失败',
+    titleIcon: 'cancel',
+    conditionFun: (status) => status.status === 'FAIL',
+    showBtn: false,
+  },
 ]

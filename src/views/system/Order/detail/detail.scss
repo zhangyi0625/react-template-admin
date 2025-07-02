@@ -13,10 +13,20 @@
   border: 1px solid #bfc2cc;
   color: #606266;
 }
+.cancel-type:hover {
+  border-radius: 6px !important;
+  border: 1px solid #bfc2cc !important;
+  color: #606266 !important;
+}
 .confirm-type {
   background: #fa8c16;
   color: #ffffff;
   border: 1px solid #fa8c16;
+}
+.confirm-type:hover {
+  background: #fa8c16 !important;
+  color: #ffffff !important;
+  border: 1px solid #fa8c16 !important;
 }
 // :global {
 .ant-tabs-top > .ant-tabs-nav::before {

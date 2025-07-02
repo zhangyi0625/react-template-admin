@@ -34,5 +34,21 @@ export type statusConditionType = {
   conditionFun: (status: Partial<OrderAllStatusType>) => boolean
   showBtn: boolean
   cancelBtnText?: string
-  confimBtnText?: string
+  confirmBtnText?: string
+  confirmHint?: string
+  confirmApi?: any
+}
+
+export interface CargoReuirementOptionsType {
+  label: string
+  includeCarrier: string
+  key: string
+  value?: string | null
+  replaceFn?: (type: string | any) => string
+  other?: string | null
+}
+
+export type BookingFailReasonType = {
+  label: string
+  reason: string[]
 }

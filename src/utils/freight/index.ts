@@ -30,7 +30,7 @@ export const loadAdditionalCharges = (price: FreightPriceListType[] = []) => {
     price.map((item: FreightPriceListType) => {
       item.costDetailList.map((el: CostDetailType) => {
         // 区分类型是票价还是箱型费用
-        type = el.chargeType === 'BL' ? 'blPrice' : 'ctn' + item.ctnType
+        type = el.chargeType === 'BL' ? 'blPrice' : item.ctnType
         if (el.costCategory === 'POR')
           getJudgePush(el, type, porList, additionalCharges.porPriceList)
         else if (el.costCategory === 'FND' || el.costCategory === 'LAND')

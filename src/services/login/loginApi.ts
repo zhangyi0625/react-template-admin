@@ -1,5 +1,5 @@
-import { HttpRequest } from '@/utils/request';
-import type { Response } from '@/types/global';
+import { HttpRequest } from '@/utils/request'
+import type { Response } from '@/types/global'
 
 /**
  * 枚举登录需要的接口地址
@@ -8,7 +8,7 @@ export enum LoginApi {
   /**
    * 登录
    */
-  login = '/login',
+  login = '/staff/login',
 
   /**
    * 退出登录
@@ -29,9 +29,9 @@ export const login = (params: any) => {
       url: LoginApi.login,
       data: params,
     },
-    { isTransformResponse: false },
-  );
-};
+    { isTransformResponse: false }
+  )
+}
 
 /**
  * 获取验证码
@@ -44,14 +44,14 @@ export const getCaptcha = (checkKey: string) => {
     },
     {
       successMessageMode: 'none',
-    },
-  );
-};
+    }
+  )
+}
 
 /**
  * 用户退出登录
  * @param token 用户token
  */
 export const logout = (token: string) => {
-  HttpRequest.delete({ url: LoginApi.logout, params: { token } });
-};
+  HttpRequest.delete({ url: LoginApi.logout, params: { token } })
+}

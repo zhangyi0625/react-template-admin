@@ -1,60 +1,66 @@
-import { setMenus } from '@/stores/store';
-import { Spin, App as AntdApp, Skeleton } from 'antd';
-import type React from 'react';
-import { Suspense, useCallback, useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { useLocation, useNavigate } from 'react-router-dom';
-import { Router } from '@/router/router';
-import { getMenuListByRoleId } from '@/services/system/menu/menuApi';
-import { antdUtils } from '@/utils/antdUtil';
+import { setMenus } from '@/stores/store'
+import { Spin, App as AntdApp, Skeleton } from 'antd'
+import type React from 'react'
+import { Suspense, useCallback, useEffect, useState } from 'react'
+import { useDispatch } from 'react-redux'
+import { useLocation, useNavigate } from 'react-router-dom'
+import { Router } from '@/router/router'
+import { getMenuListByRoleId } from '@/services/system/menu/menuApi'
+import { antdUtils } from '@/utils/antdUtil'
 
 /**
  * 主应用
  */
 const App: React.FC = () => {
   // 触发更新的钩子函数
-  const dispatch = useDispatch();
+  const dispatch = useDispatch()
   // 应用加载中
-  const [loading, setLoading] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(false)
   // 路由跳转
-  const navigate = useNavigate();
-  const location = useLocation();
+  const navigate = useNavigate()
+  const location = useLocation()
   // 方便非react组件内部使用
-  const { notification, message, modal } = AntdApp.useApp();
+  const { notification, message, modal } = AntdApp.useApp()
 
   /**
    * 查询用户的菜单信息
    */
   const getMenuData = useCallback(async () => {
-    const roleId = sessionStorage.getItem('roleId') || '';
+    // const roleId = sessionStorage.getItem('roleId') || ''
+    // const roleId = sessionStorage.getItem('roleId') || '';
+    const roleId = sessionStorage.getItem('roleId') || 'admin'
+    console.log(roleId, 'roleId')
+
     try {
-      const menu = await getMenuListByRoleId({ roleId });
-      dispatch(setMenus(menu)); // 更新 Redux 状态
+      const menu = await getMenuListByRoleId({})
+      dispatch(setMenus(menu)) // 更新 Redux 状态
     } catch (e: unknown) {
+      console.log('aaa')
+
       notification.error({
         message: '菜单加载失败',
         description: `原因：${e instanceof Error ? e.message : '未知错误'}`,
         duration: 0,
-      });
+      })
     } finally {
-      setLoading(false);
+      setLoading(false)
     }
-  }, [dispatch]);
+  }, [dispatch])
 
   // 组件挂载完成后加载用户菜单
   useEffect(() => {
     // 设置antd组件的实例(用于非react组件内部使用)
-    antdUtils.setMessageInstance(message);
-    antdUtils.setNotificationInstance(notification);
-    antdUtils.setModalInstance(modal);
+    antdUtils.setMessageInstance(message)
+    antdUtils.setNotificationInstance(notification)
+    antdUtils.setModalInstance(modal)
     // 去后台查询菜单，也需要判定当前是否登录，未登录的话就跳转登录页面
-    const isLogin = sessionStorage.getItem('isLogin');
+    const isLogin = sessionStorage.getItem('isLogin')
     if (isLogin === 'false' || !isLogin || location.pathname === '/login') {
-      navigate('/login');
+      navigate('/login')
     } else {
-      getMenuData();
+      getMenuData()
     }
-  }, [getMenuData, location.pathname, navigate]);
+  }, [getMenuData, location.pathname, navigate])
 
   return (
     <>
@@ -66,6 +72,6 @@ const App: React.FC = () => {
         </Suspense>
       )}
     </>
-  );
-};
-export default App;
+  )
+}
+export default App

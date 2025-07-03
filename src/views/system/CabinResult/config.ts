@@ -55,3 +55,15 @@ export const CabinResultOptions: CustomColumn[] = [
     ],
   },
 ]
+
+export const RelevanceOrderOptions: CustomColumn[] = [
+  {
+    label: '目的港名称',
+    name: 'fndId',
+    api: getSearchPort,
+    options: [],
+    formType: 'select',
+    span: 12,
+    tag: 'FND',
+  },
+]

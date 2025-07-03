@@ -1,4 +1,4 @@
-import { HttpRequest } from '@/utils/request';
+import { HttpRequest } from '@/utils/request'
 
 /**
  * 枚举菜单相关的请求API
@@ -37,9 +37,9 @@ export const getMenuListByRoleId = (params: any) => {
       url: Api.getMenuList,
       params,
     },
-    { successMessageMode: 'none' },
-  );
-};
+    { successMessageMode: 'none' }
+  )
+}
 
 /**
  * 查询所有菜单
@@ -53,9 +53,9 @@ export const getAllMenus = (params: Record<string, any>) => {
     },
     {
       successMessageMode: 'none',
-    },
-  );
-};
+    }
+  )
+}
 
 /**
  * 获取所有的一级菜单
@@ -64,9 +64,9 @@ export const getAllMenus = (params: Record<string, any>) => {
 export const getDirectory = () => {
   return HttpRequest.get(
     { url: Api.getDirectory },
-    { successMessageMode: 'none' },
-  );
-};
+    { successMessageMode: 'none' }
+  )
+}
 
 /**
  * 新增菜单
@@ -77,8 +77,8 @@ export const addMenu = (params: Record<string, any>) => {
   return HttpRequest.post({
     url: Api.addMenu,
     data: params,
-  });
-};
+  })
+}
 
 /**
  * 修改菜单数据
@@ -89,8 +89,8 @@ export const updateMenu = (params: Record<string, any>) => {
   return HttpRequest.post({
     url: Api.updateMenu,
     data: params,
-  });
-};
+  })
+}
 
 /**
  * 删除菜单
@@ -101,8 +101,8 @@ export const deleteMenu = (menuId: string) => {
   return HttpRequest.delete({
     url: Api.deleteMenu,
     params: menuId,
-  });
-};
+  })
+}
 
 /**
  * 批量删除菜单
@@ -113,8 +113,8 @@ export const deleteMenuBatch = (menuIds: string[]) => {
   return HttpRequest.delete({
     url: Api.deleteMenuBatch,
     data: menuIds,
-  });
-};
+  })
+}
 
 //    下面两个方法都需要进行更改，改为专用的文件导入导出
 
@@ -127,8 +127,8 @@ export const exportMenu = (menus: any) => {
   return HttpRequest.post({
     url: Api.exportMenus,
     data: menus,
-  });
-};
+  })
+}
 
 /**
  * 导入菜单（从Excel里面导入）
@@ -139,8 +139,8 @@ export const importMenu = (file: any) => {
   return HttpRequest.post({
     url: Api.importMenus,
     data: file,
-  });
-};
+  })
+}
 
 /**
  * 验证菜单权限
@@ -151,5 +151,5 @@ export const checkPermission = (params: any) => {
   return HttpRequest.post({
     url: Api.checkPermission,
     data: params,
-  });
-};
+  })
+}

@@ -79,6 +79,7 @@ export default defineConfig({
   },
   // 服务相关
   server: {
+    host: '::',
     port: 3005,
     open: false,
     proxy: {

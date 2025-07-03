@@ -18,7 +18,7 @@ const fetchSearch = debounce(
 )
 
 const SearchFormItem: React.FC<CustomColumn> = memo((props) => {
-  const { label, name, formType, api, tag, options } = props
+  const { label, name, formType, api, tag, options, isRules } = props
 
   const { RangePicker } = DatePicker
 
@@ -33,16 +33,13 @@ const SearchFormItem: React.FC<CustomColumn> = memo((props) => {
     API: any,
     tag: string | undefined
   ) => {
-    console.log(newVal, 'handleSearch')
     fetchSearch({ value: newVal, name: type, api: API, tag }, setDefaultOptions)
   }
 
   const selectFoucs = (name: string, API: any, tag: string | undefined) => {
     if (portNameOptions.includes(name)) {
-      console.log('zzzz', name, API)
       fetchSearch({ value: null, name: name, api: API, tag }, setDefaultOptions)
     } else setDefaultOptions(options)
-    console.log(options, 'options')
   }
 
   const selectOptions = () => {
@@ -73,7 +70,22 @@ const SearchFormItem: React.FC<CustomColumn> = memo((props) => {
 
   return (
     <div className={'search-form-item'}>
-      <Form.Item label={label} name={name}>
+      <Form.Item
+        label={label}
+        name={name}
+        rules={
+          isRules
+            ? [
+                {
+                  required: true,
+                  message: `请${
+                    formType === 'input' ? '输入' : '选择'
+                  }${label}`,
+                },
+              ]
+            : undefined
+        }
+      >
         {formType === 'input' && (
           <Input
             autoFocus={false}

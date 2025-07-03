@@ -1,6 +1,8 @@
 import React from 'react'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { Button, Card, ConfigProvider, type TableProps, Space, App } from 'antd'
+import { TablePaginationConfig } from 'antd/lib'
+import { DownloadOutlined, SendOutlined } from '@ant-design/icons'
 import SearchForm from '@/components/searchForm'
 import SearchTable from '@/components/searchTable'
 import { CabinResultOptions } from './config'
@@ -8,13 +10,14 @@ import {
   postCabinResult,
   getCabinResultOptions,
   postOnRelevance,
+  postRelevanceResult,
+  postBatchProduct,
 } from '@/services/order'
-import { OrderSearchParams } from '@/services/order/type'
-import { TablePaginationConfig } from 'antd/lib'
-import { DownloadOutlined, SendOutlined } from '@ant-design/icons'
+import type { OrderSearchParams } from '@/services/order/type'
 import { formatTime } from '@/utils/format'
 import CabinResultModal from './CabinResultModal'
 import RelevanceOrderDrawer from './RelevanceOrderDrawer'
+import ManualRelease from './ManualReleaseModal'
 
 type CtnTypeParams = {
   ctnType: string
@@ -37,11 +40,20 @@ const CabinResult: React.FC = () => {
 
   const [loading, setLoading] = useState<boolean>(false)
 
+  const [manualReleaseId, setManualReleaseId] = useState<string>('')
+
   const [selected, setSelected] = useState<string[]>([])
 
   const [relevance, setRelevance] = useState<boolean>(false)
 
-  const [manualRelease, setManualRelease] = useState<boolean>(false)
+  const [manualReleaseParams, setManualReleaseParmas] = useState<{
+    visible: boolean
+    editRow: any | null
+    carrierOptions?: string[]
+  }>({
+    visible: false,
+    editRow: null,
+  })
 
   const columns: TableProps['columns'] = [
     {
@@ -191,18 +203,24 @@ const CabinResult: React.FC = () => {
           <Space direction="vertical" size={0}>
             <div
               className={getClassName(!record.orderId, 'blue')}
-              onClick={() => setRelevance(true)}
+              onClick={() => {
+                setManualReleaseId(record.id)
+                setRelevance(true)
+              }}
             >
               关联订单
             </div>
             <div className={getClassName(record.orderId, 'red')}>查看订单</div>
             <div
-              className={getClassName(!record.orderId, 'blue')}
+              className={getClassName(record.orderId, 'blue')}
               onClick={() => cancelRelevance(record.id)}
             >
               取消关联
             </div>
-            <div className={getClassName(!record.publishStatus, 'blue')}>
+            <div
+              className={getClassName(!record.publishStatus, 'blue')}
+              onClick={() => openManual(record)}
+            >
               手动发布
             </div>
           </Space>
@@ -216,10 +234,10 @@ const CabinResult: React.FC = () => {
   }
 
   const onUpdateSearch = (
-    info: Pick<OrderSearchParams, 'filter'> | unknown
+    info?: Pick<OrderSearchParams, 'filter'> | unknown
   ) => {
     const filteredObj = Object.fromEntries(
-      Object.entries(info ?? {}).filter(([key, value]) => !!value)
+      Object.entries(info ?? {}).filter(([, value]) => !!value)
     )
     setSearchDefault({
       ...searchDefaultForm,
@@ -234,9 +252,24 @@ const CabinResult: React.FC = () => {
       message.error('请至少选择一条要导出的订单')
       return
     }
-    postCabinResult(selected).then((res) => {
-      console.log(res, 'res')
-    })
+    setLoading(true)
+    postBatchProduct(selected)
+      .then((res) => {
+        let flag =
+          res.data.effected == selected.length &&
+          !res.data.failedItems &&
+          res.data.failedItems.length !== 0
+            ? true
+            : false
+        let errorMsg = res.data.failedItems[0].message ?? ''
+        flag === true
+          ? message.success('批量发布成功')
+          : message.error(
+              `发布成功${res.data.effected}条数据，其余发布失败，失败原因：${errorMsg}等...`
+            )
+        setLoading(false)
+      })
+      .catch(() => setLoading(false))
   }
 
   const onEditOk = (params: any) => {
@@ -276,7 +309,30 @@ const CabinResult: React.FC = () => {
     })
   }
 
-  const handleOk = () => {}
+  const handleOk = (e: string[]) => {
+    if (e.length !== 1) message.error('只能选择一条订单导入订舱结果')
+    else {
+      postRelevanceResult({
+        ids: [manualReleaseId],
+        orderId: e.join(','),
+      }).then(() => {
+        message.success('导入成功')
+        setRelevance(false)
+      })
+      // onUpdateSearch()
+    }
+  }
+
+  const openManual = (row: any) => {
+    let arr = CabinResultOptions.find(
+      (item) => item.name === 'carrier'
+    )?.options
+    setManualReleaseParmas({
+      visible: true,
+      editRow: row,
+      carrierOptions: arr?.map((item) => item.name),
+    })
+  }
 
   return (
     <>
@@ -294,8 +350,9 @@ const CabinResult: React.FC = () => {
             columns={CabinResultOptions}
             gutterWidth={24}
             labelPosition="left"
-            byHeight={false}
             btnSeparate={true}
+            isShowExpend={false}
+            isShowReset={true}
             onUpdateSearch={onUpdateSearch}
           />
         </Card>
@@ -304,7 +361,7 @@ const CabinResult: React.FC = () => {
             <Button
               type="primary"
               icon={<DownloadOutlined />}
-              onClick={() => openCabinResultModal()}
+              onClick={openCabinResultModal}
             >
               导入拍舱结果
             </Button>
@@ -334,6 +391,13 @@ const CabinResult: React.FC = () => {
         drawerShow={relevance}
         onCancel={() => setRelevance(false)}
         onOk={handleOk}
+      />
+      <ManualRelease
+        params={manualReleaseParams}
+        onCancel={() =>
+          setManualReleaseParmas({ visible: false, editRow: null })
+        }
+        onOk={() => {}}
       />
     </>
   )

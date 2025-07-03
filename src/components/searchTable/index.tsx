@@ -17,9 +17,11 @@ interface SearchTableProps<T = OrderTableObject>
   searchFilter?: any
   rowKey: string
   isSelection: boolean
+  isPagination?: boolean
+  selectionParentType?: 'checkbox' | 'radio'
   immediate?: boolean
   onUpdatePagination: (pagination: TablePaginationConfig) => void
-  onUpdateSelection?: (arr: string[]) => void
+  onUpdateSelection?: (idAdrr: string[], dataRow?: any) => void
 }
 
 const searchTable: React.FC<SearchTableProps> = memo((props) => {
@@ -29,6 +31,8 @@ const searchTable: React.FC<SearchTableProps> = memo((props) => {
     searchFilter,
     rowKey,
     isSelection,
+    isPagination,
+    selectionParentType,
     immediate,
     onUpdatePagination,
     onUpdateSelection,
@@ -65,23 +69,26 @@ const searchTable: React.FC<SearchTableProps> = memo((props) => {
 
   useEffect(() => {
     if (!immediate) {
-      console.log('立即执行！')
       loadTableData()
     }
+    setSelectionType(selectionParentType ?? selectionType)
   }, [
     currentPagination.pageSize,
     currentPagination.pageSizeOptions,
     searchFilter,
     immediate,
+    selectionParentType,
   ])
 
   const handleTableChange = (pagination: TablePaginationConfig) => {
+    // if (isPagination) {
     setCurrentPagination({
       ...currentPagination,
       current: pagination.current,
       pageSize: pagination.pageSize,
     })
     onUpdatePagination(pagination)
+    // }
   }
 
   const rowSelection: TableProps['rowSelection'] = {
@@ -92,7 +99,10 @@ const searchTable: React.FC<SearchTableProps> = memo((props) => {
         selectedRows
       )
       if (onUpdateSelection && isSelection)
-        onUpdateSelection(selectedRows.map((item: { id: number }) => item.id))
+        onUpdateSelection(
+          selectedRows.map((item: { id: number }) => item.id),
+          selectedRows
+        )
     },
     getCheckboxProps: (record: any) => ({
       disabled: record.name === 'Disabled User', // Column configuration not to be checked

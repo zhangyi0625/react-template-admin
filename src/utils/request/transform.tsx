@@ -210,9 +210,12 @@ export const transform: AxiosTransform = {
    */
   requestInterceptors: (config, options) => {
     const cpt = options?.requestOptions?.encrypt
-    if (config.url?.includes('upload'))
+    if (config.url?.includes('upload') || config.url?.includes('staff/login')) {
       config.headers['Content-Type'] = ContentTypeEnum.FORM_DATA
-    else config.headers['Content-Type'] = ContentTypeEnum.JSON
+      if (config.url?.includes('staff/login')) {
+        // config.headers['x-captcha-answer'] =
+      }
+    } else config.headers['Content-Type'] = ContentTypeEnum.JSON
     // 进行数据加密
     if (config.data && cpt === 1) {
       // 判定json数据需要转为json字符串才能加密

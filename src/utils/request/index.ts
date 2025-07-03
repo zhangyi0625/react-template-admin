@@ -19,7 +19,7 @@ function createAxios(opts?: Partial<CreateAxiosOptions>) {
         // headers: { 'Content-Type': ContentTypeEnum.JSON },
         headers: {
           'Content-Type': ContentTypeEnum.FORM_URLENCODED,
-          // 'x-captcha-answer': s,
+          'x-captcha-answer': sessionStorage.getItem('captchaAnswer'),
           authorization: 'Bearer ' + sessionStorage.getItem('token'),
         },
         // 数据处理方式

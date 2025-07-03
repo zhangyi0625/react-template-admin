@@ -1,11 +1,11 @@
 import style from './index.module.scss'
-import { memo, useEffect, useState } from 'react'
+import { memo, useCallback, useEffect, useState } from 'react'
 import { Button, Col, Form, Row, Space } from 'antd'
 import { SelectProps } from 'antd'
 import { RootState } from '@/stores/store'
 import { useSelector } from 'react-redux'
 import SearchFormItem from './searchFormItem'
-import { RedoOutlined, SearchOutlined } from '@ant-design/icons'
+import { DownOutlined, RedoOutlined, SearchOutlined } from '@ant-design/icons'
 import { filterKeys, replaceObjectName } from '@/utils/tool'
 import { formatTime } from '@/utils/format'
 
@@ -19,15 +19,18 @@ export interface CustomColumn {
   span: number
   tag?: string | undefined | 'POR' | 'FND'
   filterSearch?: boolean
+  // Todo : form表单rules 暂时只支持基础空置校验
+  isRules?: boolean
 }
 
 type SearchFormPorps = {
   gutterWidth: number
-  // showRow?: number
+  showRow?: number
   columns: CustomColumn[]
-  byHeight: boolean
   btnSeparate: boolean
-  labelPosition: any
+  labelPosition: 'left' | 'right'
+  isShowReset: boolean
+  isShowExpend: boolean
   onUpdateSearch: (filter?: unknown) => void
 }
 
@@ -51,10 +54,12 @@ const formItemLayout = {
 const SearchForm: React.FC<SearchFormPorps> = memo((props) => {
   const {
     gutterWidth,
+    showRow,
     columns,
-    byHeight,
     labelPosition,
     btnSeparate,
+    isShowReset,
+    isShowExpend,
     onUpdateSearch,
   } = props
 
@@ -69,6 +74,12 @@ const SearchForm: React.FC<SearchFormPorps> = memo((props) => {
   const onFinish = (value: unknown) => {
     onUpdateSearch(value)
   }
+
+  const expendColumns = useCallback(() => {
+    if (showRow && isShowExpend) {
+      return !isExpend ? columns.length : showRow * 4
+    }
+  }, [isExpend])
 
   const [searchColumns, setSerachColumns] = useState<CustomColumn[]>(columns)
 
@@ -86,6 +97,7 @@ const SearchForm: React.FC<SearchFormPorps> = memo((props) => {
       if (item.publicSettingKey)
         item.options = extendsOptions(publicData[item.publicSettingKey])
     })
+
     setTimeout(() => {
       setSerachColumns([...searchColumns])
     }, 500)
@@ -117,6 +129,10 @@ const SearchForm: React.FC<SearchFormPorps> = memo((props) => {
     onSearch()
   }
 
+  const changeExpend = () => {
+    setIsExpend(!isExpend)
+  }
+
   return (
     <div className={style['search-form']}>
       <Form
@@ -126,14 +142,17 @@ const SearchForm: React.FC<SearchFormPorps> = memo((props) => {
         labelAlign={labelPosition}
         form={searchForm}
       >
-        <Row
-          gutter={gutterWidth}
-          className={
-            byHeight && !isExpend ? 'no-show gap-y-[10px]' : 'gap-y-[10px]'
-          }
-        >
+        <Row gutter={gutterWidth} className={'gap-y-[10px]'}>
           {columns.map((item, index) => (
-            <Col key={index} span={item.span}>
+            <Col
+              key={index}
+              span={item.span}
+              className={
+                isExpend && showRow && index + 1 > showRow * 4
+                  ? style['no-show']
+                  : ''
+              }
+            >
               <SearchFormItem
                 label={item.label}
                 name={item.name}
@@ -142,11 +161,12 @@ const SearchForm: React.FC<SearchFormPorps> = memo((props) => {
                 formType={item.formType}
                 span={item.span}
                 tag={item.tag}
+                isRules={item.isRules ?? false}
                 publicSettingKey={item.publicSettingKey}
               />
             </Col>
           ))}
-          {!btnSeparate ? (
+          {!btnSeparate && (
             <Col>
               <Space>
                 <Button
@@ -156,20 +176,22 @@ const SearchForm: React.FC<SearchFormPorps> = memo((props) => {
                 >
                   搜索
                 </Button>
-                <Button
-                  type="default"
-                  icon={<RedoOutlined />}
-                  onClick={onReset}
-                >
-                  重置
-                </Button>
+                {isShowReset && (
+                  <Button
+                    type="default"
+                    icon={<RedoOutlined />}
+                    onClick={onReset}
+                  >
+                    重置
+                  </Button>
+                )}
               </Space>
             </Col>
-          ) : null}
+          )}
         </Row>
       </Form>
-      {btnSeparate ? (
-        <div className="flex justify-end mt-[10px]">
+      {btnSeparate && (
+        <div className="flex items-center justify-end mt-[10px]">
           <Space>
             <Button
               type="primary"
@@ -179,12 +201,20 @@ const SearchForm: React.FC<SearchFormPorps> = memo((props) => {
             >
               搜索
             </Button>
-            <Button type="default" icon={<RedoOutlined />} onClick={onReset}>
-              重置
-            </Button>
+            {isShowReset && (
+              <Button type="default" icon={<RedoOutlined />} onClick={onReset}>
+                重置
+              </Button>
+            )}
+            {isShowExpend && (
+              <a style={{ fontSize: '12px' }} onClick={changeExpend}>
+                <DownOutlined rotate={isExpend ? 180 : 0} />
+                Collapse
+              </a>
+            )}
           </Space>
         </div>
-      ) : null}
+      )}
     </div>
   )
 })

@@ -1,9 +1,8 @@
-import { memo, useCallback, useEffect, useMemo, useState } from 'react'
+import { memo, useEffect, useMemo, useState } from 'react'
 import { Input, Table, TableProps } from 'antd'
-import { ORDER, statusAllList } from '../../../config'
+import { ORDER, OrderDetailAreaInfo } from '../../../config'
 import { loadAdditionalCharges } from '@/utils/freight'
-import { FreightPriceListType } from '@/utils/freight/type'
-import { filterKeys } from '@/utils/tool'
+import type { FreightPriceListType } from '@/utils/freight/type'
 
 type CtnType = {
   ctnType: string
@@ -29,6 +28,8 @@ type OrderInfoParmas = {
   orderCarrierAccounts: any
   por: any
   fnd: any
+  productChannel: string
+  [key: string]: string | any
 }
 
 interface AreaBaseInfoProps {
@@ -184,44 +185,74 @@ const AreaBaseInfo: React.FC<AreaBaseInfoProps> = memo((props) => {
 
   const getPriceFee = () => {
     const priceList = loadAdditionalCharges(orderInfo?.bookingInfo?.priceList)
-    // const columnsName = useMemo(() => {
-    //   return '起运港费用'
-    // }, [priceList])
-    const firstColumns: TableProps['columns'] = [
-      {
-        dataIndex: 'chargeName',
-        title: '订舱信息',
-        key: 'chargeName',
-        align: 'center',
-      },
+    const columnsList = [
+      [
+        {
+          dataIndex: 'chargeName',
+          title: '海运附加费',
+          key: 'chargeName',
+          align: 'center',
+        },
+        ...(columns?.slice(1, columns.length) as any),
+      ],
+      [
+        {
+          dataIndex: 'chargeName',
+          title: '起运港费用',
+          key: 'chargeName',
+          align: 'center',
+        },
+        ...(columns?.slice(1, columns.length) as any),
+      ],
     ]
-    const resetColumns = firstColumns.concat(
-      columns?.slice(1, columns.length) as any
-    )
-    console.log(
-      priceList,
-      'priceList',
-      orderInfo?.bookingInfo?.priceList,
-      resetColumns
-      // columnsName
-    )
+
     return (
       <>
         <Table
           className="mt-[40px]"
-          columns={resetColumns}
+          columns={columnsList[0]}
           dataSource={priceList?.oceanFreight}
           pagination={false}
           rowKey={(record) => record?.chargeName || 'chargeName'}
         />
         <Table
           className="mt-[40px]"
-          columns={resetColumns}
+          columns={columnsList[1]}
           dataSource={priceList?.porPriceList}
           pagination={false}
           rowKey={(record) => record?.chargeName || 'chargeName'}
         />
       </>
+    )
+  }
+
+  const getAreaInfo = () => {
+    let arr = OrderDetailAreaInfo.map((item) => {
+      if (item.key && !item.bySetting) {
+        item.value = !item.getValue
+          ? orderInfo[item.key]
+          : item.getValue(orderInfo[item.key])
+      }
+      return { ...item }
+    })
+
+    return (
+      <div className="mt-[40px]">
+        <p className="font-bold text-dull-grey">航线信息</p>
+        <div className="grid grid-cols-2 mt-[10px] border-collapse border border-slate-200">
+          {arr.map((item, index) => (
+            <div
+              className="w-full flex items-center border-b border-slate-200"
+              key={index}
+            >
+              <div className="w-[116px] p-[15px] bg-slate-100 h-full">
+                {item.label}
+              </div>
+              <div className="p-[15px] flex-1">{item.value}</div>
+            </div>
+          ))}
+        </div>
+      </div>
     )
   }
 
@@ -251,13 +282,12 @@ const AreaBaseInfo: React.FC<AreaBaseInfoProps> = memo((props) => {
       />
       <p className="mt-[40px] font-bold text-dull-grey">涉及账号</p>
       <Table
-        // title={() => '涉及账号'}
         columns={accountTableColumns}
         dataSource={orderInfo?.orderCarrierAccounts}
         rowKey={'username'}
         pagination={false}
       />
-      <p className="mt-[40px] font-bold text-dull-grey">航线信息</p>
+      {type === 'BOOKING' && getAreaInfo()}
       <p className={textClass}>港口航线信息</p>
       <Table
         columns={protServiceColumns}
@@ -265,8 +295,7 @@ const AreaBaseInfo: React.FC<AreaBaseInfoProps> = memo((props) => {
         pagination={false}
         rowKey={(record) => record?.id || 'id'}
       />
-      {/* <Table  /> */}
-      {orderInfo && getPriceFee()}
+      {orderInfo && orderInfo?.productChannel !== 'CUSTOMER' && getPriceFee()}
     </>
   )
 })

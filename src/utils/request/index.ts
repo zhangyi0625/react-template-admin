@@ -41,7 +41,7 @@ function createAxios(opts?: Partial<CreateAxiosOptions>) {
           // 成功消息提示类型
           successMessageMode: 'success',
           // 接口地址（默认前缀）
-          apiUrl: '/api',
+          apiUrl: '/apis',
           // 接口拼接地址前缀
           urlPrefix: '',
           // 是否加入时间戳 默认不添加时间戳

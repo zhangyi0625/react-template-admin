@@ -1,34 +1,43 @@
 /**
  * 系统角色
  */
-export interface SysRole {
+export interface SysRoleType {
   /**
    * 角色ID
    */
-  id: string;
-
-  /**
-   * 角色编码
-   */
-  roleCode: string;
+  id: string | null
 
   /**
    * 角色名称
    */
-  roleName: string;
+  roleName: string
 
   /**
-   * 角色类型
+   * 角色备注
    */
-  roleType: string;
+  comments: string
+}
 
-  /**
-   * 角色状态
-   */
-  status: string;
+export interface SysRoleParams extends Partial<Omit<SysRoleType, 'id'>> {
+  page: number
+  size: number
+}
 
-  /**
-   * 角色描述
-   */
-  remark?: string;
+export interface SysUserParams {
+  page: number
+  size: number
+  roleId: string
+  loginName?: string
+  nickname?: string
+}
+
+export interface SysUserType
+  extends Pick<SysUserParams, 'loginName' | 'nickname'> {
+  id: string | null
+  orgId: string
+  phone: string
+  introduction: string
+  loginPwd: string
+  roles: string | string[] | any
+  email: string
 }

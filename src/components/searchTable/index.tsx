@@ -26,6 +26,7 @@ interface SearchTableProps<T = OrderTableObject>
 
 const searchTable: React.FC<SearchTableProps> = memo((props) => {
   const {
+    bordered,
     columns,
     fetchData,
     searchFilter,
@@ -36,6 +37,7 @@ const searchTable: React.FC<SearchTableProps> = memo((props) => {
     immediate,
     onUpdatePagination,
     onUpdateSelection,
+    onRow,
   } = props
 
   const [tableData, setTableData] = useState([])
@@ -57,8 +59,10 @@ const searchTable: React.FC<SearchTableProps> = memo((props) => {
   const loadTableData = async (paginationConfig = currentPagination) => {
     setLoading(true)
     const response = await fetchData(searchFilter)
-    setTableData(response.entries)
-    setCurrentPagination({ ...paginationConfig, total: response.total })
+    console.log('response', response)
+
+    setTableData(response.entries ?? response.results)
+    setCurrentPagination({ ...paginationConfig, total: Number(response.total) })
     try {
     } catch {
       setLoading(false)
@@ -113,6 +117,7 @@ const searchTable: React.FC<SearchTableProps> = memo((props) => {
   return (
     <Spin spinning={loading}>
       <Table
+        bordered
         columns={columns}
         dataSource={tableData}
         pagination={currentPagination}

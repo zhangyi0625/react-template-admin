@@ -36,3 +36,31 @@ export function replaceObjectName(
   refreshArr = JSON.parse(JSON.stringify(arr))
   return refreshArr
 }
+
+interface BuildTreeType {
+  label: string
+  value: string
+  children: BuildTreeType[]
+}
+
+/**
+ * 使用哈希表来存储节点关系 遍历构建树形结构
+ * @param data
+ * @returns
+ */
+export function buildTree(data: any | BuildTreeType[]) {
+  const map = new Map()
+  const tree: BuildTreeType[] = []
+  // 将数组元素存入哈希表
+  data.forEach((item: any) => {
+    map.set(item.id, { ...item, children: [] })
+  })
+  data.forEach((item: any) => {
+    if (item.parentId === '0' || !item.parentId) tree.push(map.get(item.id))
+    else {
+      const parent = map.get(item.parentId)
+      parent && parent.children.push(map.get(item.id))
+    }
+  })
+  return tree
+}

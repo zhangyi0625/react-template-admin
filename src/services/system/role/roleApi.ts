@@ -1,5 +1,10 @@
-import { HttpRequest } from "@/utils/request";
-import type { SysRole } from "./roleModel";
+import { HttpRequest } from '@/utils/request'
+import type {
+  SysRoleParams,
+  SysRoleType,
+  SysUserParams,
+  SysUserType,
+} from './roleModel'
 
 /**
  * 枚举角色相关的api
@@ -8,59 +13,74 @@ export enum RoleApi {
   /**
    * 获取角色列表
    */
-  getRoleList = "/system/role/getRoleList",
+  getRoleList = '/api/system/role/page',
   /**
    * 获取角色详情
    */
-  getRoleDetail = "/system/role/detail",
+  getRoleDetail = '/system/role/detail',
   /**
    * 新增角色
    */
-  addRole = "/system/role/addRole",
+  addRole = '/api/system/role/add',
   /**
    * 编辑角色
    */
-  editRole = "/system/role/editRole",
+  editRole = '/api/system/role/update',
 
   /**
    * 改变角色状态
    */
-  changeStatus = "/system/role/changeStatus",
+  changeStatus = '/system/role/changeStatus',
 
   /**
    * 删除角色
    */
-  deleteRole = "/system/role/deleteRole",
+  deleteRole = '/api/system/role/delete/',
 
   /**
    * 获取角色菜单
    */
-  getRoleMenu = "/system/role/getRoleMenu",
+  getRoleMenu = '/system/role/getRoleMenu',
 
   /**
    * 获取角色用户
    */
-  getRoleUser = "/system/role/getRoleUser",
+  getRoleUser = '/api/system/user/page',
+
+  /**
+   * 新增角色用户
+   */
+  addRoleUser = '/api/system/user/add',
+
+  /**
+   * 删除角色用户
+   */
+  deleteRoleUser = '/api/system/user/delete/',
+
+  /**
+   * 批量删除角色用户
+   */
+  batchDeleteRoleUser = '/api/system/user/batchDelete',
 
   /**
    * 获取不在该角色下的所有可用用户
    */
-  getUserNotInRoleByPage = "/system/role/getUserNotInRoleByPage",
+  getUserNotInRoleByPage = '/system/role/getUserNotInRoleByPage',
 
   /**
    * 给角色分配菜单
    */
-  assignRoleMenu = "/system/role/assignRoleMenu",
+  assignRoleMenu = '/system/role/assignRoleMenu',
 
   /**
    * 给角色分配用户
    */
-  assignRoleUser = "/system/role/assignRoleUser",
+  assignRoleUser = '/system/role/assignRoleUser',
 
   /**
    * 校验角色编码是否重复
    */
-  checkRoleCodeExist = "/system/role/checkRoleCodeExist",
+  checkRoleCodeExist = '/system/role/checkRoleCodeExist',
 }
 
 /**
@@ -68,41 +88,41 @@ export enum RoleApi {
  * @param params 角色参数
  * @returns 角色列表
  */
-export const getRoleList = (params: any) => {
-  return HttpRequest.post<SysRole[]>(
+export const getRoleList = (params: SysRoleParams) => {
+  return HttpRequest.get<SysRoleType[]>(
     {
       url: RoleApi.getRoleList,
-      data: params,
+      params: params,
     },
     {
-      successMessageMode: "none",
+      successMessageMode: 'none',
     }
-  );
-};
+  )
+}
 
 /**
  * 新增角色
  * @param params 角色参数
  * @returns 结果
  */
-export const addRole = (params: Record<string, any>) => {
+export const addRole = (params: SysRoleType) => {
   return HttpRequest.post({
     url: RoleApi.addRole,
     data: params,
-  });
-};
+  })
+}
 
 /**
  * 编辑角色信息
  * @param params 角色参数
  * @returns 结果
  */
-export const editRole = (params: Record<string, any>) => {
+export const editRole = (params: SysRoleType) => {
   return HttpRequest.post({
     url: RoleApi.editRole,
     data: params,
-  });
-};
+  })
+}
 
 /**
  * 更新角色状态
@@ -113,20 +133,19 @@ export const changStatus = (params: Record<string, any>) => {
   return HttpRequest.patch({
     url: RoleApi.changeStatus,
     data: params,
-  });
-};
+  })
+}
 
 /**
  * 删除角色
  * @param params 角色参数
  * @returns 结果
  */
-export const deleteRole = (params: Record<string, any>) => {
+export const deleteRole = (id: string) => {
   return HttpRequest.delete({
-    url: RoleApi.deleteRole,
-    params,
-  });
-};
+    url: RoleApi.deleteRole + id,
+  })
+}
 
 /**
  * 获取角色菜单权限
@@ -140,10 +159,10 @@ export const getRoleMenu = (roleId: string) => {
       params: { roleId },
     },
     {
-      successMessageMode: "none",
+      successMessageMode: 'none',
     }
-  );
-};
+  )
+}
 
 /**
  * 分配角色菜单权限
@@ -154,8 +173,8 @@ export const assignRoleMenu = (params: any) => {
   return HttpRequest.post({
     url: RoleApi.assignRoleMenu,
     data: params,
-  });
-};
+  })
+}
 
 /**
  * 分配角色用户
@@ -166,25 +185,70 @@ export const assignRoleUser = (params: any) => {
   return HttpRequest.post({
     url: RoleApi.assignRoleUser,
     data: params,
-  });
-};
+  })
+}
 
 /**
  * 获取角色用户
  * @param params 角色参数
  * @returns 结果
  */
-export const getRoleUser = (params: any) => {
-  return HttpRequest.post(
+export const getRoleUser = (params: SysUserParams) => {
+  return HttpRequest.get(
     {
       url: RoleApi.getRoleUser,
+      params: params,
+    },
+    {
+      successMessageMode: 'none',
+    }
+  )
+}
+
+/**
+ * 新增角色用户
+ * @param params 用户参数
+ * @returns 结果
+ */
+export const postRoleUser = (params: SysUserType) => {
+  return HttpRequest.post(
+    {
+      url: RoleApi.addRoleUser,
       data: params,
     },
     {
-      successMessageMode: "none",
+      successMessageMode: 'none',
     }
-  );
-};
+  )
+}
+
+/**
+ * 删除角色用户
+ * @param params 用户参数
+ * @returns 结果
+ */
+export const deleteRoleUser = (id: string) => {
+  return HttpRequest.delete({
+    url: RoleApi.deleteRoleUser + id,
+  })
+}
+
+/**
+ * 批量删除角色用户
+ * @param params 用户参数
+ * @returns 结果
+ */
+export const postBatchRoleUser = (params: { ids: string[] }) => {
+  return HttpRequest.post(
+    {
+      url: RoleApi.addRoleUser,
+      data: params,
+    },
+    {
+      successMessageMode: 'none',
+    }
+  )
+}
 
 /**
  * 获取不在该角色下的所有可用用户
@@ -198,10 +262,10 @@ export const getUserNotInRoleByPage = (params: any) => {
       data: params,
     },
     {
-      successMessageMode: "none",
+      successMessageMode: 'none',
     }
-  );
-};
+  )
+}
 /**
  * 验证角色编码是否存在
  * @param params 角色编码
@@ -214,7 +278,7 @@ export const checkRoleCodeExist = (params: any) => {
       params,
     },
     {
-      successMessageMode: "none",
+      successMessageMode: 'none',
     }
-  );
-};
+  )
+}

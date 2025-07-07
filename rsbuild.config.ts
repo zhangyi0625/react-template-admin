@@ -83,11 +83,11 @@ export default defineConfig({
     port: 3005,
     open: false,
     proxy: {
-      '/api': {
-        // target: 'http://dev.zaicang.net/api/',
-        target: process.env.VITE_BASE_API + '/api/',
+      '/apis': {
+        // target: 'https://qms.zaicang.net/apis',
+        target: process.env.VITE_BASE_API,
         changeOrigin: true,
-        pathRewrite: (path) => path.replace(/^\/api/, ''),
+        pathRewrite: (path) => path.replace(/^\/apis/, ''),
       },
       // '/api': {
       //   target: 'http://localhost:8090/fusion',

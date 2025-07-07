@@ -1,269 +1,258 @@
-import DragModal from '@/components/modal/DragModal';
+import { useEffect, useRef, useState } from 'react'
 import {
-  assignRoleUser,
-  getUserNotInRoleByPage,
-} from '@/services/system/role/roleApi';
-import {
-  SearchOutlined,
-  RedoOutlined,
-  ManOutlined,
-  WomanOutlined,
-} from '@ant-design/icons';
-import {
-  Button,
-  Card,
   Col,
   Form,
+  GetProp,
   Input,
   type InputRef,
   Row,
   Select,
-  Space,
-  Table,
-  type TableProps,
-} from 'antd';
-import { useEffect, useRef, useState } from 'react';
+  TreeSelect,
+  TreeSelectProps,
+} from 'antd'
+import DragModal from '@/components/modal/DragModal'
+import { getRoleList } from '@/services/system/role/roleApi'
+import { getOrganizationList } from '@/services/system/organization/organization'
+import { buildTree } from '@/utils/tool'
+import { SysUserType } from '@/services/system/role/roleModel'
+
+type DefaultOptionType = GetProp<TreeSelectProps, 'treeData'>[number]
 
 /**
  * 添加用户弹窗
  * @returns
  */
 const AddUser: React.FC<AddUserProps> = ({ open, onOk, onCancel, roleId }) => {
-  const [form] = Form.useForm();
-  // 当前选中的行数据
-  const [selRows, setSelectedRows] = useState<any[]>([]);
-  // 表格数据
-  const [tableData, setTableData] = useState<any[]>([]);
-  // 数据总条数
-  const [total, setTotal] = useState<number>(0);
-  const ref = useRef<InputRef>(null);
-  // 分页参数
-  const [pagination, setPagination] = useState<{
-    pageNumber: number;
-    pageSize: number;
-  }>({
-    pageNumber: 1,
-    pageSize: 10,
-  });
+  const [form] = Form.useForm()
+
+  const [role, setRole] = useState([])
+
+  const ref = useRef<InputRef>(null)
+
+  const [loading, setLoading] = useState<boolean>(false)
+
+  const [treeData, setTreeData] = useState<Omit<DefaultOptionType, 'label'>[]>(
+    []
+  )
+
+  const [initialValues, setInitialValues] = useState<{ roles: string[] }>({
+    roles: [],
+  })
 
   useEffect(() => {
-    if (!open) return;
-    // 获取没有当前角色权限的所有用户
-    getUserData();
-    // 重置选中的行
-    setSelectedRows([]);
-  }, [open, pagination]);
+    if (!open.visible) return
+    // 获取所有角色
+    getAllRole()
+    getOrganization()
+    if (open.editRow) {
+      form.setFieldsValue({
+        ...open.editRow,
+        roles: open.editRow?.roles.map((el: { roleId: string }) => el.roleId),
+      })
+    } else {
+      form.resetFields()
+      setInitialValues({ roles: [roleId] })
+    }
+  }, [open.visible])
 
-  /**
-   * 获取用户数据
-   */
-  const getUserData = () => {
-    getUserNotInRoleByPage({
-      roleId,
-      // 表单数据
-      searchParams: form.getFieldsValue(),
-      pageNum: pagination.pageNumber,
-      pageSize: pagination.pageSize,
-    }).then((resp) => {
-      setTableData(resp.data);
-      resp.total && setTotal(resp.total);
-      ref.current?.focus();
-    });
-  };
+  const getOrganization = () => {
+    setLoading(true)
+    getOrganizationList().then((resp) => {
+      setTreeData(buildTree(resp))
+      setLoading(false)
+    })
+  }
 
-  /**
-   * 检索表单提交
-   */
-  const onFinish = () => {
-    getUserData();
-  };
-
-  /**
-   * 定义表格的列
-   */
-  const columns: TableProps['columns'] = [
-    {
-      title: 'id',
-      dataIndex: 'id',
-      hidden: true,
-    },
-    {
-      title: '用户ID',
-      dataIndex: 'userId',
-      width: 120,
-      align: 'center',
-      hidden: true,
-    },
-    {
-      title: '用户名',
-      dataIndex: 'username',
-      width: 120,
-      align: 'left',
-    },
-    {
-      title: '实名',
-      dataIndex: 'realName',
-      width: 120,
-      align: 'left',
-    },
-    {
-      title: '性别',
-      dataIndex: 'sex',
-      width: 60,
-      align: 'center',
-      render: (text) => {
-        return text === 1 ? (
-          <ManOutlined className="text-blue-400" />
-        ) : (
-          <WomanOutlined className="text-pink-400" />
-        );
-      },
-    },
-  ];
-
-  /**
-   * 多行选中的配置
-   */
-  const rowSelection: TableProps['rowSelection'] = {
-    // 行选中的回调
-    onChange(_selectedRowKeys, selectedRows) {
-      setSelectedRows(selectedRows);
-    },
-    columnWidth: 32,
-    fixed: true,
-  };
-
-  /**
-   * 分页改变事件
-   * @param page 页数
-   * @param pageSize 每页数量
-   */
-  const onPageSizeChange = (page: number, pageSize: number) => {
-    setPagination({
-      pageNumber: page,
-      pageSize: pageSize,
-    });
-  };
+  const getAllRole = () => {
+    getRoleList({ page: 1, size: 9999 }).then((resp: any) => {
+      setRole(resp.results)
+    })
+  }
 
   /**
    * 点击确定的操作
    */
   const handleOk = () => {
-    if (selRows.length === 0) {
-      onOk(0);
-      return;
-    }
-    const userIds = selRows.map((item: any) => item.id);
-    // 分配用户
-    assignRoleUser({
-      roleId,
-      ids: userIds,
-      operate: 'add',
-    }).then(() => {
-      onOk(selRows.length);
-      // 清空选择项
-      setSelectedRows([]);
-    });
-  };
+    form
+      .validateFields()
+      .then(() => {
+        onOk(form.getFieldsValue())
+      })
+      .catch((errorInfo) => {
+        // 滚动并聚焦到第一个错误字段
+        form.scrollToField(errorInfo.errorFields[0].name)
+        form.focusField(errorInfo.errorFields[0].name)
+      })
+  }
+
+  const cancel = () => {
+    form.resetFields()
+    onCancel()
+  }
 
   return (
     <DragModal
-      open={open}
-      onCancel={onCancel}
-      title="添加用户"
+      open={open.visible}
+      onCancel={cancel}
+      title={!open.editRow ? '添加用户' : '修改用户'}
       width={{ xl: 800, xxl: 1000 }}
       onOk={handleOk}
+      loading={loading}
     >
-      <Card>
-        <Form form={form} onFinish={onFinish}>
-          <Row gutter={12}>
-            <Col span={6}>
-              <Form.Item className="mb-0" label="用户名" name="username">
-                <Input
-                  placeholder="请输入用户名"
-                  autoFocus
-                  allowClear
-                  autoComplete="off"
-                  ref={ref}
-                />
-              </Form.Item>
-            </Col>
-            <Col span={6}>
-              <Form.Item className="mb-0" label="真实姓名" name="realName">
-                <Input
-                  placeholder="请输入真实姓名"
-                  allowClear
-                  autoComplete="off"
-                />
-              </Form.Item>
-            </Col>
-            <Col span={6}>
-              <Form.Item className="mb-0" label="性别">
-                <Select
-                  allowClear
-                  options={[
-                    { value: '', label: '请选择', disabled: true },
-                    { value: 1, label: '男' },
-                    { value: 0, label: '女' },
-                  ]}
-                />
-              </Form.Item>
-            </Col>
-            <Col span={6} style={{ textAlign: 'right' }}>
-              <Space>
-                <Button
-                  type="primary"
-                  htmlType="submit"
-                  icon={<SearchOutlined />}
-                >
-                  检索
-                </Button>
-                <Button
-                  type="default"
-                  icon={<RedoOutlined />}
-                  onClick={() => {
-                    form.resetFields();
-                  }}
-                >
-                  重置
-                </Button>
-              </Space>
-            </Col>
-          </Row>
-        </Form>
-      </Card>
-      <Card className="mt-2">
-        <Table
-          size="small"
-          title={() => '用户列表'}
-          bordered
-          rowKey="id"
-          columns={columns}
-          pagination={{
-            pageSize: pagination.pageSize,
-            current: pagination.pageNumber,
-            showQuickJumper: true,
-            showSizeChanger: true,
-            showTotal: (total) => `共 ${total} 条`,
-            total: total,
-            onChange(page, pageSize) {
-              onPageSizeChange(page, pageSize);
-            },
-          }}
-          dataSource={tableData}
-          rowSelection={rowSelection}
-        />
-      </Card>
+      <Form form={form} labelCol={{ span: 5 }} initialValues={initialValues}>
+        <Row gutter={24}>
+          <Col span={12}>
+            <Form.Item
+              className="mb-0"
+              label="用户账号"
+              name="loginName"
+              rules={[{ required: true, message: '请输入用户账号' }]}
+            >
+              <Input
+                placeholder="请输入用户名"
+                autoFocus
+                allowClear
+                autoComplete="off"
+                ref={ref}
+              />
+            </Form.Item>
+          </Col>
+          <Col span={12}>
+            <Form.Item
+              className="mb-0"
+              label="手机号"
+              name="phone"
+              rules={[
+                {
+                  pattern: /^1[3-9]\d{9}$/,
+                  message: '请输入正确的手机号',
+                },
+                { required: true, message: '请输入手机号' },
+              ]}
+            >
+              <Input
+                placeholder="请输入用户名"
+                autoFocus
+                allowClear
+                autoComplete="off"
+                ref={ref}
+              />
+            </Form.Item>
+          </Col>
+          <Col span={12}>
+            <Form.Item
+              className="mb-0"
+              label="所属机构"
+              name="orgId"
+              rules={[{ required: true, message: '请选择所属机构' }]}
+            >
+              <TreeSelect
+                styles={{
+                  popup: { root: { maxHeight: 400, overflow: 'auto' } },
+                }}
+                treeData={treeData}
+                placeholder="请选择所属机构"
+                fieldNames={{
+                  label: 'orgName',
+                  value: 'id',
+                  children: 'children',
+                }}
+              />
+            </Form.Item>
+          </Col>
+          <Col span={12}>
+            <Form.Item
+              className="mb-0"
+              label="登陆密码"
+              name="loginPwd"
+              rules={[
+                {
+                  validator: (_, value) => {
+                    if (!value) return Promise.reject('密码不能为空')
+                    if (!/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$/.test(value)) {
+                      return Promise.reject('密码需包含字母和数字且至少6位')
+                    }
+                    return Promise.resolve()
+                  },
+                },
+              ]}
+            >
+              <Input
+                placeholder="请输入登录密码"
+                allowClear
+                autoComplete="off"
+              />
+            </Form.Item>
+          </Col>
+          <Col span={12}>
+            <Form.Item
+              className="mb-0"
+              label="姓名"
+              name="nickname"
+              rules={[{ required: true, message: '请输入姓名' }]}
+            >
+              <Input placeholder="请输入姓名" allowClear autoComplete="off" />
+            </Form.Item>
+          </Col>
+          <Col span={12}>
+            <Form.Item className="mb-0" label="住址" name="address">
+              <Input placeholder="请输入住址" allowClear autoComplete="off" />
+            </Form.Item>
+          </Col>
+          <Col span={12}>
+            <Form.Item
+              className="mb-0"
+              label="角色"
+              name="roles"
+              rules={[{ required: true, message: '请选择角色' }]}
+            >
+              <Select
+                mode="multiple"
+                options={role.map((item: { roleName: string; id: string }) => ({
+                  label: item.roleName,
+                  value: item.id,
+                }))}
+                placeholder="请选择角色"
+                allowClear
+                filterOption
+              />
+            </Form.Item>
+          </Col>
+          <Col span={12}>
+            <Form.Item
+              className="mb-0"
+              label="邮箱"
+              name="email"
+              rules={[
+                {
+                  type: 'email',
+                  message: '请输入正确的邮箱',
+                },
+              ]}
+            >
+              <Input placeholder="请输入邮箱" allowClear autoComplete="off" />
+            </Form.Item>
+          </Col>
+          <Col span={12}>
+            <Form.Item className="mb-0" label="个人简介" name="introduction">
+              <Input.TextArea placeholder="请输入个人简介" allowClear />
+            </Form.Item>
+          </Col>
+        </Row>
+      </Form>
     </DragModal>
-  );
-};
-export default AddUser;
+  )
+}
+export default AddUser
 
 export interface AddUserProps {
-  open: boolean;
+  open: {
+    visible: boolean
+    editRow: SysUserType | null
+  }
   // 当前角色
-  roleId: string;
+  roleId: string
   // 点击确定(选中的数量)
-  onOk: (params: number) => void;
-  onCancel: (e: React.MouseEvent<HTMLButtonElement>) => void;
+  onOk: (params: SysUserType) => void
+  onCancel: () => void
 }

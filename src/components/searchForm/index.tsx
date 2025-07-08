@@ -21,6 +21,7 @@ export interface CustomColumn {
   filterSearch?: boolean
   // Todo : form表单rules 暂时只支持基础空置校验
   isRules?: boolean
+  defaultValue?: string | null
 }
 
 type SearchFormPorps = {
@@ -71,6 +72,10 @@ const SearchForm: React.FC<SearchFormPorps> = memo((props) => {
 
   const [isExpend, setIsExpend] = useState<boolean>(false)
 
+  const [initialValues, setInitialValues] = useState({})
+
+  const [searchColumns, setSerachColumns] = useState<CustomColumn[]>(columns)
+
   const onFinish = (value: unknown) => {
     onUpdateSearch(value)
   }
@@ -80,8 +85,6 @@ const SearchForm: React.FC<SearchFormPorps> = memo((props) => {
       return !isExpend ? columns.length : showRow * 4
     }
   }, [isExpend])
-
-  const [searchColumns, setSerachColumns] = useState<CustomColumn[]>(columns)
 
   useEffect(() => {
     const getData = async (api?: any) => {
@@ -96,10 +99,21 @@ const SearchForm: React.FC<SearchFormPorps> = memo((props) => {
       if (item.filterSearch) item.options = await getData(item.api)
       if (item.publicSettingKey)
         item.options = extendsOptions(publicData[item.publicSettingKey])
+      if (item.name && item.defaultValue) {
+        searchForm.resetFields()
+        searchForm.setFieldsValue({ [item.name]: item.defaultValue })
+      }
     })
 
     setTimeout(() => {
       setSerachColumns([...searchColumns])
+      console.log(
+        [...searchColumns],
+        'searchColumns',
+        searchColumns[0],
+        initialValues
+      )
+      // setInitialValues({})
     }, 500)
   }, [...searchColumns])
 
@@ -141,6 +155,7 @@ const SearchForm: React.FC<SearchFormPorps> = memo((props) => {
         colon={false}
         labelAlign={labelPosition}
         form={searchForm}
+        initialValues={initialValues}
       >
         <Row gutter={gutterWidth} className={'gap-y-[10px]'}>
           {columns.map((item, index) => (

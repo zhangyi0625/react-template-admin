@@ -10,7 +10,9 @@ const RoleInfoModal: React.FC<RoleInfoModalProps> = ({
 }) => {
   // 表单实例
   const [form] = Form.useForm()
-  const roleCodeRef = useRef<InputRef>(null)
+
+  const roleNameRef = useRef<InputRef>(null)
+
   const { visible, currentRow, view } = params
 
   useEffect(() => {
@@ -30,7 +32,7 @@ const RoleInfoModal: React.FC<RoleInfoModalProps> = ({
    */
   const onAfterOpenChange = (open: boolean) => {
     if (open) {
-      roleCodeRef.current?.focus()
+      roleNameRef.current?.focus()
     }
   }
 
@@ -69,7 +71,11 @@ const RoleInfoModal: React.FC<RoleInfoModalProps> = ({
           label="角色名称"
           rules={[{ required: true, message: '请输入角色名称' }]}
         >
-          <Input placeholder="请输入角色名称" autoComplete="off" />
+          <Input
+            ref={roleNameRef}
+            placeholder="请输入角色名称"
+            autoComplete="off"
+          />
         </Form.Item>
         <Form.Item name="comments" label="角色备注">
           <Input.TextArea placeholder="请输入角色备注" />

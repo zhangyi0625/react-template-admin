@@ -4,25 +4,16 @@ import {
   ExclamationCircleFilled,
   MoreOutlined,
   PlusOutlined,
-  RedoOutlined,
-  SearchOutlined,
 } from '@ant-design/icons'
 import useParentSize from '@/hooks/useParentSize'
 import {
   App,
   Button,
   Card,
-  Col,
   ConfigProvider,
   Dropdown,
-  Form,
-  Input,
   type MenuProps,
-  Row,
-  Select,
   Space,
-  Table,
-  Tag,
   type TableProps,
   TablePaginationConfig,
 } from 'antd'
@@ -41,6 +32,7 @@ import RoleInfoModal from './RoleInfoModal'
 import RoleMenuDrawer from './RoleMenuDrawer'
 import RoleUserDrawer from './RoleUserDrawer'
 import { SysRoleParams, SysRoleType } from '@/services/system/role/roleModel'
+import { filterKeys } from '@/utils/tool'
 
 /**
  * 系统角色维护
@@ -48,19 +40,12 @@ import { SysRoleParams, SysRoleType } from '@/services/system/role/roleModel'
  */
 const Role: React.FC = () => {
   const { modal } = App.useApp()
-  // 检索表单
-  // const [form] = Form.useForm()
-  // 容器高度计算（表格）
-  const { parentRef, height } = useParentSize()
 
-  // 表格数据
-  const [tableData, setTableData] = useState<any[]>([])
-  // 表格加载状态
-  const [loading, setLoading] = useState<boolean>(false)
+  // 容器高度计算（表格）
+  const { parentRef } = useParentSize()
+
   // 当前选中的行数据
   const [selRows, setSelectedRows] = useState<any[]>([])
-
-  // const [selected, setSelected] = useState<string[]>([])
 
   // 将当前编辑行和窗口开关合并为一个状态对象
   const [params, setParams] = useState<{
@@ -83,10 +68,7 @@ const Role: React.FC = () => {
   // 角色用户分配抽屉
   const [drawerOpenUser, setDrawerOpenUser] = useState<boolean>(false)
 
-  useEffect(() => {
-    // 查询角色数据
-    // queryRoleData()
-  }, [])
+  useEffect(() => {}, [])
 
   // 更多操作中的选项
   const more: (row: any) => MenuProps['items'] = (row) => [
@@ -203,8 +185,9 @@ const Role: React.FC = () => {
     const filteredObj = Object.fromEntries(
       Object.entries(info ?? {}).filter(([, value]) => !!value)
     )
+    let pageInfo = filterKeys(searchDefaultForm, ['page', 'size'], true)
     setSearchDefaultForm({
-      ...searchDefaultForm,
+      ...pageInfo,
       ...filteredObj,
     })
   }
@@ -325,6 +308,7 @@ const Role: React.FC = () => {
             rowSelection={{ ...rowSelection }}
           /> */}
           <SearchTable
+            size="large"
             columns={columns}
             bordered
             rowKey="id"

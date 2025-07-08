@@ -1,5 +1,5 @@
 import {
-  assignRoleUser,
+  changStatus,
   deleteRoleUser,
   getRoleUser,
   postBatchRoleUser,
@@ -22,7 +22,6 @@ import {
   Form,
   Input,
   type InputRef,
-  message,
   Row,
   Space,
   Switch,
@@ -43,22 +42,31 @@ const RoleUserDrawer: React.FC<RoleUserDrawerProps> = ({
   roleId,
   onCancel,
 }) => {
-  const { modal } = App.useApp()
+  const { modal, message } = App.useApp()
+
+  const [loading, setLoading] = useState<boolean>(false)
+
   // 用户表格数据
-  const [tableData, setTableData] = useState<any[]>([])
+  const [tableData, setTableData] = useState([])
+
   // 添加用户弹窗的打开关闭
   const [openAddUser, setOpenAddUser] = useState<{
     visible: boolean
     editRow: SysUserType | null
   }>({ visible: false, editRow: null })
+
   // 检索表单
   const [form] = Form.useForm()
+
   // 当前选中的行数据
   const [selRows, setSelectedRows] = useState<any[]>([])
+
   // 数据总条数
   const [total, setTotal] = useState<number>(0)
+
   // 第一个检索框
   const ref = useRef<InputRef>(null)
+
   // 分页参数
   const [pagination, setPagination] = useState<{
     pageNumber: number
@@ -80,6 +88,7 @@ const RoleUserDrawer: React.FC<RoleUserDrawerProps> = ({
    * @param params 查询参数
    */
   const getRoleUserByPage = () => {
+    setLoading(true)
     getRoleUser({
       roleId: roleId,
       page: pagination.pageNumber,
@@ -91,6 +100,7 @@ const RoleUserDrawer: React.FC<RoleUserDrawerProps> = ({
       // 设置数据总条数
       resp.total && setTotal(resp.total)
       ref.current?.focus()
+      setLoading(false)
     })
   }
 
@@ -139,7 +149,12 @@ const RoleUserDrawer: React.FC<RoleUserDrawerProps> = ({
       key: 'status',
       align: 'center',
       render(value) {
-        return <Switch value={value.status} />
+        return (
+          <Switch
+            value={value.status}
+            onChange={(e) => switchChange(e, value.id)}
+          />
+        )
       },
     },
     {
@@ -182,6 +197,12 @@ const RoleUserDrawer: React.FC<RoleUserDrawerProps> = ({
       },
     },
   ]
+
+  const switchChange = (e: boolean, id: string) => {
+    changStatus({ id: id, status: Number(e) }).then(() => {
+      getRoleUserByPage()
+    })
+  }
 
   /**
    * 分页改变事件
@@ -262,7 +283,7 @@ const RoleUserDrawer: React.FC<RoleUserDrawerProps> = ({
   const handleOk = (form: SysUserType) => {
     postRoleUser(form).then(() => {
       message.success('添加成功')
-      setOpenAddUser(false)
+      cancelAddUser()
       getRoleUserByPage()
     })
   }
@@ -350,6 +371,7 @@ const RoleUserDrawer: React.FC<RoleUserDrawerProps> = ({
             columns={columns}
             dataSource={tableData}
             bordered
+            loading={loading}
             rowKey="id"
             pagination={{
               pageSize: pagination.pageSize,

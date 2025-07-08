@@ -53,6 +53,11 @@ export enum RoleApi {
   addRoleUser = '/api/system/user/add',
 
   /**
+   * 修改角色用户状态
+   */
+  updateRoleUserStatus = '/api/system/user/update',
+
+  /**
    * 删除角色用户
    */
   deleteRoleUser = '/api/system/user/delete/',
@@ -129,9 +134,9 @@ export const editRole = (params: SysRoleType) => {
  * @param params 角色参数
  * @returns 结果
  */
-export const changStatus = (params: Record<string, any>) => {
-  return HttpRequest.patch({
-    url: RoleApi.changeStatus,
+export const changStatus = (params: { id: string; status: number }) => {
+  return HttpRequest.post({
+    url: RoleApi.updateRoleUserStatus,
     data: params,
   })
 }

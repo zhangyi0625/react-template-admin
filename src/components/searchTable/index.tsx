@@ -76,6 +76,7 @@ const searchTable: React.FC<SearchTableProps> = memo((props) => {
       loadTableData()
     }
     setSelectionType(selectionParentType ?? selectionType)
+    console.log(props, 'props')
   }, [
     currentPagination.pageSize,
     currentPagination.pageSizeOptions,
@@ -117,6 +118,7 @@ const searchTable: React.FC<SearchTableProps> = memo((props) => {
   return (
     <Spin spinning={loading}>
       <Table
+        size={props.size}
         bordered
         columns={columns}
         dataSource={tableData}

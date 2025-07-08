@@ -28,7 +28,7 @@ export default defineConfig({
     // mock 插件
     pluginMockServer({
       // 表示拦截以路径/api开头的
-      prefix: '/api',
+      prefix: '/apis',
     }),
     // 启动图片压缩
     pluginImageCompress(),

@@ -1,5 +1,6 @@
 export interface ShippingAccounType {
-  type: string
+  id?: string | null
+  accountType: string
   carrier: string | null
   customer: string
   account: string | null

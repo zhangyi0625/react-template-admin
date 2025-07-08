@@ -11,7 +11,6 @@ export type DictonaryModalProps = {
     currentRow: SysDictionaryType | null
     view: boolean
   }
-
   // 点击确定的回调
   onOk: (params: SysDictionaryType) => void
   // 点击取消的回调

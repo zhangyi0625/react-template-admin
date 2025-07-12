@@ -1,12 +1,12 @@
 export interface CustomerManageType {
   id?: string | null
-  customerName: string
-  customer: string
-  code: string
+  name: string
+  shortName: string
+  socialCode: string
 }
 
 export interface CustomerManageParams {
-  keyWord: string | null
+  name: string | null
   page: number
-  size: number
+  limit: number
 }

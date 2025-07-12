@@ -5,9 +5,10 @@ import { CustomerManageParams, CustomerManageType } from './customerManageModel'
  * 枚举客户管理相关的api
  */
 export enum CustomerManageApi {
-  customerManageList = '/system/test/customer',
-  addCustomerManage = '/system/test/add/customer',
-  deleteCustomerManage = '/system/test/customer/',
+  customer = '/api/core/business/customer',
+  // customerManageList = '/system/test/customer',
+  // addCustomerManage = '/system/test/add/customer',
+  // deleteCustomerManage = '/system/test/customer/',
 }
 
 /**
@@ -18,7 +19,7 @@ export enum CustomerManageApi {
 export const getCustomerManageList = (params: CustomerManageParams) => {
   return HttpRequest.get(
     {
-      url: CustomerManageApi.customerManageList,
+      url: CustomerManageApi.customer,
       params: params,
     },
     {
@@ -35,7 +36,24 @@ export const getCustomerManageList = (params: CustomerManageParams) => {
 export const addCustomerManage = (params: CustomerManageType) => {
   return HttpRequest.post(
     {
-      url: CustomerManageApi.addCustomerManage,
+      url: CustomerManageApi.customer,
+      data: params,
+    },
+    {
+      successMessageMode: 'none',
+    }
+  )
+}
+
+/**
+ * 修改客户
+ * @param params 客户管理参数
+ * @returns
+ */
+export const putCustomerManage = (params: CustomerManageType) => {
+  return HttpRequest.put(
+    {
+      url: CustomerManageApi.customer,
       data: params,
     },
     {
@@ -52,7 +70,7 @@ export const addCustomerManage = (params: CustomerManageType) => {
 export const deleteCustomerManage = (id: string) => {
   return HttpRequest.delete(
     {
-      url: CustomerManageApi.deleteCustomerManage + id,
+      url: CustomerManageApi.customer + '/' + id,
     },
     {
       successMessageMode: 'none',

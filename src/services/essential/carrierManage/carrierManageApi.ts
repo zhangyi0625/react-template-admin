@@ -9,6 +9,24 @@ import type {
  */
 export enum CarrierManageApi {
   carrier = '/core/business/base/carrier',
+  carrierByPage = '/core/business/base/carrier/page',
+}
+
+/**
+ * 分页获取船司管理列表
+ * @param params 船司管理参数
+ * @returns 船司管理列表
+ */
+export const getCarrierManageListByPage = (params?: CarrierManageParams) => {
+  return HttpRequest.get(
+    {
+      url: CarrierManageApi.carrierByPage,
+      params: params,
+    },
+    {
+      successMessageMode: 'none',
+    }
+  )
 }
 
 /**
@@ -16,7 +34,7 @@ export enum CarrierManageApi {
  * @param params 船司管理参数
  * @returns 船司管理列表
  */
-export const getCarrierManageList = (params: CarrierManageParams) => {
+export const getCarrierManageList = (params?: CarrierManageParams) => {
   return HttpRequest.get(
     {
       url: CarrierManageApi.carrier,

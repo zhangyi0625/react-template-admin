@@ -5,10 +5,7 @@ import { CustomerManageParams, CustomerManageType } from './customerManageModel'
  * 枚举客户管理相关的api
  */
 export enum CustomerManageApi {
-  customer = '/api/core/business/customer',
-  // customerManageList = '/system/test/customer',
-  // addCustomerManage = '/system/test/add/customer',
-  // deleteCustomerManage = '/system/test/customer/',
+  customer = '/core/business/customer',
 }
 
 /**

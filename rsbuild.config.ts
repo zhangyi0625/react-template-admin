@@ -8,8 +8,6 @@ import { pluginHtmlMinifierTerser } from 'rsbuild-plugin-html-minifier-terser'
 
 const { publicVars } = loadEnv({ prefixes: ['VITE_'] })
 
-console.log(publicVars, 'publicVars', process.env)
-
 export default defineConfig({
   plugins: [
     // 表示将react和router相关的包拆分为单独的chunk
@@ -83,17 +81,11 @@ export default defineConfig({
     port: 3005,
     open: false,
     proxy: {
-      '/apis': {
-        // target: 'https://qms.zaicang.net/apis',
+      '/api': {
         target: process.env.VITE_BASE_API,
         changeOrigin: true,
-        pathRewrite: (path) => path.replace(/^\/apis/, ''),
+        pathRewrite: (path) => path.replace(/^\/api/, ''),
       },
-      // '/api': {
-      //   target: 'http://localhost:8090/fusion',
-      //   changeOrigin: true,
-      //   pathRewrite: (path) => path.replace(/^\/api/, ''),
-      // },
     },
   },
 })

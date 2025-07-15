@@ -36,7 +36,8 @@
     "redux-persist": "^6.0.0",
     "rsbuild-plugin-html-minifier-terser": "^1.1.1",
     "screenfull": "^6.0.2",
-    "socket.io-client": "^4.8.1"
+    "socket.io-client": "^4.8.1",
+    "xlsx": "^0.18.5"
   },
   "devDependencies": {
     "@biomejs/biome": "^1.9.4",

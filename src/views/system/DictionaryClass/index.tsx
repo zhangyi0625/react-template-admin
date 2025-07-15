@@ -12,7 +12,7 @@ import {
 import {
   addDictionary,
   deleteDictionary,
-  getDictionaryList,
+  getDictionaryListByPage,
   updateDictionary,
 } from '@/services/system/dictionary/dictionaryApi'
 import { ExclamationCircleFilled, PlusOutlined } from '@ant-design/icons'
@@ -23,7 +23,7 @@ import DictonaryClassModal from './DictonaryClassModal'
 const DictionaryClass: React.FC = () => {
   const { height } = useParentSize()
 
-  const { modal } = App.useApp()
+  const { modal, message } = App.useApp()
 
   const [loading, setLoading] = useState<boolean>(false)
 
@@ -46,9 +46,9 @@ const DictionaryClass: React.FC = () => {
 
   const loadDictionaryList = () => {
     setLoading(true)
-    getDictionaryList()
+    getDictionaryListByPage()
       .then((resp) => {
-        setTableData(resp)
+        setTableData(resp.list)
         setLoading(false)
       })
       .catch(() => setLoading(false))
@@ -60,11 +60,26 @@ const DictionaryClass: React.FC = () => {
       dataIndex: 'dictName',
       key: 'dictName',
       align: 'center',
+      width: 250,
+    },
+    {
+      title: '字典标识',
+      dataIndex: 'dictCode',
+      key: 'dictCode',
+      align: 'center',
+      width: 250,
     },
     {
       title: '备注',
-      dataIndex: 'notes',
-      key: 'notes',
+      dataIndex: 'comments',
+      key: 'comments',
+      align: 'center',
+      width: 250,
+    },
+    {
+      title: '修改时间',
+      dataIndex: 'updateTime',
+      key: 'updateTime',
       align: 'center',
     },
     {
@@ -130,15 +145,11 @@ const DictionaryClass: React.FC = () => {
         // 编辑数据
         await updateDictionary(roleData)
       }
+      message.success(!params.currentRow ? '添加成功' : '修改成功')
       // 操作成功，关闭弹窗，刷新数据
       setParams({ visible: false, currentRow: null, view: false })
       loadDictionaryList()
-    } catch (error) {
-      modal.error({
-        title: '操作失败',
-        content: `原因：${error}`,
-      })
-    }
+    } catch (error) {}
   }
   return (
     <>
@@ -174,7 +185,7 @@ const DictionaryClass: React.FC = () => {
             dataSource={tableData}
             columns={columns}
             loading={loading}
-            rowKey="id"
+            rowKey="dictId"
             scroll={{ x: 'max-content', y: height - 128 }}
           />
         </Card>

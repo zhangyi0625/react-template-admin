@@ -1,14 +1,17 @@
 export interface SysDictionaryClassType {
   dictName: string
-  id?: string | null
-  notes?: string
+  dictId?: string | null
+  comments?: string
+  dictCode: string
   sort: number
 }
 
 export interface SysDictionaryType extends SysDictionaryClassType {
-  dictCode: string
-  mainId: string
+  dictDataName: string
+  dictDataCode: string
 }
 
-export interface SysDictionaryParams
-  extends Pick<SysDictionaryClassType, 'dictName' | 'id'> {}
+export interface SysDictionaryParams extends Pick<SysDictionaryType, 'dictId'> {
+  page: number
+  limit: number
+}

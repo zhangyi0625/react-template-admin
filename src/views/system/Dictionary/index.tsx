@@ -1,29 +1,39 @@
 import type React from 'react'
 import { useEffect, useState } from 'react'
-import { App, Button, Card, ConfigProvider, Space, type TableProps } from 'antd'
 import {
-  addDictionaryById,
-  deleteDictionaryById,
-  getDictionaryList,
-  updateDictionaryById,
-  batchDeleteDictionaryById,
-  getDictionaryListById,
-} from '@/services/system/dictionary/dictionaryApi'
+  App,
+  Button,
+  Card,
+  ConfigProvider,
+  Space,
+  TablePaginationConfig,
+  type TableProps,
+} from 'antd'
 import {
   DeleteOutlined,
   ExclamationCircleFilled,
   PlusOutlined,
 } from '@ant-design/icons'
 import {
+  addDictionaryById,
+  deleteDictionaryById,
+  getDictionaryList,
+  updateDictionaryById,
+  batchDeleteDictionaryById,
+  getDictionaryListByIdPage,
+} from '@/services/system/dictionary/dictionaryApi'
+import type {
+  SysDictionaryClassType,
   SysDictionaryParams,
   SysDictionaryType,
 } from '@/services/system/dictionary/dictionaryModel'
 import SearchForm, { CustomColumn } from '@/components/searchForm'
 import DictonaryModal from './DictonaryModal'
 import SearchTable from '@/components/searchTable'
+import { filterKeys } from '@/utils/tool'
 
 const Dictionary: React.FC = () => {
-  const { modal } = App.useApp()
+  const { modal, message } = App.useApp()
 
   const [dictionaryClass, setDictionaryClass] = useState<
     { id: string; name: string }[]
@@ -32,7 +42,9 @@ const Dictionary: React.FC = () => {
   const [searchDefaultForm, setSearchDefaultForm] = useState<
     Partial<SysDictionaryParams>
   >({
-    id: null,
+    page: 1,
+    limit: 10,
+    dictId: null,
   })
 
   // 将当前编辑行和窗口开关合并为一个状态对象
@@ -46,7 +58,7 @@ const Dictionary: React.FC = () => {
     view: false,
   })
 
-  const [selRows, setSelectedRows] = useState<any[]>([])
+  const [selRows, setSelectedRows] = useState<string[]>([])
 
   const [immediate, setImmediate] = useState<boolean>(true)
 
@@ -57,14 +69,15 @@ const Dictionary: React.FC = () => {
   const getDicOptions = async () => {
     setImmediate(true)
     let res = await getDictionaryList()
-    let newArr = res.map((item: any) => {
+    let newArr = res.map((item: SysDictionaryClassType) => {
       return {
-        id: item.id,
+        id: item.dictId,
         name: item.dictName,
       }
     })
     setDictionaryClass(newArr)
-    newArr.length && setSearchDefaultForm({ id: newArr[0]?.id })
+    newArr.length &&
+      setSearchDefaultForm({ ...searchDefaultForm, dictId: newArr[0]?.id })
     setTimeout(() => {
       setImmediate(false)
     }, 300)
@@ -73,20 +86,27 @@ const Dictionary: React.FC = () => {
   const columns: TableProps['columns'] = [
     {
       title: '字典项名称',
+      dataIndex: 'dictDataName',
+      key: 'dictDataName',
+      align: 'center',
+    },
+    {
+      title: '字典分类',
       dataIndex: 'dictName',
       key: 'dictName',
       align: 'center',
     },
     {
-      title: '背景色',
-      dataIndex: 'dictCode',
-      key: 'dictCode',
+      title: '备注',
+      dataIndex: 'comments',
+      key: 'comments',
       align: 'center',
+      width: 120,
     },
     {
-      title: '备注',
-      dataIndex: 'notes',
-      key: 'notes',
+      title: '修改时间',
+      dataIndex: 'updateTime',
+      key: 'updateTime',
       align: 'center',
     },
     {
@@ -115,7 +135,7 @@ const Dictionary: React.FC = () => {
               type="link"
               danger
               size="small"
-              onClick={() => deleteDic(record.id)}
+              onClick={() => deleteDic(record.dictDataId)}
             >
               删除
             </Button>
@@ -128,15 +148,15 @@ const Dictionary: React.FC = () => {
   const SelectDictionaryOptions: CustomColumn[] = [
     {
       label: '标签分类',
-      name: 'id',
+      name: 'dictId',
       formType: 'select',
       options: dictionaryClass,
-      defaultValue: searchDefaultForm?.id,
+      defaultValue: searchDefaultForm?.dictId,
       span: 6,
     },
     {
-      label: '搜索关键字',
-      name: 'dictName',
+      label: '字典项名称',
+      name: 'dictDataName',
       formType: 'input',
       span: 6,
     },
@@ -157,16 +177,12 @@ const Dictionary: React.FC = () => {
           : deleteDictionaryById(id as string)
         ).then(() => {
           // 刷新表格数据
-          onUpdateSearch()
+          onUpdateSearch({ ...searchDefaultForm })
           // 清空选择项
           setSelectedRows([])
         })
       },
     })
-  }
-
-  const onAddDicClick = () => {
-    setParams({ visible: true, currentRow: null, view: false })
   }
 
   const onEditOk = async (roleData: SysDictionaryType) => {
@@ -178,25 +194,32 @@ const Dictionary: React.FC = () => {
         // 编辑数据
         await updateDictionaryById(roleData)
       }
+      message.success(!params.currentRow ? '添加成功' : '修改成功')
       // 操作成功，关闭弹窗，刷新数据
       setParams({ visible: false, currentRow: null, view: false })
-      onUpdateSearch()
-    } catch (error) {
-      modal.error({
-        title: '操作失败',
-        content: `原因：${error}`,
-      })
-    }
+      onUpdateSearch({ ...searchDefaultForm })
+    } catch (error) {}
   }
 
   const onUpdateSearch = (info?: SysDictionaryParams | unknown) => {
     const filteredObj = Object.fromEntries(
       Object.entries(info ?? {}).filter(([, value]) => !!value)
     )
+    let pageInfo = filterKeys(searchDefaultForm, ['page', 'limit'], true)
     setSearchDefaultForm({
+      ...pageInfo,
       ...filteredObj,
     })
   }
+
+  const onUpdatePagination = (pagination: TablePaginationConfig) => {
+    setSearchDefaultForm({
+      ...searchDefaultForm,
+      page: pagination.current as number,
+      limit: pagination.pageSize as number,
+    })
+  }
+
   return (
     <>
       {/* 菜单检索条件栏 */}
@@ -232,7 +255,9 @@ const Dictionary: React.FC = () => {
             <Button
               type="primary"
               icon={<PlusOutlined />}
-              onClick={onAddDicClick}
+              onClick={() =>
+                setParams({ visible: true, currentRow: null, view: false })
+              }
             >
               新增
             </Button>
@@ -241,7 +266,7 @@ const Dictionary: React.FC = () => {
               danger
               icon={<DeleteOutlined />}
               disabled={selRows.length === 0}
-              onClick={() => deleteDic(selRows)}
+              onClick={() => deleteDic(selRows, 'batch')}
             >
               批量删除
             </Button>
@@ -250,15 +275,13 @@ const Dictionary: React.FC = () => {
             size="small"
             columns={columns}
             bordered
-            rowKey="id"
-            fetchData={getDictionaryListById}
+            rowKey="dictDataId"
+            fetchData={getDictionaryListByIdPage}
             searchFilter={searchDefaultForm}
             isSelection={true}
             isPagination={false}
             immediate={immediate}
-            onUpdatePagination={() => {
-              return
-            }}
+            onUpdatePagination={onUpdatePagination}
             onUpdateSelection={(options: string[]) => setSelectedRows(options)}
           />
         </Card>
@@ -266,6 +289,11 @@ const Dictionary: React.FC = () => {
       <DictonaryModal
         params={params}
         onOk={onEditOk}
+        dictionaryClass={dictionaryClass}
+        defaultdictId={
+          SelectDictionaryOptions.find((item) => item.name === 'dictId')
+            ?.defaultValue ?? null
+        }
         onCancel={() =>
           setParams({ visible: false, currentRow: null, view: false })
         }

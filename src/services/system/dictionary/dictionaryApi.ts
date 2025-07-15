@@ -9,15 +9,28 @@ import type {
  * 枚举角色相关的api
  */
 export enum DictionaryApi {
-  dictionaryList = '/api/system/dict/class/list',
-  addDictionary = '/api/system/dict/class/add',
-  updateDictonary = '/api/system/dict/class/update',
-  deleteDictionary = '/api/system/dict/class/delete/',
-  dictionaryById = '/api/system/dict/class/page/data/',
-  addDictionaryById = '/api/system/dict/data/add',
-  updateDictionaryById = '/api/system/dict/data/update',
-  deleteDictionaryById = '/api/system/dict/class/page/data',
-  batchDeleteDictionaryById = '/api/system/dict/data/batchDelte',
+  dictionary = '/system/dictionary',
+  dictionaryByPage = '/system/dictionary/page',
+  dictionaryById = '/system/dictionary-data',
+  dictionaryByIdPage = '/system/dictionary-data/page',
+  batchDeleteDictionaryById = '/system/dictionary-data/batch',
+}
+
+/**
+ * 分页获取字典分类列表
+ * @param params 字典参数
+ * @returns 字典分类列表
+ */
+export const getDictionaryListByPage = (params?: SysDictionaryClassType) => {
+  return HttpRequest.get(
+    {
+      url: DictionaryApi.dictionaryByPage,
+      params: params,
+    },
+    {
+      successMessageMode: 'none',
+    }
+  )
 }
 
 /**
@@ -28,7 +41,7 @@ export enum DictionaryApi {
 export const getDictionaryList = (params?: SysDictionaryClassType) => {
   return HttpRequest.get(
     {
-      url: DictionaryApi.dictionaryList,
+      url: DictionaryApi.dictionary,
       params: params,
     },
     {
@@ -45,7 +58,7 @@ export const getDictionaryList = (params?: SysDictionaryClassType) => {
 export const addDictionary = (params: SysDictionaryClassType) => {
   return HttpRequest.post(
     {
-      url: DictionaryApi.addDictionary,
+      url: DictionaryApi.dictionary,
       data: params,
     },
     {
@@ -60,9 +73,9 @@ export const addDictionary = (params: SysDictionaryClassType) => {
  * @returns
  */
 export const updateDictionary = (params: SysDictionaryClassType) => {
-  return HttpRequest.post(
+  return HttpRequest.put(
     {
-      url: DictionaryApi.updateDictonary,
+      url: DictionaryApi.dictionary,
       data: params,
     },
     {
@@ -79,7 +92,7 @@ export const updateDictionary = (params: SysDictionaryClassType) => {
 export const deleteDictionary = (id: string) => {
   return HttpRequest.delete(
     {
-      url: DictionaryApi.deleteDictionary + id,
+      url: DictionaryApi.dictionary + '/' + id,
     },
     {
       successMessageMode: 'none',
@@ -88,15 +101,32 @@ export const deleteDictionary = (id: string) => {
 }
 
 /**
- * 查询字典项
+ * 分页查询字典项
  * @param id
  * @returns
  */
-export const getDictionaryListById = (params: Partial<SysDictionaryParams>) => {
+export const getDictionaryListByIdPage = (
+  params: Partial<SysDictionaryParams>
+) => {
   return HttpRequest.get(
     {
-      url: DictionaryApi.dictionaryById + params?.id,
+      url: DictionaryApi.dictionaryByIdPage,
       params: params,
+    },
+    {
+      successMessageMode: 'none',
+    }
+  )
+}
+
+/**
+ * 查询全部字典项
+ * @returns
+ */
+export const getDictionaryListById = () => {
+  return HttpRequest.get(
+    {
+      url: DictionaryApi.dictionaryById,
     },
     {
       successMessageMode: 'none',
@@ -112,7 +142,7 @@ export const getDictionaryListById = (params: Partial<SysDictionaryParams>) => {
 export const addDictionaryById = (params: SysDictionaryType) => {
   return HttpRequest.post(
     {
-      url: DictionaryApi.addDictionaryById,
+      url: DictionaryApi.dictionaryById,
       data: params,
     },
     {
@@ -127,9 +157,9 @@ export const addDictionaryById = (params: SysDictionaryType) => {
  * @returns
  */
 export const updateDictionaryById = (params: SysDictionaryType) => {
-  return HttpRequest.post(
+  return HttpRequest.put(
     {
-      url: DictionaryApi.updateDictionaryById,
+      url: DictionaryApi.dictionaryById,
       data: params,
     },
     {
@@ -146,7 +176,7 @@ export const updateDictionaryById = (params: SysDictionaryType) => {
 export const deleteDictionaryById = (id: string) => {
   return HttpRequest.delete(
     {
-      url: DictionaryApi.deleteDictionaryById + id,
+      url: DictionaryApi.dictionaryById + '/' + id,
     },
     {
       successMessageMode: 'none',
@@ -160,10 +190,10 @@ export const deleteDictionaryById = (id: string) => {
  * @returns
  */
 export const batchDeleteDictionaryById = (params: { ids: string[] }) => {
-  return HttpRequest.post(
+  return HttpRequest.delete(
     {
       url: DictionaryApi.batchDeleteDictionaryById,
-      data: params,
+      data: params.ids,
     },
     {
       successMessageMode: 'none',

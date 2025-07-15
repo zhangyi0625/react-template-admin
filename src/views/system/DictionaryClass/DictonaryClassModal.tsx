@@ -76,7 +76,7 @@ const DictonaryClassModal: React.FC<DictonaryClassModalProps> = ({
       afterOpenChange={onAfterOpenChange}
     >
       <Form form={form} labelCol={{ span: 4 }}>
-        <Form.Item name="id" hidden>
+        <Form.Item name="dictId" hidden>
           <Input disabled />
         </Form.Item>
         <Form.Item
@@ -91,13 +91,24 @@ const DictonaryClassModal: React.FC<DictonaryClassModalProps> = ({
           />
         </Form.Item>
         <Form.Item
-          name="sort"
+          name="dictCode"
+          label="字典标识"
+          rules={[{ required: true, message: '请输入字典标识' }]}
+        >
+          <Input
+            ref={dictNameRef}
+            placeholder="请输入字典名称"
+            autoComplete="off"
+          />
+        </Form.Item>
+        <Form.Item
+          name="sortNumber"
           label="排序号"
           rules={[{ required: true, message: '请选择排序号' }]}
         >
           <InputNumber style={{ width: '100%' }} />
         </Form.Item>
-        <Form.Item name="notes" label="字典备注">
+        <Form.Item name="comments" label="字典备注">
           <Input.TextArea placeholder="请输入字典备注" />
         </Form.Item>
       </Form>

@@ -1,7 +1,8 @@
 import React, { useEffect, useRef } from 'react'
-import { Form, Input, InputNumber, type InputRef } from 'antd'
+import { Form, Input, InputNumber, Select, type InputRef } from 'antd'
+import { SelectProps } from 'antd/lib'
 import DragModal from '@/components/modal/DragModal'
-import { SysDictionaryType } from '@/services/system/dictionary/dictionaryModel'
+import type { SysDictionaryType } from '@/services/system/dictionary/dictionaryModel'
 
 export type DictonaryModalProps = {
   params: {
@@ -11,6 +12,8 @@ export type DictonaryModalProps = {
     currentRow: SysDictionaryType | null
     view: boolean
   }
+  dictionaryClass: { id: string; name: string }[]
+  defaultdictId: string | null
   // 点击确定的回调
   onOk: (params: SysDictionaryType) => void
   // 点击取消的回调
@@ -19,6 +22,8 @@ export type DictonaryModalProps = {
 
 const DictonaryModal: React.FC<DictonaryModalProps> = ({
   params,
+  dictionaryClass,
+  defaultdictId,
   onCancel,
   onOk,
 }) => {
@@ -36,7 +41,9 @@ const DictonaryModal: React.FC<DictonaryModalProps> = ({
     } else {
       // 清空表单数据，表示新增
       form.resetFields()
+      defaultdictId && form.setFieldsValue({ dictId: defaultdictId })
     }
+    console.log(dictionaryClass)
   }, [currentRow, visible])
 
   /**
@@ -79,7 +86,20 @@ const DictonaryModal: React.FC<DictonaryModalProps> = ({
           <Input disabled />
         </Form.Item>
         <Form.Item
-          name="dictName"
+          name="dictId"
+          label="字典分类"
+          rules={[{ required: true, message: '请选择字典分类' }]}
+        >
+          <Select
+            placeholder="请选择字典分类"
+            showSearch
+            allowClear
+            options={dictionaryClass as unknown as SelectProps['options']}
+            fieldNames={{ value: 'id', label: 'name' }}
+          />
+        </Form.Item>
+        <Form.Item
+          name="dictDataName"
           label="字典项名称"
           rules={[{ required: true, message: '请输入字典项名称' }]}
         >
@@ -90,24 +110,24 @@ const DictonaryModal: React.FC<DictonaryModalProps> = ({
           />
         </Form.Item>
         <Form.Item
-          name="dictCode"
-          label="背景颜色"
-          rules={[{ required: true, message: '请输入背景颜色' }]}
+          name="dictDataCode"
+          label="字典项标识"
+          rules={[{ required: true, message: '请输入字典项标识' }]}
         >
           <Input
             ref={dictNameRef}
-            placeholder="请输入字典项名称"
+            placeholder="请输入字典项标识"
             autoComplete="off"
           />
         </Form.Item>
         <Form.Item
-          name="sort"
+          name="sortNumber"
           label="排序号"
           rules={[{ required: true, message: '请选择排序号' }]}
         >
           <InputNumber style={{ width: '100%' }} />
         </Form.Item>
-        <Form.Item name="notes" label="备注">
+        <Form.Item name="comments" label="备注">
           <Input.TextArea placeholder="请输入备注" />
         </Form.Item>
       </Form>

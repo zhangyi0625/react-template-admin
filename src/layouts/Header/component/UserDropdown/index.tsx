@@ -99,7 +99,7 @@ const UserDropdown: React.FC = () => {
             sessionStorage.removeItem('loginUser')
 
             // 修改回document.title
-            document.title = 'Fusion Admin - 登录'
+            document.title = '在舱光速抢舱管理平台 - 登录'
             // 退出到登录页面
             navigate('/login')
           },

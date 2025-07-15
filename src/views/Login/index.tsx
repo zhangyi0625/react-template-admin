@@ -10,11 +10,11 @@ import {
 import styles from './login.module.scss'
 import { useNavigate } from 'react-router-dom'
 import { getCaptcha, login } from '@/services/login/loginApi'
-import { getMenuListByRoleId } from '@/services/system/menu/menuApi'
 import { useDispatch } from 'react-redux'
 import { setMenus } from '@/stores/store'
 import { HttpCodeEnum } from '@/enums/httpEnum'
 import { antdUtils } from '@/utils/antdUtil'
+import { MenuModel } from '@/services/system/menu/menuModel'
 
 /**
  * 登录模块
@@ -31,7 +31,7 @@ const Login: React.FC = () => {
   const [code, setCode] = useState<{
     base64: string
     text: string
-    uuid?: string
+    verifyKey?: string
   }>()
   // 验证码的校验key，获取验证码的时候返回，用于验证码的校验
   const [checkKey, setCheckKey] = useState<string>('')
@@ -47,7 +47,7 @@ const Login: React.FC = () => {
    */
   const submit = async (values: any) => {
     // 加入验证码校验key
-    values.uuid = checkKey
+    values.verifyKey = checkKey
     setLoading(true)
     // 这里考虑返回的内容不仅包括token，还包括用户登录的角色（需要存储在本地，用于刷新页面时重新根据角色获取菜单）、配置的首页地址（供登录后进行跳转）
     try {
@@ -81,37 +81,27 @@ const Login: React.FC = () => {
         // 登录成功
         case HttpCodeEnum.SUCCESS:
           {
+            let userId = data.user?.userId
             // 没有配置首页地址默认跳到第一个菜单
-            // const { token, roleId } = data
-            console.log(data, 'data')
-
-            // let { homePath } = data
-            let roleId = data.user?.login_name
-            // let homePath = data.user?.authorities
-            let homePath = ''
+            let homePath = data.user?.authorities
             sessionStorage.setItem('token', data.access_token)
             sessionStorage.setItem('isLogin', 'true')
-            sessionStorage.setItem('roleId', roleId)
+            sessionStorage.setItem('roleId', userId)
             // 存储登录的用户名
-            sessionStorage.setItem('loginUser', values.username)
-            // 登录成功根据角色获取菜单
-            const menu = await getMenuListByRoleId({ roleId })
-            dispatch(setMenus(menu))
-            // 判断是否配置了默认跳转的首页地址
-            if (!homePath) {
-              // 获取第一个是路由的地址
-              const firstRoute = menu.find((item: any) => item.route === '1')
-              if (firstRoute) {
-                homePath = firstRoute.path
-              }
+            sessionStorage.setItem('loginUser', data.user?.username)
+            dispatch(setMenus(homePath))
+            // 获取第一个是路由的地址
+            const firstRoute = homePath.find(
+              (item: MenuModel) => item.menuId === '36'
+            )
+            if (firstRoute) {
+              homePath = firstRoute.path
             }
-            console.log(homePath)
-
             // 跳转到首页
             navigate(homePath)
             antdUtils.notification?.success({
               message: '登录成功',
-              description: '欢迎来到Fusion Admin!',
+              description: '欢迎来到在舱光速抢舱管理平台!',
             })
           }
           break
@@ -133,26 +123,6 @@ const Login: React.FC = () => {
     } finally {
       setLoading(false)
     }
-    // if (state === 'success') {
-    //   // 加入验证码校验key
-    //   values.checkKey = checkKey
-    //   setLoading(true)
-    // }
-    // captcha?.onSuccess(function () {
-    //   let result = captcha.getValidate()
-    //   let pickToken =
-    //     result['lot_number'] +
-    //     '|' +
-    //     result['captcha_output'] +
-    //     '|' +
-    //     result['pass_token'] +
-    //     '|' +
-    //     result['gen_time']
-    //   sessionStorage.setItem('captchaAnswer', pickToken)
-    //   setCAPTCHA(pickToken)
-    // })
-    // console.log(values, 'values', state, captcha)
-    // return
   }
 
   /**
@@ -163,7 +133,7 @@ const Login: React.FC = () => {
     const key = new Date().getTime().toString()
     const code = await getCaptcha(key)
     setCode(code)
-    setCheckKey(code?.uuid)
+    setCheckKey(code?.verifyKey)
   }
 
   return (
@@ -201,7 +171,7 @@ const Login: React.FC = () => {
                     color: '#999999',
                   }}
                 >
-                  Fusion Admin
+                  在舱光速抢舱管理平台
                 </span>
               </p>
             </div>
@@ -265,7 +235,7 @@ const Login: React.FC = () => {
                   <Row gutter={8}>
                     <Col span={18}>
                       <Form.Item
-                        name="code"
+                        name="verifyCode"
                         noStyle
                         rules={[{ required: true, message: '请输入验证码' }]}
                       >

@@ -1,8 +1,15 @@
 export interface SysOrganizationType {
-  id: string | null
-  comments: string
-  orgName: string
+  organizationId: string | null
   parentId: string
-  orgCode: string | null
-  orgFullName: string | null
+  organizationTypeName: string
+  organizationName: string | null
+  organizationFullName: string
+  sortNumber: number
+  comments: string
+}
+
+export interface SysOrganizationParams
+  extends Pick<SysOrganizationType, 'organizationName'> {
+  page: number
+  limit: number
 }

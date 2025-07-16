@@ -5,22 +5,37 @@ import type { SysOrganizationType } from './organizationModel'
  * 枚举角色相关的api
  */
 export enum OrganizationApi {
-  organizationList = '/api/system/org/list',
-  addOrganization = '/api/system/org/add',
-  editOrganization = '/api/system/org/update',
-  deleteOrganization = '/api/system/org/delete/',
+  organizationList = '/system/organization',
+  organizationListByPage = '/system/organization/page',
+  batchOrganization = '/system/organization/batch',
 }
 
 /**
- * 租户列表
+ * 分页查询租户列表
  * @param params 租户参数
  * @returns 租户列表
  */
-export const getOrganizationList = (params?: SysOrganizationType) => {
+export const getOrganizationListByPage = (params: SysOrganizationType) => {
+  return HttpRequest.get(
+    {
+      url: OrganizationApi.organizationListByPage,
+      params: params,
+    },
+    {
+      successMessageMode: 'none',
+    }
+  )
+}
+
+/**
+ * 全部租户列表
+ * @param params 租户参数
+ * @returns 租户列表
+ */
+export const getOrganizationList = () => {
   return HttpRequest.get(
     {
       url: OrganizationApi.organizationList,
-      params: params,
     },
     {
       successMessageMode: 'none',
@@ -34,7 +49,7 @@ export const getOrganizationList = (params?: SysOrganizationType) => {
 export const addOrganization = (params: SysOrganizationType) => {
   return HttpRequest.post(
     {
-      url: OrganizationApi.addOrganization,
+      url: OrganizationApi.organizationList,
       data: params,
     },
     {
@@ -48,9 +63,9 @@ export const addOrganization = (params: SysOrganizationType) => {
  * @param params 租户参数
  */
 export const updateOrganization = (params?: SysOrganizationType) => {
-  return HttpRequest.post(
+  return HttpRequest.put(
     {
-      url: OrganizationApi.editOrganization,
+      url: OrganizationApi.organizationList,
       data: params,
     },
     {
@@ -64,9 +79,25 @@ export const updateOrganization = (params?: SysOrganizationType) => {
  * @param params 租户参数
  */
 export const deleteOrganization = (id: string) => {
-  return HttpRequest.get(
+  return HttpRequest.delete(
     {
-      url: OrganizationApi.deleteOrganization + id,
+      url: OrganizationApi.organizationList + '/' + id,
+    },
+    {
+      successMessageMode: 'none',
+    }
+  )
+}
+
+/**
+ * 批量删除租户
+ * @param params 租户参数
+ */
+export const deleteBatchOrganization = (id: string[]) => {
+  return HttpRequest.delete(
+    {
+      url: OrganizationApi.batchOrganization,
+      data: id,
     },
     {
       successMessageMode: 'none',

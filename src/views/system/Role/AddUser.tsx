@@ -13,8 +13,8 @@ import {
 import DragModal from '@/components/modal/DragModal'
 import { getRoleList } from '@/services/system/role/roleApi'
 import { getOrganizationList } from '@/services/system/organization/organization'
+import type { SysRoleType, SysUserType } from '@/services/system/role/roleModel'
 import { buildTree } from '@/utils/tool'
-import { SysUserType } from '@/services/system/role/roleModel'
 
 type DefaultOptionType = GetProp<TreeSelectProps, 'treeData'>[number]
 
@@ -25,7 +25,7 @@ type DefaultOptionType = GetProp<TreeSelectProps, 'treeData'>[number]
 const AddUser: React.FC<AddUserProps> = ({ open, onOk, onCancel, roleId }) => {
   const [form] = Form.useForm()
 
-  const [role, setRole] = useState([])
+  const [role, setRole] = useState<SysRoleType[]>([])
 
   const ref = useRef<InputRef>(null)
 
@@ -35,15 +35,10 @@ const AddUser: React.FC<AddUserProps> = ({ open, onOk, onCancel, roleId }) => {
     []
   )
 
-  const [initialValues, setInitialValues] = useState<{ roles: string[] }>({
-    roles: [],
-  })
-
   useEffect(() => {
     if (!open.visible) return
-    // 获取所有角色
-    getAllRole()
-    getOrganization()
+    // 获取所有角色和组织机构
+    init()
     if (open.editRow) {
       form.setFieldsValue({
         ...open.editRow,
@@ -51,21 +46,16 @@ const AddUser: React.FC<AddUserProps> = ({ open, onOk, onCancel, roleId }) => {
       })
     } else {
       form.resetFields()
-      setInitialValues({ roles: [roleId] })
+      form.setFieldsValue({ roles: [roleId] })
     }
   }, [open.visible])
 
-  const getOrganization = () => {
+  const init = () => {
     setLoading(true)
-    getOrganizationList().then((resp) => {
-      setTreeData(buildTree(resp))
+    Promise.all([getOrganizationList(), getRoleList()]).then((result) => {
+      setTreeData(buildTree(result[0], 'organizationId'))
+      setRole(result[1])
       setLoading(false)
-    })
-  }
-
-  const getAllRole = () => {
-    getRoleList({ page: 1, size: 9999 }).then((resp: any) => {
-      setRole(resp.results)
     })
   }
 
@@ -76,7 +66,13 @@ const AddUser: React.FC<AddUserProps> = ({ open, onOk, onCancel, roleId }) => {
     form
       .validateFields()
       .then(() => {
-        onOk(form.getFieldsValue())
+        onOk({
+          ...form.getFieldsValue(),
+          roles:
+            role.filter((item) =>
+              form.getFieldValue('roles').includes(item.roleId)
+            ) ?? [],
+        })
       })
       .catch((errorInfo) => {
         // 滚动并聚焦到第一个错误字段
@@ -99,13 +95,16 @@ const AddUser: React.FC<AddUserProps> = ({ open, onOk, onCancel, roleId }) => {
       onOk={handleOk}
       loading={loading}
     >
-      <Form form={form} labelCol={{ span: 5 }} initialValues={initialValues}>
+      <Form form={form} labelCol={{ span: 5 }}>
+        <Form.Item name="userId" hidden>
+          <Input disabled />
+        </Form.Item>
         <Row gutter={24}>
           <Col span={12}>
             <Form.Item
               className="mb-0"
               label="用户账号"
-              name="loginName"
+              name="username"
               rules={[{ required: true, message: '请输入用户账号' }]}
             >
               <Input
@@ -143,7 +142,7 @@ const AddUser: React.FC<AddUserProps> = ({ open, onOk, onCancel, roleId }) => {
             <Form.Item
               className="mb-0"
               label="所属机构"
-              name="orgId"
+              name="organizationId"
               rules={[{ required: true, message: '请选择所属机构' }]}
             >
               <TreeSelect
@@ -153,8 +152,8 @@ const AddUser: React.FC<AddUserProps> = ({ open, onOk, onCancel, roleId }) => {
                 treeData={treeData}
                 placeholder="请选择所属机构"
                 fieldNames={{
-                  label: 'orgName',
-                  value: 'id',
+                  label: 'organizationName',
+                  value: 'organizationId',
                   children: 'children',
                 }}
               />
@@ -164,12 +163,15 @@ const AddUser: React.FC<AddUserProps> = ({ open, onOk, onCancel, roleId }) => {
             <Form.Item
               className="mb-0"
               label="登陆密码"
-              name="loginPwd"
+              name="password"
               rules={[
+                { required: true },
                 {
                   validator: (_, value) => {
-                    if (!value) return Promise.reject('密码不能为空')
-                    if (!/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$/.test(value)) {
+                    if (
+                      value &&
+                      !/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$/.test(value)
+                    ) {
                       return Promise.reject('密码需包含字母和数字且至少6位')
                     }
                     return Promise.resolve()
@@ -195,11 +197,6 @@ const AddUser: React.FC<AddUserProps> = ({ open, onOk, onCancel, roleId }) => {
             </Form.Item>
           </Col>
           <Col span={12}>
-            <Form.Item className="mb-0" label="住址" name="address">
-              <Input placeholder="请输入住址" allowClear autoComplete="off" />
-            </Form.Item>
-          </Col>
-          <Col span={12}>
             <Form.Item
               className="mb-0"
               label="角色"
@@ -208,9 +205,9 @@ const AddUser: React.FC<AddUserProps> = ({ open, onOk, onCancel, roleId }) => {
             >
               <Select
                 mode="multiple"
-                options={role.map((item: { roleName: string; id: string }) => ({
+                options={role.map((item: SysRoleType) => ({
                   label: item.roleName,
-                  value: item.id,
+                  value: item.roleId,
                 }))}
                 placeholder="请选择角色"
                 allowClear

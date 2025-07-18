@@ -63,7 +63,7 @@ const RoleInfoModal: React.FC<RoleInfoModalProps> = ({
       afterOpenChange={onAfterOpenChange}
     >
       <Form form={form} labelCol={{ span: 4 }} disabled={view}>
-        <Form.Item name="id" hidden>
+        <Form.Item name="roleId" hidden>
           <Input disabled />
         </Form.Item>
         <Form.Item

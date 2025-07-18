@@ -1,10 +1,5 @@
-import {
-  DeleteOutlined,
-  EditOutlined,
-  ExclamationCircleFilled,
-  MoreOutlined,
-  PlusOutlined,
-} from '@ant-design/icons'
+import type React from 'react'
+import { useEffect, useState } from 'react'
 import useParentSize from '@/hooks/useParentSize'
 import {
   App,
@@ -17,13 +12,19 @@ import {
   type TableProps,
   TablePaginationConfig,
 } from 'antd'
-import type React from 'react'
-import { useEffect, useState } from 'react'
+import {
+  DeleteOutlined,
+  EditOutlined,
+  ExclamationCircleFilled,
+  MoreOutlined,
+  PlusOutlined,
+} from '@ant-design/icons'
 import {
   addRole,
   deleteRole,
+  deleteBatchRole,
   editRole,
-  getRoleList,
+  getRoleListByPage,
 } from '@/services/system/role/roleApi'
 import SearchForm from '@/components/searchForm'
 import SearchTable from '@/components/searchTable'
@@ -42,10 +43,10 @@ const Role: React.FC = () => {
   const { modal } = App.useApp()
 
   // 容器高度计算（表格）
-  const { parentRef } = useParentSize()
+  const { parentRef, height } = useParentSize()
 
   // 当前选中的行数据
-  const [selRows, setSelectedRows] = useState<any[]>([])
+  const [selRows, setSelectedRows] = useState<string[]>([])
 
   // 将当前编辑行和窗口开关合并为一个状态对象
   const [params, setParams] = useState<{
@@ -60,7 +61,7 @@ const Role: React.FC = () => {
 
   const [searchDefaultForm, setSearchDefaultForm] = useState<SysRoleParams>({
     page: 1,
-    size: 10,
+    limit: 10,
   })
 
   // 抽屉窗口打开关闭
@@ -92,7 +93,7 @@ const Role: React.FC = () => {
           icon: <ExclamationCircleFilled />,
           content: '确定删除该角色吗？数据删除后将无法恢复！',
           onOk() {
-            deleteRole(row.id).then(() => {
+            deleteRole(row.roleId).then(() => {
               // 刷新表格数据
               onUpdateSearch()
             })
@@ -182,10 +183,12 @@ const Role: React.FC = () => {
   ]
 
   const onUpdateSearch = (info?: SysRoleParams | unknown) => {
+    console.log(height, 'height')
+
     const filteredObj = Object.fromEntries(
       Object.entries(info ?? {}).filter(([, value]) => !!value)
     )
-    let pageInfo = filterKeys(searchDefaultForm, ['page', 'size'], true)
+    let pageInfo = filterKeys(searchDefaultForm, ['page', 'limit'], true)
     setSearchDefaultForm({
       ...pageInfo,
       ...filteredObj,
@@ -196,7 +199,7 @@ const Role: React.FC = () => {
     setSearchDefaultForm({
       ...searchDefaultForm,
       page: pagination.current as number,
-      size: pagination.pageSize as number,
+      limit: pagination.pageSize as number,
     })
   }
 
@@ -235,15 +238,25 @@ const Role: React.FC = () => {
         // 编辑数据
         await editRole(roleData)
       }
+      // message.success(!params.currentRow ? '添加成功' : '修改成功')
       // 操作成功，关闭弹窗，刷新数据
       setParams({ visible: false, currentRow: null, view: false })
       onUpdateSearch()
-    } catch (error) {
-      modal.error({
-        title: '操作失败',
-        content: `原因：${error}`,
-      })
-    }
+    } catch (error) {}
+  }
+
+  const batchDeleteRole = () => {
+    modal.confirm({
+      title: '批量删除角色',
+      icon: <ExclamationCircleFilled />,
+      content: '确定批量删除该角色吗？数据删除后将无法恢复！',
+      onOk() {
+        deleteBatchRole({ ids: selRows }).then(() => {
+          // 刷新表格数据
+          onUpdateSearch()
+        })
+      },
+    })
   }
 
   return (
@@ -269,70 +282,60 @@ const Role: React.FC = () => {
             onUpdateSearch={onUpdateSearch}
           />
         </Card>
-        {/* 查询表格 */}
-        <Card
-          style={{ flex: 1, marginTop: '8px' }}
-          styles={{ body: { height: '100%' } }}
-          ref={parentRef}
-        >
-          {/* 操作按钮 */}
-          <Space className="mb-[20px]">
-            <Button
-              type="primary"
-              icon={<PlusOutlined />}
-              onClick={onAddRoleClick}
-            >
-              新增
-            </Button>
-            <Button
-              type="default"
-              danger
-              icon={<DeleteOutlined />}
-              disabled={selRows.length === 0}
-            >
-              批量删除
-            </Button>
-          </Space>
-          {/* 表格数据 */}
-          {/* <Table
-            size="small"
-            onRow={onRow}
-            style={{ marginTop: '8px' }}
-            bordered
-            pagination={false}
-            dataSource={tableData}
-            columns={columns}
-            loading={loading}
-            rowKey="id"
-            scroll={{ x: 'max-content', y: height - 128 }}
-            rowSelection={{ ...rowSelection }}
-          /> */}
-          <SearchTable
-            size="large"
-            columns={columns}
-            bordered
-            rowKey="id"
-            fetchData={getRoleList}
-            searchFilter={searchDefaultForm}
-            isSelection={true}
-            onUpdatePagination={onUpdatePagination}
-            onUpdateSelection={(options: string[]) => setSelectedRows(options)}
-          />
-        </Card>
       </ConfigProvider>
+
+      {/* 查询表格 */}
+      <Card
+        style={{ flex: 1, marginTop: '8px', minHeight: 0 }}
+        styles={{ body: { height: '100%' } }}
+        ref={parentRef}
+      >
+        {/* 操作按钮 */}
+        <Space className="mb-[8px]">
+          <Button
+            type="primary"
+            icon={<PlusOutlined />}
+            onClick={onAddRoleClick}
+          >
+            新增
+          </Button>
+          <Button
+            type="default"
+            danger
+            icon={<DeleteOutlined />}
+            disabled={selRows.length === 0}
+            onClick={batchDeleteRole}
+          >
+            批量删除
+          </Button>
+        </Space>
+        <SearchTable
+          size="middle"
+          columns={columns}
+          style={{ marginTop: '8px' }}
+          bordered
+          scroll={{ x: 'max-content', y: height - 158 }}
+          rowKey="roleId"
+          fetchData={getRoleListByPage}
+          searchFilter={searchDefaultForm}
+          isSelection={true}
+          onUpdatePagination={onUpdatePagination}
+          onUpdateSelection={(options: string[]) => setSelectedRows(options)}
+        />
+      </Card>
 
       {/* 编辑弹窗 */}
       <RoleInfoModal params={params} onCancel={onCancel} onOk={onEditOk} />
       {/* 权限分配抽屉 */}
       <RoleMenuDrawer
-        roleId={params.currentRow?.id}
+        roleId={params.currentRow?.roleId}
         onOk={hideDrawer}
         open={drawerOpen}
         onCancel={hideDrawer}
       />
       {/* 用户分配抽屉 */}
       <RoleUserDrawer
-        roleId={params.currentRow?.id}
+        roleId={params.currentRow?.roleId}
         onCancel={hideDrawer}
         open={drawerOpenUser}
       />

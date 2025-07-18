@@ -15,6 +15,8 @@ import { setMenus } from '@/stores/store'
 import { HttpCodeEnum } from '@/enums/httpEnum'
 import { antdUtils } from '@/utils/antdUtil'
 import { MenuModel } from '@/services/system/menu/menuModel'
+import { buildTree } from '@/utils/tool'
+import { getRoleMenu } from '@/services/system/role/roleApi'
 
 /**
  * 登录模块
@@ -22,8 +24,11 @@ import { MenuModel } from '@/services/system/menu/menuModel'
  */
 const Login: React.FC = () => {
   const [form] = Form.useForm()
+
   const inputRef = useRef(null)
+
   const navigate = useNavigate()
+
   const dispatch = useDispatch()
   // 加载状态
   const [loading, setLoading] = useState<boolean>(false)
@@ -81,22 +86,28 @@ const Login: React.FC = () => {
         // 登录成功
         case HttpCodeEnum.SUCCESS:
           {
-            let userId = data.user?.userId
+            let roleId = data.user?.userId
             // 没有配置首页地址默认跳到第一个菜单
-            let homePath = data.user?.authorities
+            let { homePath } = data
             sessionStorage.setItem('token', data.access_token)
             sessionStorage.setItem('isLogin', 'true')
-            sessionStorage.setItem('roleId', userId)
+            sessionStorage.setItem('roleId', roleId)
             // 存储登录的用户名
             sessionStorage.setItem('loginUser', data.user?.username)
-            dispatch(setMenus(homePath))
-            // 获取第一个是路由的地址
-            const firstRoute = homePath.find(
-              (item: MenuModel) => item.menuId === '36'
-            )
-            if (firstRoute) {
-              homePath = firstRoute.path
+            const menu = await getRoleMenu(roleId)
+            // return
+            dispatch(setMenus(buildTree(menu, 'menuId')))
+            // 判断是否配置了默认跳转的首页地址
+            if (!homePath) {
+              // 获取第一个是路由的地址
+              const firstRoute = menu.find(
+                (item: { menuType: number }) => item.menuType === 0
+              )
+              if (firstRoute) {
+                homePath = firstRoute.path
+              }
             }
+
             // 跳转到首页
             navigate(homePath)
             antdUtils.notification?.success({

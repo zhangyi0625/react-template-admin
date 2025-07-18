@@ -81,21 +81,19 @@ const LeftMenu: React.FC = memo(() => {
   const deepLoopFloat = (menuList: RouteItem[], newArr: MenuItem[] = []) => {
     for (const item of menuList) {
       // 如果不能显示的菜单不显示
-      if (item?.meta?.menuType === 2) {
+      if (item.menuType === 2) {
         continue
       }
       // 下面判断代码解释 *** !item?.children?.length   ==>   (!item.children || item.children.length === 0)
       if (!item?.children?.length) {
-        newArr.push(
-          getItem(item.meta?.title, item.path, getIcon(item.meta?.icon))
-        )
+        newArr.push(getItem(item.title, item.path, getIcon(item.icon)))
         continue
       }
       newArr.push(
         getItem(
-          item.meta?.title,
+          item.title,
           item.path,
-          getIcon(item.meta?.icon),
+          getIcon(item.icon),
           deepLoopFloat(item.children)
         )
       )
@@ -118,7 +116,7 @@ const LeftMenu: React.FC = memo(() => {
     // 判断如果是二级路由，不在左边菜单那种的就不去更新
     const route = searchRoute(pathname, menus)
     if (route && Object.keys(route).length) {
-      const title = route.meta?.title
+      const title = route.title
       if (title) document.title = `${title} - 在舱光速抢舱管理平台`
       if (!collapsed) setOpenKeys(openKey)
     }

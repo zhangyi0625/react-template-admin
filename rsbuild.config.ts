@@ -26,7 +26,7 @@ export default defineConfig({
     // mock 插件
     pluginMockServer({
       // 表示拦截以路径/api开头的
-      prefix: '/apis',
+      prefix: '/api',
     }),
     // 启动图片压缩
     pluginImageCompress(),
@@ -80,12 +80,20 @@ export default defineConfig({
     host: '::',
     port: 3005,
     open: false,
+    // historyApiFallback: {
+    //   index: '/index.tsx',
+    // },
     proxy: {
       '/api': {
         target: process.env.VITE_BASE_API,
         changeOrigin: true,
         pathRewrite: (path) => path.replace(/^\/api/, ''),
       },
+      // '/api': {
+      //   target: 'http://localhost:3005',
+      //   changeOrigin: true,
+      //   pathRewrite: (path) => path.replace(/^\/api/, ''),
+      // },
     },
   },
 })

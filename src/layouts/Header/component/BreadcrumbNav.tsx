@@ -71,8 +71,8 @@ function patchBreadcrumb(
         const pth: Record<string, any> = {}
         pth.title = (
           <>
-            {joinIcon && item.meta?.icon && getIcon(item.meta.icon)}
-            <span style={{ padding: '0 4px' }}>{item.meta?.title}</span>
+            {joinIcon && item.icon && getIcon(item.icon)}
+            <span style={{ padding: '0 4px' }}>{item.title}</span>
           </>
         )
         pth.key = item.path
@@ -80,16 +80,16 @@ function patchBreadcrumb(
         if (pathname === item.path) {
           pth.title = (
             <>
-              {joinIcon && item.meta?.icon && getIcon(item.meta.icon)}
-              <Link to={item.path}>{item.meta?.title}</Link>
+              {joinIcon && item.icon && getIcon(item.icon)}
+              <Link to={item.path}>{item.title}</Link>
             </>
           )
         } else {
           if (item.component) {
             pth.title = (
               <>
-                {joinIcon && item.meta?.icon && getIcon(item.meta.icon)}
-                <Link to={pathname}>{item.meta?.title}详情</Link>
+                {joinIcon && item.icon && getIcon(item.icon)}
+                <Link to={pathname}>{item.title}详情</Link>
               </>
             )
           }

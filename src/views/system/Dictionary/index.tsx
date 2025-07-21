@@ -31,9 +31,12 @@ import SearchForm, { CustomColumn } from '@/components/searchForm'
 import DictonaryModal from './DictonaryModal'
 import SearchTable from '@/components/searchTable'
 import { filterKeys } from '@/utils/tool'
+import useParentSize from '@/hooks/useParentSize'
 
 const Dictionary: React.FC = () => {
   const { modal, message } = App.useApp()
+
+  const { parentRef, height } = useParentSize()
 
   const [dictionaryClass, setDictionaryClass] = useState<
     { id: string; name: string }[]
@@ -245,47 +248,48 @@ const Dictionary: React.FC = () => {
             />
           )}
         </Card>
-        {/* 查询表格 */}
-        <Card
-          style={{ flex: 1, marginTop: '8px' }}
-          styles={{ body: { height: '100%' } }}
-        >
-          {/* 操作按钮 */}
-          <Space className="mb-[20px]">
-            <Button
-              type="primary"
-              icon={<PlusOutlined />}
-              onClick={() =>
-                setParams({ visible: true, currentRow: null, view: false })
-              }
-            >
-              新增
-            </Button>
-            <Button
-              type="default"
-              danger
-              icon={<DeleteOutlined />}
-              disabled={selRows.length === 0}
-              onClick={() => deleteDic(selRows, 'batch')}
-            >
-              批量删除
-            </Button>
-          </Space>
-          <SearchTable
-            size="small"
-            columns={columns}
-            bordered
-            rowKey="dictDataId"
-            fetchData={getDictionaryListByIdPage}
-            searchFilter={searchDefaultForm}
-            isSelection={true}
-            isPagination={false}
-            immediate={immediate}
-            onUpdatePagination={onUpdatePagination}
-            onUpdateSelection={(options: string[]) => setSelectedRows(options)}
-          />
-        </Card>
       </ConfigProvider>
+      <Card
+        style={{ flex: 1, marginTop: '8px', minHeight: 0 }}
+        styles={{ body: { height: '100%' } }}
+        ref={parentRef}
+      >
+        {/* 操作按钮 */}
+        <Space className="mb-[8px]">
+          <Button
+            type="primary"
+            icon={<PlusOutlined />}
+            onClick={() =>
+              setParams({ visible: true, currentRow: null, view: false })
+            }
+          >
+            新增
+          </Button>
+          <Button
+            type="default"
+            danger
+            icon={<DeleteOutlined />}
+            disabled={selRows.length === 0}
+            onClick={() => deleteDic(selRows, 'batch')}
+          >
+            批量删除
+          </Button>
+        </Space>
+        <SearchTable
+          size="small"
+          columns={columns}
+          bordered
+          rowKey="dictDataId"
+          fetchData={getDictionaryListByIdPage}
+          searchFilter={searchDefaultForm}
+          scroll={{ x: 'max-content', y: height - 158 }}
+          isSelection={true}
+          isPagination={false}
+          immediate={immediate}
+          onUpdatePagination={onUpdatePagination}
+          onUpdateSelection={(options: string[]) => setSelectedRows(options)}
+        />
+      </Card>
       <DictonaryModal
         params={params}
         onOk={onEditOk}

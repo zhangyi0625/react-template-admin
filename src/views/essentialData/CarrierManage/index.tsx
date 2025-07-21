@@ -8,34 +8,34 @@ import {
   TablePaginationConfig,
   TableProps,
 } from 'antd'
-import { ExclamationCircleFilled, PlusOutlined } from '@ant-design/icons'
 import SearchForm from '@/components/searchForm'
 import SearchTable from '@/components/searchTable'
-import type {
-  CustomerManageParams,
-  CustomerManageType,
-} from '@/services/essential/customerManage/customerManageModel'
-import {
-  addCustomerManage,
-  putCustomerManage,
-  deleteCustomerManage,
-  getCustomerManageListByPage,
-} from '@/services/essential/customerManage/customerManageApi'
-import { SelectCustomerManageOptions } from './config'
-import AddCustomerManage from './AddCustomerManage'
 import { filterKeys } from '@/utils/tool'
+import { ExclamationCircleFilled, PlusOutlined } from '@ant-design/icons'
+import {
+  CarrierManageParams,
+  CarrierManageType,
+} from '@/services/essential/carrierManage/carrierManageModel'
+import {
+  addCarrierManage,
+  deleteCarrierManage,
+  getCarrierManageListByPage,
+  putCarrierManage,
+} from '@/services/essential/carrierManage/carrierManageApi'
+import { SelectCarrierManageOptions } from './config'
+import AddCarrierManage from './AddCarrierManage'
 import useParentSize from '@/hooks/useParentSize'
 
-const CustomerManage: React.FC = () => {
+const CarrierManage: React.FC = () => {
   const { modal, message } = App.useApp()
 
   const { parentRef, height } = useParentSize()
 
   const [searchDefaultForm, setSearchDefaultForm] =
-    useState<CustomerManageParams>({
+    useState<CarrierManageParams>({
       page: 1,
       limit: 10,
-      name: null,
+      code: null,
     })
 
   const [params, setParams] = useState<{
@@ -50,28 +50,38 @@ const CustomerManage: React.FC = () => {
 
   const columns: TableProps['columns'] = [
     {
-      title: '客户名称',
-      dataIndex: 'name',
-      key: 'name',
+      title: '船司代码',
+      dataIndex: 'code',
+      key: 'code',
       align: 'center',
     },
     {
-      title: '客户简称',
-      dataIndex: 'shortName',
-      key: 'shortName',
+      title: '船司中文名',
+      dataIndex: 'cnName',
+      key: 'cnName',
       align: 'center',
     },
     {
-      title: '统一社会信用代码',
-      dataIndex: 'socialCode',
-      key: 'socialCode',
-      width: 300,
+      title: '船司英文名',
+      dataIndex: 'enName',
+      key: 'enName',
+      width: 120,
       align: 'center',
+    },
+    {
+      title: '船司logo',
+      dataIndex: 'logoUrl',
+      key: 'logoUrl',
+      align: 'center',
+      render(value) {
+        return <img src={value} className="w-[48px] h-[48px] m-auto" alt="" />
+      },
     },
     {
       title: '修改时间',
-      key: 'updateTime',
       dataIndex: 'updateTime',
+      key: 'updateTime',
+      width: 200,
       align: 'center',
     },
     {
@@ -106,14 +116,14 @@ const CustomerManage: React.FC = () => {
     },
   ]
 
-  const onEditOk = async (customerRow: CustomerManageType) => {
+  const onEditOk = async (customerRow: CarrierManageType) => {
     try {
       if (params.currentRow == null) {
         // 新增数据
-        await addCustomerManage(customerRow)
+        await addCarrierManage(customerRow)
       } else {
         // 编辑数据
-        await putCustomerManage(customerRow)
+        await putCarrierManage(customerRow)
       }
       message.success(!params.currentRow ? '添加成功' : '修改成功')
       // 操作成功，关闭弹窗，刷新数据
@@ -124,11 +134,11 @@ const CustomerManage: React.FC = () => {
 
   const deleteBatch = (id: string) => {
     modal.confirm({
-      title: '删除客户',
+      title: '删除船司',
       icon: <ExclamationCircleFilled />,
-      content: '确定删除该客户吗？数据删除后将无法恢复！',
+      content: '确定删除该船司吗？数据删除后将无法恢复！',
       onOk() {
-        deleteCustomerManage(id).then(() => {
+        deleteCarrierManage(id).then(() => {
           // 刷新表格数据
           onUpdateSearch()
         })
@@ -136,7 +146,7 @@ const CustomerManage: React.FC = () => {
     })
   }
 
-  const onUpdateSearch = (info?: CustomerManageParams | unknown) => {
+  const onUpdateSearch = (info?: CarrierManageParams | unknown) => {
     const filteredObj = Object.fromEntries(
       Object.entries(info ?? {}).filter(([, value]) => !!value)
     )
@@ -169,7 +179,7 @@ const CustomerManage: React.FC = () => {
       >
         <Card>
           <SearchForm
-            columns={SelectCustomerManageOptions}
+            columns={SelectCarrierManageOptions}
             gutterWidth={24}
             labelPosition="left"
             btnSeparate={false}
@@ -192,7 +202,7 @@ const CustomerManage: React.FC = () => {
               setParams({ visible: true, currentRow: null, view: true })
             }
           >
-            新增客户
+            新增船司
           </Button>
         </Space>
         <SearchTable
@@ -200,15 +210,15 @@ const CustomerManage: React.FC = () => {
           columns={columns}
           bordered
           rowKey="id"
+          isCache="carrierData"
           scroll={{ x: 'max-content', y: height - 158 }}
-          fetchData={getCustomerManageListByPage}
-          isCache="customerData"
+          fetchData={getCarrierManageListByPage}
           searchFilter={searchDefaultForm}
           isSelection={false}
           onUpdatePagination={onUpdatePagination}
         />
       </Card>
-      <AddCustomerManage
+      <AddCarrierManage
         params={params}
         onOk={onEditOk}
         onCancel={() =>
@@ -219,4 +229,4 @@ const CustomerManage: React.FC = () => {
   )
 }
 
-export default CustomerManage
+export default CarrierManage

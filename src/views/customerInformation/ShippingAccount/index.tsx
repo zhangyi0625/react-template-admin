@@ -38,11 +38,14 @@ import type { CustomerManageType } from '@/services/essential/customerManage/cus
 import type { CarrierManageType } from '@/services/essential/carrierManage/carrierManageModel'
 import { filterKeys } from '@/utils/tool'
 import { formatTime } from '@/utils/format'
+import useParentSize from '@/hooks/useParentSize'
 
 const API = process.env.VITE_STATIC_API
 
 const ShippingAccount: React.FC = () => {
   const { modal, message } = App.useApp()
+
+  const { parentRef, height } = useParentSize()
 
   const dispatch = useDispatch()
 
@@ -306,53 +309,58 @@ const ShippingAccount: React.FC = () => {
             onUpdateSearch={onUpdateSearch}
           />
         </Card>
-        <Card>
-          <Space className="mb-[20px]">
-            <Button
-              type="primary"
-              icon={<PlusOutlined />}
-              onClick={() =>
-                setParams({ visible: true, currentRow: null, view: true })
-              }
-            >
-              添加账号
-            </Button>
-            <Button
-              color="orange"
-              icon={<ImportOutlined />}
-              variant="solid"
-              onClick={() => setImportModel(true)}
-            >
-              批量导入账号
-            </Button>
-            <Button
-              variant="solid"
-              icon={<LoginOutlined />}
-              color="green"
-              onClick={readyLogin}
-            >
-              账号预登陆
-            </Button>
-            <div
-              className="underline text-blue-500 text-sm cursor-pointer"
-              onClick={downLoadFile}
-            >
-              下载账号导入模版
-            </div>
-          </Space>
-          <SearchTable
-            size="large"
-            columns={columns}
-            bordered
-            rowKey="id"
-            fetchData={getShippingAccountListByPage}
-            searchFilter={searchDefaultForm}
-            isSelection={true}
-            onUpdatePagination={onUpdatePagination}
-            onUpdateSelection={(options: string[]) => setSelectedRows(options)}
-          />
-        </Card>
       </ConfigProvider>
+      <Card
+        style={{ flex: 1, marginTop: '8px', minHeight: 0 }}
+        styles={{ body: { height: '100%' } }}
+        ref={parentRef}
+      >
+        <Space className="mb-[8px]">
+          <Button
+            type="primary"
+            icon={<PlusOutlined />}
+            onClick={() =>
+              setParams({ visible: true, currentRow: null, view: true })
+            }
+          >
+            添加账号
+          </Button>
+          <Button
+            color="orange"
+            icon={<ImportOutlined />}
+            variant="solid"
+            onClick={() => setImportModel(true)}
+          >
+            批量导入账号
+          </Button>
+          <Button
+            variant="solid"
+            icon={<LoginOutlined />}
+            color="green"
+            onClick={readyLogin}
+          >
+            账号预登陆
+          </Button>
+          <div
+            className="underline text-blue-500 text-sm cursor-pointer"
+            onClick={downLoadFile}
+          >
+            下载账号导入模版
+          </div>
+        </Space>
+        <SearchTable
+          size="middle"
+          columns={columns}
+          bordered
+          rowKey="id"
+          scroll={{ x: 'max-content', y: height - 158 }}
+          fetchData={getShippingAccountListByPage}
+          searchFilter={searchDefaultForm}
+          isSelection={true}
+          onUpdatePagination={onUpdatePagination}
+          onUpdateSelection={(options: string[]) => setSelectedRows(options)}
+        />
+      </Card>
       <AddShippingAccount
         params={params}
         carrierOptions={carrierOptions}

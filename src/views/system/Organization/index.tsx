@@ -40,8 +40,7 @@ import { SelectOrganizationOptions } from './config'
 const Organization: React.FC = () => {
   const { modal, message } = App.useApp()
 
-  // 容器高度计算（表格）
-  const { parentRef } = useParentSize()
+  const { parentRef, height } = useParentSize()
 
   // 当前选中的行数据
   const [selRows, setSelectedRows] = useState<string[]>([])
@@ -221,46 +220,45 @@ const Organization: React.FC = () => {
             onUpdateSearch={onUpdateSearch}
           />
         </Card>
-        {/* 查询表格 */}
-        <Card
-          style={{ flex: 1, marginTop: '8px' }}
-          styles={{ body: { height: '100%' } }}
-          ref={parentRef}
-        >
-          {/* 操作按钮 */}
-          <Space className="mb-[20px]">
-            <Button
-              type="primary"
-              icon={<PlusOutlined />}
-              onClick={() =>
-                setParams({ visible: true, currentRow: null, view: false })
-              }
-            >
-              新增
-            </Button>
-            <Button
-              type="default"
-              danger
-              icon={<DeleteOutlined />}
-              disabled={selRows.length === 0}
-              onClick={() => deleteDic(selRows, 'batch')}
-            >
-              批量删除
-            </Button>
-          </Space>
-          <SearchTable
-            size="large"
-            columns={columns}
-            bordered
-            rowKey="organizationId"
-            fetchData={getOrganizationListByPage}
-            searchFilter={searchDefaultForm}
-            isSelection={true}
-            onUpdatePagination={onUpdatePagination}
-            onUpdateSelection={(options: string[]) => setSelectedRows(options)}
-          />
-        </Card>
       </ConfigProvider>
+      <Card
+        style={{ flex: 1, marginTop: '8px', minHeight: 0 }}
+        styles={{ body: { height: '100%' } }}
+        ref={parentRef}
+      >
+        <Space className="mb-[8px]">
+          <Button
+            type="primary"
+            icon={<PlusOutlined />}
+            onClick={() =>
+              setParams({ visible: true, currentRow: null, view: false })
+            }
+          >
+            新增
+          </Button>
+          <Button
+            type="default"
+            danger
+            icon={<DeleteOutlined />}
+            disabled={selRows.length === 0}
+            onClick={() => deleteDic(selRows, 'batch')}
+          >
+            批量删除
+          </Button>
+        </Space>
+        <SearchTable
+          size="middle"
+          columns={columns}
+          bordered
+          rowKey="organizationId"
+          scroll={{ x: 'max-content', y: height - 158 }}
+          fetchData={getOrganizationListByPage}
+          searchFilter={searchDefaultForm}
+          isSelection={true}
+          onUpdatePagination={onUpdatePagination}
+          onUpdateSelection={(options: string[]) => setSelectedRows(options)}
+        />
+      </Card>
       <AddOrganization
         params={params}
         onCancel={() =>

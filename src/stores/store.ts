@@ -1,16 +1,18 @@
-import { configureStore } from '@reduxjs/toolkit'
+import { configureStore, Tuple } from '@reduxjs/toolkit'
 import { persistStore, persistReducer } from 'redux-persist'
 import storage from 'redux-persist/lib/storage'
 import { combineReducers } from 'redux'
 import { menuSlice } from './menuReducers'
 import { type Category, preferencesSlice } from './preferencesReducers'
 import { sysSettingSlice } from './settingReducers'
+import { essentialSlice } from './essentialReducers'
 
 // 组合reducer（这里还可以添加其他的reducer）
 const rootReducer = combineReducers({
   menuState: menuSlice.reducer,
   preferences: preferencesSlice.reducer,
   publicSetting: sysSettingSlice.reducer,
+  essentail: essentialSlice.reducer,
 })
 
 // 持久化存储配置
@@ -26,8 +28,9 @@ const persistedReducer = persistReducer(persistConfig, rootReducer)
 // 配置store
 export const store = configureStore({
   reducer: persistedReducer,
-  middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware({ serializableCheck: false }),
+  // middleware: (getDefaultMiddleware) =>
+  //   getDefaultMiddleware({ serializableCheck: false }),
+  middleware: () => new Tuple(),
 })
 
 // 定义RootState
@@ -47,3 +50,5 @@ export const updatePreferences = (category: Category, key: any, value: any) =>
   updateSetting({ category, key, value })
 
 export const { setPublicData } = sysSettingSlice.actions
+
+export const { setEssentail } = essentialSlice.actions

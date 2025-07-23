@@ -8,6 +8,7 @@ import SearchFormItem from './searchFormItem'
 import { DownOutlined, RedoOutlined, SearchOutlined } from '@ant-design/icons'
 import { filterKeys, replaceObjectName } from '@/utils/tool'
 import { formatTime } from '@/utils/format'
+import { isArray } from 'lodash-es'
 
 export interface CustomColumn {
   label: string
@@ -22,6 +23,12 @@ export interface CustomColumn {
   // Todo : form表单rules 暂时只支持基础空置校验
   isRules?: boolean
   defaultValue?: string | null
+  hidden?: boolean
+  selectFileldName?: {
+    label: string
+    value: string
+    children?: string
+  }
 }
 
 type SearchFormPorps = {
@@ -72,8 +79,6 @@ const SearchForm: React.FC<SearchFormPorps> = memo((props) => {
 
   const [isExpend, setIsExpend] = useState<boolean>(false)
 
-  const [initialValues, setInitialValues] = useState({})
-
   const [searchColumns, setSerachColumns] = useState<CustomColumn[]>(columns)
 
   const onFinish = (value: unknown) => {
@@ -107,13 +112,6 @@ const SearchForm: React.FC<SearchFormPorps> = memo((props) => {
 
     setTimeout(() => {
       setSerachColumns([...searchColumns])
-      console.log(
-        [...searchColumns],
-        'searchColumns',
-        searchColumns[0],
-        initialValues
-      )
-      // setInitialValues({})
     }, 500)
   }, [...searchColumns])
 
@@ -129,11 +127,40 @@ const SearchForm: React.FC<SearchFormPorps> = memo((props) => {
   }
 
   const onSearch = () => {
-    let date = searchForm.getFieldsValue()['date-picker'] ?? []
-    let params = {
-      ...filterKeys(searchForm.getFieldsValue(), ['date-picker'], false),
-      createdStart: formatTime(date[0], 'Y-M-D h:m:s'),
-      createdEnd: formatTime(date[1], 'Y-M-D h:m:s'),
+    // 针对处理时间传值表达式：name + 'Start' || 'End'
+    let nameKey: string[] = []
+    let params = {}
+    searchColumns.map((item) => {
+      if (
+        item.formType === 'date-picker' &&
+        searchForm.getFieldValue([item.name])
+      ) {
+        nameKey.push(item.name)
+      }
+    })
+    if (nameKey.length === 0) {
+      params = {
+        ...searchForm.getFieldsValue(),
+      }
+    } else {
+      nameKey.map((item) => {
+        params = {
+          ...filterKeys(searchForm.getFieldsValue(), nameKey, false),
+          ...params,
+          fndCode:
+            (isArray(searchForm.getFieldValue('fndCode'))
+              ? searchForm.getFieldValue('fndCode')[1]
+              : searchForm.getFieldValue('fndCode')) ?? '',
+          [`${item}Start`]: formatTime(
+            searchForm.getFieldsValue()[item][0],
+            'Y-M-D h:m:s'
+          ),
+          [`${item}End`]: formatTime(
+            searchForm.getFieldsValue()[item][0],
+            'Y-M-D h:m:s'
+          ),
+        }
+      })
     }
     onUpdateSearch(params)
   }
@@ -155,7 +182,6 @@ const SearchForm: React.FC<SearchFormPorps> = memo((props) => {
         colon={false}
         labelAlign={labelPosition}
         form={searchForm}
-        initialValues={initialValues}
       >
         <Row gutter={gutterWidth} className={'gap-y-[10px]'}>
           {columns.map((item, index) => (
@@ -167,6 +193,7 @@ const SearchForm: React.FC<SearchFormPorps> = memo((props) => {
                   ? style['no-show']
                   : ''
               }
+              hidden={item.hidden}
             >
               <SearchFormItem
                 label={item.label}
@@ -178,6 +205,7 @@ const SearchForm: React.FC<SearchFormPorps> = memo((props) => {
                 tag={item.tag}
                 isRules={item.isRules ?? false}
                 publicSettingKey={item.publicSettingKey}
+                selectFileldName={item.selectFileldName}
               />
             </Col>
           ))}

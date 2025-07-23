@@ -1,7 +1,8 @@
 import React, { memo, useEffect, useState } from 'react'
 import { Spin, Table, TableProps } from 'antd'
 import { TablePaginationConfig } from 'antd/lib'
-import useParentSize from '@/hooks/useParentSize'
+import { useDispatch } from 'react-redux'
+import { setEssentail } from '@/stores/store'
 
 type OrderTableObject = {
   orderNo: string
@@ -20,25 +21,29 @@ interface SearchTableProps<T = OrderTableObject>
   isPagination?: boolean
   selectionParentType?: 'checkbox' | 'radio'
   immediate?: boolean
+  // Todo ： 缓存部分基数数据 用于redux
+  isCache?: string
   onUpdatePagination: (pagination: TablePaginationConfig) => void
   onUpdateSelection?: (idAdrr: string[], dataRow?: any) => void
 }
 
 const searchTable: React.FC<SearchTableProps> = memo((props) => {
   const {
-    bordered,
     columns,
     fetchData,
     searchFilter,
     rowKey,
     isSelection,
     isPagination,
+    scroll,
     selectionParentType,
     immediate,
+    isCache,
     onUpdatePagination,
     onUpdateSelection,
-    onRow,
   } = props
+
+  const dispatch = useDispatch()
 
   const [tableData, setTableData] = useState([])
   const [loading, setLoading] = useState<boolean>(false)
@@ -46,8 +51,6 @@ const searchTable: React.FC<SearchTableProps> = memo((props) => {
   const [selectionType, setSelectionType] = useState<'checkbox' | 'radio'>(
     'checkbox'
   )
-
-  const { height } = useParentSize()
 
   const [currentPagination, setCurrentPagination] =
     useState<TablePaginationConfig>({
@@ -58,12 +61,18 @@ const searchTable: React.FC<SearchTableProps> = memo((props) => {
 
   const loadTableData = async (paginationConfig = currentPagination) => {
     setLoading(true)
-    const response = await fetchData(searchFilter)
-    console.log('response', response)
-
-    setTableData(response.entries ?? response.results)
-    setCurrentPagination({ ...paginationConfig, total: Number(response.total) })
     try {
+      const response = await fetchData(searchFilter)
+      let resp =
+        Object.keys(response).length > 0
+          ? response.list ?? response.results
+          : response
+      console.log(resp, 'response', response, isCache)
+      isCache && dispatch(setEssentail({ value: resp, key: isCache }))
+      setTableData(resp)
+      setCurrentPagination({
+        ...paginationConfig,
+      })
     } catch {
       setLoading(false)
     } finally {
@@ -105,7 +114,7 @@ const searchTable: React.FC<SearchTableProps> = memo((props) => {
       )
       if (onUpdateSelection && isSelection)
         onUpdateSelection(
-          selectedRows.map((item: { id: number }) => item.id),
+          selectedRows.map((item: any) => item[rowKey]),
           selectedRows
         )
     },
@@ -125,7 +134,7 @@ const searchTable: React.FC<SearchTableProps> = memo((props) => {
         pagination={currentPagination}
         onChange={handleTableChange}
         rowKey={rowKey}
-        scroll={{ x: 'max-content', y: height - 128 }}
+        scroll={scroll}
         rowSelection={
           isSelection
             ? {

@@ -1,12 +1,22 @@
 import { memo, useState } from 'react'
-import { Form, Select, Input, DatePicker } from 'antd'
+import {
+  Form,
+  Select,
+  Input,
+  DatePicker,
+  Cascader,
+  GetProp,
+  CascaderProps,
+} from 'antd'
+import { SelectProps } from 'antd/lib'
 import { CustomColumn } from '.'
 import { debounce } from 'lodash-es'
-import { SelectProps } from 'antd/lib'
 
 type fetchValueType = Pick<CustomColumn, 'name' | 'api' | 'tag'> & {
   value: string | null
 }
+
+type DefaultOptionType = GetProp<CascaderProps, 'options'>[number]
 
 const fetchSearch = debounce(
   (value: fetchValueType, callback: (data: any) => void) => {
@@ -18,7 +28,16 @@ const fetchSearch = debounce(
 )
 
 const SearchFormItem: React.FC<CustomColumn> = memo((props) => {
-  const { label, name, formType, api, tag, options, isRules } = props
+  const {
+    label,
+    name,
+    formType,
+    api,
+    tag,
+    options,
+    isRules,
+    selectFileldName,
+  } = props
 
   const { RangePicker } = DatePicker
 
@@ -68,6 +87,14 @@ const SearchFormItem: React.FC<CustomColumn> = memo((props) => {
     )
   }
 
+  const filter = (inputValue: string, path: DefaultOptionType[]) =>
+    path.some(
+      (option) =>
+        (option.text as string)
+          .toLowerCase()
+          .indexOf(inputValue.toLowerCase()) > -1
+    )
+
   return (
     <div className={'search-form-item'}>
       <Form.Item
@@ -110,6 +137,36 @@ const SearchFormItem: React.FC<CustomColumn> = memo((props) => {
               },
             }}
             options={selectOptions()}
+          />
+        )}
+        {/* 普通查询select */}
+        {formType === 'normalSelect' && (
+          <Select
+            allowClear
+            placeholder={`请输入${label}`}
+            showSearch
+            options={options}
+            filterOption={(input, option) =>
+              String(option?.label ?? '')
+                .toLowerCase()
+                .includes(input.toLowerCase())
+            }
+            fieldNames={
+              selectFileldName ?? {
+                label: 'label',
+                value: 'value',
+                children: 'children',
+              }
+            }
+          />
+        )}
+        {formType === 'cascader' && (
+          <Cascader
+            options={options}
+            placeholder={`请输入${label}`}
+            showSearch={{ filter }}
+            allowClear
+            fieldNames={{ label: 'text', children: 'children' }}
           />
         )}
         {formType === 'date-picker' && (

@@ -158,7 +158,6 @@ export const transform: AxiosTransform = {
     }
     const params = config.params || {}
     const data = config.data || false
-
     if (
       config.method?.toUpperCase() === RequestEnum.GET ||
       config.method?.toUpperCase() === RequestEnum.DELETE
@@ -212,9 +211,6 @@ export const transform: AxiosTransform = {
     const cpt = options?.requestOptions?.encrypt
     if (config.url?.includes('upload') || config.url?.includes('staff/login')) {
       config.headers['Content-Type'] = ContentTypeEnum.FORM_DATA
-      if (config.url?.includes('staff/login')) {
-        // config.headers['x-captcha-answer'] =
-      }
     } else config.headers['Content-Type'] = ContentTypeEnum.JSON
     // 进行数据加密
     if (config.data && cpt === 1) {
@@ -235,6 +231,8 @@ export const transform: AxiosTransform = {
     }
     // 将加密配置放到请求头里面
     config.headers['X-Encrypted'] = cpt
+    config.headers['Authorization'] =
+      'Bearer ' + sessionStorage.getItem('token')
     return config
   },
 

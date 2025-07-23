@@ -12,15 +12,8 @@ function createAxios(opts?: Partial<CreateAxiosOptions>) {
       {
         authenticationScheme: '',
         timeout: 10 * 1000,
-        // headers: {
-        //   'Content-Type': ContentTypeEnum.FORM_URLENCODED,
-        //   'x-captcha-answer': s,
-        // },
-        // headers: { 'Content-Type': ContentTypeEnum.JSON },
         headers: {
-          'Content-Type': ContentTypeEnum.FORM_URLENCODED,
-          'x-captcha-answer': sessionStorage.getItem('captchaAnswer'),
-          authorization: 'Bearer ' + sessionStorage.getItem('token'),
+          Authorization: 'Bearer ' + sessionStorage.getItem('token'),
         },
         // 数据处理方式
         transform,
@@ -41,7 +34,7 @@ function createAxios(opts?: Partial<CreateAxiosOptions>) {
           // 成功消息提示类型
           successMessageMode: 'success',
           // 接口地址（默认前缀）
-          apiUrl: '/apis',
+          apiUrl: '/api',
           // 接口拼接地址前缀
           urlPrefix: '',
           // 是否加入时间戳 默认不添加时间戳

@@ -6,6 +6,24 @@ import { CustomerManageParams, CustomerManageType } from './customerManageModel'
  */
 export enum CustomerManageApi {
   customer = '/core/business/customer',
+  customerByPage = '/core/business/customer/page',
+}
+
+/**
+ * 分页获取客户管理列表
+ * @param params 客户管理参数
+ * @returns 客户管理列表
+ */
+export const getCustomerManageListByPage = (params: CustomerManageParams) => {
+  return HttpRequest.get(
+    {
+      url: CustomerManageApi.customerByPage,
+      params: params,
+    },
+    {
+      successMessageMode: 'none',
+    }
+  )
 }
 
 /**
@@ -13,11 +31,10 @@ export enum CustomerManageApi {
  * @param params 客户管理参数
  * @returns 客户管理列表
  */
-export const getCustomerManageList = (params: CustomerManageParams) => {
+export const getCustomerManageList = () => {
   return HttpRequest.get(
     {
       url: CustomerManageApi.customer,
-      params: params,
     },
     {
       successMessageMode: 'none',

@@ -1,10 +1,4 @@
-import {
-  changStatus,
-  deleteRoleUser,
-  getRoleUser,
-  postBatchRoleUser,
-  postRoleUser,
-} from '@/services/system/role/roleApi'
+import { useEffect, useRef, useState } from 'react'
 import {
   CloseOutlined,
   DeleteOutlined,
@@ -29,9 +23,16 @@ import {
   type TableProps,
   Tag,
 } from 'antd'
-import { useEffect, useRef, useState } from 'react'
 import AddUser from './AddUser'
-import { SysUserType } from '@/services/system/role/roleModel'
+import {
+  changStatus,
+  deleteRoleUser,
+  getRoleUserByPage,
+  postBatchRoleUser,
+  postRoleUser,
+  putRoleUser,
+} from '@/services/system/role/roleApi'
+import type { SysUserType } from '@/services/system/role/roleModel'
 
 /**
  * 给角色分配用户
@@ -79,7 +80,7 @@ const RoleUserDrawer: React.FC<RoleUserDrawerProps> = ({
   useEffect(() => {
     if (!open) return
     // 获取当前角色已经分配的用户
-    getRoleUserByPage()
+    getRoleUser()
     setSelectedRows([])
   }, [open, pagination])
 
@@ -87,18 +88,18 @@ const RoleUserDrawer: React.FC<RoleUserDrawerProps> = ({
    * 分页查询数据
    * @param params 查询参数
    */
-  const getRoleUserByPage = () => {
+  const getRoleUser = () => {
     setLoading(true)
-    getRoleUser({
+    getRoleUserByPage({
       roleId: roleId,
       page: pagination.pageNumber,
-      size: pagination.pageSize,
+      limit: pagination.pageSize,
       ...form.getFieldsValue(),
     }).then((resp) => {
       // 设置表格数据
-      setTableData(resp.results)
+      setTableData(resp.list)
       // 设置数据总条数
-      resp.total && setTotal(resp.total)
+      resp.count && setTotal(resp.count)
       ref.current?.focus()
       setLoading(false)
     })
@@ -122,7 +123,7 @@ const RoleUserDrawer: React.FC<RoleUserDrawerProps> = ({
     },
     {
       title: '用户账号',
-      dataIndex: 'loginName',
+      dataIndex: 'username',
       width: 80,
       align: 'center',
     },
@@ -151,26 +152,36 @@ const RoleUserDrawer: React.FC<RoleUserDrawerProps> = ({
       render(value) {
         return (
           <Switch
-            value={value.status}
-            onChange={(e) => switchChange(e, value.id)}
+            value={Boolean(value.status)}
+            checkedChildren="正常"
+            unCheckedChildren="冻结"
+            onChange={(e) => switchChange(e, value)}
           />
         )
       },
     },
     {
-      title: '部门',
-      dataIndex: 'orgName',
+      title: '组织结构',
+      dataIndex: 'organizationName',
       align: 'center',
     },
     {
       title: '邮箱',
       dataIndex: 'email',
       align: 'center',
+      width: 100,
     },
     {
       title: '手机号',
       dataIndex: 'phone',
       align: 'center',
+      width: 150,
+    },
+    {
+      title: '更新时间',
+      dataIndex: 'updateTime',
+      align: 'center',
+      width: 200,
     },
     {
       title: '操作',
@@ -188,7 +199,7 @@ const RoleUserDrawer: React.FC<RoleUserDrawerProps> = ({
               type="link"
               danger
               size="small"
-              onClick={() => deleteBatch(record.id)}
+              onClick={() => deleteBatch(record.userId)}
             >
               移除
             </Button>
@@ -198,9 +209,9 @@ const RoleUserDrawer: React.FC<RoleUserDrawerProps> = ({
     },
   ]
 
-  const switchChange = (e: boolean, id: string) => {
-    changStatus({ id: id, status: Number(e) }).then(() => {
-      getRoleUserByPage()
+  const switchChange = (e: boolean, row: SysUserType) => {
+    changStatus({ ...row, status: Number(e) }).then(() => {
+      getRoleUser()
     })
   }
 
@@ -220,7 +231,7 @@ const RoleUserDrawer: React.FC<RoleUserDrawerProps> = ({
    * 表单检索
    */
   const onFinish = () => {
-    getRoleUserByPage()
+    getRoleUser()
   }
 
   /**
@@ -228,12 +239,12 @@ const RoleUserDrawer: React.FC<RoleUserDrawerProps> = ({
    */
   const rowSelection: TableProps['rowSelection'] = {
     // 行选中的回调
-    onChange(_selectedRowKeys, selectedRows) {
-      setSelectedRows(selectedRows)
+    onChange(_selectedRowKeys) {
+      setSelectedRows(_selectedRowKeys)
     },
     columnWidth: 32,
     fixed: true,
-    selectedRowKeys: selRows.map((item) => item.id),
+    selectedRowKeys: selRows.map((item) => item.userId),
   }
 
   /**
@@ -268,11 +279,11 @@ const RoleUserDrawer: React.FC<RoleUserDrawerProps> = ({
       onOk() {
         // 调用删除接口，删除成功后刷新页面数据
         ;(type
-          ? postBatchRoleUser({ ids: id as string[] })
+          ? postBatchRoleUser(id as string[])
           : deleteRoleUser(id as string)
         ).then(() => {
           // 刷新表格数据
-          getRoleUserByPage()
+          getRoleUser()
           // 清空选择项
           setSelectedRows([])
         })
@@ -280,12 +291,19 @@ const RoleUserDrawer: React.FC<RoleUserDrawerProps> = ({
     })
   }
 
-  const handleOk = (form: SysUserType) => {
-    postRoleUser(form).then(() => {
-      message.success('添加成功')
+  const handleOk = async (form: SysUserType) => {
+    try {
+      if (!form.userId) {
+        // 新增数据
+        await postRoleUser(form)
+      } else {
+        // 编辑数据
+        await putRoleUser(form)
+      }
+      message.success(!form.userId ? '添加成功' : '修改成功')
       cancelAddUser()
-      getRoleUserByPage()
-    })
+      getRoleUser()
+    } catch (error) {}
   }
 
   return (
@@ -307,7 +325,7 @@ const RoleUserDrawer: React.FC<RoleUserDrawerProps> = ({
               <Col span={6}>
                 <Form.Item
                   className="mb-0"
-                  name="loginName"
+                  name="username"
                   label="用户账号"
                   colon={false}
                 >
@@ -337,7 +355,7 @@ const RoleUserDrawer: React.FC<RoleUserDrawerProps> = ({
                     type="default"
                     icon={<RedoOutlined />}
                     onClick={() => {
-                      form.resetFields()
+                      form.resetFields(), getRoleUser()
                     }}
                   >
                     重置
@@ -372,7 +390,7 @@ const RoleUserDrawer: React.FC<RoleUserDrawerProps> = ({
             dataSource={tableData}
             bordered
             loading={loading}
-            rowKey="id"
+            rowKey="userId"
             pagination={{
               pageSize: pagination.pageSize,
               current: pagination.pageNumber,

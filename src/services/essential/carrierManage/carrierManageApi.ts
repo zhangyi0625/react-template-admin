@@ -34,7 +34,7 @@ export const getCarrierManageListByPage = (params?: CarrierManageParams) => {
  * @param params 船司管理参数
  * @returns 船司管理列表
  */
-export const getCarrierManageList = (params?: CarrierManageParams) => {
+export const getCarrierManageList = (params: Partial<CarrierManageParams>) => {
   return HttpRequest.get(
     {
       url: CarrierManageApi.carrier,

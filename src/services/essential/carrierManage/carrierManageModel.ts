@@ -3,12 +3,13 @@ export interface CarrierManageType {
   cnName: string
   code: string | null
   enName: string
-  enabled: boolean | number
+  enabled?: boolean | number
   logoUrl?: string
   sort?: number
 }
 
-export interface CarrierManageParams extends Pick<CarrierManageType, 'code'> {
+export interface CarrierManageParams
+  extends Pick<CarrierManageType, 'code' | 'enabled'> {
   page: number
   limit: number
 }

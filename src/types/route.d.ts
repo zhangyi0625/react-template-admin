@@ -90,4 +90,6 @@ export interface RouteItem {
   title: string
   // 图标
   icon: string
+  // 隐藏
+  hide: number
 }

@@ -4,12 +4,12 @@ import { essentailPreferences } from './storeState'
 export type Category = keyof essentailPreferences
 
 export const initEssential: essentailPreferences = {
-  routeData: null,
-  porPortData: null,
-  fndPortData: null,
-  carrierData: null,
-  customerData: null,
-  relevanceService: null,
+  routeData: undefined,
+  porPortData: undefined,
+  fndPortData: undefined,
+  carrierData: undefined,
+  customerData: undefined,
+  relevanceService: undefined,
 }
 
 export const essentialSlice = createSlice({

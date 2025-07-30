@@ -18,7 +18,7 @@ export type ImportShippingAccoutProps = {
   visible: boolean
   title: string
   options?: CustomerManageType[] | any[]
-  type: string | 'importShippingAccount' | 'importCabinTask'
+  type: 'importShippingAccount' | 'importCabinTask'
   onOk: (params: Record<string, string | number | boolean>) => void
   onCancel: (e: React.MouseEvent<HTMLButtonElement>) => void
 }
@@ -52,7 +52,7 @@ const ImportShippingAccout: React.FC<ImportShippingAccoutProps> = ({
       return false
     },
     onChange(info) {
-      ImportShippingAccountByXLSX(info.file as FileType, setFileResults)
+      ImportShippingAccountByXLSX(info.file as FileType, setFileResults, type)
     },
     fileList,
   }

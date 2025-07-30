@@ -1,14 +1,14 @@
-import { setMenus } from '@/stores/store'
+import { RootState, setMenus } from '@/stores/store'
 import { Spin, App as AntdApp, Skeleton } from 'antd'
 import type React from 'react'
 import { Suspense, useCallback, useEffect, useState } from 'react'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { Router } from '@/router/router'
-import { getMenusList } from '@/services/system/menu/menuApi'
 import { antdUtils } from '@/utils/antdUtil'
 import { getRoleMenu } from './services/system/role/roleApi'
 import { buildTree } from './utils/tool'
+import type { RouteItem } from './types/route'
 
 /**
  * 主应用
@@ -32,8 +32,7 @@ const App: React.FC = () => {
     try {
       const menu = await getRoleMenu(roleId)
       const treeMenu = menu.filter(
-        (item: { menuType: number; hide: number }) =>
-          item.menuType !== 2 && !item.hide
+        (item: RouteItem) => item.menuType !== 2 && !item.hide
       )
       const build = buildTree(treeMenu, 'menuId')
       dispatch(setMenus(build)) // 更新 Redux 状态

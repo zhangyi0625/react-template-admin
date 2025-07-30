@@ -13,19 +13,15 @@ export enum RoleApi {
   /**
    * 获取角色列表
    */
-  getRoleList = '/api/system/role/page',
+  getRoleList = '/system/role',
+  /**
+   * 分页获取角色列表
+   */
+  getRoleListByPage = '/system/role/page',
   /**
    * 获取角色详情
    */
   getRoleDetail = '/system/role/detail',
-  /**
-   * 新增角色
-   */
-  addRole = '/api/system/role/add',
-  /**
-   * 编辑角色
-   */
-  editRole = '/api/system/role/update',
 
   /**
    * 改变角色状态
@@ -33,44 +29,34 @@ export enum RoleApi {
   changeStatus = '/system/role/changeStatus',
 
   /**
-   * 删除角色
+   * 批量删除角色
    */
-  deleteRole = '/api/system/role/delete/',
+  batchDeleteRole = '/system/role/batch',
 
   /**
    * 获取角色菜单
    */
-  getRoleMenu = '/system/role/getRoleMenu',
+  getRoleMenu = '/system/role-menu/',
 
   /**
    * 获取角色用户
    */
-  getRoleUser = '/api/system/user/page',
+  RoleUser = '/system/user',
 
   /**
-   * 新增角色用户
+   * 分页获取角色用户
    */
-  addRoleUser = '/api/system/user/add',
+  getRoleUserByPage = '/system/user/page',
 
   /**
    * 修改角色用户状态
    */
-  updateRoleUserStatus = '/api/system/user/update',
-
-  /**
-   * 删除角色用户
-   */
-  deleteRoleUser = '/api/system/user/delete/',
+  updateRoleUserStatus = '/system/user/status',
 
   /**
    * 批量删除角色用户
    */
-  batchDeleteRoleUser = '/api/system/user/batchDelete',
-
-  /**
-   * 获取不在该角色下的所有可用用户
-   */
-  getUserNotInRoleByPage = '/system/role/getUserNotInRoleByPage',
+  batchDeleteRoleUser = '/system/user/batch',
 
   /**
    * 给角色分配菜单
@@ -89,14 +75,29 @@ export enum RoleApi {
 }
 
 /**
- * 查询角色列表
+ * 查询所有角色列表
+ * @returns 角色列表
+ */
+export const getRoleList = () => {
+  return HttpRequest.get(
+    {
+      url: RoleApi.getRoleList,
+    },
+    {
+      successMessageMode: 'none',
+    }
+  )
+}
+
+/**
+ * 分页查询角色列表
  * @param params 角色参数
  * @returns 角色列表
  */
-export const getRoleList = (params: SysRoleParams) => {
-  return HttpRequest.get<SysRoleType[]>(
+export const getRoleListByPage = (params: SysRoleParams) => {
+  return HttpRequest.get(
     {
-      url: RoleApi.getRoleList,
+      url: RoleApi.getRoleListByPage,
       params: params,
     },
     {
@@ -112,7 +113,7 @@ export const getRoleList = (params: SysRoleParams) => {
  */
 export const addRole = (params: SysRoleType) => {
   return HttpRequest.post({
-    url: RoleApi.addRole,
+    url: RoleApi.getRoleList,
     data: params,
   })
 }
@@ -123,8 +124,8 @@ export const addRole = (params: SysRoleType) => {
  * @returns 结果
  */
 export const editRole = (params: SysRoleType) => {
-  return HttpRequest.post({
-    url: RoleApi.editRole,
+  return HttpRequest.put({
+    url: RoleApi.getRoleList,
     data: params,
   })
 }
@@ -134,8 +135,8 @@ export const editRole = (params: SysRoleType) => {
  * @param params 角色参数
  * @returns 结果
  */
-export const changStatus = (params: { id: string; status: number }) => {
-  return HttpRequest.post({
+export const changStatus = (params: SysUserType) => {
+  return HttpRequest.put({
     url: RoleApi.updateRoleUserStatus,
     data: params,
   })
@@ -148,7 +149,19 @@ export const changStatus = (params: { id: string; status: number }) => {
  */
 export const deleteRole = (id: string) => {
   return HttpRequest.delete({
-    url: RoleApi.deleteRole + id,
+    url: RoleApi.getRoleList + '/' + id,
+  })
+}
+
+/**
+ * 批量删除角色
+ * @param params 角色参数
+ * @returns 结果
+ */
+export const deleteBatchRole = (params: { ids: string[] }) => {
+  return HttpRequest.delete({
+    url: RoleApi.batchDeleteRole,
+    data: params.ids,
   })
 }
 
@@ -160,8 +173,7 @@ export const deleteRole = (id: string) => {
 export const getRoleMenu = (roleId: string) => {
   return HttpRequest.get(
     {
-      url: RoleApi.getRoleMenu,
-      params: { roleId },
+      url: RoleApi.getRoleMenu + roleId,
     },
     {
       successMessageMode: 'none',
@@ -174,10 +186,13 @@ export const getRoleMenu = (roleId: string) => {
  * @param params 角色参数
  * @returns 结果
  */
-export const assignRoleMenu = (params: any) => {
-  return HttpRequest.post({
-    url: RoleApi.assignRoleMenu,
-    data: params,
+export const assignRoleMenu = (params: {
+  roleId: string
+  menuIds: string[]
+}) => {
+  return HttpRequest.put({
+    url: RoleApi.getRoleMenu + params.roleId,
+    data: params.menuIds,
   })
 }
 
@@ -201,7 +216,24 @@ export const assignRoleUser = (params: any) => {
 export const getRoleUser = (params: SysUserParams) => {
   return HttpRequest.get(
     {
-      url: RoleApi.getRoleUser,
+      url: RoleApi.RoleUser,
+      params: params,
+    },
+    {
+      successMessageMode: 'none',
+    }
+  )
+}
+
+/**
+ * 分页获取角色用户
+ * @param params 角色参数
+ * @returns 结果
+ */
+export const getRoleUserByPage = (params: SysUserParams) => {
+  return HttpRequest.get(
+    {
+      url: RoleApi.getRoleUserByPage,
       params: params,
     },
     {
@@ -218,7 +250,24 @@ export const getRoleUser = (params: SysUserParams) => {
 export const postRoleUser = (params: SysUserType) => {
   return HttpRequest.post(
     {
-      url: RoleApi.addRoleUser,
+      url: RoleApi.RoleUser,
+      data: params,
+    },
+    {
+      successMessageMode: 'none',
+    }
+  )
+}
+
+/**
+ * 修改角色用户
+ * @param params 用户参数
+ * @returns 结果
+ */
+export const putRoleUser = (params: SysUserType) => {
+  return HttpRequest.put(
+    {
+      url: RoleApi.RoleUser,
       data: params,
     },
     {
@@ -234,7 +283,7 @@ export const postRoleUser = (params: SysUserType) => {
  */
 export const deleteRoleUser = (id: string) => {
   return HttpRequest.delete({
-    url: RoleApi.deleteRoleUser + id,
+    url: RoleApi.RoleUser + '/' + id,
   })
 }
 
@@ -243,28 +292,11 @@ export const deleteRoleUser = (id: string) => {
  * @param params 用户参数
  * @returns 结果
  */
-export const postBatchRoleUser = (params: { ids: string[] }) => {
-  return HttpRequest.post(
+export const postBatchRoleUser = (ids: string[]) => {
+  return HttpRequest.delete(
     {
-      url: RoleApi.addRoleUser,
-      data: params,
-    },
-    {
-      successMessageMode: 'none',
-    }
-  )
-}
-
-/**
- * 获取不在该角色下的所有可用用户
- * @param params 角色参数和分页参数
- * @returns 结果
- */
-export const getUserNotInRoleByPage = (params: any) => {
-  return HttpRequest.post(
-    {
-      url: RoleApi.getUserNotInRoleByPage,
-      data: params,
+      url: RoleApi.batchDeleteRoleUser,
+      data: ids,
     },
     {
       successMessageMode: 'none',

@@ -11,7 +11,7 @@ type OrderTableObject = {
   [key: string]: any
 }
 
-interface SearchTableProps<T = OrderTableObject>
+interface SearchTableProps<T = any>
   extends Omit<TableProps<T>, 'columns' | 'datasource'> {
   columns: TableProps['columns']
   fetchData: (pagination: TablePaginationConfig | any) => Promise<any>

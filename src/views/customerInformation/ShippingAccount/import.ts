@@ -1,29 +1,38 @@
-import { ShippingAccounType } from '@/services/customerInformation/shippingAccount/shippingAccountModel'
+import type { ShippingAccounType } from '@/services/customerInformation/shippingAccount/shippingAccountModel'
 import { message } from 'antd'
 import * as XLSX from 'xlsx'
 
-const xlsxHeader = [
-  '船公司编码',
-  '账号抬头',
-  '登录名',
-  '登录密码',
-  '支付密码',
-  '是否为下单账号',
-]
+type ImportXLSXContentType = {
+  xlsxHeader: string[]
+  xlsxKey: string[]
+}
 
-const xlsxKey = [
-  'carrier',
-  'accountHead',
-  'account',
-  'loginPassword',
-  'payPassword',
-  'type',
-]
+const importXLSXContentType: Record<string, ImportXLSXContentType> = {
+  importShippingAccount: {
+    xlsxHeader: ['船公司编码', '账号抬头', '登录名', '登录密码', '支付密码'],
+    xlsxKey: [
+      'carrier',
+      'accountHead',
+      'account',
+      'loginPassword',
+      'payPassword',
+    ],
+  },
+  importCabinTask: {
+    xlsxHeader: [],
+    xlsxKey: [],
+  },
+}
 
 type importType = Record<string, Omit<ShippingAccounType, 'id' | 'customerId'>>
 
-export function ImportShippingAccountByXLSX(file: File, callback?: any) {
-  // const { message } = App.useApp()
+type ImportSource = 'importShippingAccount' | 'importCabinTask'
+
+export function ImportShippingAccountByXLSX(
+  file: File,
+  callback: any,
+  importSource: ImportSource
+) {
   const reader = new FileReader()
   reader.onload = (e) => {
     // e.target.result --> FileReader 完成读取操作后的结果
@@ -44,13 +53,12 @@ export function ImportShippingAccountByXLSX(file: File, callback?: any) {
     // 校验xlsx title文字匹配xlsxHeader
     if (
       !jsonData[0] ||
-      jsonData[0].find((text: string) => !xlsxHeader.includes(text))
+      jsonData[0].find(
+        (text: string) =>
+          !importXLSXContentType[importSource].xlsxHeader.includes(text)
+      )
     ) {
       message.error('船司账号导入格式有误，请下载账号导入模版！')
-      console.log(
-        jsonData[0].find((text: string) => !xlsxHeader.includes(text)),
-        'sss'
-      )
       return
     } else if (!jsonData[1]) {
       message.error('船司账号导入内容不存在！')
@@ -61,13 +69,11 @@ export function ImportShippingAccountByXLSX(file: File, callback?: any) {
         for (let i in item) {
           params = {
             ...params,
-            [xlsxKey[i]]: item[i],
-            type: i === '5' && (item[i] === '是' ? 'ORDER' : 'QUERY'),
+            [importXLSXContentType[importSource].xlsxKey[i]]: item[i],
           }
         }
         arr.push(params)
       })
-      console.log(arr)
       callback(arr)
     }
   }

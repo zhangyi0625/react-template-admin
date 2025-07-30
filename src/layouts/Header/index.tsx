@@ -10,7 +10,6 @@ import { Badge, Dropdown, Input, Layout, Skeleton, Space, Tooltip } from 'antd'
 import React, { Suspense } from 'react'
 import { memo, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-
 import MessageBox from './component/MessageBox'
 import FullScreen from './component/FullScreen'
 import BreadcrumbNav from './component/BreadcrumbNav'
@@ -32,7 +31,7 @@ const Header: React.FC = memo(() => {
    * 跳转到github
    */
   const routeGitHub = () => {
-    window.open('https://github.com/yecongling/fusion-admin', '_blank')
+    // window.open('https://github.com/yecongling/fusion-admin', '_blank')
   }
 
   /**
@@ -65,12 +64,12 @@ const Header: React.FC = memo(() => {
             }
             onChange={(e) => searchMenu(e.target.value)}
           />
-          <Tooltip placement="bottom" title="github">
+          {/* <Tooltip placement="bottom" title="github">
             <GithubOutlined
               style={{ cursor: 'pointer', fontSize: '18px' }}
               onClick={routeGitHub}
             />
-          </Tooltip>
+          </Tooltip> */}
           <Tooltip placement="bottom" title="锁屏">
             <LockOutlined
               style={{ cursor: 'pointer', fontSize: '18px' }}
@@ -80,14 +79,14 @@ const Header: React.FC = memo(() => {
             />
           </Tooltip>
           {/* 邮件 */}
-          <Badge count={5}>
+          {/* <Badge count={5}>
             <MailOutlined style={{ cursor: 'pointer', fontSize: '18px' }} />
-          </Badge>
-          <Dropdown placement="bottomRight" popupRender={() => <MessageBox />}>
+          </Badge> */}
+          {/* <Dropdown placement="bottomRight" popupRender={() => <MessageBox />}>
             <Badge count={5}>
               <BellOutlined style={{ cursor: 'pointer', fontSize: '18px' }} />
             </Badge>
-          </Dropdown>
+          </Dropdown> */}
           <Tooltip placement="bottomRight" title="系统设置">
             <SettingOutlined
               style={{ cursor: 'pointer', fontSize: '18px' }}

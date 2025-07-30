@@ -8,7 +8,7 @@ export enum LoginApi {
   /**
    * 登录
    */
-  login = '/admin/login/login',
+  login = '/user/login',
 
   /**
    * 退出登录
@@ -17,7 +17,7 @@ export enum LoginApi {
   /**
    * 获取验证码
    */
-  getCode = '/admin/login/captcha',
+  getCode = '/user/captcha',
 }
 
 /**

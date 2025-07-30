@@ -47,3 +47,10 @@ export interface CabinResultParams extends Partial<PortCodeInfo> {
   cabinStart?: string
   cabinEnd?: string
 }
+
+export interface TodayPlanParams extends Partial<PortCodeInfo> {
+  page: number
+  limit: number
+  carrier?: string | null
+  routeFndId?: null | string
+}

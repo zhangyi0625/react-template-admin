@@ -1,19 +1,19 @@
-import DragModal from '@/components/modal/DragModal'
-import { ShippingAccounType } from '@/services/customerInformation/shippingAccount/shippingAccountModel'
-import { Form, Input, Radio, Select } from 'antd'
 import React, { useEffect, useState } from 'react'
-import { ShippingAccountForm } from './config'
+import { Form, Input, Radio, Select, SelectProps } from 'antd'
 import { CheckboxGroupProps } from 'antd/es/checkbox'
-import { CustomerManageType } from '@/services/essential/customerManage/customerManageModel'
+import DragModal from '@/components/modal/DragModal'
+import type { ShippingAccounType } from '@/services/customerInformation/shippingAccount/shippingAccountModel'
+import { ShippingAccountForm } from './config'
 
 export type AddShippingAccountProps = {
   params: {
     visible: boolean
     currentRow: ShippingAccounType
     view: boolean
+    type?: string | null
   }
-  carrierOptions: { id: string; name: string }[]
-  customerOptions: CustomerManageType[]
+  carrierOptions: SelectProps['options']
+  customerOptions: SelectProps['options']
   onOk: (params: ShippingAccounType) => void
   onCancel: (e: React.MouseEvent<HTMLButtonElement>) => void
 }
@@ -25,7 +25,7 @@ const AddShippingAccount: React.FC<AddShippingAccountProps> = ({
   onOk,
   onCancel,
 }) => {
-  const { visible, currentRow, view } = params
+  const { visible, currentRow, view, type } = params
 
   const [form] = Form.useForm()
 
@@ -34,11 +34,11 @@ const AddShippingAccount: React.FC<AddShippingAccountProps> = ({
   useEffect(() => {
     if (!visible) return
     if (currentRow) {
-      form.setFieldsValue(currentRow)
+      form.setFieldsValue({ ...currentRow, type: type })
     } else {
       form.resetFields()
-      setInitialValues({ type: 'QUERY' })
-      form.setFieldsValue({ type: 'QUERY' })
+      setInitialValues({ type: type })
+      form.setFieldsValue({ type: type })
     }
   }, [visible, view])
 
@@ -89,14 +89,16 @@ const AddShippingAccount: React.FC<AddShippingAccountProps> = ({
               <Select
                 placeholder={`请选择${item.label}`}
                 filterOption
-                options={(
-                  (item.name === 'carrier'
-                    ? carrierOptions
-                    : customerOptions) || []
-                ).map((item) => ({
-                  label: item.name,
-                  value: item.id,
-                }))}
+                options={
+                  item.name === 'carrier' ? carrierOptions : customerOptions
+                }
+                fieldNames={
+                  item.selectFileldName ?? {
+                    label: 'labal',
+                    value: 'value',
+                    children: 'children',
+                  }
+                }
               />
             )}
             {item.formType === 'radio' && (

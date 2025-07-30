@@ -300,17 +300,17 @@ export interface sysSettingPreferences {
 
 export interface essentailPreferences {
   /** 细分航线缓存 */
-  routeData: RouteMangeType[] | null
+  routeData: RouteMangeType[] | undefined
   /** 起运港缓存 */
-  porPortData: PortManageType[] | null
+  porPortData: PortManageType[] | undefined
   /** 目的港缓存 */
-  fndPortData: PortManageType[] | null
+  fndPortData: PortManageType[] | undefined
   /** 船司数据缓存 */
-  carrierData: CarrierManageType[] | null
+  carrierData: CarrierManageType[] | undefined
   /** 客户数据缓存 */
-  customerData: CustomerManageType[] | null
+  customerData: CustomerManageType[] | undefined
   /** 关联服务缓存 */
-  relevanceService: ServiceSettingType[] | null
+  relevanceService: ServiceSettingType[] | undefined
   [key: string]: any
 }
 

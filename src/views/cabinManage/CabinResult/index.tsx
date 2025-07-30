@@ -39,10 +39,10 @@ const CabinResult: React.FC = () => {
   useEffect(() => {
     setImmediate(true)
     if (
-      !essential.customerData ||
-      !essential.porPortData ||
-      !essential.fndPortData ||
-      !essential.carrierData
+      !essential.customerData?.length ||
+      !essential.porPortData?.length ||
+      !essential.fndPortData?.length ||
+      !essential.carrierData?.length
     ) {
       loadSearchList()
     } else {

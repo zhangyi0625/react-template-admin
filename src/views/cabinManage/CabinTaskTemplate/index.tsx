@@ -37,7 +37,7 @@ import {
   getFndPortManageList,
   getPorPortManageList,
 } from '@/services/essential/portManage/portManageModel'
-import { filterKeys, replaceObjectName } from '@/utils/tool'
+import { filterKeys } from '@/utils/tool'
 import { RouteMangeType } from '@/services/customerInformation/routeManage/routeManageModel'
 import useParentSize from '@/hooks/useParentSize'
 import { getCustomerManageList } from '@/services/essential/customerManage/customerManageApi'
@@ -51,7 +51,7 @@ export type CabinTaskTemplateProps = {
 
 const CabinTaskTemplate: React.FC<CabinTaskTemplateProps> = memo(
   ({ carrier, setting }) => {
-    const { modal, message } = App.useApp()
+    const { message } = App.useApp()
 
     const { parentRef, height } = useParentSize()
 
@@ -98,21 +98,22 @@ const CabinTaskTemplate: React.FC<CabinTaskTemplateProps> = memo(
         render(_, record) {
           return (
             <Space>
-              {current === 'NOT_STARTED' && (
-                <Button
-                  color="green"
-                  style={{ background: '#07C160' }}
-                  variant="solid"
-                  onClick={CabinImmediately}
-                >
-                  即刻抢舱
-                </Button>
-              )}
-              {current === 'RUNNING' && (
-                <Button color="red" variant="solid">
-                  停止抢舱
-                </Button>
-              )}
+              <Button
+                color="green"
+                hidden={current !== 'NOT_STARTED'}
+                style={{ background: '#07C160' }}
+                variant="solid"
+                onClick={CabinImmediately}
+              >
+                即刻抢舱
+              </Button>
+              <Button
+                hidden={current !== 'RUNNING'}
+                color="red"
+                variant="solid"
+              >
+                停止抢舱
+              </Button>
               <Button
                 type="default"
                 onClick={() =>
@@ -125,7 +126,7 @@ const CabinTaskTemplate: React.FC<CabinTaskTemplateProps> = memo(
           )
         },
       })
-    }, [getTemplateSetting])
+    }, [getTemplateSetting, current])
 
     const [searchDefaultForm, setSearchDefaultForm] =
       useState<CabinTaskTemplateParams>({
@@ -147,16 +148,15 @@ const CabinTaskTemplate: React.FC<CabinTaskTemplateProps> = memo(
 
     useEffect(() => {
       if (!carrier) return
+      setImmediate(true)
       if (
-        !essential.routeData ||
-        !essential.porPortData ||
-        !essential.fndPortData ||
-        !essential.customerData
+        !essential.routeData?.length ||
+        !essential.porPortData?.length ||
+        !essential.fndPortData?.length ||
+        !essential.customerData?.length
       ) {
-        setImmediate(true)
         loadSearchList()
       } else {
-        setImmediate(true)
         getReduxData()
       }
     }, [carrier, essential])
@@ -179,7 +179,6 @@ const CabinTaskTemplate: React.FC<CabinTaskTemplateProps> = memo(
     }
 
     const getReduxData = () => {
-      // setImmediate(true)
       let { routeData, porPortData, fndPortData, customerData } = essential
       let newRoute = (routeData || []).map((item: RouteMangeType) => {
         return {
@@ -219,6 +218,11 @@ const CabinTaskTemplate: React.FC<CabinTaskTemplateProps> = memo(
       setSearchDefaultForm({ ...searchDefaultForm, routeFndId: key })
     }
 
+    const changeStatus = (name: string) => {
+      setCurrent(name)
+      onUpdateSearch(searchDefaultForm)
+    }
+
     const onUpdateSearch = (info?: CabinTaskTemplateParams | unknown) => {
       const filteredObj = Object.fromEntries(
         Object.entries(info ?? {}).filter(([, value]) => !!value)
@@ -255,7 +259,7 @@ const CabinTaskTemplate: React.FC<CabinTaskTemplateProps> = memo(
 
     const CabinImmediately = () => {}
     return (
-      <div className={'cabinTaskTemplate'}>
+      <>
         <ConfigProvider
           theme={{
             components: {
@@ -283,7 +287,7 @@ const CabinTaskTemplate: React.FC<CabinTaskTemplateProps> = memo(
                               : 'text-dull-grey border-1 border-slate-400'
                           }`}
                           key={item.name}
-                          onClick={() => setCurrent(item.name)}
+                          onClick={() => changeStatus(item.name)}
                         >
                           {item.label}
                         </div>
@@ -363,9 +367,10 @@ const CabinTaskTemplate: React.FC<CabinTaskTemplateProps> = memo(
                 下载MSK抢舱模版
               </div>
             </Space>
-          ) : current === 'padding' ? (
-            <Space className="mb-[20px]">
+          ) : current === 'RUNNING' ? (
+            <Space className="mb-[8px]">
               <Button
+                hidden={current !== 'RUNNING'}
                 color="red"
                 variant="solid"
                 onClick={() => isSelected() && CabinImmediately()}
@@ -407,7 +412,7 @@ const CabinTaskTemplate: React.FC<CabinTaskTemplateProps> = memo(
           onOk={() => {}}
           onCancel={() => setImportModel(false)}
         />
-      </div>
+      </>
     )
   }
 )

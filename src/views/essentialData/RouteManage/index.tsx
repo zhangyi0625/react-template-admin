@@ -4,6 +4,7 @@ import {
   Button,
   Card,
   ConfigProvider,
+  SelectProps,
   Space,
   TablePaginationConfig,
   TableProps,
@@ -58,11 +59,11 @@ const RouteManage: React.FC = () => {
 
   const [immediate, setImmediate] = useState<boolean>(true)
 
-  const [fndPortData, setFndPortData] = useState([])
+  const [fndPortData, setFndPortData] = useState<SelectProps['options']>([])
 
   useEffect(() => {
     setImmediate(false)
-    if (!essential.fndPortData) {
+    if (!essential.fndPortData?.length) {
       loadSearchList()
     } else {
       getReduxData()

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { Col, Form, Input, Row, Select } from 'antd'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { RootState, setEssentail } from '@/stores/store'
 import DragModal from '@/components/modal/DragModal'
 import type { ServiceSettingType } from '@/services/setting/serviceSettingModel'
@@ -30,6 +30,8 @@ const ServiceSettingInfo: React.FC<ServiceSettingInfoProps> = ({
 
   const [form] = Form.useForm()
 
+  const dispatch = useDispatch()
+
   const essential = useSelector((state: RootState) => state.essentail)
 
   const [formMap, setFormMap] = useState(ServiceSettingForm)
@@ -43,7 +45,7 @@ const ServiceSettingInfo: React.FC<ServiceSettingInfoProps> = ({
     } else {
       form.resetFields()
     }
-    if (!essential.carrierData || !essential.routeData) {
+    if (!essential.carrierData?.length || !essential.routeData?.length) {
       loadSearchList()
     } else {
       getReduxData()
@@ -159,9 +161,3 @@ const ServiceSettingInfo: React.FC<ServiceSettingInfoProps> = ({
 }
 
 export default ServiceSettingInfo
-function dispatch(arg0: {
-  payload: { value: essentailPreferences; key: string }
-  type: 'essential/setEssentail'
-}) {
-  throw new Error('Function not implemented.')
-}

@@ -17,8 +17,7 @@ import { useSelector } from 'react-redux'
 import { RootState } from '@/stores/store'
 import { formatTime } from '@/utils/format'
 import { filterKeys } from '@/utils/tool'
-import dayjs from 'dayjs'
-import { CustomerManageType } from '@/services/essential/customerManage/customerManageModel'
+import type { CustomerManageType } from '@/services/essential/customerManage/customerManageModel'
 
 export type AddCabinTaskProps = {
   params: {
@@ -69,16 +68,6 @@ const AddCabinTask: React.FC<AddCabinTaskProps> = memo(
               ),
             },
           }
-          console.log(
-            {
-              ...form.getFieldsValue(),
-              fndCode: form.getFieldValue('fndCode')[1],
-              etd: formatTime(form.getFieldValue('etd'), 'Y-M-D'),
-            },
-            'zzzz',
-            params
-          )
-          // return
           onOk(params)
         })
         .catch((errorInfo) => {

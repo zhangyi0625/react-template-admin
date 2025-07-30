@@ -37,9 +37,9 @@ const CabinHistory: React.FC = () => {
   useEffect(() => {
     setImmediate(true)
     if (
-      !essential.routeData ||
-      !essential.porPortData ||
-      !essential.fndPortData
+      !essential.routeData?.length ||
+      !essential.porPortData?.length ||
+      !essential.fndPortData?.length
     ) {
       loadSearchList()
     } else {
@@ -180,11 +180,7 @@ const CabinHistory: React.FC = () => {
           },
         }}
       >
-        <Card
-          style={{ flex: 1, marginTop: '8px', minHeight: 0 }}
-          styles={{ body: { height: '100%' } }}
-          ref={parentRef}
-        >
+        <Card>
           <SearchForm
             columns={SelectCabinHistoryOptions}
             gutterWidth={24}
@@ -196,7 +192,11 @@ const CabinHistory: React.FC = () => {
           />
         </Card>
       </ConfigProvider>
-      <Card>
+      <Card
+        style={{ flex: 1, marginTop: '8px', minHeight: 0 }}
+        styles={{ body: { height: '100%' } }}
+        ref={parentRef}
+      >
         <SearchTable
           size="middle"
           columns={columns}

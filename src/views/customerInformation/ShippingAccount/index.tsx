@@ -1,4 +1,6 @@
 import { useEffect, useState } from 'react'
+import { useLocation, useParams } from 'react-router-dom'
+import { useDispatch, useSelector } from 'react-redux'
 import {
   App,
   Button,
@@ -11,12 +13,13 @@ import {
 import {
   ExclamationCircleFilled,
   ImportOutlined,
-  LoginOutlined,
   PlusOutlined,
 } from '@ant-design/icons'
-import { useDispatch, useSelector } from 'react-redux'
 import { RootState, setEssentail } from '@/stores/store'
-import { SelectShippingAccountOptions } from './config'
+import {
+  SelectShippingAccountOptions,
+  ShippingAccountOperationBtn,
+} from './config'
 import SearchForm from '@/components/searchForm'
 import SearchTable from '@/components/searchTable'
 import {
@@ -29,9 +32,11 @@ import {
   batchImportShippingAccount,
   putShippingAccountList,
   deleteShippingAccountList,
+  relevanceShippingAccountClose,
 } from '@/services/customerInformation/shippingAccount/shippingAccountApi'
 import AddShippingAccount from './AddShippingAccount'
 import ImportShippingAccout from './ImportShippingAccout'
+import SetRelevanceModal from './setRelevanceModal'
 import { getCarrierManageList } from '@/services/essential/carrierManage/carrierManageApi'
 import { getCustomerManageList } from '@/services/essential/customerManage/customerManageApi'
 import type { CustomerManageType } from '@/services/essential/customerManage/customerManageModel'
@@ -39,11 +44,16 @@ import type { CarrierManageType } from '@/services/essential/carrierManage/carri
 import { filterKeys } from '@/utils/tool'
 import { formatTime } from '@/utils/format'
 import useParentSize from '@/hooks/useParentSize'
+import type { ServiceSettingType } from '@/services/setting/serviceSettingModel'
 
 const API = process.env.VITE_STATIC_API
 
 const ShippingAccount: React.FC = () => {
   const { modal, message } = App.useApp()
+
+  const routeParams = useParams()
+
+  const location = useLocation()
 
   const { parentRef, height } = useParentSize()
 
@@ -54,6 +64,9 @@ const ShippingAccount: React.FC = () => {
   const [selectoptions, setSelectOptions] = useState(
     SelectShippingAccountOptions
   )
+
+  const [relevanceModal, setRelevanceModal] = useState<boolean>(false)
+
   const [selRows, setSelectedRows] = useState<any[]>([])
 
   const [searchDefaultForm, setSearchDefaultForm] =
@@ -64,22 +77,24 @@ const ShippingAccount: React.FC = () => {
       account: null,
     })
 
-  const [carrierOptions, setCarrierOptions] = useState<
-    { id: string; name: string }[]
-  >([])
+  const [carrierOptions, setCarrierOptions] = useState<CarrierManageType[]>([])
 
   const [customerOptions, setCustomerOptions] = useState<CustomerManageType[]>(
     []
   )
 
+  const [immediate, setImmediate] = useState<boolean>(false)
+
   const [params, setParams] = useState<{
     visible: boolean
     currentRow: any
     view: boolean
+    type: string
   }>({
     visible: false,
     currentRow: null,
     view: false,
+    type: 'QUERY',
   })
 
   const [importModel, setImportModel] = useState<boolean>(false)
@@ -90,13 +105,15 @@ const ShippingAccount: React.FC = () => {
       dataIndex: 'carrier',
       key: 'carrier',
       align: 'center',
+      width: 80,
     },
-    // {
-    //   title: '客户简称',
-    //   dataIndex: 'custometName',
-    //   key: 'custometName',
-    //   align: 'center',
-    // },
+    {
+      title: '客户名称',
+      dataIndex: 'customerName',
+      key: 'customerName',
+      align: 'center',
+      width: 200,
+    },
     {
       title: '船司账号',
       dataIndex: 'account',
@@ -109,38 +126,63 @@ const ShippingAccount: React.FC = () => {
       dataIndex: 'accountHead',
       key: 'accountHead',
       align: 'center',
+      width: 100,
     },
     {
-      title: '账号类型',
-      key: 'type',
+      title: '设为查询',
+      key: 'isQuery',
       align: 'center',
-      render(text) {
-        return <div>{text.type === 'QUERY' ? '查询' : '下单'}</div>
+      width: 100,
+      hidden: params.type === 'QUERY',
+      render(value) {
+        return <div>{value?.isQuery ? '已设置' : '-'}</div>
       },
     },
     {
       title: '账号状态',
       key: 'vaild',
       align: 'center',
-      render(text) {
+      width: 100,
+      render(value) {
         return (
-          <div className={`text-${text.isValid ? 'blue' : 'red'}-500`}>
-            {text.vaild ? '有效' : '无效'}
+          <div className={`text-${value.isValid ? 'blue' : 'red'}-500`}>
+            {value.vaild ? '有效' : '无效'}
           </div>
         )
       },
     },
     {
+      title: '是否启用',
+      key: 'isEnable',
+      align: 'center',
+      width: 100,
+      render(value) {
+        return (
+          <div className={`text-${value.isEnable ? 'blue' : 'red'}-500`}>
+            {value.isEnable ? '启用' : '不启用'}
+          </div>
+        )
+      },
+    },
+    {
+      title: '关联服务',
+      key: 'serverName',
+      dataIndex: 'serverName',
+      align: 'center',
+      width: 120,
+    },
+    {
       title: '更新时间',
       key: 'updateTime',
       align: 'center',
-      render(text) {
-        return <div>{formatTime(text.updateTime, 'Y-M-D h:m')}</div>
+      width: 150,
+      render(value) {
+        return <div>{formatTime(value.updateTime, 'Y-M-D h:m')}</div>
       },
     },
     {
       title: '操作',
-      width: '14%',
+      width: '10%',
       dataIndex: 'action',
       fixed: 'right',
       align: 'center',
@@ -151,7 +193,12 @@ const ShippingAccount: React.FC = () => {
               type="link"
               size="small"
               onClick={() =>
-                setParams({ visible: true, currentRow: record, view: true })
+                setParams({
+                  ...params,
+                  visible: true,
+                  currentRow: record,
+                  view: true,
+                })
               }
             >
               修改
@@ -171,55 +218,61 @@ const ShippingAccount: React.FC = () => {
   ]
 
   useEffect(() => {
-    if (!essential.carrierData) {
+    let name = location.pathname.split(
+      '/customerInformation/shippingAccount/'
+    )[1]
+    setImmediate(true)
+    if (!essential.carrierData?.length || !essential.routeData?.length) {
       loadSearchList()
     } else {
       getReduxData()
     }
-  }, [])
+    setParams({ ...params, type: name })
+    console.log(routeParams, 'routeParams', location, name)
+  }, [location.pathname, params.type])
 
   // 重新更新查询部分数据 并存储进redux
   const loadSearchList = () => {
-    Promise.all([getCarrierManageList(), getCustomerManageList]).then(
-      (resp) => {
-        let key = ['carrierData', 'customerData']
-        key.map((_, index: number) => {
-          dispatch(setEssentail({ value: resp[index], key: key[index] }))
-        })
-        setTimeout(() => {
-          getReduxData()
-        }, 500)
-      }
-    )
+    Promise.all([
+      getCarrierManageList({ enabled: 1 }),
+      getCustomerManageList(),
+    ]).then((resp) => {
+      let key = ['carrierData', 'customerData']
+      key.map((_, index: number) => {
+        dispatch(setEssentail({ value: resp[index], key: key[index] }))
+      })
+      getReduxData()
+    })
   }
 
   const getReduxData = () => {
     let { carrierData = [], customerData = [] } = essential
-    let carrier = carrierData.map((item: Pick<CarrierManageType, 'code'>) => {
-      return {
-        id: item.code,
-        name: item.code,
-      }
-    })
-    let customer = customerData.map((item: CustomerManageType) => {
-      return {
-        value: item.id,
-        label: item.name,
-      }
-    })
     selectoptions.map((item) => {
-      if (item.name === 'carrier') item.options = carrier
-      if (item.name === 'customerId') item.options = customer
+      if (item.name === 'carrier') item.options = carrierData
+      if (item.name === 'customerId') item.options = customerData
+      if (item.name === 'serverName') item.hidden = params.type !== 'QUERY'
+      if (item.name === 'isQuery') item.hidden = params.type !== 'ORDER'
     })
+    console.log(selectoptions, 'selectOptions')
     setCustomerOptions(customerData)
-    setSelectOptions(selectoptions)
-    setCarrierOptions(carrier)
+    setSelectOptions([...selectoptions])
+    setCarrierOptions(carrierData)
+    setImmediate(false)
   }
 
-  const readyLogin = () => {
+  const operationShippingAccount = (type?: string) => {
     if (selRows.length === 0) {
-      message.error('请选择预登陆账号！')
+      message.error('请至少选择一个船司账号！')
     } else {
+      if (!type) {
+        setRelevanceModal(true)
+        return
+      }
+      ;(ShippingAccountOperationBtn as any)[type](selRows).then(() => {
+        message.success('操作成功')
+        onUpdateSearch(searchDefaultForm)
+        // setSelectedRows([])
+      })
     }
   }
 
@@ -246,7 +299,9 @@ const ShippingAccount: React.FC = () => {
 
   const onUpdateSearch = (info?: ShippingAccounParams | unknown) => {
     const filteredObj = Object.fromEntries(
-      Object.entries(info ?? {}).filter(([, value]) => !!value)
+      Object.entries(info ?? {}).filter(
+        ([, value]) => value !== undefined || value !== null
+      )
     )
     let pageInfo = filterKeys(searchDefaultForm, ['page', 'limit'], true)
     setSearchDefaultForm({
@@ -274,7 +329,7 @@ const ShippingAccount: React.FC = () => {
       }
       message.success(!params.currentRow ? '添加成功' : '修改成功')
       // 操作成功，关闭弹窗，刷新数据
-      setParams({ visible: false, currentRow: null, view: false })
+      setParams({ ...params, visible: false, currentRow: null, view: false })
       onUpdateSearch()
     } catch (error) {}
   }
@@ -283,9 +338,21 @@ const ShippingAccount: React.FC = () => {
     batchImportShippingAccount(info).then(() => {
       message.success('导入成功')
       setImportModel(false)
-      onUpdateSearch()
+      onUpdateSearch(searchDefaultForm)
     })
   }
+
+  const relevanceService = (params: { serverNo: string }) => {
+    relevanceShippingAccountClose({
+      ids: selRows,
+      serverNo: params.serverNo,
+    }).then(() => {
+      message.success('关联服务成功')
+      setRelevanceModal(false)
+      onUpdateSearch(searchDefaultForm)
+    })
+  }
+
   return (
     <>
       {/* 菜单检索条件栏 */}
@@ -303,7 +370,7 @@ const ShippingAccount: React.FC = () => {
             columns={selectoptions}
             gutterWidth={24}
             labelPosition="left"
-            btnSeparate={false}
+            btnSeparate={true}
             isShowReset={true}
             isShowExpend={false}
             onUpdateSearch={onUpdateSearch}
@@ -320,7 +387,12 @@ const ShippingAccount: React.FC = () => {
             type="primary"
             icon={<PlusOutlined />}
             onClick={() =>
-              setParams({ visible: true, currentRow: null, view: true })
+              setParams({
+                visible: true,
+                currentRow: null,
+                view: true,
+                type: params.type,
+              })
             }
           >
             添加账号
@@ -334,19 +406,51 @@ const ShippingAccount: React.FC = () => {
             批量导入账号
           </Button>
           <Button
-            variant="solid"
-            icon={<LoginOutlined />}
-            color="green"
-            onClick={readyLogin}
+            hidden={params.type !== 'ORDER'}
+            color="primary"
+            variant="outlined"
+            onClick={() => operationShippingAccount('search')}
           >
-            账号预登陆
+            设为查询
           </Button>
-          <div
-            className="underline text-blue-500 text-sm cursor-pointer"
+          <Button
+            hidden={params.type !== 'ORDER'}
+            color="primary"
+            variant="outlined"
+            onClick={() => operationShippingAccount('cancelSearch')}
+          >
+            取消查询
+          </Button>
+          <Button
+            color="primary"
+            variant="outlined"
+            onClick={() => operationShippingAccount('close')}
+          >
+            关闭账号
+          </Button>
+          <Button
+            color="primary"
+            variant="outlined"
+            onClick={() => operationShippingAccount('open')}
+          >
+            启用账号
+          </Button>
+          <Button
+            hidden={params.type !== 'QUERY'}
+            color="primary"
+            variant="outlined"
+            onClick={() => operationShippingAccount()}
+          >
+            关联服务
+          </Button>
+          <Button
+            type="link"
+            color="primary"
             onClick={downLoadFile}
+            className="underline text-blue-500 text-sm cursor-pointer"
           >
             下载账号导入模版
-          </div>
+          </Button>
         </Space>
         <SearchTable
           size="middle"
@@ -355,6 +459,7 @@ const ShippingAccount: React.FC = () => {
           rowKey="id"
           scroll={{ x: 'max-content', y: height - 158 }}
           fetchData={getShippingAccountListByPage}
+          immediate={immediate}
           searchFilter={searchDefaultForm}
           isSelection={true}
           onUpdatePagination={onUpdatePagination}
@@ -367,7 +472,12 @@ const ShippingAccount: React.FC = () => {
         customerOptions={customerOptions}
         onOk={onEditOk}
         onCancel={() =>
-          setParams({ visible: false, currentRow: null, view: false })
+          setParams({
+            ...params,
+            visible: false,
+            currentRow: null,
+            view: false,
+          })
         }
       />
       <ImportShippingAccout
@@ -377,6 +487,16 @@ const ShippingAccount: React.FC = () => {
         visible={importModel}
         onOk={importShippingAccount}
         onCancel={() => setImportModel(false)}
+      />
+      <SetRelevanceModal
+        visible={relevanceModal}
+        revelanceOptions={
+          SelectShippingAccountOptions.find(
+            (item) => item.name === 'serverName'
+          )?.options as ServiceSettingType[]
+        }
+        onOk={relevanceService}
+        onCancel={() => setRelevanceModal(false)}
       />
     </>
   )

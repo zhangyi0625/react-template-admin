@@ -1,6 +1,29 @@
-import { useState } from 'react'
-import { Card, ConfigProvider } from 'antd'
+import { useEffect, useState } from 'react'
+import {
+  Card,
+  ConfigProvider,
+  Space,
+  TablePaginationConfig,
+  TableProps,
+} from 'antd'
 import useParentSize from '@/hooks/useParentSize'
+import { useDispatch, useSelector } from 'react-redux'
+import { RootState, setEssentail } from '@/stores/store'
+import SearchForm from '@/components/searchForm'
+import SearchTable from '@/components/searchTable'
+import type {
+  CabinTaskTemplateParams,
+  TodayPlanParams,
+} from '@/services/cabinManage/cabinManageModel'
+import { getRouteManageList } from '@/services/customerInformation/routeManage/routeManageApi'
+import {
+  getFndPortManageList,
+  getPorPortManageList,
+} from '@/services/essential/portManage/portManageModel'
+import { getCarrierManageList } from '@/services/essential/carrierManage/carrierManageApi'
+import { getCabinManageListByPage } from '@/services/cabinManage/cabinManageApi'
+import { SelectTodayPlanOptions } from './config'
+import { filterKeys } from '@/utils/tool'
 
 const TodayPlan: React.FC = () => {
   const { parentRef, height } = useParentSize()
@@ -8,6 +31,135 @@ const TodayPlan: React.FC = () => {
   const [today, setToday] = useState<string>(
     '日一二三四五六'.charAt(new Date().getDay())
   )
+
+  const dispatch = useDispatch()
+
+  const essential = useSelector((state: RootState) => state.essentail)
+
+  const [immediate, setImmediate] = useState<boolean>(false)
+
+  const [searchColumns, setSearchColumns] = useState(SelectTodayPlanOptions)
+
+  const [searchDefaultForm, setSearchDefaultForm] = useState<TodayPlanParams>({
+    page: 1,
+    limit: 10,
+  })
+
+  const [connectCustomer, setConnectCustomer] = useState<{
+    visible: boolean
+    id: null | string
+  }>({
+    visible: false,
+    id: null,
+  })
+
+  useEffect(() => {
+    setImmediate(true)
+    if (
+      !essential.routeData?.length ||
+      !essential.porPortData?.length ||
+      !essential.fndPortData?.length ||
+      !essential.carrierData?.length
+    ) {
+      loadSearchList()
+    } else {
+      getReduxData()
+    }
+  }, [])
+
+  const tableColumns: TableProps['columns'] = [
+    {
+      title: '船公司',
+      key: 'carrier',
+      dataIndex: 'carrier',
+      align: 'center',
+      width: 80,
+    },
+    {
+      title: '起运港',
+      key: 'porCode',
+      dataIndex: 'porCode',
+      align: 'center',
+      width: 100,
+    },
+    {
+      title: '目的港',
+      key: 'fndCode',
+      dataIndex: 'fndCode',
+      align: 'center',
+      width: 100,
+    },
+    {
+      title: '船司航线',
+      key: 'route',
+      dataIndex: 'routeFndName',
+      align: 'center',
+      width: 100,
+    },
+    {
+      title: '关联客户',
+      key: 'customer',
+      align: 'center',
+      width: 100,
+      render(_, record) {
+        return (
+          <div
+            className="cursor-pointer text-normal-blue text-sm"
+            onClick={() => {
+              setConnectCustomer({ visible: true, id: record.id })
+            }}
+          >
+            3个客户
+          </div>
+        )
+      },
+    },
+  ]
+
+  // 重新更新查询部分数据 并存储进redux
+  const loadSearchList = () => {
+    Promise.all([
+      getRouteManageList(),
+      getPorPortManageList(),
+      getFndPortManageList(),
+      getCarrierManageList({ enabled: 1 }),
+    ]).then((resp) => {
+      let key = ['routeData', 'porPortData', 'fndPortData', 'carrierData']
+      key.map((_, index: number) => {
+        dispatch(setEssentail({ value: resp[index], key: key[index] }))
+      })
+      getReduxData()
+    })
+  }
+
+  const getReduxData = () => {
+    let { routeData, porPortData, fndPortData, carrierData } = essential
+    let resetPorData = (porPortData || []).map(
+      (item: { code: string; enName: string; cnName: string }) => {
+        return {
+          value: item.code,
+          label: item.enName + '-' + item.cnName,
+        }
+      }
+    )
+    let resetFndData = (fndPortData || []).map(
+      (item: { code: string; enName: string; cnName: string }) => {
+        return {
+          value: item.code,
+          label: item.enName + '-' + item.cnName,
+        }
+      }
+    )
+    searchColumns.map((item) => {
+      if (item.name === 'porCode' || item.name === 'fndCode') {
+        item.options = item.name === 'porCode' ? resetPorData : resetFndData
+      }
+      if (item.name === 'carrier') item.options = carrierData
+      if (item.name === 'router') item.options = routeData
+    })
+    setSearchColumns([...searchColumns])
+    setImmediate(false)
+  }
 
   const getTabsItem = () => {
     const items = [
@@ -48,6 +200,25 @@ const TodayPlan: React.FC = () => {
 
   const changeDay = (key: string) => {
     setToday(key)
+  }
+
+  const onUpdateSearch = (info?: CabinTaskTemplateParams | unknown) => {
+    const filteredObj = Object.fromEntries(
+      Object.entries(info ?? {}).filter(([, value]) => !!value)
+    )
+    let pageInfo = filterKeys(searchDefaultForm, ['page', 'limit'], true)
+    setSearchDefaultForm({
+      ...pageInfo,
+      ...filteredObj,
+    })
+  }
+
+  const onUpdatePagination = (pagination: TablePaginationConfig) => {
+    setSearchDefaultForm({
+      ...searchDefaultForm,
+      page: pagination.current as number,
+      limit: pagination.pageSize as number,
+    })
   }
 
   return (
@@ -100,7 +271,32 @@ const TodayPlan: React.FC = () => {
         styles={{ body: { height: '100%' } }}
         ref={parentRef}
       >
-        <div className="font-semibold text-base text-dull-grey">账号预登录</div>
+        <div className="font-semibold text-base text-dull-grey mb-[10px]">
+          账号预登录
+        </div>
+        <SearchForm
+          columns={searchColumns}
+          gutterWidth={24}
+          labelPosition="left"
+          btnSeparate={true}
+          isShowReset={true}
+          isShowExpend={false}
+          onUpdateSearch={onUpdateSearch}
+        />
+        <Space>
+          <SearchTable
+            size="middle"
+            columns={tableColumns}
+            bordered
+            rowKey="id"
+            scroll={{ x: 'max-content', y: height - 268 }}
+            immediate={immediate}
+            fetchData={getCabinManageListByPage}
+            searchFilter={searchDefaultForm}
+            isSelection={false}
+            onUpdatePagination={onUpdatePagination}
+          />
+        </Space>
       </Card>
     </>
   )

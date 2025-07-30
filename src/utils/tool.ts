@@ -26,11 +26,12 @@ export function replaceObjectName(
   wishName: string[],
   newName: string[]
 ) {
-  if (wishName.length !== newName.length) return
+  if (wishName.length !== newName.length || !arr.length) return
   let refreshArr = []
   arr.map((obj: any) => {
     wishName.map((name: string, index: number) => {
-      if (obj[name]) obj[newName[index]] = obj[name]
+      // if (obj[name]) obj[newName[index]] = obj[name]
+      if (obj[name]) Reflect.set(obj, newName[index], obj[name])
     })
   })
   refreshArr = JSON.parse(JSON.stringify(arr))
@@ -48,18 +49,18 @@ interface BuildTreeType {
  * @param data
  * @returns
  */
-export function buildTree(data: any | BuildTreeType[]) {
+export function buildTree(data: any | BuildTreeType[], mapId: string) {
   const map = new Map()
   const tree: BuildTreeType[] = []
   // 将数组元素存入哈希表
   data.forEach((item: any) => {
-    map.set(item.id, { ...item, children: [] })
+    map.set(item[mapId], { ...item, children: [] })
   })
   data.forEach((item: any) => {
-    if (item.parentId === '0' || !item.parentId) tree.push(map.get(item.id))
+    if (item.parentId === '0' || !item.parentId) tree.push(map.get(item[mapId]))
     else {
       const parent = map.get(item.parentId)
-      parent && parent.children.push(map.get(item.id))
+      parent && parent.children.push(map.get(item[mapId]))
     }
   })
   return tree

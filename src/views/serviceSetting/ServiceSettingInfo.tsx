@@ -50,22 +50,22 @@ const ServiceSettingInfo: React.FC<ServiceSettingInfoProps> = ({
     } else {
       getReduxData()
     }
-  }, [currentRow, visible])
+  }, [visible, essential])
 
   // 重新更新查询部分数据 并存储进redux
   const loadSearchList = () => {
     setLoading(true)
     Promise.all([
-      getRouteManageList,
+      getRouteManageList(),
       getCarrierManageList({ enabled: 1 }),
     ]).then((resp) => {
       let key = ['routeData', 'carrierData']
       key.map((_, index: number) => {
         dispatch(setEssentail({ value: resp[index], key: key[index] }))
       })
-      setTimeout(() => {
-        getReduxData()
-      }, 500)
+      // setTimeout(() => {
+      getReduxData()
+      // }, 1500)
     })
   }
 
@@ -77,18 +77,21 @@ const ServiceSettingInfo: React.FC<ServiceSettingInfoProps> = ({
         label: item.routeName,
       }
     })
-    ServiceSettingForm.map((item) => {
-      if (item.name === 'carrier' || item.name === 'routeFndIds') {
-        item.options =
-          item.name === 'carrier'
-            ? replaceObjectName(
-                carrierData,
-                ['code', 'code'],
-                ['label', 'value']
-              )
-            : newRoute
+    let carrier = carrierData.map((item) => {
+      return {
+        label: item.code,
+        value: item.code,
       }
     })
+    console.log(carrierData, 'carrierData', essential)
+
+    ServiceSettingForm.map((item) => {
+      if (item.name === 'carrier' || item.name === 'routeFndIds') {
+        item.options = item.name === 'carrier' ? carrier : newRoute
+      }
+    })
+    console.log(ServiceSettingForm, 'ServiceSettingForm')
+
     setFormMap([...formMap])
     setLoading(false)
   }

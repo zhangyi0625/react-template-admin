@@ -210,7 +210,6 @@ const CarrierManage: React.FC = () => {
           columns={columns}
           bordered
           rowKey="id"
-          isCache="carrierData"
           scroll={{ x: 'max-content', y: height - 158 }}
           fetchData={getCarrierManageListByPage}
           searchFilter={searchDefaultForm}

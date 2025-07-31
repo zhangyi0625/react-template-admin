@@ -58,7 +58,12 @@ const UserDropdown: React.FC = () => {
       label: '刷新缓存',
       icon: <SyncOutlined />,
       onClick: () => {
-        // 后端的缓存信息（相当于把缓存数据刷新）
+        /**
+         * 后端的缓存信息（相当于把缓存数据刷新）
+         * 清除local storage所有redux数据 为了重新缓存新数据
+         */
+        localStorage.clear()
+        window.location.reload()
       },
     },
     {

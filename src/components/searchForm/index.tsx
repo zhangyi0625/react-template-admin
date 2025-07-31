@@ -92,6 +92,8 @@ const SearchForm: React.FC<SearchFormPorps> = memo((props) => {
   }, [isExpend])
 
   useEffect(() => {
+    console.log('searchForm')
+
     const getData = async (api?: any) => {
       let result = await replaceObjectName(
         await api(),

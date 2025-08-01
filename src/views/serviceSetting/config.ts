@@ -27,6 +27,10 @@ export const ServiceSettingForm: CustomColumn[] = [
         label: '即可启动',
         value: 'IMMEDIATE',
       },
+      {
+        label: '关闭任务',
+        value: 'SUSPEND',
+      },
     ],
     span: 12,
   },

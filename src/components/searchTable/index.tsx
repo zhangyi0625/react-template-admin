@@ -72,6 +72,7 @@ const searchTable: React.FC<SearchTableProps> = memo((props) => {
       setTableData(resp)
       setCurrentPagination({
         ...paginationConfig,
+        total: Number(response.count),
       })
     } catch {
       setLoading(false)

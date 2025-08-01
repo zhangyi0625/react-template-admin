@@ -48,7 +48,7 @@ const CabinResult: React.FC = () => {
     } else {
       getReduxData()
     }
-  }, [])
+  }, [essential])
 
   const columns: TableProps['columns'] = [
     {

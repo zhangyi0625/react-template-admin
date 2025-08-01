@@ -63,9 +63,7 @@ const ServiceSettingInfo: React.FC<ServiceSettingInfoProps> = ({
       key.map((_, index: number) => {
         dispatch(setEssentail({ value: resp[index], key: key[index] }))
       })
-      // setTimeout(() => {
       getReduxData()
-      // }, 1500)
     })
   }
 

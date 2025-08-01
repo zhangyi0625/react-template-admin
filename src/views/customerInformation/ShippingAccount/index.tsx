@@ -229,7 +229,7 @@ const ShippingAccount: React.FC = () => {
     }
     setParams({ ...params, type: name })
     console.log(routeParams, 'routeParams', location, name)
-  }, [location.pathname, params.type])
+  }, [location.pathname, params.type, essential])
 
   // 重新更新查询部分数据 并存储进redux
   const loadSearchList = () => {

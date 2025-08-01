@@ -45,7 +45,7 @@ const CabinHistory: React.FC = () => {
     } else {
       getReduxData()
     }
-  }, [])
+  }, [essential])
 
   const loadSearchList = () => {
     Promise.all([

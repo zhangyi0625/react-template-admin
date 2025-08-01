@@ -65,7 +65,7 @@ const TodayPlan: React.FC = () => {
     } else {
       getReduxData()
     }
-  }, [])
+  }, [essential])
 
   const tableColumns: TableProps['columns'] = [
     {

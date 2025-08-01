@@ -42,6 +42,7 @@ const ServiceSetting: React.FC = () => {
 
   useEffect(() => {
     loadServiceSettingList()
+    console.log('useEffect')
   }, [])
 
   const loadServiceSettingList = () => {
@@ -236,7 +237,7 @@ const ServiceSetting: React.FC = () => {
             dataSource={tableData}
             columns={columns}
             loading={loading}
-            rowKey="dictId"
+            rowKey="id"
             scroll={{ x: 'max-content', y: height - 128 }}
           />
         </Card>

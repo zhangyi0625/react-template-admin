@@ -68,7 +68,7 @@ const RouteManage: React.FC = () => {
     } else {
       getReduxData()
     }
-  }, [immediate])
+  }, [immediate, essential])
 
   const columns: TableProps['columns'] = [
     {

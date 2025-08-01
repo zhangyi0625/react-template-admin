@@ -26,6 +26,7 @@ import SearchTable from '@/components/searchTable'
 import AddCabinTask from './AddCabinTask'
 import ImportShippingAccout from '@/views/customerInformation/ShippingAccount/ImportShippingAccout'
 import OperationLogDrawer from './OperationLogDrawer'
+import SetFrequecnyDrawer from './SetFrequecnyDrawer'
 import { RootState, setEssentail } from '@/stores/store'
 import { getTemplateSetting } from './columns'
 import {
@@ -85,6 +86,11 @@ const CabinTaskTemplate: React.FC<CabinTaskTemplateProps> = memo(
       visible: false,
       id: null,
     })
+
+    const [frequecnyParams, setFrequecnyParams] = useState<{
+      visible: boolean
+      selRow: string[]
+    }>({ visible: false, selRow: [] })
 
     const [importModel, setImportModel] = useState<boolean>(false)
 
@@ -349,7 +355,9 @@ const CabinTaskTemplate: React.FC<CabinTaskTemplateProps> = memo(
               <Button
                 color="green"
                 variant="solid"
-                onClick={() => isSelected() && CabinImmediately()}
+                onClick={() =>
+                  setFrequecnyParams({ visible: true, selRow: [] })
+                }
               >
                 设置放舱同频
               </Button>
@@ -411,6 +419,13 @@ const CabinTaskTemplate: React.FC<CabinTaskTemplateProps> = memo(
           visible={importModel}
           onOk={() => {}}
           onCancel={() => setImportModel(false)}
+        />
+        <SetFrequecnyDrawer
+          visible={frequecnyParams.visible}
+          onCancel={() => setFrequecnyParams({ visible: false, selRow: [] })}
+          onOk={(ids: string[]) =>
+            setFrequecnyParams({ visible: false, selRow: ids })
+          }
         />
       </>
     )

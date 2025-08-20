@@ -52,6 +52,8 @@ const searchTable: React.FC<SearchTableProps> = memo((props) => {
     'checkbox'
   )
 
+  const [selectedRowKeys, setSelectedRowKeys] = useState<string[]>([])
+
   const [currentPagination, setCurrentPagination] =
     useState<TablePaginationConfig>({
       current: 1,
@@ -74,6 +76,7 @@ const searchTable: React.FC<SearchTableProps> = memo((props) => {
         ...paginationConfig,
         total: Number(response.count),
       })
+      setSelectedRowKeys([])
     } catch {
       setLoading(false)
     } finally {
@@ -107,17 +110,14 @@ const searchTable: React.FC<SearchTableProps> = memo((props) => {
   }
 
   const rowSelection: TableProps['rowSelection'] = {
+    selectedRowKeys,
     onChange: (selectedRowKeys: React.Key[], selectedRows: any) => {
-      console.log(
-        `selectedRowKeys: ${selectedRowKeys}`,
-        'selectedRows: ',
-        selectedRows
-      )
       if (onUpdateSelection && isSelection)
         onUpdateSelection(
           selectedRows.map((item: any) => item[rowKey]),
           selectedRows
         )
+      setSelectedRowKeys(selectedRows.map((item: any) => item[rowKey]))
     },
     getCheckboxProps: (record: any) => ({
       disabled: record.name === 'Disabled User', // Column configuration not to be checked

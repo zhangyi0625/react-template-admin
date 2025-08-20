@@ -15,6 +15,10 @@ export enum CabinManageApi {
   cabinManageListByPage = '/core/business/booking-task/page',
   cabinOperationLog = '/core/business/booking-task-event/',
   batchAddCabinManage = '/core/business/booking-task/batch',
+  closeBatchCabin = '/core/business/booking-task/close',
+  openBatchCabinByFrequency = '/core/business/booking-task/high-freq/run',
+  openBatchCabinByImmdiate = '/core/business/booking-task/immediate/run',
+  stopBatchCabin = '/core/business/booking-task/suspend/run',
   addCabin = '/system/test/add/customer',
   deleteCabin = '/system/test/customer/',
   cabinHistoryList = '/core/business/stowage-history/page',
@@ -97,6 +101,83 @@ export const batchAddCabinManage = (params: CabinTaskTemplateType[]) => {
   return HttpRequest.post(
     {
       url: CabinManageApi.batchAddCabinManage,
+      data: params,
+    },
+    {
+      successMessageMode: 'none',
+    }
+  )
+}
+
+/**
+ * 批量关闭订舱任务
+ * @param params 订舱管理参数
+ * @returns 订舱管理列表
+ */
+export const closeBatchCabinManage = (params: string[]) => {
+  return HttpRequest.post(
+    {
+      url: CabinManageApi.closeBatchCabin,
+      data: params,
+    },
+    {
+      successMessageMode: 'none',
+    }
+  )
+}
+
+/**
+ * 订舱任务高频启动
+ * @param params 订舱管理参数
+ * @returns 订舱管理列表
+ */
+export const openBatchCabinByFrequency = (params: {
+  ids: string[]
+  sameFrequencyTaskId?: string
+}) => {
+  return HttpRequest.post(
+    {
+      url: CabinManageApi.openBatchCabinByFrequency,
+      data: params,
+    },
+    {
+      successMessageMode: 'none',
+    }
+  )
+}
+
+/**
+ * 订舱任务即可运行
+ * @param params 订舱管理参数
+ * @returns 订舱管理列表
+ */
+export const openBatchCabinByImmdiate = (params: {
+  ids: string[]
+  sameFrequencyTaskId?: string
+}) => {
+  return HttpRequest.post(
+    {
+      url: CabinManageApi.openBatchCabinByImmdiate,
+      data: params,
+    },
+    {
+      successMessageMode: 'none',
+    }
+  )
+}
+
+/**
+ * 停止运行任务
+ * @param params 订舱管理参数
+ * @returns 订舱管理列表
+ */
+export const stopBatchCabin = (params: {
+  ids: string[]
+  sameFrequencyTaskId?: string
+}) => {
+  return HttpRequest.post(
+    {
+      url: CabinManageApi.stopBatchCabin,
       data: params,
     },
     {

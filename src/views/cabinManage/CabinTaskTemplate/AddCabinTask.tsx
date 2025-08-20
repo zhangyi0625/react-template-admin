@@ -18,11 +18,13 @@ import { RootState } from '@/stores/store'
 import { formatTime } from '@/utils/format'
 import { filterKeys } from '@/utils/tool'
 import type { CustomerManageType } from '@/services/essential/customerManage/customerManageModel'
+import type { CabinTaskTemplateType } from '@/services/cabinManage/cabinManageModel'
+import dayjs from 'dayjs'
 
 export type AddCabinTaskProps = {
   params: {
     visible: boolean
-    currentRow: null
+    currentRow: CabinTaskTemplateType | null
     view: boolean
   }
   carrier: string
@@ -32,7 +34,7 @@ export type AddCabinTaskProps = {
 
 const AddCabinTask: React.FC<AddCabinTaskProps> = memo(
   ({ params, carrier, onOk, onCancel }) => {
-    const { visible, currentRow, view } = params
+    const { visible, currentRow } = params
 
     const [form] = Form.useForm()
 
@@ -46,7 +48,12 @@ const AddCabinTask: React.FC<AddCabinTaskProps> = memo(
 
     useEffect(() => {
       if (!visible) return
-      if (!currentRow) form.resetFields()
+      form.resetFields()
+      if (!currentRow) {
+        form.setFieldsValue({ withRollable: 1 })
+      } else {
+        form.setFieldsValue({ ...currentRow, etd: dayjs(currentRow.etd) })
+      }
     }, [visible])
 
     const onConfirm = () => {

@@ -19,6 +19,7 @@ import {
 } from '@/services/setting'
 import type { ServiceSettingType } from '../../services/setting/serviceSettingModel'
 import ServiceSettingInfo from './ServiceSettingInfo'
+import { ServiceSettingForm } from './config'
 
 const ServiceSetting: React.FC = () => {
   const { height } = useParentSize()
@@ -116,6 +117,20 @@ const ServiceSetting: React.FC = () => {
       key: 'startType',
       align: 'center',
       width: 150,
+      render(value) {
+        let arr = ServiceSettingForm.find(
+          (item) => item.name === 'startType'
+        )?.options
+        return (
+          <div>
+            {
+              arr?.find((item) =>
+                value.startType.split(',').includes(item.value)
+              )?.label
+            }
+          </div>
+        )
+      },
     },
     {
       title: '修改时间',

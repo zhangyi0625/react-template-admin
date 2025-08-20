@@ -21,8 +21,7 @@ import type {
   CabinTaskTemplateType,
 } from '@/services/cabinManage/cabinManageModel'
 import { useDispatch, useSelector } from 'react-redux'
-import SearchForm from '@/components/searchForm'
-import SearchTable from '@/components/searchTable'
+import { SearchForm, SearchTable } from 'customer-search-form-table'
 import AddCabinTask from './AddCabinTask'
 import ImportShippingAccout from '@/views/customerInformation/ShippingAccount/ImportShippingAccout'
 import OperationLogDrawer from './OperationLogDrawer'
@@ -32,6 +31,10 @@ import { getTemplateSetting } from './columns'
 import {
   getCabinManageListByPage,
   addCabinManageList,
+  closeBatchCabinManage,
+  openBatchCabinByFrequency,
+  openBatchCabinByImmdiate,
+  stopBatchCabin,
 } from '@/services/cabinManage/cabinManageApi'
 import { getRouteManageList } from '@/services/customerInformation/routeManage/routeManageApi'
 import {
@@ -70,6 +73,8 @@ const CabinTaskTemplate: React.FC<CabinTaskTemplateProps> = memo(
 
     const [immediate, setImmediate] = useState<boolean>(false)
 
+    const [loading, setLoading] = useState<boolean>(false)
+
     const [seleced, setSelected] = useState<string[]>([])
 
     const isSelected = useCallback(() => {
@@ -77,7 +82,7 @@ const CabinTaskTemplate: React.FC<CabinTaskTemplateProps> = memo(
         message.error('请至少选择一条数据！')
         return false
       } else return true
-    }, [seleced])
+    }, [seleced.length])
 
     const [operationLog, setOperationLog] = useState<{
       visible: boolean
@@ -98,25 +103,33 @@ const CabinTaskTemplate: React.FC<CabinTaskTemplateProps> = memo(
       return getTemplateSetting(carrier, current)['columns']?.concat({
         title: '操作',
         width: '8%',
-        dataIndex: 'action',
         fixed: 'right',
         align: 'center',
         render(_, record) {
           return (
             <Space>
-              <Button
+              {/* <Button
                 color="green"
                 hidden={current !== 'NOT_STARTED'}
                 style={{ background: '#07C160' }}
                 variant="solid"
-                onClick={CabinImmediately}
+                onClick={() => openImmediate(_)}
               >
                 即刻抢舱
+              </Button> */}
+              <Button
+                color="green"
+                hidden={current !== 'NOT_STARTED'}
+                variant="solid"
+                onClick={() => CabinImmediately('frequency', [_.id])}
+              >
+                高频启动
               </Button>
               <Button
                 hidden={current !== 'RUNNING'}
                 color="red"
                 variant="solid"
+                onClick={() => CabinImmediately('stop', [_.id])}
               >
                 停止抢舱
               </Button>
@@ -155,6 +168,7 @@ const CabinTaskTemplate: React.FC<CabinTaskTemplateProps> = memo(
     useEffect(() => {
       if (!carrier) return
       setImmediate(true)
+      setLoading(true)
       if (
         !essential.routeData?.length ||
         !essential.porPortData?.length ||
@@ -217,6 +231,7 @@ const CabinTaskTemplate: React.FC<CabinTaskTemplateProps> = memo(
       })
       console.log(essential, 'essentail', searchColumns)
       setSearchColumns([...searchColumns])
+      setLoading(false)
       setImmediate(false)
     }
 
@@ -226,14 +241,18 @@ const CabinTaskTemplate: React.FC<CabinTaskTemplateProps> = memo(
 
     const changeStatus = (name: string) => {
       setCurrent(name)
-      onUpdateSearch(searchDefaultForm)
+      onUpdateSearch({ ...searchDefaultForm, status: name })
     }
 
     const onUpdateSearch = (info?: CabinTaskTemplateParams | unknown) => {
       const filteredObj = Object.fromEntries(
         Object.entries(info ?? {}).filter(([, value]) => !!value)
       )
-      let pageInfo = filterKeys(searchDefaultForm, ['page', 'limit'], true)
+      let pageInfo = filterKeys(
+        searchDefaultForm,
+        ['page', 'limit', 'routeFndId', 'status'],
+        true
+      )
       setSearchDefaultForm({
         ...pageInfo,
         ...filteredObj,
@@ -263,28 +282,69 @@ const CabinTaskTemplate: React.FC<CabinTaskTemplateProps> = memo(
       })
     }
 
-    const CabinImmediately = () => {}
+    const CabinImmediately = async (type?: string, selectedArr?: string[]) => {
+      // console.log(type, 'type', seleced,setting)
+      switch (type) {
+        case 'close':
+          await closeBatchCabinManage(selectedArr ?? seleced).then((res) => {
+            res.failures && res.failures.length && showMessage(res.failures)
+            !res.failures.length &&
+              res.success === seleced.length &&
+              message.success('操作成功！')
+          })
+          break
+        case 'immediate':
+          await openBatchCabinByImmdiate({ ids: selectedArr ?? seleced }).then(
+            (res) => {
+              res.failures && res.failures.length && showMessage(res.failures)
+              !res.failures.length &&
+                res.success === seleced.length &&
+                message.success('操作成功！')
+            }
+          )
+          break
+        case 'frequency':
+          await openBatchCabinByFrequency({ ids: selectedArr ?? seleced }).then(
+            (res) => {
+              res.failures && res.failures.length && showMessage(res.failures)
+              !res.failures.length &&
+                res.success === seleced.length &&
+                message.success('操作成功！')
+            }
+          )
+          break
+        case 'stop':
+          await stopBatchCabin({ ids: selectedArr ?? seleced }).then((res) => {
+            res.failures && res.failures.length && showMessage(res.failures)
+            !res.failures.length &&
+              res.success === seleced.length &&
+              message.success('操作成功！')
+          })
+          break
+      }
+      setImmediate(true)
+      setTimeout(() => {
+        setImmediate(false)
+      }, 300)
+    }
+
+    const showMessage = (failures: { index: number; failMsg: string }[]) => {
+      failures && message.error('操作失败！')
+    }
     return (
       <>
-        <ConfigProvider
-          theme={{
-            components: {
-              Form: {
-                itemMarginBottom: 0,
-              },
-            },
-          }}
-        >
-          <Card tabList={items} onTabChange={tabChange} loading={immediate}>
-            <Form
-              labelCol={{ xs: { span: 24 }, sm: { span: 6 } }}
-              labelAlign="left"
-              colon={false}
-            >
+        <ConfigProvider>
+          <Card
+            tabList={items}
+            onTabChange={tabChange}
+            loading={loading}
+            className="search-card"
+          >
+            <Form labelAlign="left" colon={false}>
               <Row gutter={24}>
                 <Col span={8}>
                   <Form.Item label="任务状态">
-                    <div className="grid grid-cols-3 mb-[10px] w-fit">
+                    <div className="grid grid-cols-3 w-fit">
                       {CabinTaskTemplateStatusOptions.map((item) => (
                         <div
                           className={`w-[80px] h-[32px] leading-[30px] text-center rounded-[4px] mr-[8px] cursor-pointer ${
@@ -308,6 +368,7 @@ const CabinTaskTemplate: React.FC<CabinTaskTemplateProps> = memo(
               gutterWidth={24}
               labelPosition="left"
               btnSeparate={false}
+              iconHidden={true}
               isShowReset={true}
               isShowExpend={false}
               onUpdateSearch={onUpdateSearch}
@@ -315,7 +376,7 @@ const CabinTaskTemplate: React.FC<CabinTaskTemplateProps> = memo(
           </Card>
         </ConfigProvider>
         <Card
-          loading={immediate}
+          loading={loading}
           style={{ flex: 1, marginTop: '8px', minHeight: 0 }}
           styles={{ body: { height: '100%' } }}
           ref={parentRef}
@@ -341,16 +402,9 @@ const CabinTaskTemplate: React.FC<CabinTaskTemplateProps> = memo(
                 color="green"
                 style={{ background: '#07C160' }}
                 variant="solid"
-                onClick={() => isSelected() && CabinImmediately()}
+                onClick={() => isSelected() && CabinImmediately('immediate')}
               >
                 即刻抢舱
-              </Button>
-              <Button
-                color="green"
-                variant="solid"
-                onClick={() => isSelected() && CabinImmediately()}
-              >
-                高频启动
               </Button>
               <Button
                 color="green"
@@ -364,7 +418,7 @@ const CabinTaskTemplate: React.FC<CabinTaskTemplateProps> = memo(
               <Button
                 color="red"
                 variant="solid"
-                onClick={() => setOperationLog({ visible: false, id: null })}
+                onClick={() => isSelected() && CabinImmediately('close')}
               >
                 关闭任务
               </Button>
@@ -381,7 +435,7 @@ const CabinTaskTemplate: React.FC<CabinTaskTemplateProps> = memo(
                 hidden={current !== 'RUNNING'}
                 color="red"
                 variant="solid"
-                onClick={() => isSelected() && CabinImmediately()}
+                onClick={() => isSelected() && CabinImmediately('stop')}
               >
                 批量停止
               </Button>
@@ -390,6 +444,9 @@ const CabinTaskTemplate: React.FC<CabinTaskTemplateProps> = memo(
           <SearchTable
             size="middle"
             columns={tableColumns()}
+            totalKey="count"
+            fetchResultKey="list"
+            isPagination={true}
             bordered
             rowKey="id"
             scroll={{ x: 'max-content', y: height - 158 }}

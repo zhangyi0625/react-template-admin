@@ -11,8 +11,7 @@ import {
   Tag,
 } from 'antd'
 import { ExclamationCircleFilled, PlusOutlined } from '@ant-design/icons'
-import SearchForm from '@/components/searchForm'
-import SearchTable from '@/components/searchTable'
+import { SearchForm, SearchTable } from 'customer-search-form-table'
 import AddPortManage from './AddPortManage'
 import {
   addPortManage,
@@ -258,6 +257,7 @@ const RouteManage: React.FC = () => {
           <SearchForm
             columns={SelectPortManageOptions}
             gutterWidth={24}
+            iconHidden={true}
             labelPosition="left"
             btnSeparate={true}
             isShowReset={true}
@@ -284,6 +284,9 @@ const RouteManage: React.FC = () => {
         </Space>
         <SearchTable
           size="middle"
+          totalKey="count"
+          fetchResultKey="list"
+          isPagination={true}
           columns={columns}
           bordered
           rowKey="id"

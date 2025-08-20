@@ -8,8 +8,7 @@ import {
   TablePaginationConfig,
   TableProps,
 } from 'antd'
-import SearchForm from '@/components/searchForm'
-import SearchTable from '@/components/searchTable'
+import { SearchForm, SearchTable } from 'customer-search-form-table'
 import { filterKeys } from '@/utils/tool'
 import { ExclamationCircleFilled, PlusOutlined } from '@ant-design/icons'
 import {
@@ -182,6 +181,7 @@ const CarrierManage: React.FC = () => {
             columns={SelectCarrierManageOptions}
             gutterWidth={24}
             labelPosition="left"
+            iconHidden={true}
             btnSeparate={false}
             isShowReset={true}
             isShowExpend={false}
@@ -208,6 +208,9 @@ const CarrierManage: React.FC = () => {
         <SearchTable
           size="middle"
           columns={columns}
+          totalKey="count"
+          fetchResultKey="list"
+          isPagination={true}
           bordered
           rowKey="id"
           scroll={{ x: 'max-content', y: height - 158 }}

@@ -1,9 +1,9 @@
-import SearchTable from '@/components/searchTable'
-import { getCabinManageList } from '@/services/cabinManage/cabinManageApi'
-import { CloseOutlined } from '@ant-design/icons'
-import { Button, Drawer, Space } from 'antd'
 import React, { useCallback, useEffect, useState } from 'react'
+import { Button, Drawer, Space } from 'antd'
+import { CloseOutlined } from '@ant-design/icons'
+import { SearchTable } from 'customer-search-form-table'
 import { getTemplateSetting } from './columns'
+import { getCabinManageList } from '@/services/cabinManage/cabinManageApi'
 
 export type SetFrequecnyDrawerProps = {
   visible: boolean
@@ -52,6 +52,8 @@ const SetFrequecnyDrawer: React.FC<SetFrequecnyDrawerProps> = ({
     >
       <SearchTable
         size="middle"
+        fetchResultKey="data"
+        totalKey=""
         columns={tableColumns()}
         bordered
         selectionParentType="radio"

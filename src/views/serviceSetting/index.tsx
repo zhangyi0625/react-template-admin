@@ -50,7 +50,7 @@ const ServiceSetting: React.FC = () => {
     setLoading(true)
     getServiceSetting()
       .then((resp) => {
-        setTableData(resp.data)
+        setTableData(resp)
         setLoading(false)
       })
       .catch(() => setLoading(false))

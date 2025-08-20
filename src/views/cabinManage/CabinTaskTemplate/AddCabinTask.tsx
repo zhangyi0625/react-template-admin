@@ -277,7 +277,7 @@ const AddCabinTask: React.FC<AddCabinTaskProps> = memo(
                 <InputNumber min={0} style={{ width: '200px' }} />
               )}
               {item.formType === 'input' && (
-                <Input placeholder={item.label} allowClear />
+                <Input placeholder={item.label as string} allowClear />
               )}
               {item.formType === 'radio' && (
                 <Radio.Group

@@ -1,16 +1,9 @@
 import { useEffect, useState } from 'react'
-import {
-  Card,
-  ConfigProvider,
-  Space,
-  TablePaginationConfig,
-  TableProps,
-} from 'antd'
+import { Card, ConfigProvider, TablePaginationConfig, TableProps } from 'antd'
 import useParentSize from '@/hooks/useParentSize'
 import { useDispatch, useSelector } from 'react-redux'
 import { RootState, setEssentail } from '@/stores/store'
-import SearchForm from '@/components/searchForm'
-import SearchTable from '@/components/searchTable'
+import { SearchForm, SearchTable } from 'customer-search-form-table'
 import type {
   CabinTaskTemplateParams,
   TodayPlanParams,
@@ -277,26 +270,29 @@ const TodayPlan: React.FC = () => {
         <SearchForm
           columns={searchColumns}
           gutterWidth={24}
+          iconHidden={true}
           labelPosition="left"
           btnSeparate={true}
           isShowReset={true}
           isShowExpend={false}
           onUpdateSearch={onUpdateSearch}
         />
-        <Space>
-          <SearchTable
-            size="middle"
-            columns={tableColumns}
-            bordered
-            rowKey="id"
-            scroll={{ x: 'max-content', y: height - 268 }}
-            immediate={immediate}
-            fetchData={getCabinManageListByPage}
-            searchFilter={searchDefaultForm}
-            isSelection={false}
-            onUpdatePagination={onUpdatePagination}
-          />
-        </Space>
+        <SearchTable
+          style={{ marginTop: '10px' }}
+          size="middle"
+          columns={tableColumns}
+          isPagination={true}
+          fetchResultKey="list"
+          totalKey="count"
+          bordered
+          rowKey="id"
+          scroll={{ x: 'max-content', y: height - 258 }}
+          immediate={immediate}
+          fetchData={getCabinManageListByPage}
+          searchFilter={searchDefaultForm}
+          isSelection={false}
+          onUpdatePagination={onUpdatePagination}
+        />
       </Card>
     </>
   )

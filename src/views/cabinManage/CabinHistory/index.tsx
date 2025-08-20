@@ -2,8 +2,7 @@ import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Card, ConfigProvider, TableProps } from 'antd'
 import { RootState, setEssentail } from '@/stores/store'
-import SearchForm from '@/components/searchForm'
-import SearchTable from '@/components/searchTable'
+import { SearchForm, SearchTable } from 'customer-search-form-table'
 import { SelectCabinHistoryOptions } from './config'
 import { getRouteManageList } from '@/services/customerInformation/routeManage/routeManageApi'
 import {
@@ -186,6 +185,7 @@ const CabinHistory: React.FC = () => {
             gutterWidth={24}
             labelPosition="left"
             btnSeparate={true}
+            iconHidden={true}
             isShowReset={true}
             isShowExpend={false}
             onUpdateSearch={onUpdateSearch}
@@ -200,6 +200,8 @@ const CabinHistory: React.FC = () => {
         <SearchTable
           size="middle"
           columns={columns}
+          totalKey="count"
+          fetchResultKey="list"
           bordered
           rowKey="id"
           scroll={{ x: 'max-content', y: height - 158 }}

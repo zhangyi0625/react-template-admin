@@ -1,4 +1,4 @@
-import { CustomColumn } from '@/components/searchForm'
+import type { CustomColumn } from 'customer-search-form-table/SearchForm/type'
 
 export const SelectCustomerManageOptions: CustomColumn[] = [
   {
@@ -6,10 +6,15 @@ export const SelectCustomerManageOptions: CustomColumn[] = [
     name: 'name',
     formType: 'input',
     span: 6,
+    selectFetch: false,
+    hiddenItem: false,
   },
 ]
 
-export const CustomerManageForm: CustomColumn[] = [
+export const CustomerManageForm: Omit<
+  CustomColumn,
+  'hiddenItem' | 'selectFetch'
+>[] = [
   {
     label: '客户名称',
     name: 'name',

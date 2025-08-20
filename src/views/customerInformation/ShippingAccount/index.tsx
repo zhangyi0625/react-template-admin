@@ -20,8 +20,7 @@ import {
   SelectShippingAccountOptions,
   ShippingAccountOperationBtn,
 } from './config'
-import SearchForm from '@/components/searchForm'
-import SearchTable from '@/components/searchTable'
+import { SearchForm, SearchTable } from 'customer-search-form-table'
 import {
   ShippingAccounParams,
   ShippingAccounType,
@@ -45,6 +44,7 @@ import { filterKeys } from '@/utils/tool'
 import { formatTime } from '@/utils/format'
 import useParentSize from '@/hooks/useParentSize'
 import type { ServiceSettingType } from '@/services/setting/serviceSettingModel'
+import { getServiceSetting } from '@/services/setting'
 
 const API = process.env.VITE_STATIC_API
 
@@ -222,13 +222,17 @@ const ShippingAccount: React.FC = () => {
       '/customerInformation/shippingAccount/'
     )[1]
     setImmediate(true)
-    if (!essential.carrierData?.length || !essential.routeData?.length) {
+    if (
+      !essential.carrierData?.length ||
+      !essential.customerData?.length ||
+      !essential.relevanceService?.length
+    ) {
       loadSearchList()
     } else {
       getReduxData()
     }
     setParams({ ...params, type: name })
-    console.log(routeParams, 'routeParams', location, name)
+    console.log(routeParams, 'routeParams', location, name, essential)
   }, [location.pathname, params.type, essential])
 
   // 重新更新查询部分数据 并存储进redux
@@ -236,8 +240,9 @@ const ShippingAccount: React.FC = () => {
     Promise.all([
       getCarrierManageList({ enabled: 1 }),
       getCustomerManageList(),
+      getServiceSetting(),
     ]).then((resp) => {
-      let key = ['carrierData', 'customerData']
+      let key = ['carrierData', 'customerData', 'relevanceService']
       key.map((_, index: number) => {
         dispatch(setEssentail({ value: resp[index], key: key[index] }))
       })
@@ -246,12 +251,19 @@ const ShippingAccount: React.FC = () => {
   }
 
   const getReduxData = () => {
-    let { carrierData = [], customerData = [] } = essential
+    let {
+      carrierData = [],
+      customerData = [],
+      relevanceService = [],
+    } = essential
     selectoptions.map((item) => {
       if (item.name === 'carrier') item.options = carrierData
       if (item.name === 'customerId') item.options = customerData
-      if (item.name === 'serverName') item.hidden = params.type !== 'QUERY'
-      if (item.name === 'isQuery') item.hidden = params.type !== 'ORDER'
+      if (item.name === 'serverName') {
+        item.hiddenItem = params.type !== 'QUERY'
+        item.options = relevanceService
+      }
+      if (item.name === 'isQuery') item.hiddenItem = params.type !== 'ORDER'
     })
     console.log(selectoptions, 'selectOptions')
     setCustomerOptions(customerData)
@@ -356,18 +368,11 @@ const ShippingAccount: React.FC = () => {
   return (
     <>
       {/* 菜单检索条件栏 */}
-      <ConfigProvider
-        theme={{
-          components: {
-            Form: {
-              itemMarginBottom: 0,
-            },
-          },
-        }}
-      >
+      <ConfigProvider>
         <Card>
           <SearchForm
             columns={selectoptions}
+            iconHidden={true}
             gutterWidth={24}
             labelPosition="left"
             btnSeparate={true}
@@ -457,6 +462,9 @@ const ShippingAccount: React.FC = () => {
           columns={columns}
           bordered
           rowKey="id"
+          totalKey="count"
+          fetchResultKey="list"
+          isPagination={true}
           scroll={{ x: 'max-content', y: height - 158 }}
           fetchData={getShippingAccountListByPage}
           immediate={immediate}

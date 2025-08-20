@@ -9,8 +9,7 @@ import {
   TableProps,
 } from 'antd'
 import { ExclamationCircleFilled, PlusOutlined } from '@ant-design/icons'
-import SearchForm from '@/components/searchForm'
-import SearchTable from '@/components/searchTable'
+import { SearchForm, SearchTable } from 'customer-search-form-table'
 import type {
   CustomerManageParams,
   CustomerManageType,
@@ -170,6 +169,7 @@ const CustomerManage: React.FC = () => {
         <Card>
           <SearchForm
             columns={SelectCustomerManageOptions}
+            iconHidden={true}
             gutterWidth={24}
             labelPosition="left"
             btnSeparate={false}
@@ -199,6 +199,9 @@ const CustomerManage: React.FC = () => {
           size="middle"
           columns={columns}
           bordered
+          totalKey="count"
+          fetchResultKey="list"
+          isPagination={true}
           rowKey="id"
           scroll={{ x: 'max-content', y: height - 158 }}
           fetchData={getCustomerManageListByPage}

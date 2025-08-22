@@ -1,4 +1,4 @@
-import type { CustomColumn } from 'customer-search-form-table/SearchForm/type'
+import { CustomColumn } from '@/components/searchForm'
 
 export const SelectTodayPlanOptions: CustomColumn[] = [
   {
@@ -11,8 +11,6 @@ export const SelectTodayPlanOptions: CustomColumn[] = [
       value: 'code',
     },
     span: 6,
-    selectFetch: false,
-    hiddenItem: false,
   },
   {
     label: '起运港',
@@ -20,8 +18,6 @@ export const SelectTodayPlanOptions: CustomColumn[] = [
     formType: 'normalSelect',
     options: [],
     span: 6,
-    selectFetch: false,
-    hiddenItem: false,
   },
   {
     label: '目的港',
@@ -29,8 +25,6 @@ export const SelectTodayPlanOptions: CustomColumn[] = [
     formType: 'normalSelect',
     options: [],
     span: 6,
-    selectFetch: false,
-    hiddenItem: false,
   },
   {
     label: '细分航线',
@@ -42,7 +36,5 @@ export const SelectTodayPlanOptions: CustomColumn[] = [
       value: 'id',
     },
     span: 6,
-    selectFetch: false,
-    hiddenItem: false,
   },
 ]

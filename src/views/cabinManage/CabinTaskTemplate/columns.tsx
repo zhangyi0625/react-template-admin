@@ -1,6 +1,6 @@
 import { TableProps } from 'antd'
 import { formatTime } from '@/utils/format'
-import type { CustomColumn } from 'customer-search-form-table/SearchForm/type'
+import { CustomColumn } from '@/components/searchForm'
 
 type formSettingType = Pick<
   CustomColumn,

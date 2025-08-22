@@ -43,7 +43,7 @@ export const getServiceSetting = () => {
     {
       url: PublicApi.serviceSetting,
     },
-    { successMessageMode: 'none' }
+    { isTransformResponse: false }
   )
 }
 

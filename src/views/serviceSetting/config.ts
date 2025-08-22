@@ -1,9 +1,6 @@
-import type { CustomColumn } from 'customer-search-form-table/SearchForm/type'
+import { CustomColumn } from '@/components/searchForm'
 
-export const ServiceSettingForm: Omit<
-  CustomColumn,
-  'selectFetch' | 'hiddenItem'
->[] = [
+export const ServiceSettingForm: CustomColumn[] = [
   {
     label: '船司',
     name: 'carrier',

@@ -2,7 +2,8 @@ import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Button, Card, ConfigProvider, Space, TableProps } from 'antd'
 import { RootState, setEssentail } from '@/stores/store'
-import { SearchForm, SearchTable } from 'customer-search-form-table'
+import SearchForm from '@/components/searchForm'
+import SearchTable from '@/components/searchTable'
 import {
   getFndPortManageList,
   getPorPortManageList,
@@ -180,12 +181,19 @@ const CabinResult: React.FC = () => {
   return (
     <>
       {/* 菜单检索条件栏 */}
-      <ConfigProvider>
+      <ConfigProvider
+        theme={{
+          components: {
+            Form: {
+              itemMarginBottom: 0,
+            },
+          },
+        }}
+      >
         <Card>
           <SearchForm
             columns={searchColumns}
             gutterWidth={24}
-            iconHidden={true}
             labelPosition="left"
             btnSeparate={true}
             isShowReset={true}
@@ -210,8 +218,6 @@ const CabinResult: React.FC = () => {
         </Space>
         <SearchTable
           size="large"
-          totalKey="count"
-          fetchResultKey="list"
           columns={columns}
           bordered
           rowKey="id"

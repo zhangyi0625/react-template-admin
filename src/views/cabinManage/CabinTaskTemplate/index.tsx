@@ -328,19 +328,6 @@ const CabinTaskTemplate: React.FC<CabinTaskTemplateProps> = memo(
       }, 300)
     }
 
-    const confirmFrequecnyDrawer = (ids: string[]) => {
-      openBatchCabinByImmdiate({
-        ids: seleced,
-        sameFrequencyTaskId: ids[0],
-      }).then((res) => {
-        res.failures && res.failures.length && showMessage(res.failures)
-        !res.failures.length &&
-          res.success === seleced.length &&
-          message.success('操作成功！')
-        setFrequecnyParams({ visible: false, selRow: [] })
-      })
-    }
-
     const showMessage = (failures: { index: number; failMsg: string }[]) => {
       failures && message.error('操作失败！')
     }
@@ -423,7 +410,6 @@ const CabinTaskTemplate: React.FC<CabinTaskTemplateProps> = memo(
                 color="green"
                 variant="solid"
                 onClick={() =>
-                  isSelected() &&
                   setFrequecnyParams({ visible: true, selRow: [] })
                 }
               >
@@ -494,7 +480,9 @@ const CabinTaskTemplate: React.FC<CabinTaskTemplateProps> = memo(
         <SetFrequecnyDrawer
           visible={frequecnyParams.visible}
           onCancel={() => setFrequecnyParams({ visible: false, selRow: [] })}
-          onOk={confirmFrequecnyDrawer}
+          onOk={(ids: string[]) =>
+            setFrequecnyParams({ visible: false, selRow: ids })
+          }
         />
       </>
     )

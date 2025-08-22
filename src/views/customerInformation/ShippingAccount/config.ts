@@ -1,4 +1,4 @@
-import type { CustomColumn } from 'customer-search-form-table/SearchForm/type'
+import type { CustomColumn } from '@/components/searchForm'
 import {
   putShippingAccountCancelSearch,
   putShippingAccountClose,
@@ -17,8 +17,6 @@ export const SelectShippingAccountOptions: CustomColumn[] = [
       value: 'code',
     },
     span: 6,
-    selectFetch: false,
-    hiddenItem: false,
   },
   {
     label: '客户名称',
@@ -30,16 +28,12 @@ export const SelectShippingAccountOptions: CustomColumn[] = [
       value: 'id',
     },
     span: 6,
-    selectFetch: false,
-    hiddenItem: false,
   },
   {
     label: '船司账号',
     name: 'account',
     formType: 'input',
     span: 6,
-    selectFetch: false,
-    hiddenItem: false,
   },
   {
     label: '是否启用',
@@ -55,8 +49,6 @@ export const SelectShippingAccountOptions: CustomColumn[] = [
         value: 0,
       },
     ],
-    selectFetch: false,
-    hiddenItem: false,
     span: 6,
   },
   {
@@ -64,20 +56,14 @@ export const SelectShippingAccountOptions: CustomColumn[] = [
     name: 'serverName',
     formType: 'normalSelect',
     options: [],
-    selectFetch: false,
-    selectFileldName: {
-      label: 'serverName',
-      value: 'serverNo',
-    },
-    hiddenItem: false,
+    hidden: true,
     span: 6,
   },
   {
     label: '查询状态',
     name: 'isQuery',
     formType: 'normalSelect',
-    selectFetch: false,
-    hiddenItem: false,
+    hidden: true,
     options: [
       {
         label: '是',
@@ -92,10 +78,7 @@ export const SelectShippingAccountOptions: CustomColumn[] = [
   },
 ]
 
-export const ShippingAccountForm: Omit<
-  CustomColumn,
-  'selectFetch' | 'hiddenItem'
->[] = [
+export const ShippingAccountForm: CustomColumn[] = [
   {
     label: '账号类型',
     name: 'type',

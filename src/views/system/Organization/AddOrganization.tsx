@@ -10,9 +10,8 @@ export interface AddOrganizationProps {
     visible: boolean
     // 弹窗需要的数据
     currentRow: SysOrganizationType | null
-    view: boolean
   }
-
+  parentId: string | null
   // 点击确定的回调
   onOk: (params: SysOrganizationType) => void
   // 点击取消的回调
@@ -21,10 +20,11 @@ export interface AddOrganizationProps {
 
 const AddOrganization: React.FC<AddOrganizationProps> = ({
   params,
+  parentId,
   onOk,
   onCancel,
 }) => {
-  const { visible, currentRow, view } = params
+  const { visible, currentRow } = params
 
   const [form] = Form.useForm()
 
@@ -44,6 +44,9 @@ const AddOrganization: React.FC<AddOrganizationProps> = ({
     } else {
       // 清空表单数据，表示新增
       form.resetFields()
+      form.setFieldsValue({
+        parentId: parentId ?? null,
+      })
     }
   }, [currentRow, visible])
 
@@ -83,7 +86,6 @@ const AddOrganization: React.FC<AddOrganizationProps> = ({
       width="40%"
       open={visible}
       title={currentRow ? '编辑组织机构' : '新增组织机构'}
-      okButtonProps={{ className: view ? 'hidden' : '' }}
       onOk={handleOk}
       onCancel={onCancel}
       afterOpenChange={onAfterOpenChange}

@@ -16,6 +16,18 @@ import { getOrganizationList } from '@/services/system/organization/organization
 import type { SysRoleType, SysUserType } from '@/services/system/role/roleModel'
 import { buildTree } from '@/utils/tool'
 
+export interface AddUserProps {
+  open: {
+    visible: boolean
+    editRow: SysUserType | null
+  }
+  // 当前角色
+  roleId: string | null
+  // 点击确定(选中的数量)
+  onOk: (params: SysUserType) => void
+  onCancel: () => void
+}
+
 type DefaultOptionType = GetProp<TreeSelectProps, 'treeData'>[number]
 
 /**
@@ -46,8 +58,9 @@ const AddUser: React.FC<AddUserProps> = ({ open, onOk, onCancel, roleId }) => {
       })
     } else {
       form.resetFields()
-      form.setFieldsValue({ roles: [roleId] })
+      form.setFieldsValue({ roles: roleId ? [roleId] : [] })
     }
+    console.log(open.editRow, form.getFieldsValue())
   }, [open.visible])
 
   const init = () => {
@@ -166,20 +179,20 @@ const AddUser: React.FC<AddUserProps> = ({ open, onOk, onCancel, roleId }) => {
               name="password"
               rules={[
                 { required: true },
-                {
-                  validator: (_, value) => {
-                    if (
-                      value &&
-                      !/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$/.test(value)
-                    ) {
-                      return Promise.reject('密码需包含字母和数字且至少6位')
-                    }
-                    return Promise.resolve()
-                  },
-                },
+                // {
+                //   validator: (_, value) => {
+                //     if (
+                //       value &&
+                //       !/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$/.test(value)
+                //     ) {
+                //       return Promise.reject('密码需包含字母和数字且至少6位')
+                //     }
+                //     return Promise.resolve()
+                //   },
+                // },
               ]}
             >
-              <Input
+              <Input.Password
                 placeholder="请输入登录密码"
                 allowClear
                 autoComplete="off"
@@ -197,12 +210,7 @@ const AddUser: React.FC<AddUserProps> = ({ open, onOk, onCancel, roleId }) => {
             </Form.Item>
           </Col>
           <Col span={12}>
-            <Form.Item
-              className="mb-0"
-              label="角色"
-              name="roles"
-              rules={[{ required: true, message: '请选择角色' }]}
-            >
+            <Form.Item className="mb-0" label="角色" name="roles">
               <Select
                 mode="multiple"
                 options={role.map((item: SysRoleType) => ({
@@ -241,15 +249,3 @@ const AddUser: React.FC<AddUserProps> = ({ open, onOk, onCancel, roleId }) => {
   )
 }
 export default AddUser
-
-export interface AddUserProps {
-  open: {
-    visible: boolean
-    editRow: SysUserType | null
-  }
-  // 当前角色
-  roleId: string
-  // 点击确定(选中的数量)
-  onOk: (params: SysUserType) => void
-  onCancel: () => void
-}

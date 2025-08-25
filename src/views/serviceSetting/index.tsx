@@ -1,14 +1,6 @@
 import type React from 'react'
 import { useEffect, useState } from 'react'
-import {
-  App,
-  Button,
-  Card,
-  ConfigProvider,
-  Space,
-  Table,
-  type TableProps,
-} from 'antd'
+import { App, Button, Card, ConfigProvider, Space, type TableProps } from 'antd'
 import { ExclamationCircleFilled, PlusOutlined } from '@ant-design/icons'
 import useParentSize from '@/hooks/useParentSize'
 import {
@@ -17,6 +9,7 @@ import {
   getServiceSetting,
   updateServiceSetting,
 } from '@/services/setting'
+import { SearchTable } from 'customer-search-form-table'
 import type { ServiceSettingType } from '../../services/setting/serviceSettingModel'
 import ServiceSettingInfo from './ServiceSettingInfo'
 import { ServiceSettingForm } from './config'
@@ -26,9 +19,7 @@ const ServiceSetting: React.FC = () => {
 
   const { modal, message } = App.useApp()
 
-  const [loading, setLoading] = useState<boolean>(false)
-
-  const [tableData, setTableData] = useState([])
+  const [immediate, setImmediate] = useState<boolean>(false)
 
   // 将当前编辑行和窗口开关合并为一个状态对象
   const [params, setParams] = useState<{
@@ -42,18 +33,14 @@ const ServiceSetting: React.FC = () => {
   })
 
   useEffect(() => {
-    loadServiceSettingList()
-    console.log('useEffect')
+    // loadServiceSettingList()
   }, [])
 
   const loadServiceSettingList = () => {
-    setLoading(true)
-    getServiceSetting()
-      .then((resp) => {
-        setTableData(resp.data)
-        setLoading(false)
-      })
-      .catch(() => setLoading(false))
+    setImmediate(true)
+    setTimeout(() => {
+      setImmediate(false)
+    }, 500)
   }
 
   const columns: TableProps['columns'] = [
@@ -245,15 +232,19 @@ const ServiceSetting: React.FC = () => {
               添加服务
             </Button>
           </Space>
-          <Table
+          <SearchTable
             size="small"
-            bordered
-            pagination={false}
-            dataSource={tableData}
             columns={columns}
-            loading={loading}
+            bordered
             rowKey="id"
+            fetchResultKey="data"
+            totalKey=""
+            immediate={immediate}
+            isPagination={false}
             scroll={{ x: 'max-content', y: height - 128 }}
+            fetchData={getServiceSetting}
+            isSelection={false}
+            onUpdatePagination={() => {}}
           />
         </Card>
       </ConfigProvider>

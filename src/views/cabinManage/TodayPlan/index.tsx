@@ -3,6 +3,7 @@ import {
   Button,
   Card,
   ConfigProvider,
+  message,
   Space,
   TablePaginationConfig,
   TableProps,
@@ -31,6 +32,16 @@ import {
 import { filterKeys } from '@/utils/tool'
 import { getCustomerManageList } from '@/services/essential/customerManage/customerManageApi'
 import AddSearchByAffilate from './AddSearchByAffilate'
+import ShippingAccountDrawer from './ShippingAccountDrawer'
+import {
+  addBatchLogin,
+  addLoginAccount,
+  addTodayLoginRecord,
+  getAffilateAccountList,
+  getScheduleAccountList,
+} from '@/services/todayPlan/todayPlanApi'
+import { AffilateAccountType } from '@/services/todayPlan/todayPlanModal'
+import { getShippingAccountList } from '@/services/customerInformation/shippingAccount/shippingAccountApi'
 
 const TodayPlan: React.FC = () => {
   const { parentRef, height } = useParentSize()
@@ -43,7 +54,9 @@ const TodayPlan: React.FC = () => {
 
   const essential = useSelector((state: RootState) => state.essentail)
 
-  const [immediate, setImmediate] = useState<boolean>(false)
+  const [immediate, setImmediate] = useState<boolean>(true)
+
+  const [seleced, setSelected] = useState<string[]>([])
 
   const [defaultActiveKey, setDefaultActiveKey] =
     useState<string>('searchBySchedule')
@@ -51,6 +64,18 @@ const TodayPlan: React.FC = () => {
   const [searchColumns, setSearchColumns] = useState(
     SelectScheduleAccountOptions
   )
+
+  const [params, setParams] = useState<{
+    visible: boolean
+    type: 'search' | 'login'
+    carrier: string
+    currentRow: AffilateAccountType[] | null
+  }>({
+    visible: false,
+    type: 'search',
+    carrier: '',
+    currentRow: null,
+  })
 
   const [searchDefaultForm, setSearchDefaultForm] = useState<TodayPlanParams>({
     page: 1,
@@ -91,7 +116,7 @@ const TodayPlan: React.FC = () => {
     } else {
       getReduxData()
     }
-  }, [essential])
+  }, [essential, immediate])
 
   const tableColumns: TableProps['columns'] = [
     {
@@ -119,7 +144,7 @@ const TodayPlan: React.FC = () => {
     },
     {
       title: '船司航线',
-      key: 'route',
+      key: 'routeFndName',
       dataIndex: 'routeFndName',
       hidden: defaultActiveKey === 'searchByAffilate',
       align: 'center',
@@ -147,15 +172,20 @@ const TodayPlan: React.FC = () => {
       align: 'center',
       hidden: defaultActiveKey === 'searchByAffilate',
       width: 100,
-      render(_, record) {
+      render(_) {
         return (
           <div
             className="cursor-pointer text-normal-blue text-sm"
             onClick={() => {
-              setConnectCustomer({ visible: true, id: record.id })
+              setParams({
+                visible: true,
+                type: 'login',
+                carrier: _.carrier,
+                currentRow: _.customers ?? [],
+              })
             }}
           >
-            3个客户
+            {_.customers.length ?? 0}个客户
           </div>
         )
       },
@@ -172,7 +202,7 @@ const TodayPlan: React.FC = () => {
             <div
               className="cursor-pointer text-normal-blue text-sm"
               onClick={() => {
-                setConnectCustomer({ visible: true, id: record.id })
+                searchOrderAccount(_.customerId, _.carrier)
               }}
             >
               查看账号
@@ -180,7 +210,7 @@ const TodayPlan: React.FC = () => {
             <div
               className="cursor-pointer text-normal-blue text-sm ml-[40px]"
               onClick={() => {
-                setConnectCustomer({ visible: true, id: record.id })
+                onLoginAccount(_.customerId, _.carrier)
               }}
             >
               登陆账号
@@ -289,6 +319,19 @@ const TodayPlan: React.FC = () => {
     setToday(key)
   }
 
+  const searchOrderAccount = (customerId: string, carrier: string) => {
+    getShippingAccountList({ customerId: customerId, isOrder: true }).then(
+      (resp) => {
+        setParams({
+          visible: true,
+          type: 'search',
+          carrier: carrier,
+          currentRow: resp,
+        })
+      }
+    )
+  }
+
   const onUpdateSearch = (info?: CabinTaskTemplateParams | unknown) => {
     const filteredObj = Object.fromEntries(
       Object.entries(info ?? {}).filter(([, value]) => !!value)
@@ -309,19 +352,84 @@ const TodayPlan: React.FC = () => {
   }
 
   const onChange = (type: string) => {
+    console.log(type)
+    setImmediate(true)
     setDefaultActiveKey(type)
     setSearchColumns(
       type === 'searchBySchedule'
         ? SelectScheduleAccountOptions
         : SelectAffilateAccountOptions
     )
-    // setTimeout(() => {
-    //   setImmediate(true)
-    //   getReduxData()
-    // }, 300)
+
+    setTimeout(() => {
+      //   setImmediate(true)
+      //   getReduxData()
+      setImmediate(false)
+    }, 300)
   }
 
-  const addCustomerOk = () => {}
+  const batchLogin = () => {
+    if (!seleced.length) {
+      message.error('至少选择一条记录批量登陆！')
+      return
+    }
+    // setConnectCustomer({ visible: true, id: null })
+    console.log(seleced, 'seleced')
+    onBatchLogin(seleced)
+  }
+
+  const addCustomerOk = (currentRow: AffilateAccountType) => {
+    addTodayLoginRecord(currentRow).then(() => {
+      message.success('添加成功！')
+      setImmediate(true)
+      setAddCustomer(false)
+    })
+    setTimeout(() => {
+      setImmediate(false)
+    }, 300)
+  }
+
+  const onLoginAccount = (customerId: string, carrier?: string) => {
+    console.log(customerId, 'customerId', params)
+    addLoginAccount({
+      customerId: customerId,
+      carrier: carrier ?? params.carrier,
+    })
+      .then(() => {
+        message.success('预登陆成功')
+        setImmediate(true)
+        setTimeout(() => {
+          setImmediate(false)
+        }, 300)
+      })
+      .catch(() => {
+        setTimeout(() => {
+          setImmediate(false)
+        }, 300)
+      })
+  }
+  const onBatchLogin = (ids: string[]) => {
+    console.log(ids, 'customerId', params)
+    let newArr = ids.map((item) => {
+      return {
+        customerId: item,
+        carrier: params.carrier,
+      }
+    })
+    addBatchLogin(newArr)
+      .then(() => {
+        message.success('批量登陆成功')
+        setImmediate(true)
+        setTimeout(() => {
+          setImmediate(false)
+        }, 300)
+      })
+      .catch(() => {
+        setTimeout(() => {
+          setImmediate(false)
+        }, 300)
+      })
+  }
 
   return (
     <>
@@ -396,35 +504,56 @@ const TodayPlan: React.FC = () => {
             <Button type="primary" onClick={() => setAddCustomer(true)}>
               添加公司
             </Button>
-            <Button
-              type="primary"
-              onClick={() => setConnectCustomer({ visible: true, id: null })}
-            >
+            <Button type="primary" onClick={batchLogin}>
               批量登陆
             </Button>
           </Space>
         )}
-        <SearchTable
-          style={{ marginTop: '10px' }}
-          size="middle"
-          totalKey="count"
-          fetchResultKey="list"
-          isPagination={true}
-          columns={tableColumns}
-          bordered
-          rowKey="id"
-          scroll={{ x: 'max-content', y: height - 298 }}
-          immediate={immediate}
-          fetchData={getCabinManageListByPage}
-          searchFilter={searchDefaultForm}
-          isSelection={false}
-          onUpdatePagination={onUpdatePagination}
-        />
+        {!immediate && (
+          <SearchTable
+            style={{ marginTop: '10px' }}
+            size="middle"
+            totalKey={defaultActiveKey === 'searchBySchedule' ? '' : 'count'}
+            fetchResultKey={
+              defaultActiveKey === 'searchBySchedule' ? 'data' : 'list'
+            }
+            isPagination={true}
+            columns={tableColumns}
+            bordered
+            rowKey={
+              defaultActiveKey === 'searchBySchedule' ? 'fndCode' : 'customerId'
+            }
+            scroll={{ x: 'max-content', y: height - 298 }}
+            immediate={immediate}
+            fetchData={
+              defaultActiveKey === 'searchBySchedule'
+                ? getScheduleAccountList
+                : getAffilateAccountList
+            }
+            searchFilter={searchDefaultForm}
+            isSelection={defaultActiveKey === 'searchBySchedule' ? false : true}
+            onUpdatePagination={onUpdatePagination}
+            onUpdateSelection={(options: string[]) => setSelected(options)}
+          />
+        )}
       </Card>
       <AddSearchByAffilate
         visible={addCustomer}
         onCancel={() => setAddCustomer(false)}
         onOk={addCustomerOk}
+      />
+      <ShippingAccountDrawer
+        params={params}
+        onCancel={() =>
+          setParams({
+            visible: false,
+            type: 'search',
+            carrier: '',
+            currentRow: null,
+          })
+        }
+        onLoginAccount={onLoginAccount}
+        onBatchLogin={onBatchLogin}
       />
     </>
   )

@@ -8,14 +8,12 @@ import {
   TablePaginationConfig,
   TableProps,
 } from 'antd'
-import SearchForm from '@/components/searchForm'
-import SearchTable from '@/components/searchTable'
-import { filterKeys } from '@/utils/tool'
 import { ExclamationCircleFilled, PlusOutlined } from '@ant-design/icons'
 import {
   CarrierManageParams,
   CarrierManageType,
 } from '@/services/essential/carrierManage/carrierManageModel'
+import { SearchForm, SearchTable } from 'customer-search-form-table'
 import {
   addCarrierManage,
   deleteCarrierManage,
@@ -23,6 +21,7 @@ import {
   putCarrierManage,
 } from '@/services/essential/carrierManage/carrierManageApi'
 import { SelectCarrierManageOptions } from './config'
+import { filterKeys } from '@/utils/tool'
 import AddCarrierManage from './AddCarrierManage'
 import useParentSize from '@/hooks/useParentSize'
 
@@ -180,6 +179,7 @@ const CarrierManage: React.FC = () => {
         <Card>
           <SearchForm
             columns={SelectCarrierManageOptions}
+            iconHidden={true}
             gutterWidth={24}
             labelPosition="left"
             btnSeparate={false}
@@ -210,6 +210,9 @@ const CarrierManage: React.FC = () => {
           columns={columns}
           bordered
           rowKey="id"
+          isPagination={true}
+          fetchResultKey="list"
+          totalKey="count"
           scroll={{ x: 'max-content', y: height - 158 }}
           fetchData={getCarrierManageListByPage}
           searchFilter={searchDefaultForm}

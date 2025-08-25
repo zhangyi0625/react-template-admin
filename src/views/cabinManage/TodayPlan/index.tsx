@@ -1,16 +1,18 @@
 import { useEffect, useState } from 'react'
 import {
+  Button,
   Card,
   ConfigProvider,
   Space,
   TablePaginationConfig,
   TableProps,
+  Tabs,
+  TabsProps,
 } from 'antd'
 import useParentSize from '@/hooks/useParentSize'
 import { useDispatch, useSelector } from 'react-redux'
 import { RootState, setEssentail } from '@/stores/store'
-import SearchForm from '@/components/searchForm'
-import SearchTable from '@/components/searchTable'
+import { SearchForm, SearchTable } from 'customer-search-form-table'
 import type {
   CabinTaskTemplateParams,
   TodayPlanParams,
@@ -22,8 +24,13 @@ import {
 } from '@/services/essential/portManage/portManageModel'
 import { getCarrierManageList } from '@/services/essential/carrierManage/carrierManageApi'
 import { getCabinManageListByPage } from '@/services/cabinManage/cabinManageApi'
-import { SelectTodayPlanOptions } from './config'
+import {
+  SelectAffilateAccountOptions,
+  SelectScheduleAccountOptions,
+} from './config'
 import { filterKeys } from '@/utils/tool'
+import { getCustomerManageList } from '@/services/essential/customerManage/customerManageApi'
+import AddSearchByAffilate from './AddSearchByAffilate'
 
 const TodayPlan: React.FC = () => {
   const { parentRef, height } = useParentSize()
@@ -38,7 +45,12 @@ const TodayPlan: React.FC = () => {
 
   const [immediate, setImmediate] = useState<boolean>(false)
 
-  const [searchColumns, setSearchColumns] = useState(SelectTodayPlanOptions)
+  const [defaultActiveKey, setDefaultActiveKey] =
+    useState<string>('searchBySchedule')
+
+  const [searchColumns, setSearchColumns] = useState(
+    SelectScheduleAccountOptions
+  )
 
   const [searchDefaultForm, setSearchDefaultForm] = useState<TodayPlanParams>({
     page: 1,
@@ -53,13 +65,27 @@ const TodayPlan: React.FC = () => {
     id: null,
   })
 
+  const [addCustomer, setAddCustomer] = useState<boolean>(false)
+
+  const components: TabsProps['items'] = [
+    {
+      label: '按船期账号预登录',
+      key: 'searchBySchedule',
+    },
+    {
+      label: '按公司账号预登录',
+      key: 'searchByAffilate',
+    },
+  ]
+
   useEffect(() => {
     setImmediate(true)
     if (
       !essential.routeData?.length ||
       !essential.porPortData?.length ||
       !essential.fndPortData?.length ||
-      !essential.carrierData?.length
+      !essential.carrierData?.length ||
+      !essential.customerData?.length
     ) {
       loadSearchList()
     } else {
@@ -79,6 +105,7 @@ const TodayPlan: React.FC = () => {
       title: '起运港',
       key: 'porCode',
       dataIndex: 'porCode',
+      hidden: defaultActiveKey === 'searchByAffilate',
       align: 'center',
       width: 100,
     },
@@ -86,6 +113,7 @@ const TodayPlan: React.FC = () => {
       title: '目的港',
       key: 'fndCode',
       dataIndex: 'fndCode',
+      hidden: defaultActiveKey === 'searchByAffilate',
       align: 'center',
       width: 100,
     },
@@ -93,6 +121,23 @@ const TodayPlan: React.FC = () => {
       title: '船司航线',
       key: 'route',
       dataIndex: 'routeFndName',
+      hidden: defaultActiveKey === 'searchByAffilate',
+      align: 'center',
+      width: 100,
+    },
+    {
+      title: '客户名称',
+      key: 'customerName',
+      dataIndex: 'customerName',
+      hidden: defaultActiveKey === 'searchBySchedule',
+      align: 'center',
+      width: 100,
+    },
+    {
+      title: '预登录时间',
+      key: 'time',
+      dataIndex: 'time',
+      hidden: defaultActiveKey === 'searchBySchedule',
       align: 'center',
       width: 100,
     },
@@ -100,6 +145,7 @@ const TodayPlan: React.FC = () => {
       title: '关联客户',
       key: 'customer',
       align: 'center',
+      hidden: defaultActiveKey === 'searchByAffilate',
       width: 100,
       render(_, record) {
         return (
@@ -114,6 +160,35 @@ const TodayPlan: React.FC = () => {
         )
       },
     },
+    {
+      title: '操作',
+      key: 'customer',
+      align: 'center',
+      hidden: defaultActiveKey === 'searchBySchedule',
+      width: 100,
+      render(_, record) {
+        return (
+          <div className="flex items-center justify-center">
+            <div
+              className="cursor-pointer text-normal-blue text-sm"
+              onClick={() => {
+                setConnectCustomer({ visible: true, id: record.id })
+              }}
+            >
+              查看账号
+            </div>
+            <div
+              className="cursor-pointer text-normal-blue text-sm ml-[40px]"
+              onClick={() => {
+                setConnectCustomer({ visible: true, id: record.id })
+              }}
+            >
+              登陆账号
+            </div>
+          </div>
+        )
+      },
+    },
   ]
 
   // 重新更新查询部分数据 并存储进redux
@@ -123,8 +198,15 @@ const TodayPlan: React.FC = () => {
       getPorPortManageList(),
       getFndPortManageList(),
       getCarrierManageList({ enabled: 1 }),
+      getCustomerManageList(),
     ]).then((resp) => {
-      let key = ['routeData', 'porPortData', 'fndPortData', 'carrierData']
+      let key = [
+        'routeData',
+        'porPortData',
+        'fndPortData',
+        'carrierData',
+        'customerData',
+      ]
       key.map((_, index: number) => {
         dispatch(setEssentail({ value: resp[index], key: key[index] }))
       })
@@ -133,7 +215,8 @@ const TodayPlan: React.FC = () => {
   }
 
   const getReduxData = () => {
-    let { routeData, porPortData, fndPortData, carrierData } = essential
+    let { routeData, porPortData, fndPortData, carrierData, customerData } =
+      essential
     let resetPorData = (porPortData || []).map(
       (item: { code: string; enName: string; cnName: string }) => {
         return {
@@ -150,13 +233,17 @@ const TodayPlan: React.FC = () => {
         }
       }
     )
+
+    console.log(searchColumns, 'searchColumns')
     searchColumns.map((item) => {
       if (item.name === 'porCode' || item.name === 'fndCode') {
         item.options = item.name === 'porCode' ? resetPorData : resetFndData
       }
       if (item.name === 'carrier') item.options = carrierData
       if (item.name === 'router') item.options = routeData
+      if (item.name === 'customerId') item.options = customerData
     })
+
     setSearchColumns([...searchColumns])
     setImmediate(false)
   }
@@ -221,6 +308,21 @@ const TodayPlan: React.FC = () => {
     })
   }
 
+  const onChange = (type: string) => {
+    setDefaultActiveKey(type)
+    setSearchColumns(
+      type === 'searchBySchedule'
+        ? SelectScheduleAccountOptions
+        : SelectAffilateAccountOptions
+    )
+    // setTimeout(() => {
+    //   setImmediate(true)
+    //   getReduxData()
+    // }, 300)
+  }
+
+  const addCustomerOk = () => {}
+
   return (
     <>
       {/* 菜单检索条件栏 */}
@@ -271,33 +373,59 @@ const TodayPlan: React.FC = () => {
         styles={{ body: { height: '100%' } }}
         ref={parentRef}
       >
-        <div className="font-semibold text-base text-dull-grey mb-[10px]">
+        <Tabs
+          activeKey={defaultActiveKey}
+          items={components}
+          onChange={onChange}
+        />
+        {/* <div className="font-semibold text-base text-dull-grey mb-[10px]">
           账号预登录
-        </div>
+        </div> */}
         <SearchForm
           columns={searchColumns}
           gutterWidth={24}
           labelPosition="left"
-          btnSeparate={true}
+          iconHidden={true}
+          btnSeparate={defaultActiveKey === 'searchBySchedule'}
           isShowReset={true}
           isShowExpend={false}
           onUpdateSearch={onUpdateSearch}
         />
-        <Space>
-          <SearchTable
-            size="middle"
-            columns={tableColumns}
-            bordered
-            rowKey="id"
-            scroll={{ x: 'max-content', y: height - 268 }}
-            immediate={immediate}
-            fetchData={getCabinManageListByPage}
-            searchFilter={searchDefaultForm}
-            isSelection={false}
-            onUpdatePagination={onUpdatePagination}
-          />
-        </Space>
+        {defaultActiveKey === 'searchByAffilate' && (
+          <Space className="">
+            <Button type="primary" onClick={() => setAddCustomer(true)}>
+              添加公司
+            </Button>
+            <Button
+              type="primary"
+              onClick={() => setConnectCustomer({ visible: true, id: null })}
+            >
+              批量登陆
+            </Button>
+          </Space>
+        )}
+        <SearchTable
+          style={{ marginTop: '10px' }}
+          size="middle"
+          totalKey="count"
+          fetchResultKey="list"
+          isPagination={true}
+          columns={tableColumns}
+          bordered
+          rowKey="id"
+          scroll={{ x: 'max-content', y: height - 298 }}
+          immediate={immediate}
+          fetchData={getCabinManageListByPage}
+          searchFilter={searchDefaultForm}
+          isSelection={false}
+          onUpdatePagination={onUpdatePagination}
+        />
       </Card>
+      <AddSearchByAffilate
+        visible={addCustomer}
+        onCancel={() => setAddCustomer(false)}
+        onOk={addCustomerOk}
+      />
     </>
   )
 }

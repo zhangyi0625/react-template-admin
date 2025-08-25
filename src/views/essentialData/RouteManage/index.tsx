@@ -10,8 +10,7 @@ import {
   TableProps,
 } from 'antd'
 import { ExclamationCircleFilled, PlusOutlined } from '@ant-design/icons'
-import SearchForm from '@/components/searchForm'
-import SearchTable from '@/components/searchTable'
+import { SearchForm, SearchTable } from 'customer-search-form-table'
 import AddRouteManage from './AddRouteManage'
 import { SelectRouteManageOptions } from './config'
 import {
@@ -209,6 +208,7 @@ const RouteManage: React.FC = () => {
           <SearchForm
             columns={selectOptions}
             gutterWidth={24}
+            iconHidden={true}
             labelPosition="left"
             btnSeparate={false}
             isShowReset={true}
@@ -238,6 +238,9 @@ const RouteManage: React.FC = () => {
           columns={columns}
           bordered
           rowKey="id"
+          isPagination={true}
+          fetchResultKey="list"
+          totalKey="count"
           isCache="routeData"
           scroll={{ x: 'max-content', y: height - 158 }}
           immediate={immediate}

@@ -1,4 +1,4 @@
-import { CustomColumn } from '@/components/searchForm'
+import type { CustomColumn } from 'customer-search-form-table/SearchForm/type'
 
 export const SelectRouteManageOptions: CustomColumn[] = [
   {
@@ -6,6 +6,8 @@ export const SelectRouteManageOptions: CustomColumn[] = [
     name: 'routeName',
     formType: 'input',
     span: 6,
+    selectFetch: false,
+    hiddenItem: false,
   },
   {
     label: '目的港',
@@ -13,5 +15,7 @@ export const SelectRouteManageOptions: CustomColumn[] = [
     formType: 'normalSelect',
     options: [],
     span: 6,
+    selectFetch: false,
+    hiddenItem: false,
   },
 ]

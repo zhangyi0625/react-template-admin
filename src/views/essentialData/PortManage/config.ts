@@ -1,5 +1,5 @@
 import { CheckboxOptionType, SelectProps } from 'antd'
-import type { CustomColumn } from '@/components/searchForm'
+import type { CustomColumn } from 'customer-search-form-table/SearchForm/type'
 import { replaceObjectName } from '@/utils/tool'
 
 type PortSettingSelectType = SelectProps['options'] | CheckboxOptionType[] | any
@@ -43,33 +43,41 @@ export const SelectPortManageOptions: CustomColumn[] = [
     name: 'code',
     formType: 'input',
     span: 6,
+    selectFetch: false,
+    hiddenItem: false,
   },
   {
     label: '港口名称',
     name: 'name',
     formType: 'input',
     span: 6,
+    selectFetch: false,
+    hiddenItem: false,
   },
   {
     label: '港口标签',
     name: 'tag',
-    formType: 'select',
+    formType: 'normalSelect',
     span: 6,
     options: replaceObjectName(
       PortSettingSelect['isPort'],
       ['label', 'value'],
       ['name', 'id']
     ),
+    selectFetch: false,
+    hiddenItem: false,
   },
   {
     label: '热门港口',
     name: 'isPopularity',
-    formType: 'select',
+    formType: 'normalSelect',
     options: replaceObjectName(
       PortSettingSelect['whether'],
       ['label', 'value'],
       ['name', 'id']
     ),
+    selectFetch: false,
+    hiddenItem: false,
     span: 6,
   },
 ]

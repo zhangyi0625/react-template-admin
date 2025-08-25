@@ -1,6 +1,6 @@
-import { CustomColumn } from '@/components/searchForm'
+import type { CustomColumn } from 'customer-search-form-table/SearchForm/type'
 
-export const SelectTodayPlanOptions: CustomColumn[] = [
+export const SelectScheduleAccountOptions: CustomColumn[] = [
   {
     label: '船公司',
     name: 'carrier',
@@ -11,6 +11,8 @@ export const SelectTodayPlanOptions: CustomColumn[] = [
       value: 'code',
     },
     span: 6,
+    selectFetch: false,
+    hiddenItem: false,
   },
   {
     label: '起运港',
@@ -18,6 +20,8 @@ export const SelectTodayPlanOptions: CustomColumn[] = [
     formType: 'normalSelect',
     options: [],
     span: 6,
+    selectFetch: false,
+    hiddenItem: false,
   },
   {
     label: '目的港',
@@ -25,6 +29,8 @@ export const SelectTodayPlanOptions: CustomColumn[] = [
     formType: 'normalSelect',
     options: [],
     span: 6,
+    selectFetch: false,
+    hiddenItem: false,
   },
   {
     label: '细分航线',
@@ -36,5 +42,64 @@ export const SelectTodayPlanOptions: CustomColumn[] = [
       value: 'id',
     },
     span: 6,
+    selectFetch: false,
+    hiddenItem: false,
   },
 ]
+
+export const SelectAffilateAccountOptions: CustomColumn[] = [
+  {
+    label: '船公司',
+    name: 'carrier',
+    formType: 'normalSelect',
+    options: [],
+    selectFileldName: {
+      label: 'code',
+      value: 'code',
+    },
+    span: 6,
+    selectFetch: false,
+    hiddenItem: false,
+  },
+  {
+    label: '公司名称',
+    name: 'customerId',
+    formType: 'normalSelect',
+    options: [],
+    selectFileldName: {
+      label: 'name',
+      value: 'id',
+    },
+    span: 6,
+    selectFetch: false,
+    hiddenItem: false,
+  },
+]
+
+export const AddSearchForm: Omit<CustomColumn, 'hiddenItem' | 'selectFetch'>[] =
+  [
+    {
+      label: '船公司',
+      name: 'carrier',
+      formType: 'select',
+      options: [],
+      selectFileldName: {
+        label: 'code',
+        value: 'code',
+      },
+      span: 24,
+      isRules: true,
+    },
+    {
+      label: '公司名称',
+      name: 'customerId',
+      formType: 'select',
+      options: [],
+      selectFileldName: {
+        label: 'name',
+        value: 'id',
+      },
+      span: 24,
+      isRules: true,
+    },
+  ]

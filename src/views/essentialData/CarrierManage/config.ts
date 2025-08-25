@@ -1,4 +1,4 @@
-import { CustomColumn } from '@/components/searchForm'
+import type { CustomColumn } from 'customer-search-form-table/SearchForm/type'
 import { PortSettingSelect } from '../PortManage/config'
 import { replaceObjectName } from '@/utils/tool'
 
@@ -8,10 +8,15 @@ export const SelectCarrierManageOptions: CustomColumn[] = [
     name: 'code',
     formType: 'input',
     span: 6,
+    selectFetch: false,
+    hiddenItem: false,
   },
 ]
 
-export const CarrierManageForm: CustomColumn[] = [
+export const CarrierManageForm: Omit<
+  CustomColumn,
+  'selectFetch' | 'hiddenItem'
+>[] = [
   {
     label: '船司代码',
     name: 'code',

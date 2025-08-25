@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Form, Input, TreeSelect, Select } from 'antd'
+import { Form, Input, Select } from 'antd'
 import { DefaultOptionType } from 'antd/es/select'
 import DragModal from '@/components/modal/DragModal'
 import type { RouteMangeType } from '@/services/customerInformation/routeManage/routeManageModel'

@@ -1,9 +1,8 @@
 import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { Card, ConfigProvider, TableProps } from 'antd'
+import { Card, ConfigProvider, TablePaginationConfig, TableProps } from 'antd'
 import { RootState, setEssentail } from '@/stores/store'
-import SearchForm from '@/components/searchForm'
-import SearchTable from '@/components/searchTable'
+import { SearchForm, SearchTable } from 'customer-search-form-table'
 import { SelectCabinHistoryOptions } from './config'
 import { getRouteManageList } from '@/services/customerInformation/routeManage/routeManageApi'
 import {
@@ -168,6 +167,14 @@ const CabinHistory: React.FC = () => {
       ...filteredObj,
     })
   }
+
+  const onUpdatePagination = (pagination: TablePaginationConfig) => {
+    setSearchDefaultForm({
+      ...searchDefaultForm,
+      page: pagination.current as number,
+      limit: pagination.pageSize as number,
+    })
+  }
   return (
     <>
       {/* 菜单检索条件栏 */}
@@ -184,6 +191,7 @@ const CabinHistory: React.FC = () => {
           <SearchForm
             columns={SelectCabinHistoryOptions}
             gutterWidth={24}
+            iconHidden={true}
             labelPosition="left"
             btnSeparate={true}
             isShowReset={true}
@@ -199,6 +207,9 @@ const CabinHistory: React.FC = () => {
       >
         <SearchTable
           size="middle"
+          totalKey="count"
+          fetchResultKey="list"
+          isPagination={true}
           columns={columns}
           bordered
           rowKey="id"
@@ -207,10 +218,7 @@ const CabinHistory: React.FC = () => {
           fetchData={getCabinHistoryList}
           searchFilter={searchDefaultForm}
           isSelection={true}
-          isPagination={false}
-          onUpdatePagination={() => {
-            return
-          }}
+          onUpdatePagination={onUpdatePagination}
         />
       </Card>
     </>

@@ -1,9 +1,15 @@
 import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { Button, Card, ConfigProvider, Space, TableProps } from 'antd'
+import {
+  Button,
+  Card,
+  ConfigProvider,
+  Space,
+  TablePaginationConfig,
+  TableProps,
+} from 'antd'
 import { RootState, setEssentail } from '@/stores/store'
-import SearchForm from '@/components/searchForm'
-import SearchTable from '@/components/searchTable'
+import { SearchForm, SearchTable } from 'customer-search-form-table'
 import {
   getFndPortManageList,
   getPorPortManageList,
@@ -177,6 +183,14 @@ const CabinResult: React.FC = () => {
     })
   }
 
+  const onUpdatePagination = (pagination: TablePaginationConfig) => {
+    setSearchDefaultForm({
+      ...searchDefaultForm,
+      page: pagination.current as number,
+      limit: pagination.pageSize as number,
+    })
+  }
+
   const exportResult = () => {}
   return (
     <>
@@ -195,6 +209,7 @@ const CabinResult: React.FC = () => {
             columns={searchColumns}
             gutterWidth={24}
             labelPosition="left"
+            iconHidden={true}
             btnSeparate={true}
             isShowReset={true}
             isShowExpend={false}
@@ -221,15 +236,15 @@ const CabinResult: React.FC = () => {
           columns={columns}
           bordered
           rowKey="id"
+          totalKey="count"
+          fetchResultKey="list"
+          isPagination={true}
           immediate={immediate}
           scroll={{ x: 'max-content', y: height - 158 }}
           fetchData={getCabinResultList}
           searchFilter={searchDefaultForm}
           isSelection={true}
-          isPagination={false}
-          onUpdatePagination={() => {
-            return
-          }}
+          onUpdatePagination={onUpdatePagination}
         />
       </Card>
     </>

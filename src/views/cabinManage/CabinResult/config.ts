@@ -1,4 +1,4 @@
-import { CustomColumn } from '@/components/searchForm'
+import type { CustomColumn } from 'customer-search-form-table/SearchForm/type'
 
 export const SelectCabinResultOptions: CustomColumn[] = [
   {
@@ -6,6 +6,8 @@ export const SelectCabinResultOptions: CustomColumn[] = [
     name: 'no',
     formType: 'input',
     span: 6,
+    selectFetch: false,
+    hiddenItem: false,
   },
   {
     label: '客户名称',
@@ -17,6 +19,8 @@ export const SelectCabinResultOptions: CustomColumn[] = [
       value: 'id',
     },
     span: 6,
+    selectFetch: false,
+    hiddenItem: false,
   },
   {
     label: '起运港',
@@ -24,6 +28,8 @@ export const SelectCabinResultOptions: CustomColumn[] = [
     formType: 'normalSelect',
     options: [],
     span: 6,
+    selectFetch: false,
+    hiddenItem: false,
   },
   {
     label: '目的港',
@@ -31,6 +37,8 @@ export const SelectCabinResultOptions: CustomColumn[] = [
     formType: 'normalSelect',
     options: [],
     span: 6,
+    selectFetch: false,
+    hiddenItem: false,
   },
   {
     label: '船公司',
@@ -42,11 +50,15 @@ export const SelectCabinResultOptions: CustomColumn[] = [
       value: 'code',
     },
     span: 6,
+    selectFetch: false,
+    hiddenItem: false,
   },
   {
     label: '订舱时间',
     name: 'createTime',
     formType: 'date-picker',
     span: 6,
+    selectFetch: false,
+    hiddenItem: false,
   },
 ]

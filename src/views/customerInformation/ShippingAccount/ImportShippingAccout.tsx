@@ -19,7 +19,7 @@ export type ImportShippingAccoutProps = {
   title: string
   options?: CustomerManageType[] | any[]
   type: 'importShippingAccount' | 'importCabinTask'
-  accountType: string
+  accountType?: string
   onOk: (params: Record<string, string | number | boolean>) => void
   onCancel: (e: React.MouseEvent<HTMLButtonElement>) => void
 }

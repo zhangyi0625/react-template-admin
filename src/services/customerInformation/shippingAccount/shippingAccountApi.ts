@@ -40,7 +40,9 @@ export const getShippingAccountListByPage = (params: ShippingAccounParams) => {
  * @param params 船司账号参数
  * @returns 船司账号列表
  */
-export const getShippingAccountList = (params: ShippingAccounParams) => {
+export const getShippingAccountList = (
+  params: Partial<ShippingAccounParams>
+) => {
   return HttpRequest.get(
     {
       url: ShippingAccountApi.shippingAccount,

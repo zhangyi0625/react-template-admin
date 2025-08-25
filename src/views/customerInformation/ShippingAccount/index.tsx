@@ -74,6 +74,9 @@ const ShippingAccount: React.FC = () => {
       limit: 10,
       carrier: null,
       account: null,
+      isOrder: null,
+      isQuery: null,
+      customerId: null,
     })
 
   const [carrierOptions, setCarrierOptions] = useState<CarrierManageType[]>([])
@@ -82,7 +85,7 @@ const ShippingAccount: React.FC = () => {
     []
   )
 
-  const [immediate, setImmediate] = useState<boolean>(false)
+  const [immediate, setImmediate] = useState<boolean>(true)
 
   const [params, setParams] = useState<{
     visible: boolean
@@ -227,6 +230,11 @@ const ShippingAccount: React.FC = () => {
       getReduxData()
     }
     setParams({ ...params, type: name })
+    setSearchDefaultForm({
+      ...searchDefaultForm,
+      isOrder: name === 'QUERY' ? null : true,
+      isQuery: name === 'QUERY' ? true : null,
+    })
     console.log(routeParams, 'routeParams', location, name)
   }, [location.pathname, params.type, essential])
 

@@ -19,6 +19,7 @@ export type ImportShippingAccoutProps = {
   title: string
   options?: CustomerManageType[] | any[]
   type: 'importShippingAccount' | 'importCabinTask'
+  accountType: string
   onOk: (params: Record<string, string | number | boolean>) => void
   onCancel: (e: React.MouseEvent<HTMLButtonElement>) => void
 }
@@ -28,6 +29,7 @@ type FileType = Parameters<GetProp<UploadProps, 'beforeUpload'>>[0]
 const ImportShippingAccout: React.FC<ImportShippingAccoutProps> = ({
   visible,
   type,
+  accountType,
   options,
   title,
   onOk,
@@ -72,6 +74,7 @@ const ImportShippingAccout: React.FC<ImportShippingAccoutProps> = ({
           return {
             ...item,
             customerId: form.getFieldValue('customerId'),
+            type: accountType,
           }
         })
         onOk(map as Omit<ShippingAccounType, 'id'>[] as any)

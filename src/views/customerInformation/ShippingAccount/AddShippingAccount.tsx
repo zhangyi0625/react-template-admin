@@ -96,7 +96,6 @@ const AddShippingAccount: React.FC<AddShippingAccountProps> = ({
                   item.selectFileldName ?? {
                     label: 'labal',
                     value: 'value',
-                    children: 'children',
                   }
                 }
               />

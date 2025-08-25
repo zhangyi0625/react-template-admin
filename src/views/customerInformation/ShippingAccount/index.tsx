@@ -20,8 +20,7 @@ import {
   SelectShippingAccountOptions,
   ShippingAccountOperationBtn,
 } from './config'
-import SearchForm from '@/components/searchForm'
-import SearchTable from '@/components/searchTable'
+import { SearchForm, SearchTable } from 'customer-search-form-table'
 import {
   ShippingAccounParams,
   ShippingAccounType,
@@ -140,13 +139,13 @@ const ShippingAccount: React.FC = () => {
     },
     {
       title: '账号状态',
-      key: 'vaild',
+      key: 'isValid',
       align: 'center',
       width: 100,
       render(value) {
         return (
           <div className={`text-${value.isValid ? 'blue' : 'red'}-500`}>
-            {value.vaild ? '有效' : '无效'}
+            {value.isValid ? '有效' : '无效'}
           </div>
         )
       },
@@ -250,8 +249,8 @@ const ShippingAccount: React.FC = () => {
     selectoptions.map((item) => {
       if (item.name === 'carrier') item.options = carrierData
       if (item.name === 'customerId') item.options = customerData
-      if (item.name === 'serverName') item.hidden = params.type !== 'QUERY'
-      if (item.name === 'isQuery') item.hidden = params.type !== 'ORDER'
+      if (item.name === 'serverName') item.hiddenItem = params.type !== 'QUERY'
+      if (item.name === 'isQuery') item.hiddenItem = params.type !== 'ORDER'
     })
     console.log(selectoptions, 'selectOptions')
     setCustomerOptions(customerData)
@@ -356,19 +355,12 @@ const ShippingAccount: React.FC = () => {
   return (
     <>
       {/* 菜单检索条件栏 */}
-      <ConfigProvider
-        theme={{
-          components: {
-            Form: {
-              itemMarginBottom: 0,
-            },
-          },
-        }}
-      >
+      <ConfigProvider>
         <Card>
           <SearchForm
             columns={selectoptions}
             gutterWidth={24}
+            iconHidden={true}
             labelPosition="left"
             btnSeparate={true}
             isShowReset={true}
@@ -457,6 +449,9 @@ const ShippingAccount: React.FC = () => {
           columns={columns}
           bordered
           rowKey="id"
+          fetchResultKey="list"
+          totalKey="count"
+          isPagination={true}
           scroll={{ x: 'max-content', y: height - 158 }}
           fetchData={getShippingAccountListByPage}
           immediate={immediate}
@@ -481,6 +476,7 @@ const ShippingAccount: React.FC = () => {
         }
       />
       <ImportShippingAccout
+        accountType={params.type}
         title="导入船司账号"
         options={customerOptions}
         type="importShippingAccount"

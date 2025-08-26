@@ -178,15 +178,7 @@ const CabinHistory: React.FC = () => {
   return (
     <>
       {/* 菜单检索条件栏 */}
-      <ConfigProvider
-        theme={{
-          components: {
-            Form: {
-              itemMarginBottom: 0,
-            },
-          },
-        }}
-      >
+      <ConfigProvider>
         <Card>
           <SearchForm
             columns={SelectCabinHistoryOptions}

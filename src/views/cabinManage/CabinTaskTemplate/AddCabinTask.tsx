@@ -52,7 +52,13 @@ const AddCabinTask: React.FC<AddCabinTaskProps> = memo(
       if (!currentRow) {
         form.setFieldsValue({ withRollable: 1 })
       } else {
-        form.setFieldsValue({ ...currentRow, etd: dayjs(currentRow.etd) })
+        form.setFieldsValue({
+          ...currentRow,
+          etd: dayjs(currentRow.etd),
+          ...currentRow.extra,
+          withRollable: currentRow.extra ? 1 : 0,
+        })
+        console.log(form.getFieldsValue())
       }
     }, [visible])
 
@@ -85,7 +91,7 @@ const AddCabinTask: React.FC<AddCabinTaskProps> = memo(
     }
     return (
       <Drawer
-        title="创建任务"
+        title={!currentRow ? '创建任务' : '修改任务'}
         width={736}
         open={visible}
         closeIcon={false}
@@ -116,6 +122,9 @@ const AddCabinTask: React.FC<AddCabinTaskProps> = memo(
           <div className="bg-normal-blue font-medium rounded-[2px] text-white w-full px-[12px] py-[6px] mb-[20px]">
             订舱信息
           </div>
+          <Form.Item name="id" hidden>
+            <Input disabled />
+          </Form.Item>
           <Form.Item
             label="起运港"
             name="porCode"
@@ -277,7 +286,7 @@ const AddCabinTask: React.FC<AddCabinTaskProps> = memo(
                 <InputNumber min={0} style={{ width: '200px' }} />
               )}
               {item.formType === 'input' && (
-                <Input placeholder={item.label} allowClear />
+                <Input placeholder={item.label as string} allowClear />
               )}
               {item.formType === 'radio' && (
                 <Radio.Group

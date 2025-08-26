@@ -1,6 +1,7 @@
 import { TableProps } from 'antd'
 import { formatTime } from '@/utils/format'
-import { CustomColumn } from '@/components/searchForm'
+import type { CustomColumn } from 'customer-search-form-table/SearchForm/type'
+import { ServiceSettingType } from './config'
 
 type formSettingType = Pick<
   CustomColumn,
@@ -9,15 +10,37 @@ type formSettingType = Pick<
 
 export const getTemplateSetting = (carrier?: string, statusType?: string) => {
   const columns = [
+    // {
+    //   title: '任务编号',
+    //   key: 'taskNo',
+    //   align: 'center',
+    //   width: 100,
+    //   render(value) {
+    //     return (
+    //       <div
+    //         className="text-blue-500 cursor-pointer underline text-sm"
+    //         onClick={() => editTaskTemplate(value)}
+    //       >
+    //         {value.taskNo}
+    //       </div>
+    //     )
+    //   },
+    // },
     {
-      title: '任务编号',
-      key: 'taskNo',
+      title: '抢舱模式',
+      key: 'startType',
       align: 'center',
-      width: 100,
+      hidden: statusType === 'NOT_STARTED',
+      width: 120,
       render(value) {
+        console.log(statusType, 'statusType')
         return (
-          <div className="text-blue-500 cursor-pointer underline text-sm">
-            {value.taskNo}
+          <div>
+            {statusType === 'SAME_FREQ'
+              ? '同频放舱'
+              : ServiceSettingType.find(
+                  (item) => item.value === value.startType
+                )?.label}
           </div>
         )
       },
@@ -32,16 +55,28 @@ export const getTemplateSetting = (carrier?: string, statusType?: string) => {
     {
       title: '起运港',
       key: 'porCode',
-      dataIndex: 'porCode',
       align: 'center',
-      width: 100,
+      width: 150,
+      render(value) {
+        return (
+          <div>
+            {value.por.enName ?? ''} - {value.por.cnName ?? ''}
+          </div>
+        )
+      },
     },
     {
       title: '目的港',
       key: 'fndCode',
-      dataIndex: 'fndCode',
       align: 'center',
-      width: 100,
+      width: 150,
+      render(value) {
+        return (
+          <div>
+            {value.fnd.enName ?? ''} - {value.fnd.cnName ?? ''}
+          </div>
+        )
+      },
     },
     {
       title: '船司航线',
@@ -126,14 +161,6 @@ export const getTemplateSetting = (carrier?: string, statusType?: string) => {
       width: 120,
     },
     {
-      title: '抢舱模式',
-      dataIndex: 'startType',
-      key: 'startType',
-      align: 'center',
-      hidden: statusType === 'NOT_STARTED',
-      width: 120,
-    },
-    {
       title: '创建时间',
       key: 'createTime',
       align: 'center',
@@ -204,4 +231,9 @@ export const getTemplateSetting = (carrier?: string, statusType?: string) => {
     formSetting: formSetting,
     operationColumns: operationColumns,
   }
+}
+
+export const editTaskTemplate = (row: any) => {
+  console.log(row, 'row')
+  return row
 }

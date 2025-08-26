@@ -1,4 +1,3 @@
-// import { CustomColumn } from '@/components/searchForm'
 import type { CustomColumn } from 'customer-search-form-table/SearchForm/type'
 
 export const SelectCabinTaskTemplateOptions: CustomColumn[] = [
@@ -66,4 +65,23 @@ export const CabinTaskTemplateStatusOptions: Pick<
     label: '已关闭',
     name: 'CLOSED',
   },
+]
+
+export const ServiceSettingType = [
+  {
+    label: '高频启动',
+    value: 'HIGH_FREQ',
+  },
+  {
+    label: '即可启动',
+    value: 'IMMEDIATE',
+  },
+  {
+    label: '关闭任务',
+    value: 'SUSPEND',
+  },
+  // {
+  //   label: '同频放舱',
+  //   value: 'SAME_FREQ',
+  // },
 ]

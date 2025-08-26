@@ -93,6 +93,23 @@ export const addCabinManageList = (params: CabinTaskTemplateType) => {
 }
 
 /**
+ * 修改订舱任务
+ * @param params 订舱管理参数
+ * @returns 订舱管理列表
+ */
+export const putCabinManageList = (params: CabinTaskTemplateType) => {
+  return HttpRequest.put(
+    {
+      url: CabinManageApi.cabinManageList,
+      data: params,
+    },
+    {
+      successMessageMode: 'none',
+    }
+  )
+}
+
+/**
  * 添加订舱任务
  * @param params 订舱管理参数
  * @returns 订舱管理列表
@@ -134,6 +151,7 @@ export const closeBatchCabinManage = (params: string[]) => {
 export const openBatchCabinByFrequency = (params: {
   ids: string[]
   sameFrequencyTaskId?: string
+  frequency?: string
 }) => {
   return HttpRequest.post(
     {

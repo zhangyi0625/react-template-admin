@@ -10,6 +10,7 @@ import {
   Row,
   Space,
   TablePaginationConfig,
+  TableProps,
   TabsProps,
 } from 'antd'
 import {
@@ -35,6 +36,7 @@ import {
   openBatchCabinByFrequency,
   openBatchCabinByImmdiate,
   stopBatchCabin,
+  putCabinManageList,
 } from '@/services/cabinManage/cabinManageApi'
 import { getRouteManageList } from '@/services/customerInformation/routeManage/routeManageApi'
 import {
@@ -45,6 +47,7 @@ import { filterKeys } from '@/utils/tool'
 import { RouteMangeType } from '@/services/customerInformation/routeManage/routeManageModel'
 import useParentSize from '@/hooks/useParentSize'
 import { getCustomerManageList } from '@/services/essential/customerManage/customerManageApi'
+import MonitoringFrequncy from './MonitoringFrequncy'
 
 const API = process.env.VITE_STATIC_API
 
@@ -75,6 +78,14 @@ const CabinTaskTemplate: React.FC<CabinTaskTemplateProps> = memo(
 
     const [loading, setLoading] = useState<boolean>(false)
 
+    const [frequencyVisible, setFrequecnyVisible] = useState<{
+      visible: boolean
+      currentId: string | null
+    }>({
+      visible: false,
+      currentId: null,
+    })
+
     const [seleced, setSelected] = useState<string[]>([])
 
     const isSelected = useCallback(() => {
@@ -100,15 +111,33 @@ const CabinTaskTemplate: React.FC<CabinTaskTemplateProps> = memo(
     const [importModel, setImportModel] = useState<boolean>(false)
 
     const tableColumns = useCallback(() => {
-      return getTemplateSetting(carrier, current)['columns']?.concat({
-        title: '操作',
-        width: '8%',
-        fixed: 'right',
-        align: 'center',
-        render(_, record) {
-          return (
-            <Space>
-              {/* <Button
+      let columns = getTemplateSetting(carrier, current)['columns'] ?? []
+      let newArr: TableProps['columns'] = [
+        {
+          title: '任务编号',
+          key: 'taskNo',
+          align: 'center',
+          width: 100,
+          render(value) {
+            return (
+              <div
+                className="text-blue-500 cursor-pointer underline text-sm"
+                onClick={() => editTaskTemplate(value)}
+              >
+                {value.taskNo}
+              </div>
+            )
+          },
+        },
+        ...columns.concat({
+          title: '操作',
+          width: '8%',
+          fixed: 'right',
+          align: 'center',
+          render(_, record) {
+            return (
+              <Space>
+                {/* <Button
                 color="green"
                 hidden={current !== 'NOT_STARTED'}
                 style={{ background: '#07C160' }}
@@ -117,34 +146,38 @@ const CabinTaskTemplate: React.FC<CabinTaskTemplateProps> = memo(
               >
                 即刻抢舱
               </Button> */}
-              <Button
-                color="green"
-                hidden={current !== 'NOT_STARTED'}
-                variant="solid"
-                onClick={() => CabinImmediately('frequency', [_.id])}
-              >
-                高频启动
-              </Button>
-              <Button
-                hidden={current !== 'RUNNING'}
-                color="red"
-                variant="solid"
-                onClick={() => CabinImmediately('stop', [_.id])}
-              >
-                停止抢舱
-              </Button>
-              <Button
-                type="default"
-                onClick={() =>
-                  setOperationLog({ visible: true, id: record.id })
-                }
-              >
-                操作日志
-              </Button>
-            </Space>
-          )
-        },
-      })
+                <Button
+                  color="green"
+                  hidden={current !== 'NOT_STARTED'}
+                  variant="solid"
+                  onClick={() =>
+                    setFrequecnyVisible({ visible: true, currentId: _.id })
+                  }
+                >
+                  高频启动
+                </Button>
+                <Button
+                  hidden={current !== 'RUNNING'}
+                  color="red"
+                  variant="solid"
+                  onClick={() => CabinImmediately('stop', [_.id])}
+                >
+                  停止抢舱
+                </Button>
+                <Button
+                  type="default"
+                  onClick={() =>
+                    setOperationLog({ visible: true, id: record.id })
+                  }
+                >
+                  操作日志
+                </Button>
+              </Space>
+            )
+          },
+        }),
+      ]
+      return newArr
     }, [getTemplateSetting, current])
 
     const [searchDefaultForm, setSearchDefaultForm] =
@@ -157,7 +190,7 @@ const CabinTaskTemplate: React.FC<CabinTaskTemplateProps> = memo(
 
     const [params, setParams] = useState<{
       visible: boolean
-      currentRow: any
+      currentRow: CabinTaskTemplateType | null
       view: boolean
     }>({
       visible: false,
@@ -274,15 +307,33 @@ const CabinTaskTemplate: React.FC<CabinTaskTemplateProps> = memo(
       document.body.appendChild(elemIF)
     }
 
-    const addCabinTask = (info: CabinTaskTemplateType) => {
-      addCabinManageList({ ...info, carrier: carrier }).then(() => {
-        message.success('订舱任务添加成功')
+    const addCabinTask = async (info: CabinTaskTemplateType) => {
+      try {
+        if (params.currentRow == null) {
+          // 新增数据
+          await addCabinManageList({ ...info, carrier: carrier })
+        } else {
+          // 编辑数据
+          await putCabinManageList({ ...info, carrier: carrier })
+        }
+        message.success(
+          !params.currentRow ? '订舱任务添加成功' : '订舱任务修改成功'
+        )
         setParams({ visible: false, currentRow: null, view: false })
         onUpdateSearch(searchDefaultForm)
-      })
+      } catch (error) {}
     }
 
-    const CabinImmediately = async (type?: string, selectedArr?: string[]) => {
+    const editTaskTemplate = (row: any) => {
+      if (row.status !== 'NOT_STARTED') return
+      setParams({ visible: true, currentRow: row, view: false })
+    }
+
+    const CabinImmediately = async (
+      type?: string,
+      selectedArr?: string[],
+      params?: unknown
+    ) => {
       // console.log(type, 'type', seleced,setting)
       switch (type) {
         case 'close':
@@ -304,14 +355,15 @@ const CabinTaskTemplate: React.FC<CabinTaskTemplateProps> = memo(
           )
           break
         case 'frequency':
-          await openBatchCabinByFrequency({ ids: selectedArr ?? seleced }).then(
-            (res) => {
-              res.failures && res.failures.length && showMessage(res.failures)
-              !res.failures.length &&
-                res.success === seleced.length &&
-                message.success('操作成功！')
-            }
-          )
+          await openBatchCabinByFrequency({
+            ids: selectedArr ?? seleced,
+            ...(params as { frequency: string }),
+          }).then((res) => {
+            res.failures && res.failures.length && showMessage(res.failures)
+            !res.failures.length &&
+              res.success === seleced.length &&
+              message.success('操作成功！')
+          })
           break
         case 'stop':
           await stopBatchCabin({ ids: selectedArr ?? seleced }).then((res) => {
@@ -326,6 +378,29 @@ const CabinTaskTemplate: React.FC<CabinTaskTemplateProps> = memo(
       setTimeout(() => {
         setImmediate(false)
       }, 300)
+    }
+
+    const confirmFrequecnyDrawer = (ids: string[]) => {
+      openBatchCabinByFrequency({
+        ids: seleced,
+        sameFrequencyTaskId: ids[0],
+      }).then((res) => {
+        res.failures && res.failures.length && showMessage(res.failures)
+        !res.failures.length &&
+          res.success === seleced.length &&
+          message.success('操作成功！')
+        setFrequecnyParams({ visible: false, selRow: [] })
+        onUpdateSearch(searchDefaultForm)
+      })
+    }
+
+    const MonitoringFrequncyOk = (currentRow: { frequency: string }) => {
+      CabinImmediately('frequency', [frequencyVisible.currentId as string], {
+        frequency: currentRow.frequency.replace(/秒/, ''),
+      })
+      setTimeout(() => {
+        setFrequecnyVisible({ visible: false, currentId: null })
+      }, 200)
     }
 
     const showMessage = (failures: { index: number; failMsg: string }[]) => {
@@ -410,6 +485,7 @@ const CabinTaskTemplate: React.FC<CabinTaskTemplateProps> = memo(
                 color="green"
                 variant="solid"
                 onClick={() =>
+                  isSelected() &&
                   setFrequecnyParams({ visible: true, selRow: [] })
                 }
               >
@@ -480,9 +556,14 @@ const CabinTaskTemplate: React.FC<CabinTaskTemplateProps> = memo(
         <SetFrequecnyDrawer
           visible={frequecnyParams.visible}
           onCancel={() => setFrequecnyParams({ visible: false, selRow: [] })}
-          onOk={(ids: string[]) =>
-            setFrequecnyParams({ visible: false, selRow: ids })
+          onOk={confirmFrequecnyDrawer}
+        />
+        <MonitoringFrequncy
+          visible={frequencyVisible.visible}
+          onCancel={() =>
+            setFrequecnyVisible({ visible: false, currentId: null })
           }
+          onOk={MonitoringFrequncyOk}
         />
       </>
     )

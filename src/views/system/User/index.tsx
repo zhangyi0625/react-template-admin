@@ -166,7 +166,7 @@ const User: React.FC = () => {
 
   const onUpdateSearch = (info?: SysRoleParams | unknown) => {
     const filteredObj = Object.fromEntries(
-      Object.entries(info ?? {}).filter(([, value]) => !!value)
+      Object.entries(info ?? {}).filter(([, value]) => value !== undefined)
     )
     let pageInfo = filterKeys(searchDefaultForm, ['page', 'limit'], true)
     setSearchDefaultForm({

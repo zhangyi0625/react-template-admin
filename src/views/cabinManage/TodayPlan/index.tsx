@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react'
 import {
+  App,
   Button,
   Card,
   ConfigProvider,
-  message,
   Space,
   TablePaginationConfig,
   TableProps,
@@ -24,7 +24,6 @@ import {
   getPorPortManageList,
 } from '@/services/essential/portManage/portManageModel'
 import { getCarrierManageList } from '@/services/essential/carrierManage/carrierManageApi'
-import { getCabinManageListByPage } from '@/services/cabinManage/cabinManageApi'
 import {
   SelectAffilateAccountOptions,
   SelectScheduleAccountOptions,
@@ -45,6 +44,8 @@ import { getShippingAccountList } from '@/services/customerInformation/shippingA
 
 const TodayPlan: React.FC = () => {
   const { parentRef, height } = useParentSize()
+
+  const { message } = App.useApp()
 
   const [today, setToday] = useState<string>(
     '日一二三四五六'.charAt(new Date().getDay())
@@ -80,14 +81,6 @@ const TodayPlan: React.FC = () => {
   const [searchDefaultForm, setSearchDefaultForm] = useState<TodayPlanParams>({
     page: 1,
     limit: 10,
-  })
-
-  const [connectCustomer, setConnectCustomer] = useState<{
-    visible: boolean
-    id: null | string
-  }>({
-    visible: false,
-    id: null,
   })
 
   const [addCustomer, setAddCustomer] = useState<boolean>(false)
@@ -196,7 +189,7 @@ const TodayPlan: React.FC = () => {
       align: 'center',
       hidden: defaultActiveKey === 'searchBySchedule',
       width: 100,
-      render(_, record) {
+      render(_) {
         return (
           <div className="flex items-center justify-center">
             <div
@@ -352,7 +345,6 @@ const TodayPlan: React.FC = () => {
   }
 
   const onChange = (type: string) => {
-    console.log(type)
     setImmediate(true)
     setDefaultActiveKey(type)
     setSearchColumns(
@@ -360,10 +352,7 @@ const TodayPlan: React.FC = () => {
         ? SelectScheduleAccountOptions
         : SelectAffilateAccountOptions
     )
-
     setTimeout(() => {
-      //   setImmediate(true)
-      //   getReduxData()
       setImmediate(false)
     }, 300)
   }
@@ -373,8 +362,6 @@ const TodayPlan: React.FC = () => {
       message.error('至少选择一条记录批量登陆！')
       return
     }
-    // setConnectCustomer({ visible: true, id: null })
-    console.log(seleced, 'seleced')
     onBatchLogin(seleced)
   }
 
@@ -429,6 +416,12 @@ const TodayPlan: React.FC = () => {
           setImmediate(false)
         }, 300)
       })
+  }
+
+  const getRowKey = (record: any) => {
+    return defaultActiveKey === 'searchBySchedule'
+      ? record.porCode + '-' + record.fndCode
+      : record.customerId
   }
 
   return (
@@ -486,9 +479,6 @@ const TodayPlan: React.FC = () => {
           items={components}
           onChange={onChange}
         />
-        {/* <div className="font-semibold text-base text-dull-grey mb-[10px]">
-          账号预登录
-        </div> */}
         <SearchForm
           columns={searchColumns}
           gutterWidth={24}
@@ -520,9 +510,7 @@ const TodayPlan: React.FC = () => {
             isPagination={true}
             columns={tableColumns}
             bordered
-            rowKey={
-              defaultActiveKey === 'searchBySchedule' ? 'fndCode' : 'customerId'
-            }
+            rowKey={getRowKey}
             scroll={{ x: 'max-content', y: height - 298 }}
             immediate={immediate}
             fetchData={

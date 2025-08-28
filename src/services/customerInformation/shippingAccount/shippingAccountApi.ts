@@ -10,6 +10,8 @@ import {
 export enum ShippingAccountApi {
   shippingAccountByPage = '/core/business/carrier-account/page',
   shippingAccount = '/core/business/carrier-account',
+  updateShippingAccountLoginPassword = '/core/business/carrier-account/updateLoginPassword',
+  updateShippingAccountPayPassword = '/core/business/carrier-account/updatePayPassword',
   batchImportShiipingAccount = '/core/business/carrier-account/batch',
   setShippingAccountSearch = '/core/business/carrier-account/query',
   cancelShippingAccountSearch = '/core/business/carrier-account/cancel/query',
@@ -97,6 +99,44 @@ export const putShippingAccountList = (params: ShippingAccounType) => {
   return HttpRequest.put(
     {
       url: ShippingAccountApi.shippingAccount,
+      data: params,
+    },
+    {
+      successMessageMode: 'none',
+    }
+  )
+}
+
+/**
+ * 修改船司账号登陆密码
+ * @param params 船司账号参数
+ * @returns
+ */
+export const putShippingAccountLoginPassword = (
+  params: Pick<ShippingAccounType, 'id' | 'loginPassword'>
+) => {
+  return HttpRequest.put(
+    {
+      url: ShippingAccountApi.updateShippingAccountLoginPassword,
+      data: params,
+    },
+    {
+      successMessageMode: 'none',
+    }
+  )
+}
+
+/**
+ * 修改船司账号支付密码
+ * @param params 船司账号参数
+ * @returns
+ */
+export const putShippingAccountPayPassword = (
+  params: Pick<ShippingAccounType, 'id' | 'payPassword'>
+) => {
+  return HttpRequest.put(
+    {
+      url: ShippingAccountApi.updateShippingAccountPayPassword,
       data: params,
     },
     {

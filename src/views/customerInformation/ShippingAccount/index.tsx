@@ -310,7 +310,7 @@ const ShippingAccount: React.FC = () => {
     )
     let pageInfo = filterKeys(
       searchDefaultForm,
-      ['page', 'limit', 'isOrder', 'isQuery'],
+      ['page', 'limit', 'isOrder', 'isQuery', 'sort'],
       true
     )
     setSearchDefaultForm({

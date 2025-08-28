@@ -8,7 +8,7 @@ import { ShippingAccountForm } from './config'
 export type AddShippingAccountProps = {
   params: {
     visible: boolean
-    currentRow: ShippingAccounType
+    currentRow: ShippingAccounType | null
     view: boolean
     type?: string | null
   }
@@ -34,11 +34,15 @@ const AddShippingAccount: React.FC<AddShippingAccountProps> = ({
   useEffect(() => {
     if (!visible) return
     if (currentRow) {
-      form.setFieldsValue({ ...currentRow, type: type })
+      form.setFieldsValue({
+        ...currentRow,
+        type: type,
+        isValid: currentRow.isValid ? 1 : 0,
+      })
     } else {
       form.resetFields()
       setInitialValues({ type: type })
-      form.setFieldsValue({ type: type })
+      form.setFieldsValue({ type: type, isValid: 1 })
     }
   }, [visible, view])
 
@@ -46,7 +50,12 @@ const AddShippingAccount: React.FC<AddShippingAccountProps> = ({
     form
       .validateFields()
       .then(() => {
-        onOk(form.getFieldsValue())
+        onOk({
+          ...form.getFieldsValue(),
+          isOrder: type === 'ORDER' ? true : null,
+          isQuery: type === 'QUERY' ? true : null,
+          isValid: Boolean(form.getFieldValue('isValid')),
+        })
       })
       .catch((errorInfo) => {
         // 滚动并聚焦到第一个错误字段

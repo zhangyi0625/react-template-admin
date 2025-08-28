@@ -1,10 +1,7 @@
-import { CustomColumn } from '@/components/searchForm'
 import { CarrierManageType } from '@/services/essential/carrierManage/carrierManageModel'
 import { CustomerManageType } from '@/services/essential/customerManage/customerManageModel'
 import { replaceObjectName } from '@/utils/tool'
 import { TableProps } from 'antd'
-import { useCallback, useState } from 'react'
-import { SelectShippingAccountOptions } from './config'
 
 type ShippingAccountColumnsType = 'tableColumns' | 'searchFilter' | 'form'
 
@@ -21,8 +18,6 @@ export default function getShippingAccountColumns(
     judge: boolean
   }
 ) {
-  console.log(selectOptions, 'selectOptions', judgeFilter)
-
   const searchFilter = [
     {
       label: '船公司',
@@ -98,8 +93,6 @@ export default function getShippingAccountColumns(
       span: 6,
     },
   ]
-
-  // console.log(searchFilter, 'searchFilter()')
 
   const tableColumns: TableProps['columns'] = []
   const form: any = []

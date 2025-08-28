@@ -74,7 +74,8 @@ const ImportShippingAccout: React.FC<ImportShippingAccoutProps> = ({
           return {
             ...item,
             customerId: form.getFieldValue('customerId'),
-            type: accountType,
+            isOrder: accountType === 'ORDER' ? true : null,
+            isQuery: accountType === 'QUERY' ? true : null,
           }
         })
         onOk(map as Omit<ShippingAccounType, 'id'>[] as any)

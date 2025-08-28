@@ -77,6 +77,7 @@ const ShippingAccount: React.FC = () => {
       isOrder: null,
       isQuery: null,
       customerId: null,
+      sort: 'create_time desc',
     })
 
   const [carrierOptions, setCarrierOptions] = useState<CarrierManageType[]>([])
@@ -114,7 +115,7 @@ const ShippingAccount: React.FC = () => {
       dataIndex: 'customerName',
       key: 'customerName',
       align: 'center',
-      width: 200,
+      width: 220,
     },
     {
       title: '船司账号',
@@ -236,7 +237,7 @@ const ShippingAccount: React.FC = () => {
       isQuery: name === 'QUERY' ? true : null,
     })
     console.log(routeParams, 'routeParams', location, name)
-  }, [location.pathname, params.type, essential])
+  }, [location.pathname, essential])
 
   // 重新更新查询部分数据 并存储进redux
   const loadSearchList = () => {
@@ -260,7 +261,6 @@ const ShippingAccount: React.FC = () => {
       if (item.name === 'serverName') item.hiddenItem = params.type !== 'QUERY'
       if (item.name === 'isQuery') item.hiddenItem = params.type !== 'ORDER'
     })
-    console.log(selectoptions, 'selectOptions')
     setCustomerOptions(customerData)
     setSelectOptions([...selectoptions])
     setCarrierOptions(carrierData)
@@ -306,11 +306,13 @@ const ShippingAccount: React.FC = () => {
 
   const onUpdateSearch = (info?: ShippingAccounParams | unknown) => {
     const filteredObj = Object.fromEntries(
-      Object.entries(info ?? {}).filter(
-        ([, value]) => value !== undefined || value !== null
-      )
+      Object.entries(info ?? {}).filter(([, value]) => value !== undefined)
     )
-    let pageInfo = filterKeys(searchDefaultForm, ['page', 'limit'], true)
+    let pageInfo = filterKeys(
+      searchDefaultForm,
+      ['page', 'limit', 'isOrder', 'isQuery'],
+      true
+    )
     setSearchDefaultForm({
       ...pageInfo,
       ...filteredObj,
@@ -460,7 +462,7 @@ const ShippingAccount: React.FC = () => {
           fetchResultKey="list"
           totalKey="count"
           isPagination={true}
-          scroll={{ x: 'max-content', y: height - 158 }}
+          scroll={{ x: 'max-content', y: height - 168 }}
           fetchData={getShippingAccountListByPage}
           immediate={immediate}
           searchFilter={searchDefaultForm}

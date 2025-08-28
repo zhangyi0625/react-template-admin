@@ -1,7 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react'
 import { Button, Drawer, Space, Table, TableProps } from 'antd'
-import { SearchTable } from 'customer-search-form-table'
-import { getCustomerManageList } from '@/services/essential/customerManage/customerManageApi'
 import type { AffilateAccountType } from '@/services/todayPlan/todayPlanModal'
 
 export type ShippingAccountDrawerProps = {
@@ -32,7 +30,6 @@ const ShippingAccountDrawer: React.FC<ShippingAccountDrawerProps> = ({
   useEffect(() => {
     if (!visible) return
     setDataSource(currentRow ?? [])
-    console.log(params, type)
   }, [visible])
 
   const tableColumns: TableProps['columns'] = [
@@ -126,21 +123,6 @@ const ShippingAccountDrawer: React.FC<ShippingAccountDrawerProps> = ({
         dataSource={dataSource}
         rowKey={type === 'search' ? 'id' : 'fndCode'}
       />
-      {/* <SearchTable
-        style={{ marginTop: '10px' }}
-        size="middle"
-        totalKey=""
-        fetchResultKey="data"
-        isPagination={false}
-        columns={tableColumns}
-        bordered
-        rowKey="id"
-        // scroll={{ x: 'max-content', y: height - 298 }}
-        fetchData={getCustomerManageList}
-        // searchFilter={searchDefaultForm}
-        isSelection={false}
-        onUpdatePagination={() => {}}
-      /> */}
     </Drawer>
   )
 }

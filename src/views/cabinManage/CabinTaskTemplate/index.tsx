@@ -178,7 +178,7 @@ const CabinTaskTemplate: React.FC<CabinTaskTemplateProps> = memo(
         }),
       ]
       return newArr
-    }, [getTemplateSetting, current])
+    }, [getTemplateSetting, current, carrier])
 
     const [searchDefaultForm, setSearchDefaultForm] =
       useState<CabinTaskTemplateParams>({
@@ -186,6 +186,7 @@ const CabinTaskTemplate: React.FC<CabinTaskTemplateProps> = memo(
         limit: 10,
         routeFndId: null,
         status: 'NOT_STARTED',
+        carrier: carrier,
       })
 
     const [params, setParams] = useState<{
@@ -502,7 +503,7 @@ const CabinTaskTemplate: React.FC<CabinTaskTemplateProps> = memo(
                 className="underline text-blue-500 text-sm cursor-pointer"
                 onClick={downLoadFile}
               >
-                下载MSK抢舱模版
+                下载{carrier}抢舱模版
               </div>
             </Space>
           ) : current === 'RUNNING' ? (

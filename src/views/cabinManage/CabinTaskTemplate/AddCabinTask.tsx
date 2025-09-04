@@ -50,13 +50,14 @@ const AddCabinTask: React.FC<AddCabinTaskProps> = memo(
       if (!visible) return
       form.resetFields()
       if (!currentRow) {
-        form.setFieldsValue({ withRollable: 1 })
+        form.setFieldsValue({ withRollable: 1, insurance: 1 })
       } else {
         form.setFieldsValue({
           ...currentRow,
           etd: dayjs(currentRow.etd),
           ...currentRow.extra,
           withRollable: currentRow.extra ? 1 : 0,
+          insurance: currentRow.extra ? 1 : 0,
         })
         console.log(form.getFieldsValue())
       }
@@ -69,14 +70,19 @@ const AddCabinTask: React.FC<AddCabinTaskProps> = memo(
           let params = {
             ...filterKeys(
               form.getFieldsValue(),
-              ['contractNo', 'extentDndFreeDays', 'withRollable'],
+              ['contractNo', 'extentDndFreeDays', 'withRollable', 'insurance'],
               false
             ),
             etd: formatTime(form.getFieldValue('etd'), 'Y-M-D'),
             extra: {
               ...filterKeys(
                 form.getFieldsValue(),
-                ['contractNo', 'extentDndFreeDays', 'withRollable'],
+                [
+                  'contractNo',
+                  'extentDndFreeDays',
+                  'withRollable',
+                  'insurance',
+                ],
                 true
               ),
             },
@@ -116,6 +122,7 @@ const AddCabinTask: React.FC<AddCabinTaskProps> = memo(
             ctnTicket: 0,
             ctnQty: 0,
             withRollable: true,
+            insurance: true,
             extentDndFreeDays: 0,
           }}
         >

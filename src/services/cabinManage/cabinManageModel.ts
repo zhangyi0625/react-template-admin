@@ -29,6 +29,7 @@ export interface CabinTaskTemplateParams extends Partial<PortCodeInfo> {
   createdEnd?: string
   customer?: string
   status: string
+  carrier?: string
 }
 
 export interface CabinHistoryParams extends Partial<PortCodeInfo> {

@@ -30,13 +30,12 @@ export const getTemplateSetting = (carrier?: string, statusType?: string) => {
       title: '抢舱模式',
       key: 'startType',
       align: 'center',
-      hidden: statusType === 'NOT_STARTED',
+      hidden: statusType !== 'RUNNING',
       width: 120,
       render(value) {
-        console.log(statusType, 'statusType')
         return (
           <div>
-            {statusType === 'SAME_FREQ'
+            {value.startType === 'SAME_FREQ'
               ? '同频放舱'
               : ServiceSettingType.find(
                   (item) => item.value === value.startType
@@ -126,29 +125,43 @@ export const getTemplateSetting = (carrier?: string, statusType?: string) => {
         )
       },
     },
-    carrier === 'MSK' && {
+    {
       title: '额外免箱',
       key: 'extra',
       align: 'center',
       width: 150,
+      hidden: carrier !== 'MSK',
       render(value) {
         return <div>{value.extra?.extentDndFreeDays ?? '-'}</div>
       },
     },
-    carrier === 'MSK' && {
+    {
       title: 'rollable',
       key: 'extra',
       align: 'center',
       width: 150,
+      hidden: carrier !== 'MSK',
       render(value) {
         return <div>{value.extra?.withRollable ? '需要' : '不需要'}</div>
       },
     },
-    carrier === 'MSK' && {
+    {
+      title: '购买保值服务',
+      key: 'insurance',
+      align: 'center',
+      width: 150,
+      hidden: carrier !== 'OOCL',
+      render(value) {
+        return <div>{value.extra?.insurance ? '需要' : '不需要'}</div>
+      },
+    },
+
+    {
       title: '合约号',
       key: 'extra',
       align: 'center',
       width: 120,
+      hidden: carrier !== 'MSK',
       render(value) {
         return <div>{value.extra?.contractNo ?? ''}</div>
       },
@@ -190,6 +203,24 @@ export const getTemplateSetting = (carrier?: string, statusType?: string) => {
         isRules: true,
         formType: 'radio',
         name: 'withRollable',
+        options: [
+          {
+            label: '需要',
+            value: 1,
+          },
+          {
+            label: '不需要',
+            value: 0,
+          },
+        ],
+      },
+    ],
+    OOCL: [
+      {
+        label: '购买保值服务',
+        isRules: true,
+        formType: 'radio',
+        name: 'insurance',
         options: [
           {
             label: '需要',

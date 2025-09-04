@@ -213,7 +213,7 @@ const CarrierManage: React.FC = () => {
           isPagination={true}
           fetchResultKey="list"
           totalKey="count"
-          scroll={{ x: 'max-content', y: height - 158 }}
+          scroll={{ x: 'max-content', y: height - 168 }}
           fetchData={getCarrierManageListByPage}
           searchFilter={searchDefaultForm}
           isSelection={false}

@@ -282,7 +282,7 @@ const RouteManage: React.FC = () => {
           isPagination={true}
           fetchResultKey="list"
           totalKey="count"
-          scroll={{ x: 'max-content', y: height - 158 }}
+          scroll={{ x: 'max-content', y: height - 168 }}
           fetchData={getAllPortManageListByPage}
           searchFilter={searchDefaultForm}
           isSelection={false}

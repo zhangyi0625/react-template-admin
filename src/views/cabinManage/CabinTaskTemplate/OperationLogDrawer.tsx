@@ -63,6 +63,7 @@ const OperationLogDrawer: React.FC<OperationLogDrawerProps> = ({
         dataSource={tableData}
         columns={tableColumns()}
         loading={loading}
+        scroll={{ x: 'max-content', y: 558 }}
         rowKey="id"
       />
     </Drawer>

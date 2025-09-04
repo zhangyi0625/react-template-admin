@@ -225,7 +225,7 @@ const ShippingAccount: React.FC = () => {
       '/customerInformation/shippingAccount/'
     )[1]
     setImmediate(true)
-    if (!essential.carrierData?.length || !essential.routeData?.length) {
+    if (!essential.carrierData?.length || !essential.customerData?.length) {
       loadSearchList()
     } else {
       getReduxData()
@@ -236,7 +236,6 @@ const ShippingAccount: React.FC = () => {
       isOrder: name === 'QUERY' ? null : true,
       isQuery: name === 'QUERY' ? true : null,
     })
-    console.log(routeParams, 'routeParams', location, name)
   }, [location.pathname, essential])
 
   // 重新更新查询部分数据 并存储进redux

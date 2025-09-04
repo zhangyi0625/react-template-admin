@@ -114,6 +114,7 @@ export const ShippingAccountForm: Omit<
       label: 'code',
       value: 'code',
     },
+    options: [],
   },
   {
     label: '客户名称',

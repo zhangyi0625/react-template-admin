@@ -38,7 +38,7 @@ const AddCabinTask: React.FC<AddCabinTaskProps> = memo(
 
     const [form] = Form.useForm()
 
-    const ctnTypeOptions = ['20GP', '40GP', '40HQ', '45HQ']
+    const ctnTypeOptions = ['20GP', '40GP', '40HQ', '45HQ', '20NOR', '40NOR']
 
     const essential = useSelector((state: RootState) => state.essentail)
 

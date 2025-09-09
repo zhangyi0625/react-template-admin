@@ -153,6 +153,7 @@ const CabinTaskTemplate: React.FC<CabinTaskTemplateProps> = memo(
                   onClick={() =>
                     setFrequecnyVisible({ visible: true, currentId: _.id })
                   }
+                  disabled={carrier !== 'MSK'}
                 >
                   高频启动
                 </Button>
@@ -489,6 +490,7 @@ const CabinTaskTemplate: React.FC<CabinTaskTemplateProps> = memo(
                   isSelected() &&
                   setFrequecnyParams({ visible: true, selRow: [] })
                 }
+                disabled={carrier !== 'MSK'}
               >
                 设置放舱同频
               </Button>

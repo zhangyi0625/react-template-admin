@@ -1,8 +1,8 @@
-import { RootState, setMenus } from '@/stores/store'
+import { setMenus } from '@/stores/store'
 import { Spin, App as AntdApp, Skeleton } from 'antd'
 import type React from 'react'
-import { Suspense, useCallback, useEffect, useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
+import { Suspense, useEffect, useState } from 'react'
+import { useDispatch } from 'react-redux'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { Router } from '@/router/router'
 import { antdUtils } from '@/utils/antdUtil'
@@ -27,7 +27,8 @@ const App: React.FC = () => {
   /**
    * 查询用户的菜单信息
    */
-  const getMenuData = useCallback(async () => {
+  const getMenuData = async () => {
+    setLoading(true)
     const roleId = sessionStorage.getItem('roleId') || ''
     try {
       const menu = await getRoleMenu(roleId)
@@ -45,7 +46,7 @@ const App: React.FC = () => {
     } finally {
       setLoading(false)
     }
-  }, [dispatch])
+  }
 
   // 组件挂载完成后加载用户菜单
   useEffect(() => {
@@ -60,7 +61,7 @@ const App: React.FC = () => {
     } else {
       getMenuData()
     }
-  }, [getMenuData, location.pathname, navigate])
+  }, [])
 
   return (
     <>

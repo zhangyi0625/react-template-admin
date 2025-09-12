@@ -23,6 +23,7 @@ export enum CabinManageApi {
   deleteCabin = '/system/test/customer/',
   cabinHistoryList = '/core/business/stowage-history/page',
   cabinResultList = '/core/business/stowage-history/page',
+  refreshLoginAccount = '/core/business/booking-task/again/login/',
 }
 
 /**
@@ -264,6 +265,22 @@ export const getCabinResultList = (params: CabinResultParams) => {
     {
       url: CabinManageApi.cabinResultList,
       params: params,
+    },
+    {
+      successMessageMode: 'none',
+    }
+  )
+}
+
+/**
+ * 重登查询账号
+ * @param params 订舱管理参数
+ * @returns
+ */
+export const updateLoginAccount = (carrier: string) => {
+  return HttpRequest.post(
+    {
+      url: CabinManageApi.refreshLoginAccount + carrier,
     },
     {
       successMessageMode: 'none',

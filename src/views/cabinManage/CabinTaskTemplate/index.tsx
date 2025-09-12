@@ -37,6 +37,7 @@ import {
   openBatchCabinByImmdiate,
   stopBatchCabin,
   putCabinManageList,
+  updateLoginAccount,
 } from '@/services/cabinManage/cabinManageApi'
 import { getRouteManageList } from '@/services/customerInformation/routeManage/routeManageApi'
 import {
@@ -48,6 +49,7 @@ import { RouteMangeType } from '@/services/customerInformation/routeManage/route
 import useParentSize from '@/hooks/useParentSize'
 import { getCustomerManageList } from '@/services/essential/customerManage/customerManageApi'
 import MonitoringFrequncy from './MonitoringFrequncy'
+import { ExclamationCircleFilled } from '@ant-design/icons'
 
 const API = process.env.VITE_STATIC_API
 
@@ -58,7 +60,7 @@ export type CabinTaskTemplateProps = {
 
 const CabinTaskTemplate: React.FC<CabinTaskTemplateProps> = memo(
   ({ carrier, setting }) => {
-    const { message } = App.useApp()
+    const { message, modal } = App.useApp()
 
     const { parentRef, height } = useParentSize()
 
@@ -408,6 +410,20 @@ const CabinTaskTemplate: React.FC<CabinTaskTemplateProps> = memo(
     const showMessage = (failures: { index: number; failMsg: string }[]) => {
       failures && message.error('操作失败！')
     }
+
+    const refreshLoginAccount = () => {
+      modal.confirm({
+        title: '重登查询账号',
+        icon: <ExclamationCircleFilled />,
+        content: '是否已更新船司高频查询账户！',
+        onOk() {
+          updateLoginAccount(carrier).then(() => {
+            // 刷新表格数据
+            onUpdateSearch()
+          })
+        },
+      })
+    }
     return (
       <>
         <ConfigProvider>
@@ -507,6 +523,9 @@ const CabinTaskTemplate: React.FC<CabinTaskTemplateProps> = memo(
               >
                 下载{carrier}抢舱模版
               </div>
+              <Button type="primary" onClick={refreshLoginAccount}>
+                重登查询账号
+              </Button>
             </Space>
           ) : current === 'RUNNING' ? (
             <Space className="mb-[8px]">

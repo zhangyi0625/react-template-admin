@@ -3,7 +3,9 @@ name: Deploy to GitHub Pages
 on:
   push:
     branches:
-      - crm-synergy
+      - master
+      - dev
+      - zc-ls-cabin
   workflow_dispatch:
 
 permissions:

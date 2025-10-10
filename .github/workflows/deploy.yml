@@ -3,7 +3,8 @@ name: Deploy to Aliyun
 on:
   push:
     branches:
-      - main   # 推送到主分支时触发该工作流
+      - main
+      - zc-ls-cabin
 
 jobs:
   build-and-deploy:

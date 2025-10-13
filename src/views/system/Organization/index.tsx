@@ -298,6 +298,8 @@ const Organization: React.FC = () => {
                 bordered
                 totalKey="count"
                 fetchResultKey="list"
+                pageIndexKey="page"
+                pageSizeKey="limit"
                 isPagination={true}
                 rowKey="organizationId"
                 scroll={{ x: 'max-content', y: height - 158 }}

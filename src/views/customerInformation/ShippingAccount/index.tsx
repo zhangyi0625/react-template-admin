@@ -460,6 +460,8 @@ const ShippingAccount: React.FC = () => {
           rowKey="id"
           fetchResultKey="list"
           totalKey="count"
+          pageIndexKey="page"
+          pageSizeKey="limit"
           isPagination={true}
           scroll={{ x: 'max-content', y: height - 168 }}
           fetchData={getShippingAccountListByPage}

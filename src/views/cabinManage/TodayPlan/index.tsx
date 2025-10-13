@@ -503,6 +503,8 @@ const TodayPlan: React.FC = () => {
           <SearchTable
             style={{ marginTop: '10px' }}
             size="middle"
+            pageIndexKey="page"
+            pageSizeKey="limit"
             totalKey={defaultActiveKey === 'searchBySchedule' ? '' : 'count'}
             fetchResultKey={
               defaultActiveKey === 'searchBySchedule' ? 'data' : 'list'

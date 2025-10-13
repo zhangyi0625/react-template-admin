@@ -35,7 +35,7 @@ export const SelectCabinHistoryOptions: CustomColumn[] = [
   {
     label: '放舱日期',
     name: 'create',
-    formType: 'date-picker',
+    formType: 'range-picker',
     span: 6,
     selectFetch: false,
     hiddenItem: false,

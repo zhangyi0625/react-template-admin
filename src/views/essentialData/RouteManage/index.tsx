@@ -241,7 +241,8 @@ const RouteManage: React.FC = () => {
           isPagination={true}
           fetchResultKey="list"
           totalKey="count"
-          isCache="routeData"
+          pageIndexKey="page"
+          pageSizeKey="limit"
           scroll={{ x: 'max-content', y: height - 158 }}
           immediate={immediate}
           fetchData={getRouteManageListByPage}

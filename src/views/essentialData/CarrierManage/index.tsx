@@ -212,6 +212,8 @@ const CarrierManage: React.FC = () => {
           rowKey="id"
           isPagination={true}
           fetchResultKey="list"
+          pageIndexKey="page"
+          pageSizeKey="limit"
           totalKey="count"
           scroll={{ x: 'max-content', y: height - 168 }}
           fetchData={getCarrierManageListByPage}

@@ -284,6 +284,8 @@ const User: React.FC = () => {
           size="middle"
           columns={columns}
           style={{ marginTop: '8px' }}
+          pageIndexKey="page"
+          pageSizeKey="limit"
           bordered
           scroll={{ x: 'max-content', y: height - 158 }}
           rowKey="userId"

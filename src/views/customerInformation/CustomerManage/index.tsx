@@ -202,10 +202,11 @@ const CustomerManage: React.FC = () => {
           rowKey="id"
           fetchResultKey="list"
           totalKey="count"
+          pageIndexKey="page"
+          pageSizeKey="limit"
           isPagination={true}
           scroll={{ x: 'max-content', y: height - 158 }}
           fetchData={getCustomerManageListByPage}
-          isCache="customerData"
           searchFilter={searchDefaultForm}
           isSelection={false}
           onUpdatePagination={onUpdatePagination}

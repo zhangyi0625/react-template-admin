@@ -548,6 +548,8 @@ const CabinTaskTemplate: React.FC<CabinTaskTemplateProps> = memo(
             bordered
             rowKey="id"
             scroll={{ x: 'max-content', y: height - 158 }}
+            pageIndexKey="page"
+            pageSizeKey="limit"
             immediate={immediate}
             fetchData={getCabinManageListByPage}
             searchFilter={searchDefaultForm}

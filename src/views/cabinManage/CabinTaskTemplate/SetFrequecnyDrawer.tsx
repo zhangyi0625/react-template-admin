@@ -66,6 +66,8 @@ const SetFrequecnyDrawer: React.FC<SetFrequecnyDrawerProps> = ({
         bordered
         selectionParentType="radio"
         rowKey="id"
+        pageIndexKey="page"
+        pageSizeKey="limit"
         fetchResultKey="data"
         totalKey=""
         fetchData={getCabinManageList}

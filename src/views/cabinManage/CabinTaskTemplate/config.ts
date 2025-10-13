@@ -34,7 +34,7 @@ export const SelectCabinTaskTemplateOptions: CustomColumn[] = [
   {
     label: 'ETD',
     name: 'etd',
-    formType: 'date-picker',
+    formType: 'range-picker',
     span: 6,
     selectFetch: false,
     hiddenItem: false,
@@ -42,7 +42,7 @@ export const SelectCabinTaskTemplateOptions: CustomColumn[] = [
   {
     label: '创建时间',
     name: 'created',
-    formType: 'date-picker',
+    formType: 'range-picker',
     span: 6,
     selectFetch: false,
     hiddenItem: false,

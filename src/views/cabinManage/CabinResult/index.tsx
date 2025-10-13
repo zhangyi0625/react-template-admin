@@ -229,6 +229,8 @@ const CabinResult: React.FC = () => {
           bordered
           rowKey="id"
           totalKey="count"
+          pageIndexKey="page"
+          pageSizeKey="limit"
           fetchResultKey="list"
           isPagination={true}
           immediate={immediate}

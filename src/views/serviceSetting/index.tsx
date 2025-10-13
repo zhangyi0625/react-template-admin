@@ -238,6 +238,8 @@ const ServiceSetting: React.FC = () => {
             bordered
             rowKey="id"
             fetchResultKey="data"
+            pageIndexKey="page"
+            pageSizeKey="limit"
             totalKey=""
             immediate={immediate}
             isPagination={false}

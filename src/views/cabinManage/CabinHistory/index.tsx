@@ -203,6 +203,8 @@ const CabinHistory: React.FC = () => {
           fetchResultKey="list"
           isPagination={true}
           columns={columns}
+          pageIndexKey="page"
+          pageSizeKey="limit"
           bordered
           rowKey="id"
           scroll={{ x: 'max-content', y: height - 158 }}

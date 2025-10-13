@@ -26,13 +26,15 @@ import {
   editRole,
   getRoleListByPage,
 } from '@/services/system/role/roleApi'
-import SearchForm from '@/components/searchForm'
-import SearchTable from '@/components/searchTable'
+import { SearchForm, SearchTable } from 'customer-search-form-table'
 import { SelectRoleOptions } from './config'
 import RoleInfoModal from './RoleInfoModal'
 import RoleMenuDrawer from './RoleMenuDrawer'
 import RoleUserDrawer from './RoleUserDrawer'
-import { SysRoleParams, SysRoleType } from '@/services/system/role/roleModel'
+import type {
+  SysRoleParams,
+  SysRoleType,
+} from '@/services/system/role/roleModel'
 import { filterKeys } from '@/utils/tool'
 
 /**
@@ -183,8 +185,6 @@ const Role: React.FC = () => {
   ]
 
   const onUpdateSearch = (info?: SysRoleParams | unknown) => {
-    console.log(height, 'height')
-
     const filteredObj = Object.fromEntries(
       Object.entries(info ?? {}).filter(([, value]) => !!value)
     )
@@ -275,6 +275,7 @@ const Role: React.FC = () => {
           <SearchForm
             columns={SelectRoleOptions}
             gutterWidth={24}
+            iconHidden={true}
             labelPosition="left"
             btnSeparate={false}
             isShowReset={true}
@@ -316,6 +317,11 @@ const Role: React.FC = () => {
           bordered
           scroll={{ x: 'max-content', y: height - 158 }}
           rowKey="roleId"
+          totalKey="count"
+          pageIndexKey="page"
+          pageSizeKey="limit"
+          fetchResultKey="list"
+          isPagination={true}
           fetchData={getRoleListByPage}
           searchFilter={searchDefaultForm}
           isSelection={true}

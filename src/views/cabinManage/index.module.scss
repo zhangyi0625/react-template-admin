@@ -1,0 +1,11 @@
+.search-card {
+  :global {
+    .ant-card-body {
+      padding-bottom: 0;
+    }
+    .ant-tabs-tab {
+      font-weight: 400;
+      font-size: 16px;
+    }
+  }
+}

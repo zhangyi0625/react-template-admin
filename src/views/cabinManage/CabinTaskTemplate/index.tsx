@@ -1,4 +1,5 @@
-import '../index.scss'
+// import '../index.scss'
+import styles from '../index.module.scss'
 import { memo, useCallback, useEffect, useState } from 'react'
 import {
   App,
@@ -431,7 +432,7 @@ const CabinTaskTemplate: React.FC<CabinTaskTemplateProps> = memo(
             tabList={items}
             onTabChange={tabChange}
             loading={loading}
-            className="search-card"
+            className={styles['search-card']}
           >
             <Form labelAlign="left" colon={false}>
               <Row gutter={24}>

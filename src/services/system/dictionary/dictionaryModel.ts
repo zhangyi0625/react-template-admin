@@ -14,4 +14,5 @@ export interface SysDictionaryType extends SysDictionaryClassType {
 export interface SysDictionaryParams extends Pick<SysDictionaryType, 'dictId'> {
   page: number
   limit: number
+  keywords: string
 }

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { useLocation, useParams } from 'react-router-dom'
+import { useLocation } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import {
   App,
@@ -49,8 +49,6 @@ const API = process.env.VITE_STATIC_API
 
 const ShippingAccount: React.FC = () => {
   const { modal, message } = App.useApp()
-
-  const routeParams = useParams()
 
   const location = useLocation()
 

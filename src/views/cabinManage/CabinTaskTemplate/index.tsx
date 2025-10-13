@@ -329,7 +329,9 @@ const CabinTaskTemplate: React.FC<CabinTaskTemplateProps> = memo(
       } catch (error) {}
     }
 
-    const editTaskTemplate = (row: any) => {
+    const editTaskTemplate = (
+      row: CabinTaskTemplateType & { status: string }
+    ) => {
       if (row.status !== 'NOT_STARTED') return
       setParams({ visible: true, currentRow: row, view: false })
     }

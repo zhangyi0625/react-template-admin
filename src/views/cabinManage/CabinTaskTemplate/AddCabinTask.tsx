@@ -1,4 +1,4 @@
-import { CloseOutlined } from '@ant-design/icons'
+import React, { memo, useCallback, useEffect } from 'react'
 import {
   Button,
   DatePicker,
@@ -10,16 +10,17 @@ import {
   Select,
   Space,
 } from 'antd'
-import React, { memo, useCallback, useEffect } from 'react'
-import { getTemplateSetting } from './columns'
-import { CheckboxGroupProps } from 'antd/es/checkbox'
+import type { CheckboxGroupProps } from 'antd/es/checkbox'
+import { CloseOutlined } from '@ant-design/icons'
 import { useSelector } from 'react-redux'
 import { RootState } from '@/stores/store'
-import { formatTime } from '@/utils/format'
-import { filterKeys } from '@/utils/tool'
+import { getTemplateSetting } from './columns'
+import { BOXPILE } from './config'
 import type { CustomerManageType } from '@/services/essential/customerManage/customerManageModel'
 import type { CabinTaskTemplateType } from '@/services/cabinManage/cabinManageModel'
 import dayjs from 'dayjs'
+import { formatTime } from '@/utils/format'
+import { filterKeys } from '@/utils/tool'
 
 export type AddCabinTaskProps = {
   params: {
@@ -28,7 +29,7 @@ export type AddCabinTaskProps = {
     view: boolean
   }
   carrier: string
-  onOk: (params: any) => void
+  onOk: (params: CabinTaskTemplateType) => void
   onCancel: () => void
 }
 
@@ -38,7 +39,7 @@ const AddCabinTask: React.FC<AddCabinTaskProps> = memo(
 
     const [form] = Form.useForm()
 
-    const ctnTypeOptions = ['20GP', '40GP', '40HQ', '45HQ', '20NOR', '40NOR']
+    const ctnTypeOptions = BOXPILE || []
 
     const essential = useSelector((state: RootState) => state.essentail)
 
@@ -59,32 +60,37 @@ const AddCabinTask: React.FC<AddCabinTaskProps> = memo(
           withRollable: currentRow.extra ? 1 : 0,
           insurance: currentRow.extra ? 1 : 0,
         })
-        console.log(form.getFieldsValue())
       }
     }, [visible])
+
+    const selectPortOptions = (
+      selectOptions: { code: string; enName: string; cnName: string }[]
+    ) => {
+      return selectOptions.map((item) => ({
+        label: item.enName + '-' + item.cnName,
+        value: item.code,
+      }))
+    }
+
+    const getFilterOption = (input: string, option?: { label: string }) => {
+      return String(option?.label ?? '')
+        .toLowerCase()
+        .includes(input.toLowerCase())
+    }
 
     const onConfirm = () => {
       form
         .validateFields()
         .then(() => {
+          const extraKeys =
+            (getTemplateSetting()['formSetting'][carrier] || []).map(
+              (item) => item.name
+            ) ?? []
           let params = {
-            ...filterKeys(
-              form.getFieldsValue(),
-              ['contractNo', 'extentDndFreeDays', 'withRollable', 'insurance'],
-              false
-            ),
+            ...filterKeys(form.getFieldsValue(), extraKeys, false),
             etd: formatTime(form.getFieldValue('etd'), 'Y-M-D'),
             extra: {
-              ...filterKeys(
-                form.getFieldsValue(),
-                [
-                  'contractNo',
-                  'extentDndFreeDays',
-                  'withRollable',
-                  'insurance',
-                ],
-                true
-              ),
+              ...filterKeys(form.getFieldsValue(), extraKeys, true),
             },
           }
           onOk(params)
@@ -146,17 +152,8 @@ const AddCabinTask: React.FC<AddCabinTaskProps> = memo(
               allowClear
               placeholder="请输入起运港"
               showSearch
-              options={(essential.porPortData || []).map(
-                (item: { code: string; enName: string; cnName: string }) => ({
-                  label: item.enName + '-' + item.cnName,
-                  value: item.code,
-                })
-              )}
-              filterOption={(input, option) =>
-                String(option?.label ?? '')
-                  .toLowerCase()
-                  .includes(input.toLowerCase())
-              }
+              options={selectPortOptions(essential.porPortData ?? [])}
+              filterOption={getFilterOption}
             />
           </Form.Item>
           <Form.Item
@@ -173,17 +170,8 @@ const AddCabinTask: React.FC<AddCabinTaskProps> = memo(
               allowClear
               placeholder="请输入目的港"
               showSearch
-              options={(essential.fndPortData || []).map(
-                (item: { code: string; enName: string; cnName: string }) => ({
-                  label: item.enName + '-' + item.cnName,
-                  value: item.code,
-                })
-              )}
-              filterOption={(input, option) =>
-                String(option?.label ?? '')
-                  .toLowerCase()
-                  .includes(input.toLowerCase())
-              }
+              options={selectPortOptions(essential.fndPortData ?? [])}
+              filterOption={getFilterOption}
             />
           </Form.Item>
           <Form.Item
@@ -222,11 +210,7 @@ const AddCabinTask: React.FC<AddCabinTaskProps> = memo(
                   value: item.id,
                 })
               )}
-              filterOption={(input, option) =>
-                String(option?.label ?? '')
-                  .toLowerCase()
-                  .includes(input.toLowerCase())
-              }
+              filterOption={getFilterOption}
             />
           </Form.Item>
           <Form.Item label="箱型" style={{ marginBottom: 0 }}>

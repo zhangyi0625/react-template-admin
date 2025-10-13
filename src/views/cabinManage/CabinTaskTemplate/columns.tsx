@@ -263,8 +263,3 @@ export const getTemplateSetting = (carrier?: string, statusType?: string) => {
     operationColumns: operationColumns,
   }
 }
-
-export const editTaskTemplate = (row: any) => {
-  console.log(row, 'row')
-  return row
-}

@@ -13,6 +13,8 @@ import {
   TableProps,
   TabsProps,
 } from 'antd'
+import { ExclamationCircleFilled } from '@ant-design/icons'
+import { SearchForm, SearchTable } from 'customer-search-form-table'
 import {
   CabinTaskTemplateStatusOptions,
   SelectCabinTaskTemplateOptions,
@@ -22,12 +24,12 @@ import type {
   CabinTaskTemplateType,
 } from '@/services/cabinManage/cabinManageModel'
 import { useDispatch, useSelector } from 'react-redux'
-import { SearchForm, SearchTable } from 'customer-search-form-table'
+import { RootState, setEssentail } from '@/stores/store'
+import useParentSize from '@/hooks/useParentSize'
 import AddCabinTask from './AddCabinTask'
-import ImportShippingAccout from '@/views/customerInformation/ShippingAccount/ImportShippingAccout'
 import OperationLogDrawer from './OperationLogDrawer'
 import SetFrequecnyDrawer from './SetFrequecnyDrawer'
-import { RootState, setEssentail } from '@/stores/store'
+import MonitoringFrequncy from './MonitoringFrequncy'
 import { getTemplateSetting } from './columns'
 import {
   getCabinManageListByPage,
@@ -44,16 +46,14 @@ import {
   getFndPortManageList,
   getPorPortManageList,
 } from '@/services/essential/portManage/portManageModel'
-import { filterKeys } from '@/utils/tool'
-import { RouteMangeType } from '@/services/customerInformation/routeManage/routeManageModel'
-import useParentSize from '@/hooks/useParentSize'
 import { getCustomerManageList } from '@/services/essential/customerManage/customerManageApi'
-import MonitoringFrequncy from './MonitoringFrequncy'
-import { ExclamationCircleFilled } from '@ant-design/icons'
+import type { RouteMangeType } from '@/services/customerInformation/routeManage/routeManageModel'
+import ImportShippingAccout from '@/views/customerInformation/ShippingAccount/ImportShippingAccout'
+import { filterKeys } from '@/utils/tool'
 
 const API = process.env.VITE_STATIC_API
 
-export type CabinTaskTemplateProps = {
+type CabinTaskTemplateProps = {
   carrier: string
   setting: unknown
 }
@@ -90,13 +90,6 @@ const CabinTaskTemplate: React.FC<CabinTaskTemplateProps> = memo(
 
     const [seleced, setSelected] = useState<string[]>([])
 
-    const isSelected = useCallback(() => {
-      if (seleced.length === 0) {
-        message.error('请至少选择一条数据！')
-        return false
-      } else return true
-    }, [seleced.length])
-
     const [operationLog, setOperationLog] = useState<{
       visible: boolean
       id: null | string
@@ -111,6 +104,48 @@ const CabinTaskTemplate: React.FC<CabinTaskTemplateProps> = memo(
     }>({ visible: false, selRow: [] })
 
     const [importModel, setImportModel] = useState<boolean>(false)
+
+    const [searchDefaultForm, setSearchDefaultForm] =
+      useState<CabinTaskTemplateParams>({
+        page: 1,
+        limit: 10,
+        routeFndId: null,
+        status: 'NOT_STARTED',
+        carrier: carrier,
+      })
+
+    const [params, setParams] = useState<{
+      visible: boolean
+      currentRow: CabinTaskTemplateType | null
+      view: boolean
+    }>({
+      visible: false,
+      currentRow: null,
+      view: false,
+    })
+
+    useEffect(() => {
+      if (!carrier) return
+      setImmediate(true)
+      setLoading(true)
+      if (
+        !essential.routeData?.length ||
+        !essential.porPortData?.length ||
+        !essential.fndPortData?.length ||
+        !essential.customerData?.length
+      ) {
+        loadSearchList()
+      } else {
+        getReduxData()
+      }
+    }, [carrier, essential])
+
+    const isSelected = useCallback(() => {
+      if (seleced.length === 0) {
+        message.error('请至少选择一条数据！')
+        return false
+      } else return true
+    }, [seleced.length])
 
     const tableColumns = useCallback(() => {
       let columns = getTemplateSetting(carrier, current)['columns'] ?? []
@@ -182,41 +217,6 @@ const CabinTaskTemplate: React.FC<CabinTaskTemplateProps> = memo(
       ]
       return newArr
     }, [getTemplateSetting, current, carrier])
-
-    const [searchDefaultForm, setSearchDefaultForm] =
-      useState<CabinTaskTemplateParams>({
-        page: 1,
-        limit: 10,
-        routeFndId: null,
-        status: 'NOT_STARTED',
-        carrier: carrier,
-      })
-
-    const [params, setParams] = useState<{
-      visible: boolean
-      currentRow: CabinTaskTemplateType | null
-      view: boolean
-    }>({
-      visible: false,
-      currentRow: null,
-      view: false,
-    })
-
-    useEffect(() => {
-      if (!carrier) return
-      setImmediate(true)
-      setLoading(true)
-      if (
-        !essential.routeData?.length ||
-        !essential.porPortData?.length ||
-        !essential.fndPortData?.length ||
-        !essential.customerData?.length
-      ) {
-        loadSearchList()
-      } else {
-        getReduxData()
-      }
-    }, [carrier, essential])
 
     // 重新更新查询部分数据 并存储进redux
     const loadSearchList = () => {

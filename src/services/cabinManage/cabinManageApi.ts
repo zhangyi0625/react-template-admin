@@ -5,7 +5,6 @@ import {
   CabinTaskTemplateParams,
   CabinTaskTemplateType,
 } from './cabinManageModel'
-import { CabinTaskTemplateProps } from '@/views/cabinManage/CabinTaskTemplate'
 
 /**
  * 枚举订舱管理相关的api
@@ -293,30 +292,30 @@ export const updateLoginAccount = (carrier: string) => {
  * @param params 订舱管理参数
  * @returns
  */
-export const addCabinManage = (params: CabinTaskTemplateProps) => {
-  return HttpRequest.post(
-    {
-      url: CabinManageApi.addCabin,
-      data: params,
-    },
-    {
-      successMessageMode: 'none',
-    }
-  )
-}
+// export const addCabinManage = (params: CabinTaskTemplateProps) => {
+//   return HttpRequest.post(
+//     {
+//       url: CabinManageApi.addCabin,
+//       data: params,
+//     },
+//     {
+//       successMessageMode: 'none',
+//     }
+//   )
+// }
 
 /**
  * 删除客户
  * @param params 订舱管理参数
  * @returns
  */
-export const deleteCabinManage = (id: string) => {
-  return HttpRequest.delete(
-    {
-      url: CabinManageApi.deleteCabin + id,
-    },
-    {
-      successMessageMode: 'none',
-    }
-  )
-}
+// export const deleteCabinManage = (id: string) => {
+//   return HttpRequest.delete(
+//     {
+//       url: CabinManageApi.deleteCabin + id,
+//     },
+//     {
+//       successMessageMode: 'none',
+//     }
+//   )
+// }

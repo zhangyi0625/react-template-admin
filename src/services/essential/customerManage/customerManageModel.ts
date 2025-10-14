@@ -1,3 +1,5 @@
+import type { DefaultPaging } from '@/types/global'
+
 export interface CustomerManageType {
   id?: string | null
   name: string
@@ -5,8 +7,6 @@ export interface CustomerManageType {
   socialCode: string
 }
 
-export interface CustomerManageParams {
+export interface CustomerManageParams extends DefaultPaging {
   name: string | null
-  page: number
-  limit: number
 }

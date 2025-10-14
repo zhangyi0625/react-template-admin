@@ -1,3 +1,5 @@
+import type { DefaultPaging } from '@/types/global'
+
 export interface ScheduleAccountType {
   carrier: string
   routeFndId: string
@@ -5,10 +7,9 @@ export interface ScheduleAccountType {
   fndCode: string
 }
 
-export interface ScheduleAccountParams extends Partial<ScheduleAccountType> {
-  page: number
-  limit: number
-}
+export interface ScheduleAccountParams
+  extends Partial<ScheduleAccountType>,
+    DefaultPaging {}
 
 export interface AffilateAccountType {
   carrier: string
@@ -17,10 +18,9 @@ export interface AffilateAccountType {
   loginTime?: string
 }
 
-export interface AffilateAccountParams extends Partial<AffilateAccountType> {
-  page: number
-  limit: number
-}
+export interface AffilateAccountParams
+  extends Partial<AffilateAccountType>,
+    DefaultPaging {}
 
 export interface BatchLoginAccount {
   carrier: string

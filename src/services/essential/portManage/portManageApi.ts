@@ -1,3 +1,5 @@
+import type { DefaultPaging } from '@/types/global'
+
 export interface PortManageType {
   id?: string | null
   cnName: string
@@ -16,8 +18,6 @@ export interface PortManageType {
 
 export interface PortManageParams
   extends Partial<
-    Pick<PortManageType, 'code' | 'name' | 'isPor' | 'isFnd' | 'isPopularity'>
-  > {
-  page: number
-  limit: number
-}
+      Pick<PortManageType, 'code' | 'name' | 'isPor' | 'isFnd' | 'isPopularity'>
+    >,
+    DefaultPaging {}

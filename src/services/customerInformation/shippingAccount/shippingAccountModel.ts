@@ -1,3 +1,5 @@
+import type { DefaultPaging } from '@/types/global'
+
 export interface ShippingAccounType {
   id?: string | null
   type: string | 'QUERY' | 'ORDER'
@@ -11,9 +13,8 @@ export interface ShippingAccounType {
 }
 
 export interface ShippingAccounParams
-  extends Pick<ShippingAccounType, 'carrier' | 'account' | 'customerId'> {
-  page: number
-  limit: number
+  extends Pick<ShippingAccounType, 'carrier' | 'account' | 'customerId'>,
+    DefaultPaging {
   sort: string
   isOrder: boolean | null
   isQuery: boolean | null

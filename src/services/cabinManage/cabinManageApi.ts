@@ -286,36 +286,3 @@ export const updateLoginAccount = (carrier: string) => {
     }
   )
 }
-
-/**
- * 添加客户
- * @param params 订舱管理参数
- * @returns
- */
-// export const addCabinManage = (params: CabinTaskTemplateProps) => {
-//   return HttpRequest.post(
-//     {
-//       url: CabinManageApi.addCabin,
-//       data: params,
-//     },
-//     {
-//       successMessageMode: 'none',
-//     }
-//   )
-// }
-
-/**
- * 删除客户
- * @param params 订舱管理参数
- * @returns
- */
-// export const deleteCabinManage = (id: string) => {
-//   return HttpRequest.delete(
-//     {
-//       url: CabinManageApi.deleteCabin + id,
-//     },
-//     {
-//       successMessageMode: 'none',
-//     }
-//   )
-// }

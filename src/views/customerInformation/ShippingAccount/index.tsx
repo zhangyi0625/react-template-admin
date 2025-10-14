@@ -43,7 +43,7 @@ import type { CarrierManageType } from '@/services/essential/carrierManage/carri
 import { filterKeys } from '@/utils/tool'
 import { formatTime } from '@/utils/format'
 import useParentSize from '@/hooks/useParentSize'
-import type { ServiceSettingType } from '@/services/setting/serviceSettingModel'
+import type { ServiceSettingType } from '@/services/serviceSetting/serviceSettingModel'
 
 const API = process.env.VITE_STATIC_API
 

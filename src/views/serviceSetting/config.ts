@@ -7,9 +7,13 @@ export const ServiceSettingForm: Omit<
   {
     label: '船司',
     name: 'carrier',
-    formType: 'select',
+    formType: 'normalSelect',
     options: [],
     span: 12,
+    selectFileldName: {
+      label: 'code',
+      value: 'code',
+    },
   },
   {
     label: '服务名称',
@@ -20,7 +24,7 @@ export const ServiceSettingForm: Omit<
   {
     label: '启动类型',
     name: 'startType',
-    formType: 'select',
+    formType: 'normalSelect',
     options: [
       {
         label: '高频启动',
@@ -92,8 +96,12 @@ export const ServiceSettingForm: Omit<
   {
     label: '细分航线',
     name: 'routeFndIds',
-    formType: 'select',
+    formType: 'normalSelect',
     options: [],
+    selectFileldName: {
+      label: 'routeName',
+      value: 'id',
+    },
     span: 12,
   },
 ]

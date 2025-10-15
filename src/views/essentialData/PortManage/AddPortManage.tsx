@@ -1,103 +1,103 @@
-import React, { useEffect, useState } from 'react'
-import { Checkbox, Form, Input, Radio, Select, Space } from 'antd'
-import { SelectProps } from 'antd/lib'
-import DragModal from '@/components/modal/DragModal'
+import React, { useEffect, useState } from 'react';
+import { Checkbox, Form, Input, Radio, Select, Space } from 'antd';
+import { SelectProps } from 'antd/lib';
+import DragModal from '@/components/modal/DragModal';
 import {
   getPortCountryManageList,
   getPortRouteManageList,
-} from '@/services/essential/portManage/portManageModel'
-import type { PortManageType } from '@/services/essential/portManage/portManageApi'
-import { PortSettingSelect } from './config'
+} from '@/services/essential/portManage/portManageModel';
+import type { PortManageType } from '@/services/essential/portManage/portManageApi';
+import { PortSettingSelect } from './config';
 
 export type AddPortManageProps = {
   params: {
-    visible: boolean
-    currentRow: PortManageType
-    view: boolean
-  }
-  onOk: (params: PortManageType) => void
-  onCancel: (e: React.MouseEvent<HTMLButtonElement>) => void
-}
+    visible: boolean;
+    currentRow: PortManageType | null;
+    view: boolean;
+  };
+  onOk: (params: PortManageType) => void;
+  onCancel: (e: React.MouseEvent<HTMLButtonElement>) => void;
+};
 
 type SelectParams = {
-  country: SelectProps['options']
-  route: SelectProps['options']
-}
+  country: SelectProps['options'];
+  route: SelectProps['options'];
+};
 
 const AddPortManage: React.FC<AddPortManageProps> = ({
   params,
   onOk,
   onCancel,
 }) => {
-  const { visible, currentRow, view } = params
+  const { visible, currentRow, view } = params;
 
-  const [form] = Form.useForm()
+  const [form] = Form.useForm();
 
-  const [loading, setLoading] = useState<boolean>(false)
+  const [loading, setLoading] = useState<boolean>(false);
 
   const [selectOptions, setSelectOptions] = useState<SelectParams>({
     country: [],
     route: [],
-  })
+  });
 
-  const [port, setPort] = useState<string[]>([])
+  const [port, setPort] = useState<string[]>([]);
 
-  const [secondRoute, setSecondRoute] = useState([] as SelectProps['options'])
+  const [secondRoute, setSecondRoute] = useState([] as SelectProps['options']);
 
   useEffect(() => {
-    if (!visible) return
-    init()
+    if (!visible) return;
+    init();
     if (currentRow) {
       form.setFieldsValue({
         ...currentRow,
         isPopularity: Number(currentRow.isPopularity),
         enabled: Number(currentRow.enabled),
         countryId: Number(currentRow.countryId),
-      })
-      currentRow.isFnd && setPort(['isFnd'])
-      currentRow.isPor && setPort(port.concat(['isPor']))
+      });
+      currentRow.isFnd && setPort(['isFnd']);
+      currentRow.isPor && setPort(port.concat(['isPor']));
     } else {
-      form.resetFields()
-      form.setFieldsValue({ isPopularity: 1, enabled: 1 })
-      setPort([])
+      form.resetFields();
+      form.setFieldsValue({ isPopularity: 1, enabled: 1 });
+      setPort([]);
     }
-  }, [visible, view])
+  }, [visible, view]);
 
   const init = () => {
-    setLoading(true)
+    setLoading(true);
     Promise.all([getPortRouteManageList(), getPortCountryManageList()])
       .then((result) => {
-        setSelectOptions({ route: result[0], country: result[1] })
+        setSelectOptions({ route: result[0], country: result[1] });
         // 回显二级航线
         getFirstRouteChange(
           form.getFieldValue('routeParentCode'),
           false,
           result[0]
-        )
-        setLoading(false)
+        );
+        setLoading(false);
       })
-      .catch(() => setLoading(false))
-  }
+      .catch(() => setLoading(false));
+  };
 
   const getFirstRouteChange = (
     e: string,
     isReset: boolean,
     result?: SelectProps['options']
   ) => {
-    isReset && form.setFieldsValue({ routeId: null })
+    isReset && form.setFieldsValue({ routeId: null });
     let filterArr = (result ?? selectOptions.route)?.filter(
       (item) => String(item.parentCode) === e.toString()
-    )
-    setSecondRoute(filterArr)
-  }
+    );
+    setSecondRoute(filterArr);
+  };
 
   const getChildren = (arr: SelectProps['options']) => {
-    return arr?.filter((item) => !item.parentId)
-  }
+    return arr?.filter((item) => !item.parentId);
+  };
 
   const checkboxChange = (e: string[]) => {
-    setPort(e)
-  }
+    setPort(e);
+  };
 
   const handleOk = () => {
     form
@@ -106,15 +106,15 @@ const AddPortManage: React.FC<AddPortManageProps> = ({
         let info = {
           isPor: Number(port.includes('isPor')),
           isFnd: Number(port.includes('isFnd')),
-        }
-        onOk({ ...form.getFieldsValue(), ...info })
+        };
+        onOk({ ...form.getFieldsValue(), ...info });
       })
       .catch((errorInfo) => {
         // 滚动并聚焦到第一个错误字段
-        form.scrollToField(errorInfo.errorFields[0].name)
-        form.focusField(errorInfo.errorFields[0].name)
-      })
-  }
+        form.scrollToField(errorInfo.errorFields[0].name);
+        form.focusField(errorInfo.errorFields[0].name);
+      });
+  };
 
   return (
     <DragModal
@@ -204,6 +204,11 @@ const AddPortManage: React.FC<AddPortManageProps> = ({
                   })
                 )}
                 allowClear
+                filterOption={(input, option) =>
+                  String(option?.label ?? '')
+                    .toLowerCase()
+                    .includes(input.toLowerCase())
+                }
                 style={{ width: '200px' }}
                 placeholder="请选择一级航线"
                 onChange={(e) => getFirstRouteChange(e, true)}
@@ -222,6 +227,11 @@ const AddPortManage: React.FC<AddPortManageProps> = ({
                 showSearch
                 allowClear
                 options={secondRoute}
+                filterOption={(input, option) =>
+                  String(option?.name ?? '')
+                    .toLowerCase()
+                    .includes(input.toLowerCase())
+                }
                 fieldNames={{ label: 'name', value: 'code' }}
                 style={{ width: '200px' }}
                 placeholder="请选择二级航线"
@@ -262,7 +272,7 @@ const AddPortManage: React.FC<AddPortManageProps> = ({
         </Form.Item>
       </Form>
     </DragModal>
-  )
-}
+  );
+};
 
-export default AddPortManage
+export default AddPortManage;

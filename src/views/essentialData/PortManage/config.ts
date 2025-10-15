@@ -1,8 +1,11 @@
-import { CheckboxOptionType, SelectProps } from 'antd'
-import type { CustomColumn } from 'customer-search-form-table/SearchForm/type'
-import { replaceObjectName } from '@/utils/tool'
+import { CheckboxOptionType, SelectProps } from 'antd';
+import type { CustomColumn } from 'customer-search-form-table/SearchForm/type';
+import { replaceObjectName } from '@/utils/tool';
 
-type PortSettingSelectType = SelectProps['options'] | CheckboxOptionType[] | any
+type PortSettingSelectType =
+  | SelectProps['options']
+  | CheckboxOptionType[]
+  | any;
 
 export const PortSettingSelect: Record<string, PortSettingSelectType> = {
   isPort: [
@@ -35,7 +38,7 @@ export const PortSettingSelect: Record<string, PortSettingSelectType> = {
       label: '否',
     },
   ],
-}
+};
 
 export const SelectPortManageOptions: CustomColumn[] = [
   {
@@ -80,4 +83,4 @@ export const SelectPortManageOptions: CustomColumn[] = [
     hiddenItem: false,
     span: 6,
   },
-]
+];

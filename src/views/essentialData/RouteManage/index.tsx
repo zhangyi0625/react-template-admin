@@ -74,7 +74,12 @@ const RouteManage: React.FC = () => {
       key: 'fnds',
       align: 'center',
       render(value) {
-        return <div>{value.fnds.join(',') ?? ''}</div>;
+        const newArr: string[] = [];
+        (essential?.fndPortData || []).map((item: PortManageType) => {
+          if (value.fnds && value.fnds.includes(item.code))
+            newArr.push(item.cnName);
+        });
+        return <div>{newArr.join('、')}</div>;
       },
     },
     {

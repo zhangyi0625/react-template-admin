@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react';
 import {
   App,
   Button,
@@ -8,66 +8,58 @@ import {
   Space,
   TablePaginationConfig,
   TableProps,
-} from 'antd'
-import { ExclamationCircleFilled, PlusOutlined } from '@ant-design/icons'
-import { SearchForm, SearchTable } from 'customer-search-form-table'
-import AddRouteManage from './AddRouteManage'
-import { SelectRouteManageOptions } from './config'
+} from 'antd';
+import { ExclamationCircleFilled, PlusOutlined } from '@ant-design/icons';
+import { SearchForm, SearchTable } from 'customer-search-form-table';
+import AddRouteManage from './AddRouteManage';
+import { SelectRouteManageOptions } from './config';
 import {
   addRouteManage,
   deleteRouteManage,
   getRouteManageListByPage,
   updateRouteManage,
-} from '@/services/customerInformation/routeManage/routeManageApi'
+} from '@/services/customerInformation/routeManage/routeManageApi';
 import type {
   RouteMangeParams,
   RouteMangeType,
-} from '@/services/customerInformation/routeManage/routeManageModel'
-import { filterKeys } from '@/utils/tool'
-import { useDispatch, useSelector } from 'react-redux'
-import { RootState, setEssentail } from '@/stores/store'
-import { getFndPortManageList } from '@/services/essential/portManage/portManageModel'
-import { PortManageType } from '@/services/essential/portManage/portManageApi'
-import useParentSize from '@/hooks/useParentSize'
+} from '@/services/customerInformation/routeManage/routeManageModel';
+import { filterKeys } from '@/utils/tool';
+import { PortManageType } from '@/services/essential/portManage/portManageApi';
+import useParentSize from '@/hooks/useParentSize';
+import useCacheData from '@/hooks/useCacheData';
 
 const RouteManage: React.FC = () => {
-  const { modal, message } = App.useApp()
+  const { modal, message } = App.useApp();
 
-  const { parentRef, height } = useParentSize()
-
-  const dispatch = useDispatch()
-
-  const essential = useSelector((state: RootState) => state.essentail)
+  const { parentRef, height } = useParentSize();
 
   const [searchDefaultForm, setSearchDefaultForm] = useState<RouteMangeParams>({
     page: 1,
     limit: 10,
-  })
+  });
 
-  const [selectOptions, setSelectOptions] = useState(SelectRouteManageOptions)
+  const [selectOptions, setSelectOptions] = useState(SelectRouteManageOptions);
 
   const [params, setParams] = useState<{
-    visible: boolean
-    currentRow: any
-    view: boolean
+    visible: boolean;
+    currentRow: any;
+    view: boolean;
   }>({
     visible: false,
     currentRow: null,
     view: false,
-  })
+  });
 
-  const [immediate, setImmediate] = useState<boolean>(true)
+  const [fndPortData, setFndPortData] = useState<SelectProps['options']>([]);
 
-  const [fndPortData, setFndPortData] = useState<SelectProps['options']>([])
+  const { essential } = useCacheData({
+    cacheEssentialKeys: ['fndPortData'],
+    formMap: selectOptions,
+  });
 
   useEffect(() => {
-    setImmediate(false)
-    if (!essential.fndPortData?.length) {
-      loadSearchList()
-    } else {
-      getReduxData()
-    }
-  }, [immediate, essential])
+    init();
+  }, [essential]);
 
   const columns: TableProps['columns'] = [
     {
@@ -82,23 +74,22 @@ const RouteManage: React.FC = () => {
       key: 'fnds',
       align: 'center',
       render(value) {
-        return <div>{value.fnds.join(',') ?? ''}</div>
+        return <div>{value.fnds.join(',') ?? ''}</div>;
       },
     },
     {
       title: '操作',
       width: '14%',
-      dataIndex: 'action',
       fixed: 'right',
       align: 'center',
-      render(_, record) {
+      render(_) {
         return (
           <Space size={0}>
             <Button
               type="link"
               size="small"
               onClick={() =>
-                setParams({ visible: true, currentRow: record, view: true })
+                setParams({ visible: true, currentRow: _, view: true })
               }
             >
               修改
@@ -107,42 +98,30 @@ const RouteManage: React.FC = () => {
               type="link"
               danger
               size="small"
-              onClick={() => deleteBatch(record.id)}
+              onClick={() => deleteBatch(_.id)}
             >
               删除
             </Button>
           </Space>
-        )
+        );
       },
     },
-  ]
+  ];
 
-  const loadSearchList = () => {
-    Promise.all([getFndPortManageList()]).then((resp) => {
-      let key = ['fndPortData']
-      key.map((_, index: number) => {
-        dispatch(setEssentail({ value: resp[index], key: key[index] }))
-      })
-      setTimeout(() => {
-        getReduxData()
-      }, 500)
-    })
-  }
-
-  const getReduxData = () => {
-    let { fndPortData = [] } = essential
+  const init = () => {
+    let { fndPortData = [] } = essential;
     let fnd = fndPortData.map((item: PortManageType) => {
       return {
         value: item.code,
         label: item.enName + '-' + item.cnName,
-      }
-    })
+      };
+    });
     selectOptions.map((item) => {
-      if (item.name === 'fnds') item.options = fnd
-    })
-    setSelectOptions(selectOptions)
-    setFndPortData(fnd)
-  }
+      if (item.name === 'fnds') item.options = fnd;
+    });
+    setSelectOptions(selectOptions);
+    setFndPortData(fnd);
+  };
 
   const deleteBatch = (id: string) => {
     modal.confirm({
@@ -152,46 +131,46 @@ const RouteManage: React.FC = () => {
       onOk() {
         deleteRouteManage(id).then(() => {
           // 刷新表格数据
-          onUpdateSearch()
-        })
+          onUpdateSearch();
+        });
       },
-    })
-  }
+    });
+  };
 
   const onEditOk = async (routeRow: RouteMangeType) => {
     try {
       if (params.currentRow == null) {
         // 新增数据
-        await addRouteManage(routeRow)
+        await addRouteManage(routeRow);
       } else {
         // 编辑数据
-        await updateRouteManage(routeRow)
+        await updateRouteManage(routeRow);
       }
       // 操作成功，关闭弹窗，刷新数据
-      message.success(!params.currentRow ? '添加成功' : '修改成功')
-      setParams({ visible: false, currentRow: null, view: false })
-      onUpdateSearch()
+      message.success(!params.currentRow ? '添加成功' : '修改成功');
+      setParams({ visible: false, currentRow: null, view: false });
+      onUpdateSearch();
     } catch (error) {}
-  }
+  };
 
   const onUpdateSearch = (info?: RouteMangeParams | unknown) => {
     const filteredObj = Object.fromEntries(
       Object.entries(info ?? {}).filter(([, value]) => !!value)
-    )
-    let pageInfo = filterKeys(searchDefaultForm, ['page', 'limit'], true)
+    );
+    let pageInfo = filterKeys(searchDefaultForm, ['page', 'limit'], true);
     setSearchDefaultForm({
       ...pageInfo,
       ...filteredObj,
-    })
-  }
+    });
+  };
 
   const onUpdatePagination = (pagination: TablePaginationConfig) => {
     setSearchDefaultForm({
       ...searchDefaultForm,
       page: pagination.current as number,
       limit: pagination.pageSize as number,
-    })
-  }
+    });
+  };
   return (
     <>
       {/* 菜单检索条件栏 */}
@@ -244,23 +223,24 @@ const RouteManage: React.FC = () => {
           pageIndexKey="page"
           pageSizeKey="limit"
           scroll={{ x: 'max-content', y: height - 158 }}
-          immediate={immediate}
           fetchData={getRouteManageListByPage}
           searchFilter={searchDefaultForm}
           isSelection={false}
           onUpdatePagination={onUpdatePagination}
         />
       </Card>
-      <AddRouteManage
-        fndPortOptions={fndPortData}
-        params={params}
-        onOk={onEditOk}
-        onCancel={() =>
-          setParams({ visible: false, currentRow: null, view: false })
-        }
-      />
+      {params.visible && (
+        <AddRouteManage
+          fndPortOptions={fndPortData}
+          params={params}
+          onOk={onEditOk}
+          onCancel={() =>
+            setParams({ visible: false, currentRow: null, view: false })
+          }
+        />
+      )}
     </>
-  )
-}
+  );
+};
 
-export default RouteManage
+export default RouteManage;

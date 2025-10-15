@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState } from 'react';
 import {
   App,
   Button,
@@ -7,45 +7,45 @@ import {
   Space,
   TablePaginationConfig,
   TableProps,
-} from 'antd'
-import { ExclamationCircleFilled, PlusOutlined } from '@ant-design/icons'
-import {
-  CarrierManageParams,
-  CarrierManageType,
-} from '@/services/essential/carrierManage/carrierManageModel'
-import { SearchForm, SearchTable } from 'customer-search-form-table'
+} from 'antd';
+import { ExclamationCircleFilled, PlusOutlined } from '@ant-design/icons';
+import { SearchForm, SearchTable } from 'customer-search-form-table';
 import {
   addCarrierManage,
   deleteCarrierManage,
   getCarrierManageListByPage,
   putCarrierManage,
-} from '@/services/essential/carrierManage/carrierManageApi'
-import { SelectCarrierManageOptions } from './config'
-import { filterKeys } from '@/utils/tool'
-import AddCarrierManage from './AddCarrierManage'
-import useParentSize from '@/hooks/useParentSize'
+} from '@/services/essential/carrierManage/carrierManageApi';
+import AddCarrierManage from './AddCarrierManage';
+import useParentSize from '@/hooks/useParentSize';
+import type {
+  CarrierManageParams,
+  CarrierManageType,
+} from '@/services/essential/carrierManage/carrierManageModel';
+import { SelectCarrierManageOptions } from './config';
+import { filterKeys } from '@/utils/tool';
 
 const CarrierManage: React.FC = () => {
-  const { modal, message } = App.useApp()
+  const { modal, message } = App.useApp();
 
-  const { parentRef, height } = useParentSize()
+  const { parentRef, height } = useParentSize();
 
   const [searchDefaultForm, setSearchDefaultForm] =
     useState<CarrierManageParams>({
       page: 1,
       limit: 10,
       code: null,
-    })
+    });
 
   const [params, setParams] = useState<{
-    visible: boolean
-    currentRow: any
-    view: boolean
+    visible: boolean;
+    currentRow: CarrierManageType | null;
+    view: boolean;
   }>({
     visible: false,
     currentRow: null,
     view: false,
-  })
+  });
 
   const columns: TableProps['columns'] = [
     {
@@ -73,7 +73,7 @@ const CarrierManage: React.FC = () => {
       key: 'logoUrl',
       align: 'center',
       render(value) {
-        return <img src={value} className="w-[48px] h-[48px] m-auto" alt="" />
+        return <img src={value} className="w-[48px] h-[48px] m-auto" alt="" />;
       },
     },
     {
@@ -86,17 +86,16 @@ const CarrierManage: React.FC = () => {
     {
       title: '操作',
       width: '14%',
-      dataIndex: 'action',
       fixed: 'right',
       align: 'center',
-      render(_, record) {
+      render(_) {
         return (
           <Space size={0}>
             <Button
               type="link"
               size="small"
               onClick={() =>
-                setParams({ visible: true, currentRow: record, view: true })
+                setParams({ visible: true, currentRow: _, view: true })
               }
             >
               修改
@@ -105,31 +104,31 @@ const CarrierManage: React.FC = () => {
               type="link"
               danger
               size="small"
-              onClick={() => deleteBatch(record.id)}
+              onClick={() => deleteBatch(_.id)}
             >
               删除
             </Button>
           </Space>
-        )
+        );
       },
     },
-  ]
+  ];
 
   const onEditOk = async (customerRow: CarrierManageType) => {
     try {
       if (params.currentRow == null) {
         // 新增数据
-        await addCarrierManage(customerRow)
+        await addCarrierManage(customerRow);
       } else {
         // 编辑数据
-        await putCarrierManage(customerRow)
+        await putCarrierManage(customerRow);
       }
-      message.success(!params.currentRow ? '添加成功' : '修改成功')
+      message.success(!params.currentRow ? '添加成功' : '修改成功');
       // 操作成功，关闭弹窗，刷新数据
-      setParams({ visible: false, currentRow: null, view: false })
-      onUpdateSearch()
+      setParams({ visible: false, currentRow: null, view: false });
+      onUpdateSearch();
     } catch (error) {}
-  }
+  };
 
   const deleteBatch = (id: string) => {
     modal.confirm({
@@ -139,30 +138,30 @@ const CarrierManage: React.FC = () => {
       onOk() {
         deleteCarrierManage(id).then(() => {
           // 刷新表格数据
-          onUpdateSearch()
-        })
+          onUpdateSearch();
+        });
       },
-    })
-  }
+    });
+  };
 
   const onUpdateSearch = (info?: CarrierManageParams | unknown) => {
     const filteredObj = Object.fromEntries(
       Object.entries(info ?? {}).filter(([, value]) => !!value)
-    )
-    let pageInfo = filterKeys(searchDefaultForm, ['page', 'limit'], true)
+    );
+    let pageInfo = filterKeys(searchDefaultForm, ['page', 'limit'], true);
     setSearchDefaultForm({
       ...pageInfo,
       ...filteredObj,
-    })
-  }
+    });
+  };
 
   const onUpdatePagination = (pagination: TablePaginationConfig) => {
     setSearchDefaultForm({
       ...searchDefaultForm,
       page: pagination.current as number,
       limit: pagination.pageSize as number,
-    })
-  }
+    });
+  };
 
   return (
     <>
@@ -230,7 +229,7 @@ const CarrierManage: React.FC = () => {
         }
       />
     </>
-  )
-}
+  );
+};
 
-export default CarrierManage
+export default CarrierManage;

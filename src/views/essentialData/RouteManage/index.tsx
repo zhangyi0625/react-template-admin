@@ -42,7 +42,7 @@ const RouteManage: React.FC = () => {
 
   const [params, setParams] = useState<{
     visible: boolean;
-    currentRow: any;
+    currentRow: RouteMangeType | null;
     view: boolean;
   }>({
     visible: false,

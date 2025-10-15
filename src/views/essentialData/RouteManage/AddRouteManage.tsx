@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Form, Input, Select } from 'antd';
+import { App, Form, Input, Select } from 'antd';
 import { SelectProps } from 'antd/es/select';
 import DragModal from '@/components/modal/DragModal';
 import type { RouteMangeType } from '@/services/customerInformation/routeManage/routeManageModel';
@@ -9,7 +9,7 @@ import AddIcon from '@/assets/svg/icon/add.svg';
 export type AddCustomerManageProps = {
   params: {
     visible: boolean;
-    currentRow: RouteMangeType;
+    currentRow: RouteMangeType | null;
     view: boolean;
   };
   fndPortOptions: SelectProps['options'];
@@ -24,6 +24,8 @@ const AddRouteManage: React.FC<AddCustomerManageProps> = ({
   onCancel,
 }) => {
   const { visible, currentRow, view } = params;
+
+  const { message } = App.useApp();
 
   const [form] = Form.useForm();
 
@@ -52,15 +54,25 @@ const AddRouteManage: React.FC<AddCustomerManageProps> = ({
   };
 
   const selectChange = (value: string, index: number) => {
+    if (fndOptions.find((item) => item === value)) {
+      message.error('请勿添加重复的目的港！');
+      onClear(index);
+    }
     fndOptions[index] = value;
     setFndOptions([...fndOptions] as string[]);
+  };
+
+  const onClear = (index: number) => {
+    setTimeout(() => {
+      fndOptions[index] = undefined;
+      setFndOptions([...fndOptions] as string[]);
+    }, 300);
   };
 
   const handleOk = () => {
     form
       .validateFields()
       .then(() => {
-        console.log(form.getFieldsValue(), fndOptions);
         onOk({
           ...form.getFieldsValue(),
           fnds: fndOptions.filter((item) => !!item),
@@ -100,9 +112,8 @@ const AddRouteManage: React.FC<AddCustomerManageProps> = ({
         </Form.Item>
         <Form.Item label="目的港">
           {fndOptions.map((item, index) => (
-            <div className="flex items-center" key={index}>
+            <div className="flex items-center mb-[10px]" key={index}>
               <Select
-                style={{ marginBottom: '10px' }}
                 allowClear
                 placeholder="请选择目的港"
                 showSearch
@@ -113,6 +124,7 @@ const AddRouteManage: React.FC<AddCustomerManageProps> = ({
                     .includes(input.toLowerCase())
                 }
                 onChange={(value) => selectChange(value, index)}
+                onClear={() => onClear(index)}
                 value={item}
               />
               <img
@@ -121,7 +133,7 @@ const AddRouteManage: React.FC<AddCustomerManageProps> = ({
                 alt="delete"
                 className={`${
                   fndOptions.length <= 1 && 'hidden'
-                } w-[14px] h-[14px] ml-[12px] mb-[10px] cursor-pointer`}
+                } w-[14px] h-[14px] ml-[12px] cursor-pointer`}
               />
             </div>
           ))}

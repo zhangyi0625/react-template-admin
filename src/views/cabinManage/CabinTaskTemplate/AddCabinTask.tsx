@@ -1,4 +1,4 @@
-import React, { memo, useCallback, useEffect } from 'react'
+import React, { memo, useCallback, useEffect } from 'react';
 import {
   Button,
   DatePicker,
@@ -9,49 +9,49 @@ import {
   Radio,
   Select,
   Space,
-} from 'antd'
-import type { CheckboxGroupProps } from 'antd/es/checkbox'
-import { CloseOutlined } from '@ant-design/icons'
-import { useSelector } from 'react-redux'
-import { RootState } from '@/stores/store'
-import { getTemplateSetting } from './columns'
-import { BOXPILE } from './config'
-import type { CustomerManageType } from '@/services/essential/customerManage/customerManageModel'
-import type { CabinTaskTemplateType } from '@/services/cabinManage/cabinManageModel'
-import dayjs from 'dayjs'
-import { formatTime } from '@/utils/format'
-import { filterKeys } from '@/utils/tool'
+} from 'antd';
+import type { CheckboxGroupProps } from 'antd/es/checkbox';
+import { CloseOutlined } from '@ant-design/icons';
+import { useSelector } from 'react-redux';
+import { RootState } from '@/stores/store';
+import { getTemplateSetting } from './columns';
+import { BOXPILE } from './config';
+import type { CustomerManageType } from '@/services/essential/customerManage/customerManageModel';
+import type { CabinTaskTemplateType } from '@/services/cabinManage/cabinManageModel';
+import dayjs from 'dayjs';
+import { formatTime } from '@/utils/format';
+import { filterKeys } from '@/utils/tool';
 
 export type AddCabinTaskProps = {
   params: {
-    visible: boolean
-    currentRow: CabinTaskTemplateType | null
-    view: boolean
-  }
-  carrier: string
-  onOk: (params: CabinTaskTemplateType) => void
-  onCancel: () => void
-}
+    visible: boolean;
+    currentRow: CabinTaskTemplateType | null;
+    view: boolean;
+  };
+  carrier: string;
+  onOk: (params: CabinTaskTemplateType) => void;
+  onCancel: () => void;
+};
 
 const AddCabinTask: React.FC<AddCabinTaskProps> = memo(
   ({ params, carrier, onOk, onCancel }) => {
-    const { visible, currentRow } = params
+    const { visible, currentRow } = params;
 
-    const [form] = Form.useForm()
+    const [form] = Form.useForm();
 
-    const ctnTypeOptions = BOXPILE || []
+    const ctnTypeOptions = BOXPILE || [];
 
-    const essential = useSelector((state: RootState) => state.essentail)
+    const essential = useSelector((state: RootState) => state.essentail);
 
     const otherFormItem = useCallback(() => {
-      return getTemplateSetting()['formSetting'][carrier] ?? []
-    }, [])
+      return getTemplateSetting()['formSetting'][carrier] ?? [];
+    }, []);
 
     useEffect(() => {
-      if (!visible) return
-      form.resetFields()
+      if (!visible) return;
+      form.resetFields();
       if (!currentRow) {
-        form.setFieldsValue({ withRollable: 1, insurance: 1 })
+        form.setFieldsValue({ withRollable: 1, insurance: 1 });
       } else {
         form.setFieldsValue({
           ...currentRow,
@@ -59,9 +59,9 @@ const AddCabinTask: React.FC<AddCabinTaskProps> = memo(
           ...currentRow.extra,
           withRollable: currentRow.extra ? 1 : 0,
           insurance: currentRow.extra ? 1 : 0,
-        })
+        });
       }
-    }, [visible])
+    }, [visible]);
 
     const selectPortOptions = (
       selectOptions: { code: string; enName: string; cnName: string }[]
@@ -69,14 +69,14 @@ const AddCabinTask: React.FC<AddCabinTaskProps> = memo(
       return selectOptions.map((item) => ({
         label: item.enName + '-' + item.cnName,
         value: item.code,
-      }))
-    }
+      }));
+    };
 
     const getFilterOption = (input: string, option?: { label: string }) => {
       return String(option?.label ?? '')
         .toLowerCase()
-        .includes(input.toLowerCase())
-    }
+        .includes(input.toLowerCase());
+    };
 
     const onConfirm = () => {
       form
@@ -85,22 +85,22 @@ const AddCabinTask: React.FC<AddCabinTaskProps> = memo(
           const extraKeys =
             (getTemplateSetting()['formSetting'][carrier] || []).map(
               (item) => item.name
-            ) ?? []
+            ) ?? [];
           let params = {
             ...filterKeys(form.getFieldsValue(), extraKeys, false),
             etd: formatTime(form.getFieldValue('etd'), 'Y-M-D'),
             extra: {
               ...filterKeys(form.getFieldsValue(), extraKeys, true),
             },
-          }
-          onOk(params)
+          };
+          onOk(params);
         })
         .catch((errorInfo) => {
           // 滚动并聚焦到第一个错误字段
-          form.scrollToField(errorInfo.errorFields[0].name)
-          form.focusField(errorInfo.errorFields[0].name)
-        })
-    }
+          form.scrollToField(errorInfo.errorFields[0].name);
+          form.focusField(errorInfo.errorFields[0].name);
+        });
+    };
     return (
       <Drawer
         title={!currentRow ? '创建任务' : '修改任务'}
@@ -290,8 +290,8 @@ const AddCabinTask: React.FC<AddCabinTaskProps> = memo(
           ))}
         </Form>
       </Drawer>
-    )
+    );
   }
-)
+);
 
-export default AddCabinTask
+export default AddCabinTask;

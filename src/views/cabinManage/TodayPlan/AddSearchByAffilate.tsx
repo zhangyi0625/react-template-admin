@@ -1,53 +1,53 @@
-import React, { useEffect, useState } from 'react'
-import { Col, Form, Input, Row, Select } from 'antd'
-import DragModal from '@/components/modal/DragModal'
-import { AddSearchForm } from './config'
-import { useSelector } from 'react-redux'
-import { RootState } from '@/stores/store'
+import React, { useEffect, useState } from 'react';
+import { Col, Form, Input, Row, Select } from 'antd';
+import DragModal from '@/components/modal/DragModal';
+import { AddSearchForm } from './config';
+import { useSelector } from 'react-redux';
+import { RootState } from '@/stores/store';
 
 export type AddSearchByAffilateProps = {
-  visible: boolean
-  onOk: (params: any) => void
-  onCancel: () => void
-}
+  visible: boolean;
+  onOk: (params: any) => void;
+  onCancel: () => void;
+};
 
 const AddSearchByAffilate: React.FC<AddSearchByAffilateProps> = ({
   visible,
   onCancel,
   onOk,
 }) => {
-  const [form] = Form.useForm()
+  const [form] = Form.useForm();
 
-  const [formMap, setFormMap] = useState(AddSearchForm)
+  const [formMap, setFormMap] = useState(AddSearchForm);
 
-  const essential = useSelector((state: RootState) => state.essentail)
+  const essential = useSelector((state: RootState) => state.essentail);
 
   useEffect(() => {
-    if (!visible) return
-    form.resetFields()
-    init()
-  }, [visible])
+    if (!visible) return;
+    form.resetFields();
+    init();
+  }, [visible]);
 
   const init = () => {
-    let { customerData = [], carrierData = [] } = essential
+    let { customerData = [], carrierData = [] } = essential;
     formMap.map((item) => {
-      item.options = item.name === 'carrier' ? carrierData : customerData
-    })
-    setFormMap([...formMap])
-  }
+      item.options = item.name === 'carrier' ? carrierData : customerData;
+    });
+    setFormMap([...formMap]);
+  };
 
   const handleOk = () => {
     form
       .validateFields()
       .then(() => {
-        onOk(form.getFieldsValue())
+        onOk(form.getFieldsValue());
       })
       .catch((errorInfo) => {
         // 滚动并聚焦到第一个错误字段
-        form.scrollToField(errorInfo.errorFields[0].name)
-        form.focusField(errorInfo.errorFields[0].name)
-      })
-  }
+        form.scrollToField(errorInfo.errorFields[0].name);
+        form.focusField(errorInfo.errorFields[0].name);
+      });
+  };
 
   return (
     <DragModal
@@ -101,7 +101,7 @@ const AddSearchByAffilate: React.FC<AddSearchByAffilateProps> = ({
         </Row>
       </Form>
     </DragModal>
-  )
-}
+  );
+};
 
-export default AddSearchByAffilate
+export default AddSearchByAffilate;

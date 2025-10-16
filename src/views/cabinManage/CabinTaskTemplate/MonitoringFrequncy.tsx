@@ -1,40 +1,40 @@
-import React, { useEffect } from 'react'
-import { Form, Radio } from 'antd'
-import { CheckboxGroupProps } from 'antd/es/checkbox'
-import DragModal from '@/components/modal/DragModal'
+import React, { useEffect } from 'react';
+import { Form, Radio } from 'antd';
+import { CheckboxGroupProps } from 'antd/es/checkbox';
+import DragModal from '@/components/modal/DragModal';
 
 export type MonitoringFrequncyProps = {
-  visible: boolean
-  onOk: (params: { frequency: string }) => void
-  onCancel: () => void
-}
+  visible: boolean;
+  onOk: (params: { frequency: string }) => void;
+  onCancel: () => void;
+};
 
 const MonitoringFrequncy: React.FC<MonitoringFrequncyProps> = ({
   visible,
   onCancel,
   onOk,
 }) => {
-  const [form] = Form.useForm()
+  const [form] = Form.useForm();
 
   useEffect(() => {
-    if (!visible) return
-    form.setFieldsValue({ frequency: '2秒' })
-  }, [visible])
+    if (!visible) return;
+    form.setFieldsValue({ frequency: '2秒' });
+  }, [visible]);
 
-  const options = ['2秒', '5秒', '10秒']
+  const options = ['2秒', '5秒', '10秒'];
 
   const handleOk = () => {
     form
       .validateFields()
       .then(() => {
-        onOk(form.getFieldsValue())
+        onOk(form.getFieldsValue());
       })
       .catch((errorInfo) => {
         // 滚动并聚焦到第一个错误字段
-        form.scrollToField(errorInfo.errorFields[0].name)
-        form.focusField(errorInfo.errorFields[0].name)
-      })
-  }
+        form.scrollToField(errorInfo.errorFields[0].name);
+        form.focusField(errorInfo.errorFields[0].name);
+      });
+  };
 
   return (
     <DragModal
@@ -61,7 +61,7 @@ const MonitoringFrequncy: React.FC<MonitoringFrequncyProps> = ({
         </Form.Item>
       </Form>
     </DragModal>
-  )
-}
+  );
+};
 
-export default MonitoringFrequncy
+export default MonitoringFrequncy;

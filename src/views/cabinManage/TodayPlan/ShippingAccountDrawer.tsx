@@ -1,17 +1,17 @@
-import React, { useEffect, useMemo, useState } from 'react'
-import { Button, Drawer, Space, Table, TableProps } from 'antd'
-import type { AffilateAccountType } from '@/services/todayPlan/todayPlanModal'
+import React, { useEffect, useMemo, useState } from 'react';
+import { Button, Drawer, Space, Table, TableProps } from 'antd';
+import type { AffilateAccountType } from '@/services/todayPlan/todayPlanModal';
 
 export type ShippingAccountDrawerProps = {
   params: {
-    visible: boolean
-    type: 'search' | 'login'
-    currentRow: AffilateAccountType[] | null
-  }
-  onCancel: () => void
-  onLoginAccount: (customerId: string) => void
-  onBatchLogin: (ids: string[]) => void
-}
+    visible: boolean;
+    type: 'search' | 'login';
+    currentRow: AffilateAccountType[] | null;
+  };
+  onCancel: () => void;
+  onLoginAccount: (customerId: string) => void;
+  onBatchLogin: (ids: string[]) => void;
+};
 
 const ShippingAccountDrawer: React.FC<ShippingAccountDrawerProps> = ({
   params,
@@ -19,18 +19,18 @@ const ShippingAccountDrawer: React.FC<ShippingAccountDrawerProps> = ({
   onLoginAccount,
   onBatchLogin,
 }) => {
-  const { visible, type, currentRow = [] } = params
+  const { visible, type, currentRow = [] } = params;
 
-  const [dataSource, setDataSource] = useState<AffilateAccountType[]>([])
+  const [dataSource, setDataSource] = useState<AffilateAccountType[]>([]);
 
   const title = useMemo(() => {
-    return type === 'search' ? '船司账号' : '账号预登陆'
-  }, [type])
+    return type === 'search' ? '船司账号' : '账号预登陆';
+  }, [type]);
 
   useEffect(() => {
-    if (!visible) return
-    setDataSource(currentRow ?? [])
-  }, [visible])
+    if (!visible) return;
+    setDataSource(currentRow ?? []);
+  }, [visible]);
 
   const tableColumns: TableProps['columns'] = [
     {
@@ -81,15 +81,15 @@ const ShippingAccountDrawer: React.FC<ShippingAccountDrawerProps> = ({
           <div
             className="cursor-pointer text-normal-blue text-sm"
             onClick={() => {
-              onLoginAccount(_.customerId)
+              onLoginAccount(_.customerId);
             }}
           >
             登陆账号
           </div>
-        )
+        );
       },
     },
-  ]
+  ];
 
   return (
     <Drawer
@@ -124,7 +124,7 @@ const ShippingAccountDrawer: React.FC<ShippingAccountDrawerProps> = ({
         rowKey={type === 'search' ? 'id' : 'fndCode'}
       />
     </Drawer>
-  )
-}
+  );
+};
 
-export default ShippingAccountDrawer
+export default ShippingAccountDrawer;

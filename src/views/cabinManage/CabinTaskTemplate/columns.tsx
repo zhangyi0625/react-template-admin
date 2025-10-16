@@ -1,31 +1,15 @@
-import { TableProps } from 'antd'
-import { formatTime } from '@/utils/format'
-import type { CustomColumn } from 'customer-search-form-table/SearchForm/type'
-import { ServiceSettingType } from './config'
+import { TableProps } from 'antd';
+import { formatTime } from '@/utils/format';
+import type { CustomColumn } from 'customer-search-form-table/SearchForm/type';
+import { ServiceSettingType } from './config';
 
 type formSettingType = Pick<
   CustomColumn,
   'label' | 'name' | 'formType' | 'isRules' | 'options'
->
+>;
 
 export const getTemplateSetting = (carrier?: string, statusType?: string) => {
   const columns = [
-    // {
-    //   title: '任务编号',
-    //   key: 'taskNo',
-    //   align: 'center',
-    //   width: 100,
-    //   render(value) {
-    //     return (
-    //       <div
-    //         className="text-blue-500 cursor-pointer underline text-sm"
-    //         onClick={() => editTaskTemplate(value)}
-    //       >
-    //         {value.taskNo}
-    //       </div>
-    //     )
-    //   },
-    // },
     {
       title: '抢舱模式',
       key: 'startType',
@@ -41,7 +25,7 @@ export const getTemplateSetting = (carrier?: string, statusType?: string) => {
                   (item) => item.value === value.startType
                 )?.label}
           </div>
-        )
+        );
       },
     },
     {
@@ -61,7 +45,7 @@ export const getTemplateSetting = (carrier?: string, statusType?: string) => {
           <div>
             {value.por.enName ?? ''} - {value.por.cnName ?? ''}
           </div>
-        )
+        );
       },
     },
     {
@@ -74,7 +58,7 @@ export const getTemplateSetting = (carrier?: string, statusType?: string) => {
           <div>
             {value.fnd.enName ?? ''} - {value.fnd.cnName ?? ''}
           </div>
-        )
+        );
       },
     },
     {
@@ -94,7 +78,7 @@ export const getTemplateSetting = (carrier?: string, statusType?: string) => {
           <div className="text-blue-500 cursor-pointer underline text-sm">
             {value.customerName}
           </div>
-        )
+        );
       },
     },
     {
@@ -103,7 +87,7 @@ export const getTemplateSetting = (carrier?: string, statusType?: string) => {
       align: 'center',
       width: 180,
       render(value) {
-        return <div>{formatTime(value.etd, 'M-D')}</div>
+        return <div>{formatTime(value.etd, 'M-D')}</div>;
       },
     },
     {
@@ -122,7 +106,7 @@ export const getTemplateSetting = (carrier?: string, statusType?: string) => {
           <div>
             {value.ctnQty} / {value.ctnTicket}
           </div>
-        )
+        );
       },
     },
     {
@@ -132,7 +116,7 @@ export const getTemplateSetting = (carrier?: string, statusType?: string) => {
       width: 150,
       hidden: carrier !== 'MSK',
       render(value) {
-        return <div>{value.extra?.extentDndFreeDays ?? '-'}</div>
+        return <div>{value.extra?.extentDndFreeDays ?? '-'}</div>;
       },
     },
     {
@@ -142,7 +126,7 @@ export const getTemplateSetting = (carrier?: string, statusType?: string) => {
       width: 150,
       hidden: carrier !== 'MSK',
       render(value) {
-        return <div>{value.extra?.withRollable ? '需要' : '不需要'}</div>
+        return <div>{value.extra?.withRollable ? '需要' : '不需要'}</div>;
       },
     },
     {
@@ -152,7 +136,7 @@ export const getTemplateSetting = (carrier?: string, statusType?: string) => {
       width: 150,
       hidden: carrier !== 'OOCL',
       render(value) {
-        return <div>{value.extra?.insurance ? '需要' : '不需要'}</div>
+        return <div>{value.extra?.insurance ? '需要' : '不需要'}</div>;
       },
     },
 
@@ -163,7 +147,7 @@ export const getTemplateSetting = (carrier?: string, statusType?: string) => {
       width: 120,
       hidden: carrier !== 'MSK',
       render(value) {
-        return <div>{value.extra?.contractNo ?? ''}</div>
+        return <div>{value.extra?.contractNo ?? ''}</div>;
       },
     },
     {
@@ -179,10 +163,10 @@ export const getTemplateSetting = (carrier?: string, statusType?: string) => {
       align: 'center',
       width: 180,
       render(value) {
-        return <div>{formatTime(value.createTime, 'Y-M-D h:m')}</div>
+        return <div>{formatTime(value.createTime, 'Y-M-D h:m')}</div>;
       },
     },
-  ] as TableProps['columns']
+  ] as TableProps['columns'];
 
   const formSetting: Record<string, formSettingType[]> = {
     MSK: [
@@ -233,7 +217,7 @@ export const getTemplateSetting = (carrier?: string, statusType?: string) => {
         ],
       },
     ],
-  }
+  };
 
   const operationColumns: TableProps['columns'] = [
     {
@@ -247,7 +231,7 @@ export const getTemplateSetting = (carrier?: string, statusType?: string) => {
       key: 'updateTime',
       align: 'center',
       render(value) {
-        return <div>{formatTime(value.updateTime, 'Y-M-D h:m')}</div>
+        return <div>{formatTime(value.updateTime, 'Y-M-D h:m')}</div>;
       },
     },
     {
@@ -256,10 +240,10 @@ export const getTemplateSetting = (carrier?: string, statusType?: string) => {
       align: 'center',
       dataIndex: 'content',
     },
-  ]
+  ];
   return {
     columns: columns,
     formSetting: formSetting,
     operationColumns: operationColumns,
-  }
-}
+  };
+};

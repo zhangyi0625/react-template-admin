@@ -1,46 +1,46 @@
-import React, { useCallback, useEffect, useState } from 'react'
-import { App, Button, Drawer, Space } from 'antd'
-import { CloseOutlined } from '@ant-design/icons'
-import { getCabinManageList } from '@/services/cabinManage/cabinManageApi'
-import { getTemplateSetting } from './columns'
-import { SearchTable } from 'customer-search-form-table'
+import React, { useCallback, useEffect, useState } from 'react';
+import { App, Button, Drawer, Space } from 'antd';
+import { CloseOutlined } from '@ant-design/icons';
+import { getCabinManageList } from '@/services/cabinManage/cabinManageApi';
+import { getTemplateSetting } from './columns';
+import { SearchTable } from 'customer-search-form-table';
 
 export type SetFrequecnyDrawerProps = {
-  visible: boolean
-  onOk: (params: string[]) => void
-  onCancel: () => void
-}
+  visible: boolean;
+  onOk: (params: string[]) => void;
+  onCancel: () => void;
+};
 
 const SetFrequecnyDrawer: React.FC<SetFrequecnyDrawerProps> = ({
   visible,
   onCancel,
   onOk,
 }) => {
-  const { message } = App.useApp()
+  const { message } = App.useApp();
 
   const [searchDefaultForm] = useState({
     startType: 'HIGH_FREQ',
-  })
+  });
 
-  const [seleced, setSelected] = useState<string[]>([])
+  const [seleced, setSelected] = useState<string[]>([]);
 
   const tableColumns = useCallback(() => {
-    let columns = getTemplateSetting()['columns']
-    let nameKey = ['porCode', 'fndCode', 'route', 'etd']
-    return columns?.filter((item) => nameKey.includes(String(item.key)))
-  }, [])
+    let columns = getTemplateSetting()['columns'];
+    let nameKey = ['porCode', 'fndCode', 'route', 'etd'];
+    return columns?.filter((item) => nameKey.includes(String(item.key)));
+  }, []);
 
   useEffect(() => {
-    if (!visible) return
-  }, [visible])
+    if (!visible) return;
+  }, [visible]);
 
   const onConfirm = () => {
     if (!seleced.length) {
-      message.error('至少选择一条数据设置同频放舱！')
-      return
+      message.error('至少选择一条数据设置同频放舱！');
+      return;
     }
-    onOk(seleced)
-  }
+    onOk(seleced);
+  };
 
   return (
     <Drawer
@@ -78,7 +78,7 @@ const SetFrequecnyDrawer: React.FC<SetFrequecnyDrawerProps> = ({
         onUpdateSelection={(options: string[]) => setSelected(options)}
       />
     </Drawer>
-  )
-}
+  );
+};
 
-export default SetFrequecnyDrawer
+export default SetFrequecnyDrawer;

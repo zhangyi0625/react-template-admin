@@ -1,45 +1,45 @@
-import React, { useCallback, useEffect, useState } from 'react'
-import { Button, Drawer, Space, Table } from 'antd'
-import { CloseOutlined } from '@ant-design/icons'
-import { getTemplateSetting } from './columns'
-import { getCabinOperationLog } from '@/services/cabinManage/cabinManageApi'
+import React, { useCallback, useEffect, useState } from 'react';
+import { Button, Drawer, Space, Table } from 'antd';
+import { CloseOutlined } from '@ant-design/icons';
+import { getTemplateSetting } from './columns';
+import { getCabinOperationLog } from '@/services/cabinManage/cabinManageApi';
 
 export type OperationLogDrawerProps = {
   params: {
-    visible: boolean
-    id: string | null
-  }
-  onCancel: () => void
-}
+    visible: boolean;
+    id: string | null;
+  };
+  onCancel: () => void;
+};
 
 const OperationLogDrawer: React.FC<OperationLogDrawerProps> = ({
   params,
   onCancel,
 }) => {
-  const { visible, id } = params
+  const { visible, id } = params;
 
-  const [tableData, setTableData] = useState([])
+  const [tableData, setTableData] = useState([]);
 
-  const [loading, setLoading] = useState<boolean>(false)
+  const [loading, setLoading] = useState<boolean>(false);
 
   useEffect(() => {
-    if (!visible) return
-    loadOperationLog()
-  }, [visible])
+    if (!visible) return;
+    loadOperationLog();
+  }, [visible]);
 
   const tableColumns = useCallback(() => {
-    return getTemplateSetting()['operationColumns']
-  }, [])
+    return getTemplateSetting()['operationColumns'];
+  }, []);
 
   const loadOperationLog = () => {
-    setLoading(true)
+    setLoading(true);
     getCabinOperationLog(id ?? '')
       .then((resp) => {
-        setTableData(resp)
-        setLoading(false)
+        setTableData(resp);
+        setLoading(false);
       })
-      .catch(() => setLoading(false))
-  }
+      .catch(() => setLoading(false));
+  };
   return (
     <Drawer
       title="操作日志"
@@ -67,7 +67,7 @@ const OperationLogDrawer: React.FC<OperationLogDrawerProps> = ({
         rowKey="id"
       />
     </Drawer>
-  )
-}
+  );
+};
 
-export default OperationLogDrawer
+export default OperationLogDrawer;

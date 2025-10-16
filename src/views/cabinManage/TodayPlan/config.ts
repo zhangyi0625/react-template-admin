@@ -60,22 +60,6 @@ export const SelectScheduleAccountOptions: CustomColumn[] = [
   },
 ];
 
-// export const SelectAffilateAccountOptions: CustomColumn[] = [
-//   {
-//     label: '船公司',
-//     name: 'carrier',
-//     formType: 'normalSelect',
-//     options: [],
-//     selectFileldName: {
-//       label: 'code',
-//       value: 'code',
-//     },
-//     span: 6,
-//     selectFetch: false,
-//     hiddenItem: false,
-//   },
-// ]
-
 export const AddSearchForm: Omit<CustomColumn, 'hiddenItem' | 'selectFetch'>[] =
   [
     {

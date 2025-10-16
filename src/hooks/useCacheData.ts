@@ -31,6 +31,7 @@ const cachePromiseList: Record<
   // relevanceService: ServiceSettingType[] | undefined
 };
 
+// 配置formMap 中 options 回显key值
 const formKeysMap: { [key: string]: string } = {
   carrier: 'carrierData',
   routeFndIds: 'routeData',
@@ -38,8 +39,14 @@ const formKeysMap: { [key: string]: string } = {
   customerId: 'customerData',
   porCode: 'porPortData',
   fndCode: 'fndPortData',
+  router: 'routeData',
 };
 
+/**
+ * useCacheData
+ * @param params
+ * @returns
+ */
 export default function useCacheData(params: {
   cacheEssentialKeys: string[];
   formMap?: CustomColumn[];

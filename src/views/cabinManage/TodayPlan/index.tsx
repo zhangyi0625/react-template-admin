@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react';
 import {
   App,
   Button,
@@ -9,81 +9,80 @@ import {
   TableProps,
   Tabs,
   TabsProps,
-} from 'antd'
-import useParentSize from '@/hooks/useParentSize'
-import { useDispatch, useSelector } from 'react-redux'
-import { RootState, setEssentail } from '@/stores/store'
-import { SearchForm, SearchTable } from 'customer-search-form-table'
-import type {
-  CabinTaskTemplateParams,
-  TodayPlanParams,
-} from '@/services/cabinManage/cabinManageModel'
-import { getRouteManageList } from '@/services/customerInformation/routeManage/routeManageApi'
-import {
-  getFndPortManageList,
-  getPorPortManageList,
-} from '@/services/essential/portManage/portManageModel'
-import { getCarrierManageList } from '@/services/essential/carrierManage/carrierManageApi'
-import {
-  SelectAffilateAccountOptions,
-  SelectScheduleAccountOptions,
-} from './config'
-import { filterKeys } from '@/utils/tool'
-import { getCustomerManageList } from '@/services/essential/customerManage/customerManageApi'
-import AddSearchByAffilate from './AddSearchByAffilate'
-import ShippingAccountDrawer from './ShippingAccountDrawer'
+} from 'antd';
+import { SearchForm, SearchTable } from 'customer-search-form-table';
+import AddSearchByAffilate from './AddSearchByAffilate';
+import ShippingAccountDrawer from './ShippingAccountDrawer';
 import {
   addBatchLogin,
   addLoginAccount,
   addTodayLoginRecord,
   getAffilateAccountList,
   getScheduleAccountList,
-} from '@/services/todayPlan/todayPlanApi'
-import { AffilateAccountType } from '@/services/todayPlan/todayPlanModal'
-import { getShippingAccountList } from '@/services/customerInformation/shippingAccount/shippingAccountApi'
+} from '@/services/todayPlan/todayPlanApi';
+import type { PortManageType } from '@/services/essential/portManage/portManageApi';
+import type { AffilateAccountType } from '@/services/todayPlan/todayPlanModal';
+import type {
+  CabinTaskTemplateParams,
+  TodayPlanParams,
+} from '@/services/cabinManage/cabinManageModel';
+import { SelectScheduleAccountOptions } from './config';
+import { getShippingAccountList } from '@/services/customerInformation/shippingAccount/shippingAccountApi';
+import useCacheData from '@/hooks/useCacheData';
+import useParentSize from '@/hooks/useParentSize';
+import { filterKeys } from '@/utils/tool';
+
+const cacheEssentialKeys = [
+  'routeData',
+  'porPortData',
+  'fndPortData',
+  'customerData',
+  'carrierData',
+];
 
 const TodayPlan: React.FC = () => {
-  const { parentRef, height } = useParentSize()
+  const { parentRef, height } = useParentSize();
 
-  const { message } = App.useApp()
+  const { message } = App.useApp();
 
   const [today, setToday] = useState<string>(
     '日一二三四五六'.charAt(new Date().getDay())
-  )
+  );
 
-  const dispatch = useDispatch()
+  const [immediate, setImmediate] = useState<boolean>(true);
 
-  const essential = useSelector((state: RootState) => state.essentail)
-
-  const [immediate, setImmediate] = useState<boolean>(true)
-
-  const [seleced, setSelected] = useState<string[]>([])
+  const [seleced, setSelected] = useState<string[]>([]);
 
   const [defaultActiveKey, setDefaultActiveKey] =
-    useState<string>('searchBySchedule')
+    useState<string>('searchBySchedule');
 
   const [searchColumns, setSearchColumns] = useState(
     SelectScheduleAccountOptions
-  )
+  );
+
+  const { essential, formMaps } = useCacheData({
+    cacheEssentialKeys: cacheEssentialKeys,
+    formMap: searchColumns,
+  });
 
   const [params, setParams] = useState<{
-    visible: boolean
-    type: 'search' | 'login'
-    carrier: string
-    currentRow: AffilateAccountType[] | null
+    visible: boolean;
+    type: 'search' | 'login';
+    carrier: string;
+    currentRow: AffilateAccountType[] | null;
   }>({
     visible: false,
     type: 'search',
     carrier: '',
     currentRow: null,
-  })
+  });
 
   const [searchDefaultForm, setSearchDefaultForm] = useState<TodayPlanParams>({
     page: 1,
     limit: 10,
-  })
+  });
 
-  const [addCustomer, setAddCustomer] = useState<boolean>(false)
+  const [addCustomer, setAddCustomer] = useState<boolean>(false);
 
   const components: TabsProps['items'] = [
     {
@@ -94,22 +93,12 @@ const TodayPlan: React.FC = () => {
       label: '按公司账号预登录',
       key: 'searchByAffilate',
     },
-  ]
+  ];
 
   useEffect(() => {
-    setImmediate(true)
-    if (
-      !essential.routeData?.length ||
-      !essential.porPortData?.length ||
-      !essential.fndPortData?.length ||
-      !essential.carrierData?.length ||
-      !essential.customerData?.length
-    ) {
-      loadSearchList()
-    } else {
-      getReduxData()
-    }
-  }, [essential, immediate])
+    setImmediate(true);
+    init();
+  }, [essential, immediate, defaultActiveKey]);
 
   const tableColumns: TableProps['columns'] = [
     {
@@ -175,12 +164,12 @@ const TodayPlan: React.FC = () => {
                 type: 'login',
                 carrier: _.carrier,
                 currentRow: _.customers ?? [],
-              })
+              });
             }}
           >
             {_.customers.length ?? 0}个客户
           </div>
-        )
+        );
       },
     },
     {
@@ -195,7 +184,7 @@ const TodayPlan: React.FC = () => {
             <div
               className="cursor-pointer text-normal-blue text-sm"
               onClick={() => {
-                searchOrderAccount(_.customerId, _.carrier)
+                searchOrderAccount(_.customerId, _.carrier);
               }}
             >
               查看账号
@@ -203,73 +192,43 @@ const TodayPlan: React.FC = () => {
             <div
               className="cursor-pointer text-normal-blue text-sm ml-[40px]"
               onClick={() => {
-                onLoginAccount(_.customerId, _.carrier)
+                onLoginAccount(_.customerId, _.carrier);
               }}
             >
               登陆账号
             </div>
           </div>
-        )
+        );
       },
     },
-  ]
+  ];
 
-  // 重新更新查询部分数据 并存储进redux
-  const loadSearchList = () => {
-    Promise.all([
-      getRouteManageList(),
-      getPorPortManageList(),
-      getFndPortManageList(),
-      getCarrierManageList({ enabled: 1 }),
-      getCustomerManageList(),
-    ]).then((resp) => {
-      let key = [
-        'routeData',
-        'porPortData',
-        'fndPortData',
-        'carrierData',
-        'customerData',
-      ]
-      key.map((_, index: number) => {
-        dispatch(setEssentail({ value: resp[index], key: key[index] }))
-      })
-      getReduxData()
-    })
-  }
-
-  const getReduxData = () => {
-    let { routeData, porPortData, fndPortData, carrierData, customerData } =
-      essential
-    let resetPorData = (porPortData || []).map(
-      (item: { code: string; enName: string; cnName: string }) => {
-        return {
-          value: item.code,
-          label: item.enName + '-' + item.cnName,
-        }
+  const init = () => {
+    let { porPortData = [], fndPortData = [] } = essential;
+    let por = porPortData.map((item: PortManageType) => {
+      return {
+        value: item.code,
+        label: item.enName + '-' + item.cnName,
+      };
+    });
+    let fnd = fndPortData.map((item: PortManageType) => {
+      return {
+        value: item.code,
+        label: item.enName + '-' + item.cnName,
+      };
+    });
+    formMaps.map((item) => {
+      if (item.name === 'porCode' || item.name === 'fndCode')
+        item.options = item.name === 'porCode' ? por : fnd;
+      if (defaultActiveKey === 'searchBySchedule') {
+        item.hiddenItem = item.name === 'customerId';
+      } else {
+        item.hiddenItem = item.name !== 'customerId' && item.name !== 'carrier';
       }
-    )
-    let resetFndData = (fndPortData || []).map(
-      (item: { code: string; enName: string; cnName: string }) => {
-        return {
-          value: item.code,
-          label: item.enName + '-' + item.cnName,
-        }
-      }
-    )
-
-    console.log(searchColumns, 'searchColumns')
-    searchColumns.map((item) => {
-      if (item.name === 'porCode' || item.name === 'fndCode') {
-        item.options = item.name === 'porCode' ? resetPorData : resetFndData
-      }
-      if (item.name === 'carrier') item.options = carrierData
-      if (item.name === 'router') item.options = routeData
-      if (item.name === 'customerId') item.options = customerData
-    })
-
-    setSearchColumns([...searchColumns])
-    setImmediate(false)
-  }
+    });
+    setSearchColumns([...formMaps]);
+    setImmediate(false);
+  };
 
   const getTabsItem = () => {
     const items = [
@@ -281,7 +240,7 @@ const TodayPlan: React.FC = () => {
         label: '周二',
         key: '二',
         children() {
-          return <div className="">123</div>
+          return <div className="">123</div>;
         },
       },
       {
@@ -304,13 +263,13 @@ const TodayPlan: React.FC = () => {
         label: '周日',
         key: '日',
       },
-    ]
-    return items
-  }
+    ];
+    return items;
+  };
 
   const changeDay = (key: string) => {
-    setToday(key)
-  }
+    setToday(key);
+  };
 
   const searchOrderAccount = (customerId: string, carrier: string) => {
     getShippingAccountList({ customerId: customerId, isOrder: true }).then(
@@ -320,109 +279,103 @@ const TodayPlan: React.FC = () => {
           type: 'search',
           carrier: carrier,
           currentRow: resp,
-        })
+        });
       }
-    )
-  }
+    );
+  };
 
   const onUpdateSearch = (info?: CabinTaskTemplateParams | unknown) => {
     const filteredObj = Object.fromEntries(
       Object.entries(info ?? {}).filter(([, value]) => !!value)
-    )
-    let pageInfo = filterKeys(searchDefaultForm, ['page', 'limit'], true)
+    );
+    let pageInfo = filterKeys(searchDefaultForm, ['page', 'limit'], true);
     setSearchDefaultForm({
       ...pageInfo,
       ...filteredObj,
-    })
-  }
+    });
+  };
 
   const onUpdatePagination = (pagination: TablePaginationConfig) => {
     setSearchDefaultForm({
       ...searchDefaultForm,
       page: pagination.current as number,
       limit: pagination.pageSize as number,
-    })
-  }
+    });
+  };
 
   const onChange = (type: string) => {
-    setImmediate(true)
-    setDefaultActiveKey(type)
-    setSearchColumns(
-      type === 'searchBySchedule'
-        ? SelectScheduleAccountOptions
-        : SelectAffilateAccountOptions
-    )
-    setTimeout(() => {
-      setImmediate(false)
-    }, 300)
-  }
+    setDefaultActiveKey(type);
+    setSearchDefaultForm({
+      ...searchDefaultForm,
+    });
+  };
 
   const batchLogin = () => {
     if (!seleced.length) {
-      message.error('至少选择一条记录批量登陆！')
-      return
+      message.error('至少选择一条记录批量登陆！');
+      return;
     }
-    onBatchLogin(seleced)
-  }
+    onBatchLogin(seleced);
+  };
 
   const addCustomerOk = (currentRow: AffilateAccountType) => {
     addTodayLoginRecord(currentRow).then(() => {
-      message.success('添加成功！')
-      setImmediate(true)
-      setAddCustomer(false)
-    })
+      message.success('添加成功！');
+      setImmediate(true);
+      setAddCustomer(false);
+    });
     setTimeout(() => {
-      setImmediate(false)
-    }, 300)
-  }
+      setImmediate(false);
+    }, 300);
+  };
 
   const onLoginAccount = (customerId: string, carrier?: string) => {
-    console.log(customerId, 'customerId', params)
+    console.log(customerId, 'customerId', params);
     addLoginAccount({
       customerId: customerId,
       carrier: carrier ?? params.carrier,
     })
       .then(() => {
-        message.success('预登陆成功')
-        setImmediate(true)
+        message.success('预登陆成功');
+        setImmediate(true);
         setTimeout(() => {
-          setImmediate(false)
-        }, 300)
+          setImmediate(false);
+        }, 300);
       })
       .catch(() => {
         setTimeout(() => {
-          setImmediate(false)
-        }, 300)
-      })
-  }
+          setImmediate(false);
+        }, 300);
+      });
+  };
   const onBatchLogin = (ids: string[]) => {
-    console.log(ids, 'customerId', params)
+    console.log(ids, 'customerId', params);
     let newArr = ids.map((item) => {
       return {
         customerId: item,
         carrier: params.carrier,
-      }
-    })
+      };
+    });
     addBatchLogin(newArr)
       .then(() => {
-        message.success('批量登陆成功')
-        setImmediate(true)
+        message.success('批量登陆成功');
+        setImmediate(true);
         setTimeout(() => {
-          setImmediate(false)
-        }, 300)
+          setImmediate(false);
+        }, 300);
       })
       .catch(() => {
         setTimeout(() => {
-          setImmediate(false)
-        }, 300)
-      })
-  }
+          setImmediate(false);
+        }, 300);
+      });
+  };
 
   const getRowKey = (record: any) => {
     return defaultActiveKey === 'searchBySchedule'
       ? record.porCode + '-' + record.fndCode
-      : record.customerId
-  }
+      : record.customerId;
+  };
 
   return (
     <>
@@ -546,7 +499,7 @@ const TodayPlan: React.FC = () => {
         onBatchLogin={onBatchLogin}
       />
     </>
-  )
-}
+  );
+};
 
-export default TodayPlan
+export default TodayPlan;

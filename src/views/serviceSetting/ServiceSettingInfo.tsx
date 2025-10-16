@@ -1,19 +1,19 @@
-import { useEffect, useState } from 'react'
-import { Col, Form, Input, Row, Select } from 'antd'
-import DragModal from '@/components/modal/DragModal'
-import type { ServiceSettingType } from '@/services/serviceSetting/serviceSettingModel'
-import { ServiceSettingForm } from './config'
-import useCacheData from '@/hooks/useCacheData'
-import { CustomColumn } from 'customer-search-form-table/SearchForm/type'
+import { useEffect, useState } from 'react';
+import { Col, Form, Input, Row, Select } from 'antd';
+import DragModal from '@/components/modal/DragModal';
+import type { ServiceSettingType } from '@/services/serviceSetting/serviceSettingModel';
+import { ServiceSettingForm } from './config';
+import useCacheData from '@/hooks/useCacheData';
+import { CustomColumn } from 'customer-search-form-table/SearchForm/type';
 
 export interface ServiceSettingInfoProps {
   params: {
-    visible: boolean
-    currentRow: ServiceSettingType | null
-    view: boolean
-  }
-  onOk: (params: ServiceSettingType) => void
-  onCancel: (e: React.MouseEvent<HTMLButtonElement>) => void
+    visible: boolean;
+    currentRow: ServiceSettingType | null;
+    view: boolean;
+  };
+  onOk: (params: ServiceSettingType) => void;
+  onCancel: (e: React.MouseEvent<HTMLButtonElement>) => void;
 }
 
 const ServiceSettingInfo: React.FC<ServiceSettingInfoProps> = ({
@@ -21,11 +21,11 @@ const ServiceSettingInfo: React.FC<ServiceSettingInfoProps> = ({
   onOk,
   onCancel,
 }) => {
-  const { visible, currentRow, view } = params
+  const { visible, currentRow, view } = params;
 
-  const [form] = Form.useForm()
+  const [form] = Form.useForm();
 
-  const [formMap, setFormMap] = useState(ServiceSettingForm)
+  const [formMap, setFormMap] = useState(ServiceSettingForm);
 
   const { loading, formMaps } = useCacheData({
     cacheEssentialKeys: ['routeData', 'carrierData'],
@@ -35,30 +35,30 @@ const ServiceSettingInfo: React.FC<ServiceSettingInfoProps> = ({
         enabled: 1,
       },
     },
-  })
+  });
 
   useEffect(() => {
-    if (!visible) return
+    if (!visible) return;
     if (currentRow) {
-      form.setFieldsValue(currentRow)
+      form.setFieldsValue(currentRow);
     } else {
-      form.resetFields()
+      form.resetFields();
     }
-    setFormMap([...formMaps])
-  }, [visible])
+    setFormMap([...formMaps]);
+  }, [visible]);
 
   const handleOk = () => {
     form
       .validateFields()
       .then(() => {
-        onOk(form.getFieldsValue())
+        onOk(form.getFieldsValue());
       })
       .catch((errorInfo) => {
         // 滚动并聚焦到第一个错误字段
-        form.scrollToField(errorInfo.errorFields[0].name)
-        form.focusField(errorInfo.errorFields[0].name)
-      })
-  }
+        form.scrollToField(errorInfo.errorFields[0].name);
+        form.focusField(errorInfo.errorFields[0].name);
+      });
+  };
   return (
     <DragModal
       width="60%"
@@ -114,7 +114,7 @@ const ServiceSettingInfo: React.FC<ServiceSettingInfoProps> = ({
         </Row>
       </Form>
     </DragModal>
-  )
-}
+  );
+};
 
-export default ServiceSettingInfo
+export default ServiceSettingInfo;

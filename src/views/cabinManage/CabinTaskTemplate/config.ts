@@ -1,4 +1,4 @@
-import type { CustomColumn } from 'customer-search-form-table/SearchForm/type'
+import type { CustomColumn } from 'customer-search-form-table/SearchForm/type';
 
 export const CabinTaskTemplateStatusOptions: Pick<
   CustomColumn,
@@ -16,7 +16,7 @@ export const CabinTaskTemplateStatusOptions: Pick<
     label: '已关闭',
     name: 'CLOSED',
   },
-]
+];
 
 export const ServiceSettingType = [
   {
@@ -35,9 +35,9 @@ export const ServiceSettingType = [
   //   label: '同频放舱',
   //   value: 'SAME_FREQ',
   // },
-]
+];
 
-export const BOXPILE = ['20GP', '40GP', '40HQ', '45HQ', '20NOR', '40NOR']
+export const BOXPILE = ['20GP', '40GP', '40HQ', '45HQ', '20NOR', '40NOR'];
 
 export const SelectCabinTaskTemplateOptions: CustomColumn[] = [
   {
@@ -49,6 +49,7 @@ export const SelectCabinTaskTemplateOptions: CustomColumn[] = [
       value: 'id',
     },
     span: 6,
+    options: [],
     selectFetch: false,
     hiddenItem: false,
   },
@@ -86,4 +87,4 @@ export const SelectCabinTaskTemplateOptions: CustomColumn[] = [
     selectFetch: false,
     hiddenItem: false,
   },
-]
+];

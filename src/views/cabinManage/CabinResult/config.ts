@@ -1,4 +1,4 @@
-import type { CustomColumn } from 'customer-search-form-table/SearchForm/type'
+import type { CustomColumn } from 'customer-search-form-table/SearchForm/type';
 
 export const SelectCabinResultOptions: CustomColumn[] = [
   {
@@ -61,4 +61,4 @@ export const SelectCabinResultOptions: CustomColumn[] = [
     selectFetch: false,
     hiddenItem: false,
   },
-]
+];

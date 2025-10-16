@@ -1,100 +1,62 @@
-import { useEffect, useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import { Card, ConfigProvider, TablePaginationConfig, TableProps } from 'antd'
-import { RootState, setEssentail } from '@/stores/store'
-import { SearchForm, SearchTable } from 'customer-search-form-table'
-import { SelectCabinHistoryOptions } from './config'
-import { getRouteManageList } from '@/services/customerInformation/routeManage/routeManageApi'
-import {
-  getFndPortManageList,
-  getPorPortManageList,
-} from '@/services/essential/portManage/portManageModel'
-import type { CabinHistoryParams } from '@/services/cabinManage/cabinManageModel'
-import { getCabinHistoryList } from '@/services/cabinManage/cabinManageApi'
-import { formatTime } from '@/utils/format'
-import { filterKeys } from '@/utils/tool'
-import useParentSize from '@/hooks/useParentSize'
+import { useEffect, useState } from 'react';
+import { Card, ConfigProvider, TablePaginationConfig, TableProps } from 'antd';
+import { SearchForm, SearchTable } from 'customer-search-form-table';
+import { SelectCabinHistoryOptions } from './config';
+import type { CabinHistoryParams } from '@/services/cabinManage/cabinManageModel';
+import { getCabinHistoryList } from '@/services/cabinManage/cabinManageApi';
+import { formatTime } from '@/utils/format';
+import { filterKeys } from '@/utils/tool';
+import useParentSize from '@/hooks/useParentSize';
+import useCacheData from '@/hooks/useCacheData';
+import type { PortManageType } from '@/services/essential/portManage/portManageApi';
+
+const cacheEssentialKeys = ['routeData', 'porPortData', 'fndPortData'];
 
 const CabinHistory: React.FC = () => {
-  const dispatch = useDispatch()
+  const { parentRef, height } = useParentSize();
 
-  const { parentRef, height } = useParentSize()
-
-  const [searchColumns, setSearchColumns] = useState(SelectCabinHistoryOptions)
+  const [searchColumns, setSearchColumns] = useState(SelectCabinHistoryOptions);
 
   const [searchDefaultForm, setSearchDefaultForm] =
     useState<CabinHistoryParams>({
       page: 1,
       limit: 10,
       router: null,
-    })
+    });
 
-  const essential = useSelector((state: RootState) => state.essentail)
+  const [immediate, setImmediate] = useState<boolean>(false);
 
-  const [immediate, setImmediate] = useState<boolean>(false)
+  const { essential, formMaps } = useCacheData({
+    cacheEssentialKeys: cacheEssentialKeys,
+    formMap: searchColumns,
+  });
 
   useEffect(() => {
-    setImmediate(true)
-    if (
-      !essential.routeData?.length ||
-      !essential.porPortData?.length ||
-      !essential.fndPortData?.length
-    ) {
-      loadSearchList()
-    } else {
-      getReduxData()
-    }
-  }, [essential])
+    setImmediate(true);
+    init();
+  }, [essential]);
 
-  const loadSearchList = () => {
-    Promise.all([
-      getRouteManageList(),
-      getPorPortManageList(),
-      getFndPortManageList(),
-    ]).then((resp) => {
-      let key = ['routeData', 'porPortData', 'fndPortData']
-      key.map((_, index: number) => {
-        dispatch(setEssentail({ value: resp[index], key: key[index] }))
-      })
-      getReduxData()
-    })
-  }
-
-  const getReduxData = () => {
-    let { routeData = [], porPortData = [], fndPortData = [] } = essential
-    let resetPorData = porPortData.map(
-      (item: { code: string; enName: string; cnName: string }) => {
-        return {
-          value: item.code,
-          label: item.enName + '-' + item.cnName,
-        }
-      }
-    )
-    let resetFndData = fndPortData.map(
-      (item: { code: string; enName: string; cnName: string }) => {
-        return {
-          value: item.code,
-          label: item.enName + '-' + item.cnName,
-        }
-      }
-    )
-    searchColumns.map((item) => {
-      if (
-        item.name === 'porCode' ||
-        item.name === 'fndCode' ||
-        item.name === 'router'
-      ) {
-        item.options =
-          item.name === 'porCode'
-            ? resetPorData
-            : item.name === 'fndCode'
-            ? resetFndData
-            : routeData
-      }
-    })
-    setSearchColumns(searchColumns)
-    setImmediate(false)
-  }
+  const init = () => {
+    let { porPortData = [], fndPortData = [] } = essential;
+    let por = porPortData.map((item: PortManageType) => {
+      return {
+        value: item.code,
+        label: item.enName + '-' + item.cnName,
+      };
+    });
+    let fnd = fndPortData.map((item: PortManageType) => {
+      return {
+        value: item.code,
+        label: item.enName + '-' + item.cnName,
+      };
+    });
+    formMaps.map((item) => {
+      if (item.name === 'porCode' || item.name === 'fndCode')
+        item.options = item.name === 'porCode' ? por : fnd;
+    });
+    setSearchColumns([...formMaps]);
+    setImmediate(false);
+  };
 
   const columns: TableProps['columns'] = [
     {
@@ -108,7 +70,7 @@ const CabinHistory: React.FC = () => {
       key: 'porCode',
       align: 'center',
       render(value) {
-        return <div>{value.porCode}</div>
+        return <div>{value.porCode}</div>;
       },
     },
     {
@@ -116,7 +78,7 @@ const CabinHistory: React.FC = () => {
       key: 'fndCode',
       align: 'center',
       render(value) {
-        return <div>{value.fndCode}</div>
+        return <div>{value.fndCode}</div>;
       },
     },
     {
@@ -124,7 +86,7 @@ const CabinHistory: React.FC = () => {
       key: 'carrierRouter',
       align: 'center',
       render(value) {
-        return <div>{value.carrierRouter}</div>
+        return <div>{value.carrierRouter}</div>;
       },
     },
     {
@@ -132,7 +94,7 @@ const CabinHistory: React.FC = () => {
       key: 'router',
       align: 'center',
       render(value) {
-        return <div>{value.router}</div>
+        return <div>{value.router}</div>;
       },
     },
     {
@@ -140,7 +102,7 @@ const CabinHistory: React.FC = () => {
       key: 'etd',
       align: 'center',
       render(value) {
-        return <div>{formatTime(value.etd, 'Y-M-D')}</div>
+        return <div>{formatTime(value.etd, 'Y-M-D')}</div>;
       },
     },
     {
@@ -152,29 +114,29 @@ const CabinHistory: React.FC = () => {
           <div>
             {value.stowageTime} {value.stowageWeek}
           </div>
-        )
+        );
       },
     },
-  ]
+  ];
 
   const onUpdateSearch = (info?: CabinHistoryParams | unknown) => {
     const filteredObj = Object.fromEntries(
       Object.entries(info ?? {}).filter(([, value]) => !!value)
-    )
-    let pageInfo = filterKeys(searchDefaultForm, ['page', 'limit'], true)
+    );
+    let pageInfo = filterKeys(searchDefaultForm, ['page', 'limit'], true);
     setSearchDefaultForm({
       ...pageInfo,
       ...filteredObj,
-    })
-  }
+    });
+  };
 
   const onUpdatePagination = (pagination: TablePaginationConfig) => {
     setSearchDefaultForm({
       ...searchDefaultForm,
       page: pagination.current as number,
       limit: pagination.pageSize as number,
-    })
-  }
+    });
+  };
   return (
     <>
       {/* 菜单检索条件栏 */}
@@ -216,7 +178,7 @@ const CabinHistory: React.FC = () => {
         />
       </Card>
     </>
-  )
-}
+  );
+};
 
-export default CabinHistory
+export default CabinHistory;

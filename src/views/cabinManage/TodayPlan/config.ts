@@ -1,4 +1,4 @@
-import type { CustomColumn } from 'customer-search-form-table/SearchForm/type'
+import type { CustomColumn } from 'customer-search-form-table/SearchForm/type';
 
 export const SelectScheduleAccountOptions: CustomColumn[] = [
   {
@@ -45,22 +45,6 @@ export const SelectScheduleAccountOptions: CustomColumn[] = [
     selectFetch: false,
     hiddenItem: false,
   },
-]
-
-export const SelectAffilateAccountOptions: CustomColumn[] = [
-  {
-    label: '船公司',
-    name: 'carrier',
-    formType: 'normalSelect',
-    options: [],
-    selectFileldName: {
-      label: 'code',
-      value: 'code',
-    },
-    span: 6,
-    selectFetch: false,
-    hiddenItem: false,
-  },
   {
     label: '公司名称',
     name: 'customerId',
@@ -72,9 +56,25 @@ export const SelectAffilateAccountOptions: CustomColumn[] = [
     },
     span: 6,
     selectFetch: false,
-    hiddenItem: false,
+    hiddenItem: true,
   },
-]
+];
+
+// export const SelectAffilateAccountOptions: CustomColumn[] = [
+//   {
+//     label: '船公司',
+//     name: 'carrier',
+//     formType: 'normalSelect',
+//     options: [],
+//     selectFileldName: {
+//       label: 'code',
+//       value: 'code',
+//     },
+//     span: 6,
+//     selectFetch: false,
+//     hiddenItem: false,
+//   },
+// ]
 
 export const AddSearchForm: Omit<CustomColumn, 'hiddenItem' | 'selectFetch'>[] =
   [
@@ -102,4 +102,4 @@ export const AddSearchForm: Omit<CustomColumn, 'hiddenItem' | 'selectFetch'>[] =
       span: 24,
       isRules: true,
     },
-  ]
+  ];

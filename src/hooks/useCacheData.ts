@@ -10,12 +10,19 @@ import {
   getPorPortManageList,
 } from '@/services/essential/portManage/portManageModel';
 import { getCustomerManageList } from '@/services/essential/customerManage/customerManageApi';
+import type { RouteMangeParams } from '@/services/customerInformation/routeManage/routeManageModel';
+import type { CarrierManageParams } from '@/services/essential/carrierManage/carrierManageModel';
 
-export type CachePromiseFilter = {
+type CachePromiseFilter = {
   enabled: number;
 };
 
-const cachePromiseList: Record<string, (params?: any) => Promise<any>> = {
+type CacheMergeParams = RouteMangeParams & Partial<CarrierManageParams>;
+
+const cachePromiseList: Record<
+  string,
+  (params: CacheMergeParams | any) => Promise<any>
+> = {
   routeData: getRouteManageList,
   porPortData: getPorPortManageList,
   fndPortData: getFndPortManageList,
@@ -28,6 +35,9 @@ const formKeysMap: { [key: string]: string } = {
   carrier: 'carrierData',
   routeFndIds: 'routeData',
   fnds: 'fndPortData',
+  customerId: 'customerData',
+  porCode: 'porPortData',
+  fndCode: 'fndPortData',
 };
 
 export default function useCacheData(params: {
@@ -51,26 +61,36 @@ export default function useCacheData(params: {
     } else {
       getReduxData();
     }
-  }, []);
+  }, [essential]);
 
   // 重新更新查询部分数据 并存储进redux
   const loadSearchList = () => {
     setLoading(true);
-    cacheEssentialKeys.map(async (key: string) => {
-      if (!cachePromiseList[key] || essential[key]?.length) {
-        // message.error('缓存数据查询异常，请检查useCacheData Hooks')
-        return;
-      }
-      try {
-        const resp = await cachePromiseList[key](
-          promiseFilter ? promiseFilter[key] : {}
+    const promiseList: Promise<any>[] = [];
+    cacheEssentialKeys.map((key) => {
+      if (cachePromiseList[key])
+        promiseList.push(
+          cachePromiseList[key](
+            promiseFilter ? promiseFilter[key] : {}
+          ) as unknown as Promise<any>
         );
-        dispatch(setEssentail({ value: resp, key: key }));
-        getReduxData();
-      } catch {
-        message.error('缓存数据查询异常，请检查useCacheData Hooks');
-      }
     });
+    promiseList.length &&
+      Promise.all(promiseList)
+        .then((resp) => {
+          cacheEssentialKeys.map(async (_, index: number) => {
+            await dispatch(
+              setEssentail({
+                value: resp[index],
+                key: cacheEssentialKeys[index],
+              })
+            );
+          });
+        })
+        .catch(() => {
+          message.error('缓存数据查询异常，请检查useCacheData Hooks');
+        });
+    // getReduxData();
   };
 
   const getReduxData = () => {

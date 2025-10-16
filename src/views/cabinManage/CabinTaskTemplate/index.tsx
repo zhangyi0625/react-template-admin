@@ -46,7 +46,7 @@ import type { RouteMangeType } from '@/services/customerInformation/routeManage/
 import ImportShippingAccout from '@/views/customerInformation/ShippingAccount/ImportShippingAccout';
 import { filterKeys } from '@/utils/tool';
 
-const API = process.env.VITE_STATIC_API;
+const API = process.env.RS_STATIC_API;
 
 type CabinTaskTemplateProps = {
   carrier: string;

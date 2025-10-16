@@ -42,7 +42,7 @@ import type { ServiceSettingType } from '@/services/serviceSetting/serviceSettin
 import { filterKeys } from '@/utils/tool';
 import { formatTime } from '@/utils/format';
 
-const API = process.env.VITE_STATIC_API;
+const API = process.env.RS_STATIC_API;
 
 const ShippingAccount: React.FC = () => {
   const { modal, message } = App.useApp();

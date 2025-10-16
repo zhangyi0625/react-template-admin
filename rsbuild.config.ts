@@ -1,12 +1,12 @@
-import path from 'node:path'
-import { defineConfig, loadEnv } from '@rsbuild/core'
-import { pluginReact } from '@rsbuild/plugin-react'
-import { pluginSass } from '@rsbuild/plugin-sass'
-import { pluginMockServer } from 'rspack-plugin-mock/rsbuild'
-import { pluginImageCompress } from '@rsbuild/plugin-image-compress'
-import { pluginHtmlMinifierTerser } from 'rsbuild-plugin-html-minifier-terser'
+import path from 'node:path';
+import { defineConfig, loadEnv } from '@rsbuild/core';
+import { pluginReact } from '@rsbuild/plugin-react';
+import { pluginSass } from '@rsbuild/plugin-sass';
+import { pluginMockServer } from 'rspack-plugin-mock/rsbuild';
+import { pluginImageCompress } from '@rsbuild/plugin-image-compress';
+import { pluginHtmlMinifierTerser } from 'rsbuild-plugin-html-minifier-terser';
 
-const { publicVars } = loadEnv({ prefixes: ['VITE_'] })
+const { publicVars } = loadEnv({ prefixes: ['RS_'] });
 
 export default defineConfig({
   plugins: [
@@ -85,7 +85,7 @@ export default defineConfig({
     // },
     proxy: {
       '/api': {
-        target: process.env.VITE_BASE_API,
+        target: process.env.RS_BASE_API,
         changeOrigin: true,
         pathRewrite: (path) => path.replace(/^\/api/, ''),
       },
@@ -96,4 +96,4 @@ export default defineConfig({
       // },
     },
   },
-})
+});

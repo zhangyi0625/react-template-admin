@@ -7,7 +7,7 @@ import { RootState } from '@/stores/store';
 
 export type AddSearchByAffilateProps = {
   visible: boolean;
-  onOk: (params: any) => void;
+  onOk: (params: { carrier: string; customerId: string }) => void;
   onCancel: () => void;
 };
 

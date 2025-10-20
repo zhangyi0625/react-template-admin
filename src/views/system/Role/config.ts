@@ -1,4 +1,4 @@
-import type { CustomColumn } from 'customer-search-form-table/SearchForm/type'
+import type { CustomColumn } from 'customer-search-form-table/SearchForm/type';
 
 export const SelectRoleOptions: CustomColumn[] = [
   {
@@ -17,4 +17,4 @@ export const SelectRoleOptions: CustomColumn[] = [
     selectFetch: false,
     hiddenItem: false,
   },
-]
+];

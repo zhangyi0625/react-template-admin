@@ -43,6 +43,7 @@ export default defineConfig({
         attrs: { lang: 'zh' },
       },
     ],
+    template: './index.html',
   },
   // 配置路径别名
   source: {

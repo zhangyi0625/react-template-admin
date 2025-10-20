@@ -6,6 +6,7 @@ on:
       - master
       - dev
       - zc-ls-cabin
+      - zc-manager
   workflow_dispatch:
 
 permissions:

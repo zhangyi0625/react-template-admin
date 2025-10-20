@@ -58,7 +58,12 @@ const UserDropdown: React.FC = () => {
       label: '刷新缓存',
       icon: <SyncOutlined />,
       onClick: () => {
-        // 后端的缓存信息（相当于把缓存数据刷新）
+        /**
+         * 后端的缓存信息（相当于把缓存数据刷新）
+         * 清除local storage所有redux数据 为了重新缓存新数据
+         */
+        localStorage.clear()
+        window.location.reload()
       },
     },
     {
@@ -99,7 +104,7 @@ const UserDropdown: React.FC = () => {
             sessionStorage.removeItem('loginUser')
 
             // 修改回document.title
-            document.title = 'Fusion Admin - 登录'
+            document.title = '在舱光速抢舱管理平台 - 登录'
             // 退出到登录页面
             navigate('/login')
           },

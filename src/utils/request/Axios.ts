@@ -151,6 +151,19 @@ export class RAxios {
   }
 
   /**
+   * 封装put请求
+   *
+   * @param config
+   * @param options
+   */
+  put<T = any>(
+    config: AxiosRequestConfig,
+    options?: RequestOptions
+  ): Promise<T> {
+    return this.request({ ...config, method: 'PUT' }, options)
+  }
+
+  /**
    * 封装delete请求
    * @param config
    * @param options

@@ -1,14 +1,12 @@
-import path from 'node:path'
-import { defineConfig, loadEnv } from '@rsbuild/core'
-import { pluginReact } from '@rsbuild/plugin-react'
-import { pluginSass } from '@rsbuild/plugin-sass'
-import { pluginMockServer } from 'rspack-plugin-mock/rsbuild'
-import { pluginImageCompress } from '@rsbuild/plugin-image-compress'
-import { pluginHtmlMinifierTerser } from 'rsbuild-plugin-html-minifier-terser'
+import path from 'node:path';
+import { defineConfig, loadEnv } from '@rsbuild/core';
+import { pluginReact } from '@rsbuild/plugin-react';
+import { pluginSass } from '@rsbuild/plugin-sass';
+import { pluginMockServer } from 'rspack-plugin-mock/rsbuild';
+import { pluginImageCompress } from '@rsbuild/plugin-image-compress';
+import { pluginHtmlMinifierTerser } from 'rsbuild-plugin-html-minifier-terser';
 
-const { publicVars } = loadEnv({ prefixes: ['VITE_'] })
-
-console.log(publicVars, 'publicVars', process.env)
+const { publicVars } = loadEnv({ prefixes: ['RS_'] });
 
 export default defineConfig({
   plugins: [
@@ -38,7 +36,7 @@ export default defineConfig({
   // 配置html模板
   html: {
     favicon: path.resolve(__dirname, './src/assets/images/favicon.ico'),
-    title: 'Fusion Admin',
+    title: '在舱光速抢舱管理平台',
     tags: [
       {
         tag: 'html',
@@ -82,18 +80,20 @@ export default defineConfig({
     host: '::',
     port: 3005,
     open: false,
+    // historyApiFallback: {
+    //   index: '/index.tsx',
+    // },
     proxy: {
       '/api': {
-        // target: 'http://dev.zaicang.net/api/',
-        target: process.env.VITE_BASE_API + '/api/',
+        target: process.env.RS_BASE_API,
         changeOrigin: true,
         pathRewrite: (path) => path.replace(/^\/api/, ''),
       },
       // '/api': {
-      //   target: 'http://localhost:8090/fusion',
+      //   target: 'http://localhost:3005',
       //   changeOrigin: true,
       //   pathRewrite: (path) => path.replace(/^\/api/, ''),
       // },
     },
   },
-})
+});

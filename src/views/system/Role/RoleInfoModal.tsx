@@ -1,7 +1,7 @@
-import DragModal from '@/components/modal/DragModal';
-import { checkRoleCodeExist } from '@/services/system/role/roleApi';
-import { Form, Input, type InputRef, Select, Switch } from 'antd';
 import { useEffect, useRef } from 'react';
+import { Form, Input, type InputRef } from 'antd';
+import DragModal from '@/components/modal/DragModal';
+import { SysRoleType } from '@/services/system/role/roleModel';
 
 const RoleInfoModal: React.FC<RoleInfoModalProps> = ({
   params,
@@ -10,7 +10,9 @@ const RoleInfoModal: React.FC<RoleInfoModalProps> = ({
 }) => {
   // 表单实例
   const [form] = Form.useForm();
-  const roleCodeRef = useRef<InputRef>(null);
+
+  const roleNameRef = useRef<InputRef>(null);
+
   const { visible, currentRow, view } = params;
 
   useEffect(() => {
@@ -30,30 +32,8 @@ const RoleInfoModal: React.FC<RoleInfoModalProps> = ({
    */
   const onAfterOpenChange = (open: boolean) => {
     if (open) {
-      roleCodeRef.current?.focus();
+      roleNameRef.current?.focus();
     }
-  };
-
-  /**
-   * 角色编码唯一性校验
-   * @param _rule 规则
-   * @param value 值
-   * @returns 结果
-   */
-  const checkUnique = async (_rule: any, value: string) => {
-    // 如果为空值，跳过校验
-    if (!value) {
-      return Promise.resolve();
-    }
-    // 如果角色编码没有进行修改，则不需要做唯一性校验
-    if (currentRow && currentRow.roleCode === value) {
-      return Promise.resolve();
-    }
-    const res = await checkRoleCodeExist({ roleCode: value });
-    if (res) {
-      return Promise.reject('角色编码已存在');
-    }
-    return Promise.resolve();
   };
 
   /**
@@ -82,54 +62,23 @@ const RoleInfoModal: React.FC<RoleInfoModalProps> = ({
       onCancel={onCancel}
       afterOpenChange={onAfterOpenChange}
     >
-      <Form
-        form={form}
-        labelCol={{ span: 3 }}
-        initialValues={{ status: true }}
-        disabled={view}
-      >
-        <Form.Item name="id" hidden>
+      <Form form={form} labelCol={{ span: 4 }} disabled={view}>
+        <Form.Item name="roleId" hidden>
           <Input disabled />
-        </Form.Item>
-        <Form.Item
-          label="角色编码"
-          name="roleCode"
-          rules={[
-            { required: true, message: '请输入角色编码' }, // 必填规则
-            { validator: checkUnique }, // 唯一性校验
-          ]}
-        >
-          <Input
-            ref={roleCodeRef}
-            placeholder="请输入角色编码"
-            autoComplete="off"
-          />
         </Form.Item>
         <Form.Item
           name="roleName"
           label="角色名称"
           rules={[{ required: true, message: '请输入角色名称' }]}
         >
-          <Input placeholder="请输入角色名称" autoComplete="off" />
-        </Form.Item>
-        <Form.Item name="roleType" label="角色类型">
-          <Select
-            placeholder="请选择角色类型"
-            options={[
-              { value: 0, label: '系统角色' },
-              { value: 1, label: '普通角色' },
-            ]}
+          <Input
+            ref={roleNameRef}
+            placeholder="请输入角色名称"
+            autoComplete="off"
           />
         </Form.Item>
-        <Form.Item
-          name="status"
-          label="角色状态"
-          rules={[{ required: true, message: '请选择角色状态' }]}
-        >
-          <Switch checkedChildren="启用" unCheckedChildren="禁用" />
-        </Form.Item>
-        <Form.Item name="remark" label="角色描述">
-          <Input.TextArea placeholder="请输入角色描述" />
+        <Form.Item name="comments" label="角色备注">
+          <Input.TextArea placeholder="请输入角色备注" />
         </Form.Item>
       </Form>
     </DragModal>
@@ -147,7 +96,7 @@ export type RoleInfoModalProps = {
   };
 
   // 点击确定的回调
-  onOk: (params: Record<string, string | number | boolean>) => void;
+  onOk: (params: SysRoleType) => void;
   // 点击取消的回调
   onCancel: (e: React.MouseEvent<HTMLButtonElement>) => void;
 };

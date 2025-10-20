@@ -2,6 +2,11 @@
  * 全局的状态（如系统设置、主题等）
  */
 
+import type { RouteMangeType } from '@/services/customerInformation/routeManage/routeManageModel'
+import type { CarrierManageType } from '@/services/essential/carrierManage/carrierManageModel'
+import type { CustomerManageType } from '@/services/essential/customerManage/customerManageModel'
+import type { PortManageType } from '@/services/essential/portManage/portManageApi'
+import type { ServiceSettingType } from '@/services/serviceSetting/serviceSettingModel'
 import type {
   BreadcrumbStyleType,
   BuiltinThemeType,
@@ -287,6 +292,26 @@ export interface CopyrightPreferences {
 export interface sysSettingPreferences {
   publicData: any
   publicSetting: any
+}
+
+/**
+ * 基础数据维护
+ */
+
+export interface essentailPreferences {
+  /** 细分航线缓存 */
+  routeData: RouteMangeType[] | undefined
+  /** 起运港缓存 */
+  porPortData: PortManageType[] | undefined
+  /** 目的港缓存 */
+  fndPortData: PortManageType[] | undefined
+  /** 船司数据缓存 */
+  carrierData: CarrierManageType[] | undefined
+  /** 客户数据缓存 */
+  customerData: CustomerManageType[] | undefined
+  /** 关联服务缓存 */
+  relevanceService: ServiceSettingType[] | undefined
+  [key: string]: any
 }
 
 /**

@@ -1,13 +1,25 @@
-import { assignRoleMenu, getRoleMenu } from '@/services/system/role/roleApi';
-import { getIcon } from '@/utils/utils';
+import { useEffect, useState } from 'react';
+import { Button, Drawer, Space, Tree, type TreeProps } from 'antd';
 import {
   CloseOutlined,
   DownOutlined,
   FolderFilled,
   FolderOpenFilled,
 } from '@ant-design/icons';
-import { Button, Drawer, Space, Tree, type TreeProps } from 'antd';
-import { useEffect, useState } from 'react';
+import { assignRoleMenu, getRoleMenu } from '@/services/system/role/roleApi';
+import { getIcon } from '@/utils/utils';
+import { getMenusList } from '@/services/system/menu/menuApi';
+import { buildTree } from '@/utils/tool';
+
+export type RoleMenuDrawerProps = {
+  open: boolean;
+  // 角色id（通过角色id查询角色已经分配的菜单）
+  roleId: string;
+  // 点击确定的回调
+  onOk: (e: React.MouseEvent<HTMLButtonElement>) => void;
+  // 点击取消的回调
+  onCancel: (e: any) => void;
+};
 
 /**
  * 角色菜单授权界面
@@ -28,16 +40,28 @@ const RoleMenuDrawer: React.FC<RoleMenuDrawerProps> = ({
 
   useEffect(() => {
     if (!open) return;
-    // 调用获取所有菜单接口方法（里面包含获取选中的菜单key）
-    getRoleMenu(roleId).then((resp: any) => {
-      // 内部包含menuList和menuIds
-      const expanded: string[] = [];
-      const data = transformData(resp.menuList, expanded);
-      setTreeData(data);
-      setChecked(resp.menuIds);
-      setExpandedKeys(expanded);
-    });
+    // 调用获取所有菜单接口方法 对比角色下的菜单 回显选中数据
+    init();
   }, [open]);
+
+  const init = () => {
+    getMenusList({ sort: 'sortNumber' }).then((result) => {
+      getRoleMenu(roleId).then((resp: any) => {
+        // 内部包含menuList和menuIds
+        const expanded: string[] = [];
+        // 生成树结构
+        const data = transformData(buildTree(result, 'menuId'), expanded);
+        const selectData = transformData(resp, []).map(
+          (item: { menuId: string }) => item.menuId
+        );
+        console.log(data, selectData);
+
+        setTreeData(data);
+        setChecked(selectData);
+        setExpandedKeys(expanded);
+      });
+    });
+  };
 
   /**
    * 数据转换
@@ -50,7 +74,7 @@ const RoleMenuDrawer: React.FC<RoleMenuDrawerProps> = ({
         item.icon = getIcon(item.icon);
       }
       if (item.children?.length > 0) {
-        expanded.push(item.id);
+        expanded.push(item.menuId);
       }
       if (item.children) {
         transformData(item.children, expanded);
@@ -105,7 +129,7 @@ const RoleMenuDrawer: React.FC<RoleMenuDrawerProps> = ({
         switcherIcon={<DownOutlined />}
         defaultExpandAll
         expandedKeys={expandedKeys}
-        fieldNames={{ title: 'name', key: 'id', children: 'children' }}
+        fieldNames={{ title: 'title', key: 'menuId', children: 'children' }}
         icon={(props: any) => {
           // 没有isLeaf这个属性表明是一级菜单
           const { isLeaf } = props.data;
@@ -126,13 +150,3 @@ const RoleMenuDrawer: React.FC<RoleMenuDrawerProps> = ({
   );
 };
 export default RoleMenuDrawer;
-
-export type RoleMenuDrawerProps = {
-  open: boolean;
-  // 角色id（通过角色id查询角色已经分配的菜单）
-  roleId: string;
-  // 点击确定的回调
-  onOk: (e: React.MouseEvent<HTMLButtonElement>) => void;
-  // 点击取消的回调
-  onCancel: (e: any) => void;
-};

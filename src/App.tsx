@@ -1,12 +1,14 @@
 import { setMenus } from '@/stores/store'
 import { Spin, App as AntdApp, Skeleton } from 'antd'
 import type React from 'react'
-import { Suspense, useCallback, useEffect, useState } from 'react'
+import { Suspense, useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { Router } from '@/router/router'
-import { getMenuListByRoleId } from '@/services/system/menu/menuApi'
 import { antdUtils } from '@/utils/antdUtil'
+import { getRoleMenu } from './services/system/role/roleApi'
+import { buildTree } from './utils/tool'
+import type { RouteItem } from './types/route'
 
 /**
  * 主应用
@@ -25,18 +27,17 @@ const App: React.FC = () => {
   /**
    * 查询用户的菜单信息
    */
-  const getMenuData = useCallback(async () => {
-    // const roleId = sessionStorage.getItem('roleId') || ''
-    // const roleId = sessionStorage.getItem('roleId') || '';
-    const roleId = sessionStorage.getItem('roleId') || 'admin'
-    console.log(roleId, 'roleId')
-
+  const getMenuData = async () => {
+    setLoading(true)
+    const roleId = sessionStorage.getItem('roleId') || ''
     try {
-      const menu = await getMenuListByRoleId({})
-      dispatch(setMenus(menu)) // 更新 Redux 状态
+      const menu = await getRoleMenu(roleId)
+      const treeMenu = menu.filter(
+        (item: RouteItem) => item.menuType !== 2 && !item.hide
+      )
+      const build = buildTree(treeMenu, 'menuId')
+      dispatch(setMenus(build)) // 更新 Redux 状态
     } catch (e: unknown) {
-      console.log('aaa')
-
       notification.error({
         message: '菜单加载失败',
         description: `原因：${e instanceof Error ? e.message : '未知错误'}`,
@@ -45,7 +46,7 @@ const App: React.FC = () => {
     } finally {
       setLoading(false)
     }
-  }, [dispatch])
+  }
 
   // 组件挂载完成后加载用户菜单
   useEffect(() => {
@@ -60,7 +61,7 @@ const App: React.FC = () => {
     } else {
       getMenuData()
     }
-  }, [getMenuData, location.pathname, navigate])
+  }, [])
 
   return (
     <>

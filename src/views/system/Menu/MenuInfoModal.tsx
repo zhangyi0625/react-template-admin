@@ -1,6 +1,6 @@
+import type React from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { QuestionCircleFilled, SettingOutlined } from '@ant-design/icons'
-import DragModal from '@/components/modal/DragModal'
-import { getDirectory } from '@/services/system/menu/menuApi'
 import {
   Dropdown,
   Form,
@@ -12,9 +12,21 @@ import {
   Tooltip,
   TreeSelect,
 } from 'antd'
-import type React from 'react'
-import { useEffect, useRef, useState } from 'react'
+import DragModal from '@/components/modal/DragModal'
+import { getMenusList } from '@/services/system/menu/menuApi'
 import IconPanel from '@/components/IconPanel'
+
+// 菜单信息弹窗的参数
+export type MenuInfoModalProps = {
+  // 弹窗可见性
+  visible: boolean
+  // 弹窗需要的数据
+  currentRow: Record<string, any> | null
+  // 点击确定的回调
+  onOk: any
+  // 点击取消的回调
+  onCancel: any
+}
 
 /**
  * 菜单信息编辑弹窗
@@ -29,7 +41,7 @@ const MenuInfoModal: React.FC<MenuInfoModalProps> = ({
   // 表单实例
   const [form] = Form.useForm()
   const nameRef = useRef<InputRef>(null)
-  const [menuType, setMenuType] = useState<number>(currentRow?.menuType || 2)
+  const [menuType, setMenuType] = useState<number>(currentRow?.menuType || 1)
   // 目录的dropdown菜单
   const [directory, setDirectory] = useState<any[]>([])
   // 设置对话框加载状态
@@ -38,18 +50,23 @@ const MenuInfoModal: React.FC<MenuInfoModalProps> = ({
   useEffect(() => {
     if (!visible) return
     // 组件挂载查询目录数据
-    getDirectory().then((response) => {
+    getMenusList({ parentId: '0' }).then((response) => {
       setDirectory(response)
       if (currentRow) {
         // 填充表单数据
-        form.setFieldsValue(currentRow)
+        form.setFieldsValue({
+          ...currentRow,
+          hide: Boolean(currentRow.hide),
+        })
+        setMenuType(currentRow?.menuType)
       } else {
         // 清空表单数据，表示新增
         form.resetFields()
+        form.setFieldsValue({ parentId: response[0].menuId })
       }
-      setLoading(false)
     })
-  }, [currentRow, form, visible])
+    setLoading(false)
+  }, [currentRow, visible])
 
   /**
    * 弹窗打开关闭的回调（打开后默认聚焦到名称输入框）
@@ -70,8 +87,11 @@ const MenuInfoModal: React.FC<MenuInfoModalProps> = ({
       .validateFields()
       .then(() => {
         // 清除所有错误
-
-        onOk(form.getFieldsValue())
+        onOk({
+          ...form.getFieldsValue(),
+          parentId: menuType === 0 ? '0' : form.getFieldValue('parentId'),
+          hide: Number(form.getFieldValue('hide')),
+        })
       })
       .catch((errorInfo) => {
         // 滚动并聚焦到第一个错误字段
@@ -96,7 +116,7 @@ const MenuInfoModal: React.FC<MenuInfoModalProps> = ({
       styles={{
         body: {
           padding: '20px 40px',
-          height: '600px',
+          height: '500px',
           overflowY: 'auto',
         },
       }}
@@ -115,10 +135,11 @@ const MenuInfoModal: React.FC<MenuInfoModalProps> = ({
           hidden: false,
           internalOrExternal: false,
           status: true,
+          parentId: '0',
         }}
         labelCol={{ span: 4 }}
       >
-        <Form.Item name="id" hidden>
+        <Form.Item name="menuId" hidden>
           <Input />
         </Form.Item>
         <Form.Item name="menuType" label="菜单类型">
@@ -132,25 +153,25 @@ const MenuInfoModal: React.FC<MenuInfoModalProps> = ({
           </Radio.Group>
         </Form.Item>
         <Form.Item
-          name={'name'}
+          name={'title'}
           label="菜单名称"
           rules={[{ required: true, message: '菜单名称不能为空!' }]}
         >
           <Input autoFocus ref={nameRef} />
         </Form.Item>
-        {menuType !== 0 && (
+        {menuType === 1 && (
           <Form.Item name="parentId" label="上级菜单">
             <TreeSelect
               showSearch
               style={{ width: '100%' }}
-              dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
               placeholder="请选择上级目录"
               treeData={directory}
+              fieldNames={{ label: 'title', value: 'menuId' }}
             />
           </Form.Item>
         )}
         <Form.Item
-          name="url"
+          name="path"
           label={
             <>
               <Tooltip title="访问的路由地址，如为外链，则路由地址需要以`http(s)://开头`">
@@ -172,12 +193,17 @@ const MenuInfoModal: React.FC<MenuInfoModalProps> = ({
         >
           <Input allowClear autoComplete="off" />
         </Form.Item>
-        <Form.Item name="componentName" label="组件名称">
+        {menuType === 2 && (
+          <Form.Item name="authority" label="权限标识">
+            <Input allowClear autoComplete="off" />
+          </Form.Item>
+        )}
+        {/* <Form.Item name="componentName" label="组件名称">
           <Input allowClear autoComplete="off" />
-        </Form.Item>
-        <Form.Item name="redirect" label="默认跳转地址">
+        </Form.Item> */}
+        {/* <Form.Item name="redirect" label="默认跳转地址">
           <Input allowClear autoComplete="off" />
-        </Form.Item>
+        </Form.Item> */}
         <Form.Item name="icon" label="菜单图标">
           <Input
             allowClear
@@ -194,16 +220,16 @@ const MenuInfoModal: React.FC<MenuInfoModalProps> = ({
             }
           />
         </Form.Item>
-        <Form.Item name="sortNo" label="排序">
-          <InputNumber min={0} autoComplete="off" />
+        <Form.Item name="sortNumber" label="排序">
+          <InputNumber min={0} autoComplete="off" style={{ width: '200px' }} />
         </Form.Item>
-        <Form.Item name="isRoute" label="是否路由菜单">
+        {/* <Form.Item name="isRoute" label="是否路由菜单">
           <Switch checkedChildren="是" unCheckedChildren="否" />
+        </Form.Item> */}
+        <Form.Item name="hide" label="隐藏路由">
+          <Switch />
         </Form.Item>
-        <Form.Item name="hidden" label="隐藏路由">
-          <Switch checkedChildren="是" unCheckedChildren="否" />
-        </Form.Item>
-        <Form.Item
+        {/* <Form.Item
           name="internalOrExternal"
           label={
             <>
@@ -215,24 +241,12 @@ const MenuInfoModal: React.FC<MenuInfoModalProps> = ({
           }
         >
           <Switch checkedChildren="外部" unCheckedChildren="内部" />
-        </Form.Item>
-        <Form.Item name="status" label="状态">
+        </Form.Item> */}
+        {/* <Form.Item name="status" label="状态">
           <Switch checkedChildren="正常" unCheckedChildren="停用" />
-        </Form.Item>
+        </Form.Item> */}
       </Form>
     </DragModal>
   )
 }
 export default MenuInfoModal
-
-// 菜单信息弹窗的参数
-export type MenuInfoModalProps = {
-  // 弹窗可见性
-  visible: boolean
-  // 弹窗需要的数据
-  currentRow: Record<string, any> | null
-  // 点击确定的回调
-  onOk: any
-  // 点击取消的回调
-  onCancel: any
-}

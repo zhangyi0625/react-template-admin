@@ -1,13 +1,11 @@
-import { assignRoleUser, getRoleUser } from '@/services/system/role/roleApi';
+import { useEffect, useRef, useState } from 'react';
 import {
   CloseOutlined,
   DeleteOutlined,
   ExclamationCircleFilled,
-  ManOutlined,
   PlusOutlined,
   RedoOutlined,
   SearchOutlined,
-  WomanOutlined,
 } from '@ant-design/icons';
 import {
   App,
@@ -19,13 +17,22 @@ import {
   Input,
   type InputRef,
   Row,
-  Select,
   Space,
+  Switch,
   Table,
   type TableProps,
+  Tag,
 } from 'antd';
-import { useEffect, useRef, useState } from 'react';
-import AddUser from './AddUser';
+import AddUser from '../User/AddUser';
+import {
+  changStatus,
+  deleteRoleUser,
+  getRoleUserByPage,
+  postBatchRoleUser,
+  postRoleUser,
+  putRoleUser,
+} from '@/services/system/role/roleApi';
+import type { SysUserType } from '@/services/system/role/roleModel';
 
 /**
  * 给角色分配用户
@@ -36,32 +43,44 @@ const RoleUserDrawer: React.FC<RoleUserDrawerProps> = ({
   roleId,
   onCancel,
 }) => {
-  const { modal } = App.useApp();
+  const { modal, message } = App.useApp();
+
+  const [loading, setLoading] = useState<boolean>(false);
+
   // 用户表格数据
-  const [tableData, setTableData] = useState<any[]>([]);
+  const [tableData, setTableData] = useState([]);
+
   // 添加用户弹窗的打开关闭
-  const [openAddUser, setOpenAddUser] = useState<boolean>(false);
+  const [openAddUser, setOpenAddUser] = useState<{
+    visible: boolean;
+    editRow: SysUserType | null;
+  }>({ visible: false, editRow: null });
+
   // 检索表单
   const [form] = Form.useForm();
+
   // 当前选中的行数据
   const [selRows, setSelectedRows] = useState<any[]>([]);
+
   // 数据总条数
   const [total, setTotal] = useState<number>(0);
+
   // 第一个检索框
   const ref = useRef<InputRef>(null);
+
   // 分页参数
   const [pagination, setPagination] = useState<{
     pageNumber: number;
     pageSize: number;
   }>({
     pageNumber: 1,
-    pageSize: 20,
+    pageSize: 10,
   });
 
   useEffect(() => {
     if (!open) return;
     // 获取当前角色已经分配的用户
-    getRoleUserByPage();
+    getRoleUser();
     setSelectedRows([]);
   }, [open, pagination]);
 
@@ -69,19 +88,20 @@ const RoleUserDrawer: React.FC<RoleUserDrawerProps> = ({
    * 分页查询数据
    * @param params 查询参数
    */
-  const getRoleUserByPage = () => {
-    getRoleUser({
-      roleId,
-      // 表单数据
-      searchParams: form.getFieldsValue(),
-      pageNum: pagination.pageNumber,
-      pageSize: pagination.pageSize,
+  const getRoleUser = () => {
+    setLoading(true);
+    getRoleUserByPage({
+      roleId: roleId,
+      page: pagination.pageNumber,
+      limit: pagination.pageSize,
+      ...form.getFieldsValue(),
     }).then((resp) => {
       // 设置表格数据
-      setTableData(resp.data);
+      setTableData(resp.list);
       // 设置数据总条数
-      resp.total && setTotal(resp.total);
+      resp.count && setTotal(resp.count);
       ref.current?.focus();
+      setLoading(false);
     });
   };
 
@@ -102,50 +122,98 @@ const RoleUserDrawer: React.FC<RoleUserDrawerProps> = ({
       hidden: true,
     },
     {
-      title: '用户名',
+      title: '用户账号',
       dataIndex: 'username',
       width: 80,
-      align: 'left',
+      align: 'center',
     },
     {
-      title: '实名',
-      dataIndex: 'realName',
-      width: 80,
-      align: 'left',
-    },
-    {
-      title: '性别',
-      dataIndex: 'sex',
+      title: '姓名',
+      dataIndex: 'nickname',
       width: 80,
       align: 'center',
-      render: (text) => {
-        return text === 1 ? (
-          <ManOutlined className="text-blue-400" />
-        ) : (
-          <WomanOutlined className="text-pink-400" />
+    },
+    {
+      title: '角色',
+      key: 'roles',
+      align: 'center',
+      render(value) {
+        return value.roles.map((item: any, index: number) => (
+          <Tag color="blue" style={{ margin: '0 4px' }} key={index}>
+            {item.roleName}
+          </Tag>
+        ));
+      },
+    },
+    {
+      title: '状态',
+      key: 'status',
+      align: 'center',
+      render(value) {
+        return (
+          <Switch
+            value={Boolean(value.status)}
+            checkedChildren="正常"
+            unCheckedChildren="冻结"
+            onChange={(e) => switchChange(e, value)}
+          />
         );
       },
+    },
+    {
+      title: '组织结构',
+      dataIndex: 'organizationName',
+      align: 'center',
+    },
+    {
+      title: '邮箱',
+      dataIndex: 'email',
+      align: 'center',
+      width: 100,
+    },
+    {
+      title: '手机号',
+      dataIndex: 'phone',
+      align: 'center',
+      width: 150,
+    },
+    {
+      title: '更新时间',
+      dataIndex: 'updateTime',
+      align: 'center',
+      width: 200,
     },
     {
       title: '操作',
       dataIndex: 'action',
-      width: 80,
+      width: 120,
       fixed: 'right',
       align: 'center',
       render: (_text, record) => {
         return (
-          <Button
-            type="link"
-            danger
-            size="small"
-            onClick={() => deleteBatch(record.id)}
-          >
-            移除
-          </Button>
+          <>
+            <Button type="link" size="small" onClick={() => editUser(record)}>
+              修改
+            </Button>
+            <Button
+              type="link"
+              danger
+              size="small"
+              onClick={() => deleteBatch(record.userId)}
+            >
+              移除
+            </Button>
+          </>
         );
       },
     },
   ];
+
+  const switchChange = (e: boolean, row: SysUserType) => {
+    changStatus({ ...row, status: Number(e) }).then(() => {
+      getRoleUser();
+    });
+  };
 
   /**
    * 分页改变事件
@@ -163,7 +231,7 @@ const RoleUserDrawer: React.FC<RoleUserDrawerProps> = ({
    * 表单检索
    */
   const onFinish = () => {
-    getRoleUserByPage();
+    getRoleUser();
   };
 
   /**
@@ -171,26 +239,30 @@ const RoleUserDrawer: React.FC<RoleUserDrawerProps> = ({
    */
   const rowSelection: TableProps['rowSelection'] = {
     // 行选中的回调
-    onChange(_selectedRowKeys, selectedRows) {
-      setSelectedRows(selectedRows);
+    onChange(_selectedRowKeys) {
+      setSelectedRows(_selectedRowKeys);
     },
     columnWidth: 32,
     fixed: true,
-    selectedRowKeys: selRows.map((item) => item.id),
+    selectedRowKeys: selRows.map((item) => item.userId),
   };
 
   /**
    * 打开添加用户弹窗
    */
   const addUser = () => {
-    setOpenAddUser(true);
+    setOpenAddUser({ visible: true, editRow: null });
+  };
+
+  const editUser = (userInfo: unknown) => {
+    setOpenAddUser({ visible: true, editRow: userInfo as SysUserType });
   };
 
   /**
    * 取消添加用户
    */
   const cancelAddUser = () => {
-    setOpenAddUser(false);
+    setOpenAddUser({ visible: false, editRow: null });
     ref.current?.focus();
   };
 
@@ -198,23 +270,20 @@ const RoleUserDrawer: React.FC<RoleUserDrawerProps> = ({
    * 批量删除用户
    * @param id 用户ID
    */
-  const deleteBatch = (id?: string) => {
+  const deleteBatch = (id: string[] | string, type?: string) => {
     // 删除操作需要二次确定
     modal.confirm({
-      title: '批量删除',
+      title: `${type ? '批量' : ''}删除`,
       icon: <ExclamationCircleFilled />,
-      content: '确定批量删除用户吗？数据删除后将无法恢复！',
+      content: `确定${type ? '批量' : ''}删除用户吗？数据删除后将无法恢复！`,
       onOk() {
         // 调用删除接口，删除成功后刷新页面数据
-        const ids = selRows.map((item: any) => item.id);
-        id && ids.push(id);
-        assignRoleUser({
-          roleId,
-          ids,
-          operate: 'delete',
-        }).then(() => {
+        (type
+          ? postBatchRoleUser(id as string[])
+          : deleteRoleUser(id as string)
+        ).then(() => {
           // 刷新表格数据
-          getRoleUserByPage();
+          getRoleUser();
           // 清空选择项
           setSelectedRows([]);
         });
@@ -222,18 +291,19 @@ const RoleUserDrawer: React.FC<RoleUserDrawerProps> = ({
     });
   };
 
-  /**
-   * 处理确定按钮的点击事件
-   * @param count 选中的数量
-   */
-  const handleOk = (count: number) => {
-    // 如果选中的数量为0，则直接关闭弹窗，不刷新表格，否则刷新表格
-    if (count === 0) {
+  const handleOk = async (form: SysUserType) => {
+    try {
+      if (!form.userId) {
+        // 新增数据
+        await postRoleUser(form);
+      } else {
+        // 编辑数据
+        await putRoleUser(form);
+      }
+      message.success(!form.userId ? '添加成功' : '修改成功');
       cancelAddUser();
-      return;
-    }
-    getRoleUserByPage();
-    cancelAddUser();
+      getRoleUser();
+    } catch (error) {}
   };
 
   return (
@@ -256,7 +326,7 @@ const RoleUserDrawer: React.FC<RoleUserDrawerProps> = ({
                 <Form.Item
                   className="mb-0"
                   name="username"
-                  label="用户名"
+                  label="用户账号"
                   colon={false}
                 >
                   <Input autoFocus allowClear autoComplete="off" ref={ref} />
@@ -265,28 +335,11 @@ const RoleUserDrawer: React.FC<RoleUserDrawerProps> = ({
               <Col span={6}>
                 <Form.Item
                   className="mb-0"
-                  name="realName"
-                  label="实际名"
+                  name="nickname"
+                  label="用户姓名"
                   colon={false}
                 >
                   <Input allowClear autoComplete="off" />
-                </Form.Item>
-              </Col>
-              <Col span={6}>
-                <Form.Item
-                  className="mb-0"
-                  name="sex"
-                  label="性别"
-                  colon={false}
-                >
-                  <Select
-                    allowClear
-                    options={[
-                      { value: '', label: '请选择', disabled: true },
-                      { value: 1, label: '男' },
-                      { value: 0, label: '女' },
-                    ]}
-                  />
                 </Form.Item>
               </Col>
               <Col span={6} style={{ textAlign: 'right' }}>
@@ -302,7 +355,7 @@ const RoleUserDrawer: React.FC<RoleUserDrawerProps> = ({
                     type="default"
                     icon={<RedoOutlined />}
                     onClick={() => {
-                      form.resetFields();
+                      form.resetFields(), getRoleUser();
                     }}
                   >
                     重置
@@ -324,7 +377,7 @@ const RoleUserDrawer: React.FC<RoleUserDrawerProps> = ({
               icon={<DeleteOutlined />}
               danger
               disabled={selRows.length === 0}
-              onClick={() => deleteBatch()}
+              onClick={() => deleteBatch(selRows, 'batch')}
             >
               批量删除
             </Button>
@@ -336,7 +389,8 @@ const RoleUserDrawer: React.FC<RoleUserDrawerProps> = ({
             columns={columns}
             dataSource={tableData}
             bordered
-            rowKey="id"
+            loading={loading}
+            rowKey="userId"
             pagination={{
               pageSize: pagination.pageSize,
               current: pagination.pageNumber,

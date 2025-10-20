@@ -12,15 +12,8 @@ function createAxios(opts?: Partial<CreateAxiosOptions>) {
       {
         authenticationScheme: '',
         timeout: 10 * 1000,
-        // headers: {
-        //   'Content-Type': ContentTypeEnum.FORM_URLENCODED,
-        //   'x-captcha-answer': s,
-        // },
-        // headers: { 'Content-Type': ContentTypeEnum.JSON },
         headers: {
-          'Content-Type': ContentTypeEnum.FORM_URLENCODED,
-          'x-captcha-answer': sessionStorage.getItem('captchaAnswer'),
-          authorization: 'Bearer ' + sessionStorage.getItem('token'),
+          Authorization: 'Bearer ' + sessionStorage.getItem('token'),
         },
         // 数据处理方式
         transform,
@@ -49,7 +42,8 @@ function createAxios(opts?: Partial<CreateAxiosOptions>) {
           // 忽略重复请求
           ignoreCancelToken: true,
           // 是否加密数据 1：加密 0：不加密(如果是开发环境下默认不加密，处理mock)
-          encrypt: import.meta.env.MODE === 'development' ? 0 : 1,
+          // encrypt: import.meta.env.MODE === 'development' ? 0 : 1,
+          encrypt: 0,
         },
       },
       opts || {}

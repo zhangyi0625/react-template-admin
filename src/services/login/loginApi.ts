@@ -8,7 +8,7 @@ export enum LoginApi {
   /**
    * 登录
    */
-  login = '/staff/login',
+  login = '/user/login',
 
   /**
    * 退出登录
@@ -17,7 +17,7 @@ export enum LoginApi {
   /**
    * 获取验证码
    */
-  getCode = '/getCaptcha',
+  getCode = '/user/captcha',
 }
 
 /**
@@ -40,7 +40,7 @@ export const login = (params: any) => {
 export const getCaptcha = (checkKey: string) => {
   return HttpRequest.get(
     {
-      url: `${LoginApi.getCode}/${checkKey}`,
+      url: `${LoginApi.getCode}?${checkKey}`,
     },
     {
       successMessageMode: 'none',

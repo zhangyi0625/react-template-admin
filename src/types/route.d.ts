@@ -1,63 +1,63 @@
 // 菜单属性
 export interface MetaProps {
-  keepAlive?: boolean;
-  requiresAuth?: boolean;
-  title: string;
-  isLeaf?: string;
-  key?: string;
+  keepAlive?: boolean
+  requiresAuth?: boolean
+  title: string
+  isLeaf?: string
+  key?: string
 }
 
 // 路由对象
 export interface RouteObject {
-  caseSensitive?: boolean;
-  children?: RouteObject[];
-  component?: React.ReactNode;
-  index?: boolean;
-  path?: string;
-  meta?: MetaProps;
-  isLink?: string;
-  auth?: boolean;
-  title?: string;
+  caseSensitive?: boolean
+  children?: RouteObject[]
+  component?: React.ReactNode
+  index?: boolean
+  path?: string
+  meta?: MetaProps
+  isLink?: string
+  auth?: boolean
+  title?: string
 }
 
 /**
  * 封装路由对象
  */
 export interface RouteMeta {
-  key?: string;
+  key?: string
   // 菜单序号
-  orderNo?: number;
+  orderNo?: number
   // 菜单名
-  title: string;
+  title: string
   // 动态路由等级
-  dynamicLevel?: number;
+  dynamicLevel?: number
   // 动态路由的真实路径
-  realPath?: string;
+  realPath?: string
   // 忽略授权
-  ignoreAuth?: boolean;
+  ignoreAuth?: boolean
   // 缓存
-  keepAlive?: boolean;
+  keepAlive?: boolean
   // 图标
-  icon?: string;
-  frameSrc?: string;
+  icon?: string
+  frameSrc?: string
   // 当前过渡
-  transitionName?: string;
+  transitionName?: string
   // 携带参数
-  carryParam?: boolean;
-  single?: boolean;
+  carryParam?: boolean
+  single?: boolean
   // 当前激活的菜单
-  currentActiveMenu?: string;
+  currentActiveMenu?: string
   // 隐藏tab
-  hideTab?: boolean;
+  hideTab?: boolean
   // 隐藏菜单
-  hideMenu?: boolean;
-  isLink?: boolean;
+  hideMenu?: boolean
+  isLink?: boolean
   // 忽略路由
-  ignoreRoute?: boolean;
-  hidePathForChildren?: boolean;
+  ignoreRoute?: boolean
+  hidePathForChildren?: boolean
   // 是否需要访问权限
-  requiresAuth?: boolean;
-  menuType?: number;
+  requiresAuth?: boolean
+  menuType?: number
 }
 
 /**
@@ -65,23 +65,31 @@ export interface RouteMeta {
  */
 export interface RouteItem {
   // 路径
-  path: string;
+  path: string
   // 组件
-  component: string;
+  component: string
   // 明细
-  meta?: RouteMeta;
+  meta?: RouteMeta
   // 菜单名
-  name?: string;
+  name?: string
   // 别名
-  alias?: string | string[];
+  alias?: string | string[]
   // 一级直达
-  redirect?: string;
+  redirect?: string
   // 大小写敏感
-  caseSensitive?: boolean;
+  caseSensitive?: boolean
   // 下级菜单
-  children?: RouteItem[];
+  children?: RouteItem[]
   // 子路由
-  childrenRoute?: RouteItem[];
+  childrenRoute?: RouteItem[]
   // route类型
-  route?: string;
+  route?: string
+  // 0:一级菜单 1:子菜单 2:按钮
+  menuType: number
+  // 菜单名称
+  title: string
+  // 图标
+  icon: string
+  // 隐藏
+  hide: number
 }

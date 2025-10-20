@@ -115,6 +115,7 @@ const CabinTaskTemplate: React.FC<CabinTaskTemplateProps> = memo(
         routeFndId: null,
         status: 'NOT_STARTED',
         carrier: carrier,
+        sort: 'create_time desc',
       });
 
     const [params, setParams] = useState<{

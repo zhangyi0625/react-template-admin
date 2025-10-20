@@ -1,57 +1,58 @@
-import type { DefaultPaging } from '@/types/global'
+import type { DefaultPaging } from '@/types/global';
 
 type CabinExtraInfo = {
-  contractNo: string
-  extentDndFreeDays: number
-  withRollable: boolean
-}
+  contractNo: string;
+  extentDndFreeDays: number;
+  withRollable: boolean;
+};
 
-type PortCodeInfo = Pick<CabinTaskTemplateType, 'porCode' | 'fndCode'>
+type PortCodeInfo = Pick<CabinTaskTemplateType, 'porCode' | 'fndCode'>;
 
 export interface CabinTaskTemplateType {
-  id?: string | null | number
-  porCode: string
-  fndCode: string
-  etd: string
-  ctnQty: number
-  ctnTicket: number
-  priceLimit: string | number
-  extra: Partial<CabinExtraInfo>
-  customerId: number
-  carrier: string
+  id?: string | null | number;
+  porCode: string;
+  fndCode: string;
+  etd: string;
+  ctnQty: number;
+  ctnTicket: number;
+  priceLimit: string | number;
+  extra: Partial<CabinExtraInfo>;
+  customerId: number;
+  carrier: string;
 }
 
 export interface CabinTaskTemplateParams
   extends Partial<PortCodeInfo>,
     DefaultPaging {
-  routeFndId: null | string
-  etdStart?: string
-  etdEnd?: string
-  createdStart?: string
-  createdEnd?: string
-  customer?: string
-  status: string
-  carrier?: string
+  routeFndId: null | string;
+  etdStart?: string;
+  etdEnd?: string;
+  createdStart?: string;
+  createdEnd?: string;
+  customer?: string;
+  status: string;
+  carrier?: string;
+  sort: string;
 }
 
 export interface CabinHistoryParams
   extends Partial<PortCodeInfo>,
     DefaultPaging {
-  router: string | number | null
-  cabinStart?: string
-  cabinEnd?: string
+  router: string | number | null;
+  cabinStart?: string;
+  cabinEnd?: string;
 }
 
 export interface CabinResultParams
   extends Partial<PortCodeInfo>,
     DefaultPaging {
-  carrier?: string | null
-  customerId?: string | number | null
-  cabinStart?: string
-  cabinEnd?: string
+  carrier?: string | null;
+  customerId?: string | number | null;
+  cabinStart?: string;
+  cabinEnd?: string;
 }
 
 export interface TodayPlanParams extends Partial<PortCodeInfo>, DefaultPaging {
-  carrier?: string | null
-  routeFndId?: null | string
+  carrier?: string | null;
+  routeFndId?: null | string;
 }

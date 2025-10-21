@@ -36,6 +36,7 @@ export const THEME_PRESET: Array<{
   {
     icon: <MoonOutlined style={{ fontSize: '20px', margin: '0 36px' }} />,
     name: 'dark',
+    selected: true,
   },
   {
     icon: <AlertOutlined style={{ fontSize: '20px', margin: '0 36px' }} />,

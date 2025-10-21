@@ -2,12 +2,28 @@ import { THEME_PRESET } from '@/enums/constants';
 import classNames from 'classnames';
 import './theme.scss';
 import SwitchItem from '../SwitchItem';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState, updateSetting } from '@/stores/store';
 
 /**
  * 主题
  * @returns
  */
 const MyTheme: React.FC = () => {
+  const dispatch = useDispatch();
+
+  const { theme } = useSelector((state: RootState) => state.preferences);
+
+  const changeMyThemeColor = (name: string) => {
+    if (name === 'auto') return;
+    dispatch(
+      updateSetting({
+        category: 'theme',
+        key: 'mode',
+        value: name,
+      })
+    );
+  };
   return (
     <div
       style={{
@@ -27,6 +43,7 @@ const MyTheme: React.FC = () => {
               justifyContent: 'center',
               alignItems: 'center',
             }}
+            onClick={() => changeMyThemeColor(item.name)}
           >
             <div
               style={{
@@ -38,7 +55,8 @@ const MyTheme: React.FC = () => {
             >
               <div
                 className={classNames('outline-box', {
-                  'outline-box-active': item.selected,
+                  'outline-box-active':
+                    item.selected && theme.mode === item.name,
                 })}
                 style={{ paddingTop: '1rem', paddingBottom: '1rem' }}
               >

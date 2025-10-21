@@ -120,7 +120,7 @@ const LeftMenu: React.FC = memo(() => {
       if (title) document.title = `${title} - 在舱光速抢舱管理平台`;
       if (!collapsed) setOpenKeys(openKey);
     }
-  }, [pathname, collapsed, menus]);
+  }, [pathname, collapsed, menus, mode]);
 
   // 设置当前展开的 subMenu
   const onOpenChange = (openKeys: string[]) => {
@@ -218,7 +218,7 @@ const LeftMenu: React.FC = memo(() => {
                 dispatch(updatePreferences('theme', 'mode', value))
               }
               vertical={collapsed}
-              defaultValue={mode}
+              value={mode}
               size="small"
               options={[
                 {

@@ -223,6 +223,53 @@ const Login: React.FC = () => {
             </div>
           </div>
         </div>
+        <div
+          style={{
+            width: '440px',
+            margin: '0 auto',
+            padding: '20px 0',
+            display: 'none',
+          }}
+        >
+          <a
+            target="_blank"
+            rel="noreferrer"
+            // href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=51012202001944"
+            style={{
+              display: 'inline-block',
+              textDecoration: 'none',
+              height: '20px',
+              lineHeight: '20px',
+            }}
+          >
+            {/* <img src={filing} style={{ float: 'left' }} alt="无图片" /> */}
+            <p
+              style={{
+                float: 'left',
+                height: '20px',
+                lineHeight: '20px',
+                margin: '0px 0px 0px 5px',
+                color: '#ffffff',
+              }}
+            >
+              在舱 ( 浙ICP备2022007500号-1)
+            </p>
+          </a>
+          <a
+            href="https://www.zaicang.net"
+            target="_blank"
+            rel="noreferrer"
+            style={{
+              position: 'absolute',
+              display: 'inline-block',
+              color: '#ffffff',
+              textDecoration: 'none',
+              marginLeft: '6px',
+            }}
+          >
+            版权所属：宁波真和物流科技有限公司
+          </a>
+        </div>
       </div>
     </>
   );

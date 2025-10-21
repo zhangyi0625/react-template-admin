@@ -1,4 +1,4 @@
-import type { Preferences } from '@/stores/storeState'
+import type { Preferences } from '@/stores/storeState';
 
 /**
  * 默认偏好设置
@@ -115,4 +115,4 @@ export const defaultPreferences: Preferences = {
     sidebarToggle: true,
     themeToggle: true,
   },
-}
+};

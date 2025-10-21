@@ -45,6 +45,8 @@ import {
 import type { RouteMangeType } from '@/services/customerInformation/routeManage/routeManageModel';
 import ImportShippingAccout from '@/views/customerInformation/ShippingAccount/ImportShippingAccout';
 import { filterKeys } from '@/utils/tool';
+import { useSelector } from 'react-redux';
+import { RootState } from '@/stores/store';
 
 const API = process.env.RS_STATIC_API;
 
@@ -65,6 +67,8 @@ const CabinTaskTemplate: React.FC<CabinTaskTemplateProps> = memo(
     const { message, modal } = App.useApp();
 
     const { parentRef, height } = useParentSize();
+
+    const { theme } = useSelector((state: RootState) => state.preferences);
 
     const [items, setItems] = useState<TabsProps['items']>([]);
 
@@ -413,11 +417,13 @@ const CabinTaskTemplate: React.FC<CabinTaskTemplateProps> = memo(
                     <div className="grid grid-cols-3 w-fit">
                       {CabinTaskTemplateStatusOptions.map((item) => (
                         <div
-                          className={`w-[80px] h-[32px] leading-[30px] text-center rounded-[4px] mr-[8px] cursor-pointer ${
-                            current === item.name
-                              ? 'text-blue-500 border-1 border-blue-500'
-                              : 'text-dull-grey border-1 border-slate-400'
-                          }`}
+                          className="w-[80px] h-[32px] leading-[30px] text-center rounded-[4px] mr-[8px] cursor-pointer text-dull-grey border-1 border-slate-400"
+                          style={{
+                            color:
+                              current === item.name ? theme.colorPrimary : '',
+                            borderColor:
+                              current === item.name ? theme.colorPrimary : '',
+                          }}
                           key={item.name}
                           onClick={() => changeStatus(item.name)}
                         >
@@ -491,8 +497,9 @@ const CabinTaskTemplate: React.FC<CabinTaskTemplateProps> = memo(
                 关闭任务
               </Button>
               <div
-                className="underline text-blue-500 text-sm cursor-pointer"
+                className="underline text-sm cursor-pointer"
                 onClick={downLoadFile}
+                style={{ color: theme.colorPrimary }}
               >
                 下载{carrier}抢舱模版
               </div>

@@ -41,6 +41,8 @@ import useCacheData from '@/hooks/useCacheData';
 import type { ServiceSettingType } from '@/services/serviceSetting/serviceSettingModel';
 import { filterKeys } from '@/utils/tool';
 import { formatTime } from '@/utils/format';
+import { useSelector } from 'react-redux';
+import { RootState } from '@/stores/store';
 
 const API = process.env.RS_STATIC_API;
 
@@ -48,6 +50,8 @@ const ShippingAccount: React.FC = () => {
   const { modal, message } = App.useApp();
 
   const location = useLocation();
+
+  const { theme } = useSelector((state: RootState) => state.preferences);
 
   const { parentRef, height } = useParentSize();
 
@@ -424,7 +428,8 @@ const ShippingAccount: React.FC = () => {
             type="link"
             color="primary"
             onClick={downLoadFile}
-            className="underline text-blue-500 text-sm cursor-pointer"
+            className="underline text-sm cursor-pointer"
+            style={{ color: theme.colorPrimary }}
           >
             下载账号导入模版
           </Button>

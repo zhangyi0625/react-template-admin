@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react';
 import {
   ConfigProvider,
   Form,
@@ -7,24 +7,26 @@ import {
   Upload,
   UploadFile,
   UploadProps,
-} from 'antd'
-import { InboxOutlined } from '@ant-design/icons'
-import DragModal from '@/components/modal/DragModal'
-import type { CustomerManageType } from '@/services/essential/customerManage/customerManageModel'
-import type { ShippingAccounType } from '@/services/customerInformation/shippingAccount/shippingAccountModel'
-import { ImportShippingAccountByXLSX } from './import'
+} from 'antd';
+import { InboxOutlined } from '@ant-design/icons';
+import DragModal from '@/components/modal/DragModal';
+import type { CustomerManageType } from '@/services/essential/customerManage/customerManageModel';
+import type { ShippingAccounType } from '@/services/customerInformation/shippingAccount/shippingAccountModel';
+import { ImportShippingAccountByXLSX } from './import';
+import { useSelector } from 'react-redux';
+import { RootState } from '@/stores/store';
 
 export type ImportShippingAccoutProps = {
-  visible: boolean
-  title: string
-  options?: CustomerManageType[] | any[]
-  type: 'importShippingAccount' | 'importCabinTask'
-  accountType?: string
-  onOk: (params: Record<string, string | number | boolean>) => void
-  onCancel: (e: React.MouseEvent<HTMLButtonElement>) => void
-}
+  visible: boolean;
+  title: string;
+  options?: CustomerManageType[] | any[];
+  type: 'importShippingAccount' | 'importCabinTask';
+  accountType?: string;
+  onOk: (params: Record<string, string | number | boolean>) => void;
+  onCancel: (e: React.MouseEvent<HTMLButtonElement>) => void;
+};
 
-type FileType = Parameters<GetProp<UploadProps, 'beforeUpload'>>[0]
+type FileType = Parameters<GetProp<UploadProps, 'beforeUpload'>>[0];
 
 const ImportShippingAccout: React.FC<ImportShippingAccoutProps> = ({
   visible,
@@ -35,36 +37,38 @@ const ImportShippingAccout: React.FC<ImportShippingAccoutProps> = ({
   onOk,
   onCancel,
 }) => {
-  const [form] = Form.useForm()
+  const [form] = Form.useForm();
 
-  const { Dragger } = Upload
+  const { Dragger } = Upload;
 
-  const [fileList, setFileList] = useState<UploadFile[]>([])
+  const [fileList, setFileList] = useState<UploadFile[]>([]);
+
+  const { theme } = useSelector((state: RootState) => state.preferences);
 
   const [fileResults, setFileResults] = useState<
     Omit<ShippingAccounType, 'id'>[]
-  >([])
+  >([]);
 
   const DraggerProps: UploadProps = {
     name: 'file',
     multiple: false,
     accept: '.xlsx',
     beforeUpload(file) {
-      setFileList([file])
-      return false
+      setFileList([file]);
+      return false;
     },
     onChange(info) {
-      ImportShippingAccountByXLSX(info.file as FileType, setFileResults, type)
+      ImportShippingAccountByXLSX(info.file as FileType, setFileResults, type);
     },
     fileList,
-  }
+  };
 
   useEffect(() => {
-    if (!visible) return
-    form.resetFields()
-    setFileList([])
-    setFileResults([])
-  }, [visible])
+    if (!visible) return;
+    form.resetFields();
+    setFileList([]);
+    setFileResults([]);
+  }, [visible]);
 
   const handleOk = () => {
     form
@@ -76,16 +80,16 @@ const ImportShippingAccout: React.FC<ImportShippingAccoutProps> = ({
             customerId: form.getFieldValue('customerId'),
             isOrder: accountType === 'ORDER' ? true : null,
             isQuery: accountType === 'QUERY' ? true : null,
-          }
-        })
-        onOk(map as Omit<ShippingAccounType, 'id'>[] as any)
+          };
+        });
+        onOk(map as Omit<ShippingAccounType, 'id'>[] as any);
       })
       .catch((errorInfo) => {
         // 滚动并聚焦到第一个错误字段
-        form.scrollToField(errorInfo.errorFields[0].name)
-        form.focusField(errorInfo.errorFields[0].name)
-      })
-  }
+        form.scrollToField(errorInfo.errorFields[0].name);
+        form.focusField(errorInfo.errorFields[0].name);
+      });
+  };
 
   return (
     <DragModal
@@ -118,7 +122,10 @@ const ImportShippingAccout: React.FC<ImportShippingAccoutProps> = ({
           </Form.Item>
         )}
         {type === 'importCabinTask' && (
-          <div className="underline text-blue-500 text-sm cursor-pointer mb-[20px]">
+          <div
+            className="underline text-sm cursor-pointer mb-[20px]"
+            style={{ color: theme.colorPrimary }}
+          >
             下载MSK抢舱模版
           </div>
         )}
@@ -142,7 +149,7 @@ const ImportShippingAccout: React.FC<ImportShippingAccoutProps> = ({
         </ConfigProvider>
       </Form>
     </DragModal>
-  )
-}
+  );
+};
 
-export default ImportShippingAccout
+export default ImportShippingAccout;

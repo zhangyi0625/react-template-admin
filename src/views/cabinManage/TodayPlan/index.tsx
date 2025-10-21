@@ -31,6 +31,8 @@ import { getShippingAccountList } from '@/services/customerInformation/shippingA
 import useCacheData from '@/hooks/useCacheData';
 import useParentSize from '@/hooks/useParentSize';
 import { filterKeys } from '@/utils/tool';
+import { useSelector } from 'react-redux';
+import { RootState } from '@/stores/store';
 
 const cacheEssentialKeys = [
   'routeData',
@@ -42,6 +44,8 @@ const cacheEssentialKeys = [
 
 const TodayPlan: React.FC = () => {
   const { parentRef, height } = useParentSize();
+
+  const { theme } = useSelector((state: RootState) => state.preferences);
 
   const { message } = App.useApp();
 
@@ -239,9 +243,6 @@ const TodayPlan: React.FC = () => {
       {
         label: '周二',
         key: '二',
-        children() {
-          return <div className="">123</div>;
-        },
       },
       {
         label: '周三',
@@ -372,9 +373,7 @@ const TodayPlan: React.FC = () => {
   };
 
   const getRowKey = (record: any) => {
-    return defaultActiveKey === 'searchBySchedule'
-      ? record.porCode + '-' + record.fndCode
-      : record.customerId;
+    return record.porCode + '-' + record.fndCode;
   };
 
   return (
@@ -393,11 +392,14 @@ const TodayPlan: React.FC = () => {
           <div className="w-full flex items-center justify-between">
             {getTabsItem().map((item, index) => (
               <div
-                className={`font-semibold text-base cursor-pointer ${
-                  new Date().getDay() === 0 || new Date().getDay() === index + 1
-                    ? 'text-normal-blue'
-                    : 'text-light-grey'
-                }`}
+                className="font-semibold text-base cursor-pointer text-light-grey"
+                style={{
+                  color:
+                    new Date().getDay() === 0 ||
+                    new Date().getDay() === index + 1
+                      ? theme.colorPrimary
+                      : '',
+                }}
                 key={item.label}
                 onClick={() => changeDay(item.key)}
               >
@@ -409,12 +411,14 @@ const TodayPlan: React.FC = () => {
                   {item.label}
                 </p>
                 <div
-                  className={`w-[160px] h-[2px] mt-[8px] ${
-                    new Date().getDay() === 0 ||
-                    new Date().getDay() === index + 1
-                      ? 'bg-normal-blue'
-                      : 'bg-gray-200'
-                  }`}
+                  className="w-[160px] h-[2px] mt-[8px] bg-gray-200"
+                  style={{
+                    background:
+                      new Date().getDay() === 0 ||
+                      new Date().getDay() === index + 1
+                        ? theme.colorPrimary
+                        : '',
+                  }}
                 ></div>
                 <div></div>
               </div>

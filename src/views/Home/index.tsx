@@ -1,8 +1,10 @@
-import { Card } from 'antd'
+import { Card } from 'antd';
 // import StatusLineChart from './StatusLineChart'
 // import ShortCutMenu from './ShortCutMenu'
 // import EndpointStatistics from './EndpointStatistics'
-import style from './home.module.scss'
+import style from './home.module.scss';
+import { useSelector } from 'react-redux';
+import { RootState } from '@/stores/store';
 // import DocumentPieChart from './DocumentPieChart'
 
 // const { RangePicker } = DatePicker
@@ -12,11 +14,15 @@ import style from './home.module.scss'
  * @returns 组件内容
  */
 function Home() {
+  const { theme } = useSelector((state: RootState) => state.preferences);
   return (
     <>
       {/* <Row gutter={8}>
         <Col span={12}> */}
-      <Card className={style.cardTitleBar} style={{ height: '100%' }}>
+      <Card
+        className={style.cardTitleBar}
+        style={{ height: '100%', color: theme.colorPrimary }}
+      >
         欢迎
       </Card>
       {/* </Col> */}
@@ -85,6 +91,6 @@ function Home() {
         </Col>
       </Row> */}
     </>
-  )
+  );
 }
-export default Home
+export default Home;

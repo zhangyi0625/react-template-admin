@@ -1,36 +1,16 @@
+import './leftMenu.scss';
 import type React from 'react';
 import { memo, useEffect, useState } from 'react';
-import {
-  Layout,
-  Image,
-  Spin,
-  Menu,
-  type MenuProps,
-  Button,
-  Divider,
-  Space,
-  Segmented,
-  Tooltip,
-  ConfigProvider,
-  Empty,
-} from 'antd';
-import { useDispatch, useSelector } from 'react-redux';
-import { type RootState, updatePreferences } from '@/stores/store.ts';
-import logo from '@/assets/images/icon-192.png';
+import { Layout, Image, Spin, Menu, type MenuProps, Empty } from 'antd';
+import { useSelector } from 'react-redux';
+import { type RootState } from '@/stores/store.ts';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-
-import './leftMenu.scss';
-import {
-  MenuFoldOutlined,
-  MenuUnfoldOutlined,
-  MoonOutlined,
-  QuestionCircleOutlined,
-  SunOutlined,
-} from '@ant-design/icons';
 import type { RouteItem } from '@/types/route';
 import { getIcon, getOpenKeys, searchRoute } from '@/utils/utils';
 
 type MenuItem = Required<MenuProps>['items'][number];
+
+const logo = process.env.RS_STATIC_API + '/static/website/icon/logo.png';
 
 /**
  * 左边的菜单栏
@@ -41,7 +21,6 @@ const LeftMenu: React.FC = memo(() => {
     (state: RootState) => state.preferences
   );
   const { menus } = useSelector((state: RootState) => state.menuState);
-  const dispatch = useDispatch();
   const { pathname } = useLocation();
   const navigate = useNavigate();
   // 定义一些状态变量
@@ -150,6 +129,7 @@ const LeftMenu: React.FC = memo(() => {
         overflowX: 'hidden',
         zIndex: 999,
         boxShadow: '0 2px 5px 0 rgba(0, 0, 0, 0.08)',
+        background: '#062C77',
       }}
       collapsible
       width={width}
@@ -159,17 +139,17 @@ const LeftMenu: React.FC = memo(() => {
       <div className="flex justify-between items-center toolbox">
         <Link to="/" style={{ width: '100%' }}>
           <div className="h-16 flex items-center justify-center">
-            <Image width={25} src={logo} preview={false} />
+            <Image width={30} height={28} src={logo} preview={false} />
             {!collapsed && (
               <p
                 style={{
                   fontWeight: 'bold',
                   margin: '0 12px',
-                  fontSize: '20px',
+                  fontSize: '18px',
                   color: titleColor,
                 }}
               >
-                FusionAdmin
+                在舱管理系统
               </p>
             )}
           </div>
@@ -190,91 +170,6 @@ const LeftMenu: React.FC = memo(() => {
           <Empty description={<>暂无菜单，请检查用户角色是否具有菜单！</>} />
         )}
       </Spin>
-      <Divider style={{ margin: '8px 0' }} />
-      <div
-        className="flex justify-center content-center"
-        style={{
-          height: collapsed ? '140px' : '40px',
-        }}
-      >
-        <Space
-          direction={collapsed ? 'vertical' : 'horizontal'}
-          align="center"
-          className="justify-center"
-        >
-          <ConfigProvider
-            theme={{
-              components: {
-                Segmented: {
-                  itemHoverColor: isDark ? '#eee' : 'rgba(0,0,0,0.88)',
-                  itemColor: isDark ? '#fff' : 'rgba(0, 0, 0, 0.65)',
-                  itemSelectedBg: isDark ? '#1677ff' : '#fff',
-                  itemSelectedColor: isDark ? '#fff' : 'rgba(0,0,0,0.88)',
-                  trackBg: isDark ? '#001529' : '#f5f5f5',
-                },
-              },
-            }}
-          >
-            <Segmented
-              onChange={(value) =>
-                dispatch(updatePreferences('theme', 'mode', value))
-              }
-              vertical={collapsed}
-              size="small"
-              options={[
-                {
-                  label: collapsed ? '' : 'light',
-                  value: 'light',
-                  icon: <SunOutlined />,
-                },
-                {
-                  label: collapsed ? '' : 'dark',
-                  value: 'dark',
-                  icon: <MoonOutlined />,
-                },
-              ]}
-            />
-          </ConfigProvider>
-          <Tooltip title="帮助文档">
-            <Button
-              size="small"
-              color="default"
-              variant="filled"
-              shape="circle"
-              icon={
-                <QuestionCircleOutlined
-                  style={{ color: isDark ? 'white' : 'black' }}
-                />
-              }
-            />
-          </Tooltip>
-          <Button
-            size="small"
-            color="default"
-            variant="filled"
-            shape="circle"
-            style={{
-              cursor: 'pointer',
-              fontSize: '16px',
-            }}
-            icon={
-              collapsed ? (
-                <MenuUnfoldOutlined
-                  style={{ color: isDark ? 'white' : 'black' }}
-                />
-              ) : (
-                <MenuFoldOutlined
-                  style={{ color: isDark ? 'white' : 'black' }}
-                />
-              )
-            }
-            onClick={() =>
-              dispatch(updatePreferences('sidebar', 'collapsed', !collapsed))
-            }
-            className="btnbor"
-          />
-        </Space>
-      </div>
     </Layout.Sider>
   );
 });

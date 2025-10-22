@@ -75,6 +75,7 @@ export const Router = () => {
   const menuState = useSelector((state: RootState) => state.menuState);
   // 取不到菜单数据默认空数组，避免handleRouter处理错误
   const { menus = [] } = menuState;
+
   // 使用useMemo 缓存处理后的路由
   const memoizedRoutes = useMemo(() => {
     // 确保动态路由只有在菜单数据变化时才重新生成

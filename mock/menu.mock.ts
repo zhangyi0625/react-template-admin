@@ -614,8 +614,8 @@ export default defineMock([
               {
                 id: Math.random().toString(),
                 name: 'website-info',
-                path: '/websiteInfo/carrierManage',
-                component: 'websiteInfo/CarrierManage',
+                path: '/websiteInfo/shippingCompanyZone',
+                component: 'websiteInfo/ShippingCompanyZone',
                 route: '1',
                 meta: {
                   keepAlive: false,

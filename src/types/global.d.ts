@@ -22,6 +22,8 @@ export interface BasicOptions {
  * 定义查询表格默认分页参数
  */
 export interface DefaultPaging {
-  page: number;
-  limit: number;
+  page?: number;
+  limit?: number;
+  pageIndex?: number;
+  pageSize?: number;
 }

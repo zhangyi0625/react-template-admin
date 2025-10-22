@@ -109,8 +109,7 @@ const Login: React.FC = () => {
         sessionStorage.setItem('isLogin', 'true');
         let homePath = '';
         const menu = await getMenusList();
-        // return
-        dispatch(setMenus(buildTree(menu, 'menuId')));
+        dispatch(setMenus(menu));
         // 判断是否配置了默认跳转的首页地址
         if (!homePath) {
           // 获取第一个是路由的地址

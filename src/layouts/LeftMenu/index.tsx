@@ -81,19 +81,21 @@ const LeftMenu: React.FC = memo(() => {
   const deepLoopFloat = (menuList: RouteItem[], newArr: MenuItem[] = []) => {
     for (const item of menuList) {
       // 如果不能显示的菜单不显示
-      if (item.menuType === 2) {
+      if (item?.meta?.menuType === 2) {
         continue;
       }
       // 下面判断代码解释 *** !item?.children?.length   ==>   (!item.children || item.children.length === 0)
       if (!item?.children?.length) {
-        newArr.push(getItem(item.title, item.path, getIcon(item.icon)));
+        newArr.push(
+          getItem(item.meta?.title, item.path, getIcon(item.meta?.icon))
+        );
         continue;
       }
       newArr.push(
         getItem(
-          item.title,
+          item.meta?.title,
           item.path,
-          getIcon(item.icon),
+          getIcon(item.meta?.icon),
           deepLoopFloat(item.children)
         )
       );
@@ -116,8 +118,8 @@ const LeftMenu: React.FC = memo(() => {
     // 判断如果是二级路由，不在左边菜单那种的就不去更新
     const route = searchRoute(pathname, menus);
     if (route && Object.keys(route).length) {
-      const title = route.title;
-      if (title) document.title = `${title} - 在舱光速抢舱管理平台`;
+      const title = route.meta?.title;
+      if (title) document.title = `${title} - Fusion Admin`;
       if (!collapsed) setOpenKeys(openKey);
     }
   }, [pathname, collapsed, menus]);
@@ -163,11 +165,11 @@ const LeftMenu: React.FC = memo(() => {
                 style={{
                   fontWeight: 'bold',
                   margin: '0 12px',
-                  fontSize: '16px',
+                  fontSize: '20px',
                   color: titleColor,
                 }}
               >
-                在舱管理系统
+                FusionAdmin
               </p>
             )}
           </div>

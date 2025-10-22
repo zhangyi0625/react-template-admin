@@ -30,12 +30,14 @@ const App: React.FC = () => {
   const getMenuData = async () => {
     setLoading(true);
     try {
+      // const menu = await getMenusList();
+      // const treeMenu = menu.filter(
+      //   (item: RouteItem) => item.menuType !== 2 && !item.hide
+      // );
+      // const build = buildTree(treeMenu, 'menuId');
+      // dispatch(setMenus(build)); // 更新 Redux 状态
       const menu = await getMenusList();
-      const treeMenu = menu.filter(
-        (item: RouteItem) => item.menuType !== 2 && !item.hide
-      );
-      const build = buildTree(treeMenu, 'menuId');
-      dispatch(setMenus(build)); // 更新 Redux 状态
+      dispatch(setMenus(menu));
     } catch (e: unknown) {
       notification.error({
         message: '菜单加载失败',

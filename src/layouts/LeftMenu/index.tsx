@@ -167,7 +167,7 @@ const LeftMenu: React.FC = memo(() => {
                   color: titleColor,
                 }}
               >
-                在舱光速抢舱管理平台
+                在舱管理系统
               </p>
             )}
           </div>

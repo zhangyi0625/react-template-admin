@@ -6,7 +6,7 @@ import type { RouteMangeType } from '@/services/customerInformation/routeManage/
 import type { CarrierManageType } from '@/services/essential/carrierManage/carrierManageModel'
 import type { CustomerManageType } from '@/services/essential/customerManage/customerManageModel'
 import type { PortManageType } from '@/services/essential/portManage/portManageApi'
-import type { ServiceSettingType } from '@/services/setting/serviceSettingModel'
+import type { ServiceSettingType } from '@/services/serviceSetting/serviceSettingModel'
 import type {
   BreadcrumbStyleType,
   BuiltinThemeType,

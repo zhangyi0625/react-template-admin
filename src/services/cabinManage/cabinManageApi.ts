@@ -5,7 +5,6 @@ import {
   CabinTaskTemplateParams,
   CabinTaskTemplateType,
 } from './cabinManageModel'
-import { CabinTaskTemplateProps } from '@/views/cabinManage/CabinTaskTemplate'
 
 /**
  * 枚举订舱管理相关的api
@@ -23,6 +22,7 @@ export enum CabinManageApi {
   deleteCabin = '/system/test/customer/',
   cabinHistoryList = '/core/business/stowage-history/page',
   cabinResultList = '/core/business/stowage-history/page',
+  refreshLoginAccount = '/core/business/booking-task/again/login/',
 }
 
 /**
@@ -93,6 +93,23 @@ export const addCabinManageList = (params: CabinTaskTemplateType) => {
 }
 
 /**
+ * 修改订舱任务
+ * @param params 订舱管理参数
+ * @returns 订舱管理列表
+ */
+export const putCabinManageList = (params: CabinTaskTemplateType) => {
+  return HttpRequest.put(
+    {
+      url: CabinManageApi.cabinManageList,
+      data: params,
+    },
+    {
+      successMessageMode: 'none',
+    }
+  )
+}
+
+/**
  * 添加订舱任务
  * @param params 订舱管理参数
  * @returns 订舱管理列表
@@ -134,6 +151,7 @@ export const closeBatchCabinManage = (params: string[]) => {
 export const openBatchCabinByFrequency = (params: {
   ids: string[]
   sameFrequencyTaskId?: string
+  frequency?: string
 }) => {
   return HttpRequest.post(
     {
@@ -254,31 +272,14 @@ export const getCabinResultList = (params: CabinResultParams) => {
 }
 
 /**
- * 添加客户
+ * 重登查询账号
  * @param params 订舱管理参数
  * @returns
  */
-export const addCabinManage = (params: CabinTaskTemplateProps) => {
+export const updateLoginAccount = (carrier: string) => {
   return HttpRequest.post(
     {
-      url: CabinManageApi.addCabin,
-      data: params,
-    },
-    {
-      successMessageMode: 'none',
-    }
-  )
-}
-
-/**
- * 删除客户
- * @param params 订舱管理参数
- * @returns
- */
-export const deleteCabinManage = (id: string) => {
-  return HttpRequest.delete(
-    {
-      url: CabinManageApi.deleteCabin + id,
+      url: CabinManageApi.refreshLoginAccount + carrier,
     },
     {
       successMessageMode: 'none',

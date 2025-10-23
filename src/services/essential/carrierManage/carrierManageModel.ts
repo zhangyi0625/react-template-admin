@@ -1,3 +1,5 @@
+import type { DefaultPaging } from '@/types/global'
+
 export interface CarrierManageType {
   id?: string | null
   cnName: string
@@ -9,7 +11,5 @@ export interface CarrierManageType {
 }
 
 export interface CarrierManageParams
-  extends Pick<CarrierManageType, 'code' | 'enabled'> {
-  page: number
-  limit: number
-}
+  extends Pick<CarrierManageType, 'code' | 'enabled'>,
+    DefaultPaging {}

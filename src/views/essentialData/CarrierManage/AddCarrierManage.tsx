@@ -1,88 +1,89 @@
+import React, { useEffect, useState } from 'react';
 import {
   App,
   Form,
   GetProp,
   Input,
   Radio,
-  Select,
   Upload,
-  UploadProps,
-} from 'antd'
-import React, { useEffect, useState } from 'react'
-import { CheckboxGroupProps } from 'antd/es/checkbox'
-import DragModal from '@/components/modal/DragModal'
-import type { CarrierManageType } from '@/services/essential/carrierManage/carrierManageModel'
-import { CarrierManageForm } from './config'
-import { LoadingOutlined, PlusOutlined } from '@ant-design/icons'
-import { postUploadFile } from '@/services/upload'
+  type UploadFile,
+  type UploadProps,
+} from 'antd';
+import { LoadingOutlined, PlusOutlined } from '@ant-design/icons';
+import { CheckboxGroupProps } from 'antd/es/checkbox';
+import DragModal from '@/components/modal/DragModal';
+import type { CarrierManageType } from '@/services/essential/carrierManage/carrierManageModel';
+import { CarrierManageForm } from './config';
+import { postUploadFile } from '@/services/upload';
 
 export type AddCarrierManageProps = {
   params: {
-    visible: boolean
-    currentRow: CarrierManageType
-    view: boolean
-  }
-  onOk: (params: CarrierManageType) => void
-  onCancel: (e: React.MouseEvent<HTMLButtonElement>) => void
-}
+    visible: boolean;
+    currentRow: CarrierManageType | null;
+    view: boolean;
+  };
+  onOk: (params: CarrierManageType) => void;
+  onCancel: (e: React.MouseEvent<HTMLButtonElement>) => void;
+};
 
-type FileType = Parameters<GetProp<UploadProps, 'beforeUpload'>>[0]
+type FileType = Parameters<GetProp<UploadProps, 'beforeUpload'>>[0];
 
 const AddCarrierManage: React.FC<AddCarrierManageProps> = ({
   params,
   onOk,
   onCancel,
 }) => {
-  const { visible, currentRow, view } = params
+  const { visible, currentRow, view } = params;
 
-  const { message } = App.useApp()
+  const { message } = App.useApp();
 
-  const [form] = Form.useForm()
+  const [form] = Form.useForm();
 
-  const [initialValues, setInitialValues] = useState({})
+  const [initialValues, setInitialValues] = useState({});
 
-  const [fileList, setFileList] = useState<any>([])
+  const [fileList, setFileList] = useState<UploadFile[]>([]);
 
-  const [imageUrl, setImageUrl] = useState<string>('')
+  const [imageUrl, setImageUrl] = useState<string>('');
 
-  const [loading, setLoading] = useState<boolean>(false)
+  const [loading, setLoading] = useState<boolean>(false);
 
   useEffect(() => {
-    if (!visible) return
+    if (!visible) return;
     if (currentRow) {
       form.setFieldsValue({
         ...currentRow,
         enabled: Number(currentRow.enabled),
-      })
-      setImageUrl(currentRow.logoUrl ?? '')
+      });
+      setImageUrl(currentRow.logoUrl ?? '');
     } else {
-      form.resetFields()
-      setInitialValues({ enabled: 1 })
-      form.setFieldsValue({ enabled: 1 })
-      setImageUrl('')
-      setLoading(false)
+      form.resetFields();
+      setInitialValues({ enabled: 1 });
+      form.setFieldsValue({ enabled: 1 });
+      setImageUrl('');
+      setFileList([]);
+      setLoading(false);
     }
-  }, [visible, view])
+  }, [visible, view]);
 
   const handleOk = () => {
     form
       .validateFields()
       .then(() => {
-        onOk({ ...form.getFieldsValue(), logoUrl: imageUrl })
+        onOk({ ...form.getFieldsValue(), logoUrl: imageUrl });
       })
       .catch((errorInfo) => {
         // 滚动并聚焦到第一个错误字段
-        form.scrollToField(errorInfo.errorFields[0].name)
-        form.focusField(errorInfo.errorFields[0].name)
-      })
-  }
+        form.scrollToField(errorInfo.errorFields[0].name);
+        form.focusField(errorInfo.errorFields[0].name);
+      });
+  };
 
   const uploadButton = (
     <button style={{ border: 0, background: 'none' }} type="button">
       {loading ? <LoadingOutlined /> : <PlusOutlined />}
       <div style={{ marginTop: 8 }}>Upload</div>
     </button>
-  )
+  );
 
   const CustomeUploadProps: UploadProps = {
     name: 'file',
@@ -90,30 +91,31 @@ const AddCarrierManage: React.FC<AddCarrierManageProps> = ({
     showUploadList: false,
     listType: 'picture-card',
     beforeUpload(file) {
-      const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png'
+      const isJpgOrPng =
+        file.type === 'image/jpeg' || file.type === 'image/png';
       if (!isJpgOrPng) {
-        message.error('You can only upload JPG/PNG file!')
+        message.error('You can only upload JPG/PNG file!');
       }
-      const isLt2M = file.size / 1024 / 1024 < 2
+      const isLt2M = file.size / 1024 / 1024 < 2;
       if (!isLt2M) {
-        message.error('Image must smaller than 2MB!')
+        message.error('Image must smaller than 2MB!');
       }
-      return false
+      return false;
     },
     onChange(info) {
-      setLoading(true)
-      const formdata = new FormData()
-      formdata.append('file', info.file as FileType) //将每一个文件图片都加进formdata
+      setLoading(true);
+      const formdata = new FormData();
+      formdata.append('file', info.file as FileType); //将每一个文件图片都加进formdata
       postUploadFile(formdata).then((resp) => {
-        setLoading(false)
-        setImageUrl(resp.data)
-      })
+        setLoading(false);
+        setImageUrl(resp.data);
+      });
     },
     onRemove() {
-      setImageUrl('')
+      setImageUrl('');
     },
     fileList,
-  }
+  };
 
   return (
     <DragModal
@@ -163,7 +165,7 @@ const AddCarrierManage: React.FC<AddCarrierManageProps> = ({
         ))}
       </Form>
     </DragModal>
-  )
-}
+  );
+};
 
-export default AddCarrierManage
+export default AddCarrierManage;

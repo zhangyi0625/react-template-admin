@@ -1,6 +1,5 @@
-import { useEffect, useState } from 'react'
-import { useLocation, useParams } from 'react-router-dom'
-import { useDispatch, useSelector } from 'react-redux'
+import { useEffect, useState } from 'react';
+import { useLocation } from 'react-router-dom';
 import {
   App,
   Button,
@@ -9,22 +8,21 @@ import {
   Space,
   TablePaginationConfig,
   TableProps,
-} from 'antd'
+} from 'antd';
 import {
   ExclamationCircleFilled,
   ImportOutlined,
   PlusOutlined,
-} from '@ant-design/icons'
-import { RootState, setEssentail } from '@/stores/store'
+} from '@ant-design/icons';
 import {
   SelectShippingAccountOptions,
   ShippingAccountOperationBtn,
-} from './config'
-import { SearchForm, SearchTable } from 'customer-search-form-table'
+} from './config';
+import { SearchForm, SearchTable } from 'customer-search-form-table';
 import {
   ShippingAccounParams,
   ShippingAccounType,
-} from '@/services/customerInformation/shippingAccount/shippingAccountModel'
+} from '@/services/customerInformation/shippingAccount/shippingAccountModel';
 import {
   getShippingAccountListByPage,
   addShippingAccountList,
@@ -32,41 +30,39 @@ import {
   putShippingAccountList,
   deleteShippingAccountList,
   relevanceShippingAccountClose,
-} from '@/services/customerInformation/shippingAccount/shippingAccountApi'
-import AddShippingAccount from './AddShippingAccount'
-import ImportShippingAccout from './ImportShippingAccout'
-import SetRelevanceModal from './setRelevanceModal'
-import { getCarrierManageList } from '@/services/essential/carrierManage/carrierManageApi'
-import { getCustomerManageList } from '@/services/essential/customerManage/customerManageApi'
-import type { CustomerManageType } from '@/services/essential/customerManage/customerManageModel'
-import type { CarrierManageType } from '@/services/essential/carrierManage/carrierManageModel'
-import { filterKeys } from '@/utils/tool'
-import { formatTime } from '@/utils/format'
-import useParentSize from '@/hooks/useParentSize'
-import type { ServiceSettingType } from '@/services/setting/serviceSettingModel'
+} from '@/services/customerInformation/shippingAccount/shippingAccountApi';
+import AddShippingAccount from './AddShippingAccount';
+import ImportShippingAccout from './ImportShippingAccout';
+import SetRelevanceModal from './setRelevanceModal';
+import type { CustomerManageType } from '@/services/essential/customerManage/customerManageModel';
+import type { CarrierManageType } from '@/services/essential/carrierManage/carrierManageModel';
+import useParentSize from '@/hooks/useParentSize';
+import useCacheData from '@/hooks/useCacheData';
+import type { ServiceSettingType } from '@/services/serviceSetting/serviceSettingModel';
+import { filterKeys } from '@/utils/tool';
+import { formatTime } from '@/utils/format';
 
-const API = process.env.VITE_STATIC_API
+const API = process.env.RS_STATIC_API;
 
 const ShippingAccount: React.FC = () => {
-  const { modal, message } = App.useApp()
+  const { modal, message } = App.useApp();
 
-  const routeParams = useParams()
+  const location = useLocation();
 
-  const location = useLocation()
-
-  const { parentRef, height } = useParentSize()
-
-  const dispatch = useDispatch()
-
-  const essential = useSelector((state: RootState) => state.essentail)
+  const { parentRef, height } = useParentSize();
 
   const [selectoptions, setSelectOptions] = useState(
     SelectShippingAccountOptions
-  )
+  );
 
-  const [relevanceModal, setRelevanceModal] = useState<boolean>(false)
+  const { essential, formMaps } = useCacheData({
+    cacheEssentialKeys: ['carrierData', 'customerData'],
+    formMap: selectoptions,
+  });
 
-  const [selRows, setSelectedRows] = useState<any[]>([])
+  const [relevanceModal, setRelevanceModal] = useState<boolean>(false);
+
+  const [selRows, setSelectedRows] = useState<any[]>([]);
 
   const [searchDefaultForm, setSearchDefaultForm] =
     useState<ShippingAccounParams>({
@@ -74,29 +70,33 @@ const ShippingAccount: React.FC = () => {
       limit: 10,
       carrier: null,
       account: null,
-    })
+      isOrder: null,
+      isQuery: null,
+      customerId: null,
+      sort: 'create_time desc',
+    });
 
-  const [carrierOptions, setCarrierOptions] = useState<CarrierManageType[]>([])
+  const [carrierOptions, setCarrierOptions] = useState<CarrierManageType[]>([]);
 
   const [customerOptions, setCustomerOptions] = useState<CustomerManageType[]>(
     []
-  )
+  );
 
-  const [immediate, setImmediate] = useState<boolean>(false)
+  const [immediate, setImmediate] = useState<boolean>(true);
 
   const [params, setParams] = useState<{
-    visible: boolean
-    currentRow: any
-    view: boolean
-    type: string
+    visible: boolean;
+    currentRow: any;
+    view: boolean;
+    type: string;
   }>({
     visible: false,
     currentRow: null,
     view: false,
     type: 'QUERY',
-  })
+  });
 
-  const [importModel, setImportModel] = useState<boolean>(false)
+  const [importModel, setImportModel] = useState<boolean>(false);
 
   const columns: TableProps['columns'] = [
     {
@@ -111,7 +111,7 @@ const ShippingAccount: React.FC = () => {
       dataIndex: 'customerName',
       key: 'customerName',
       align: 'center',
-      width: 200,
+      width: 220,
     },
     {
       title: '船司账号',
@@ -134,7 +134,7 @@ const ShippingAccount: React.FC = () => {
       width: 100,
       hidden: params.type === 'QUERY',
       render(value) {
-        return <div>{value?.isQuery ? '已设置' : '-'}</div>
+        return <div>{value?.isQuery ? '已设置' : '-'}</div>;
       },
     },
     {
@@ -147,7 +147,7 @@ const ShippingAccount: React.FC = () => {
           <div className={`text-${value.isValid ? 'blue' : 'red'}-500`}>
             {value.isValid ? '有效' : '无效'}
           </div>
-        )
+        );
       },
     },
     {
@@ -160,7 +160,7 @@ const ShippingAccount: React.FC = () => {
           <div className={`text-${value.isEnable ? 'blue' : 'red'}-500`}>
             {value.isEnable ? '启用' : '不启用'}
           </div>
-        )
+        );
       },
     },
     {
@@ -176,7 +176,7 @@ const ShippingAccount: React.FC = () => {
       align: 'center',
       width: 150,
       render(value) {
-        return <div>{formatTime(value.updateTime, 'Y-M-D h:m')}</div>
+        return <div>{formatTime(value.updateTime, 'Y-M-D h:m')}</div>;
       },
     },
     {
@@ -211,69 +211,52 @@ const ShippingAccount: React.FC = () => {
               删除
             </Button>
           </Space>
-        )
+        );
       },
     },
-  ]
+  ];
 
   useEffect(() => {
     let name = location.pathname.split(
       '/customerInformation/shippingAccount/'
-    )[1]
-    setImmediate(true)
-    if (!essential.carrierData?.length || !essential.routeData?.length) {
-      loadSearchList()
-    } else {
-      getReduxData()
-    }
-    setParams({ ...params, type: name })
-    console.log(routeParams, 'routeParams', location, name)
-  }, [location.pathname, params.type, essential])
+    )[1];
+    setImmediate(true);
+    init();
+    setParams({ ...params, type: name });
+    setSearchDefaultForm({
+      ...searchDefaultForm,
+      isOrder: name === 'QUERY' ? null : true,
+      isQuery: name === 'QUERY' ? true : null,
+    });
+  }, [location.pathname, essential]);
 
-  // 重新更新查询部分数据 并存储进redux
-  const loadSearchList = () => {
-    Promise.all([
-      getCarrierManageList({ enabled: 1 }),
-      getCustomerManageList(),
-    ]).then((resp) => {
-      let key = ['carrierData', 'customerData']
-      key.map((_, index: number) => {
-        dispatch(setEssentail({ value: resp[index], key: key[index] }))
-      })
-      getReduxData()
-    })
-  }
-
-  const getReduxData = () => {
-    let { carrierData = [], customerData = [] } = essential
-    selectoptions.map((item) => {
-      if (item.name === 'carrier') item.options = carrierData
-      if (item.name === 'customerId') item.options = customerData
-      if (item.name === 'serverName') item.hiddenItem = params.type !== 'QUERY'
-      if (item.name === 'isQuery') item.hiddenItem = params.type !== 'ORDER'
-    })
-    console.log(selectoptions, 'selectOptions')
-    setCustomerOptions(customerData)
-    setSelectOptions([...selectoptions])
-    setCarrierOptions(carrierData)
-    setImmediate(false)
-  }
+  const init = () => {
+    let { carrierData = [], customerData = [] } = essential;
+    formMaps.map((item) => {
+      if (item.name === 'serverName') item.hiddenItem = params.type !== 'QUERY';
+      if (item.name === 'isQuery') item.hiddenItem = params.type !== 'ORDER';
+    });
+    setCustomerOptions(customerData);
+    setSelectOptions([...formMaps]);
+    setCarrierOptions(carrierData);
+    setImmediate(false);
+  };
 
   const operationShippingAccount = (type?: string) => {
     if (selRows.length === 0) {
-      message.error('请至少选择一个船司账号！')
+      message.error('请至少选择一个船司账号！');
     } else {
       if (!type) {
-        setRelevanceModal(true)
-        return
+        setRelevanceModal(true);
+        return;
       }
-      ;(ShippingAccountOperationBtn as any)[type](selRows).then(() => {
-        message.success('操作成功')
-        onUpdateSearch(searchDefaultForm)
+      (ShippingAccountOperationBtn as any)[type](selRows).then(() => {
+        message.success('操作成功');
+        onUpdateSearch(searchDefaultForm);
         // setSelectedRows([])
-      })
+      });
     }
-  }
+  };
 
   const deleteBatch = (id: string) => {
     modal.confirm({
@@ -283,74 +266,76 @@ const ShippingAccount: React.FC = () => {
       onOk() {
         deleteShippingAccountList(id).then(() => {
           // 刷新表格数据
-          onUpdateSearch()
-        })
+          onUpdateSearch();
+        });
       },
-    })
-  }
+    });
+  };
 
   const downLoadFile = () => {
-    let elemIF = document.createElement('iframe')
-    elemIF.src = `${API}/static/file/importShippingAccount-template.xlsx`
-    elemIF.style.display = 'none'
-    document.body.appendChild(elemIF)
-  }
+    let elemIF = document.createElement('iframe');
+    elemIF.src = `${API}/static/file/importShippingAccount-template.xlsx`;
+    elemIF.style.display = 'none';
+    document.body.appendChild(elemIF);
+  };
 
   const onUpdateSearch = (info?: ShippingAccounParams | unknown) => {
     const filteredObj = Object.fromEntries(
-      Object.entries(info ?? {}).filter(
-        ([, value]) => value !== undefined || value !== null
-      )
-    )
-    let pageInfo = filterKeys(searchDefaultForm, ['page', 'limit'], true)
+      Object.entries(info ?? {}).filter(([, value]) => value !== undefined)
+    );
+    let pageInfo = filterKeys(
+      searchDefaultForm,
+      ['page', 'limit', 'isOrder', 'isQuery', 'sort'],
+      true
+    );
     setSearchDefaultForm({
       ...pageInfo,
       ...filteredObj,
-    })
-  }
+    });
+  };
 
   const onUpdatePagination = (pagination: TablePaginationConfig) => {
     setSearchDefaultForm({
       ...searchDefaultForm,
       page: pagination.current as number,
       limit: pagination.pageSize as number,
-    })
-  }
+    });
+  };
 
   const onEditOk = async (roleData: ShippingAccounType) => {
     try {
       if (params.currentRow == null) {
         // 新增数据
-        await addShippingAccountList(roleData)
+        await addShippingAccountList(roleData);
       } else {
         // 编辑数据
-        await putShippingAccountList(roleData)
+        await putShippingAccountList(roleData);
       }
-      message.success(!params.currentRow ? '添加成功' : '修改成功')
+      message.success(!params.currentRow ? '添加成功' : '修改成功');
       // 操作成功，关闭弹窗，刷新数据
-      setParams({ ...params, visible: false, currentRow: null, view: false })
-      onUpdateSearch()
+      setParams({ ...params, visible: false, currentRow: null, view: false });
+      onUpdateSearch();
     } catch (error) {}
-  }
+  };
 
   const importShippingAccount = (info: any) => {
     batchImportShippingAccount(info).then(() => {
-      message.success('导入成功')
-      setImportModel(false)
-      onUpdateSearch(searchDefaultForm)
-    })
-  }
+      message.success('导入成功');
+      setImportModel(false);
+      onUpdateSearch(searchDefaultForm);
+    });
+  };
 
   const relevanceService = (params: { serverNo: string }) => {
     relevanceShippingAccountClose({
       ids: selRows,
       serverNo: params.serverNo,
     }).then(() => {
-      message.success('关联服务成功')
-      setRelevanceModal(false)
-      onUpdateSearch(searchDefaultForm)
-    })
-  }
+      message.success('关联服务成功');
+      setRelevanceModal(false);
+      onUpdateSearch(searchDefaultForm);
+    });
+  };
 
   return (
     <>
@@ -451,8 +436,10 @@ const ShippingAccount: React.FC = () => {
           rowKey="id"
           fetchResultKey="list"
           totalKey="count"
+          pageIndexKey="page"
+          pageSizeKey="limit"
           isPagination={true}
-          scroll={{ x: 'max-content', y: height - 158 }}
+          scroll={{ x: 'max-content', y: height - 168 }}
           fetchData={getShippingAccountListByPage}
           immediate={immediate}
           searchFilter={searchDefaultForm}
@@ -495,7 +482,7 @@ const ShippingAccount: React.FC = () => {
         onCancel={() => setRelevanceModal(false)}
       />
     </>
-  )
-}
+  );
+};
 
-export default ShippingAccount
+export default ShippingAccount;

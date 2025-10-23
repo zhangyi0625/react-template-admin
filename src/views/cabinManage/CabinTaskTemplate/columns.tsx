@@ -1,25 +1,31 @@
-import { TableProps } from 'antd'
-import { formatTime } from '@/utils/format'
-import { CustomColumn } from '@/components/searchForm'
+import { TableProps } from 'antd';
+import { formatTime } from '@/utils/format';
+import type { CustomColumn } from 'customer-search-form-table/SearchForm/type';
+import { ServiceSettingType } from './config';
 
 type formSettingType = Pick<
   CustomColumn,
   'label' | 'name' | 'formType' | 'isRules' | 'options'
->
+>;
 
 export const getTemplateSetting = (carrier?: string, statusType?: string) => {
   const columns = [
     {
-      title: '任务编号',
-      key: 'taskNo',
+      title: '抢舱模式',
+      key: 'startType',
       align: 'center',
-      width: 100,
+      hidden: statusType !== 'RUNNING',
+      width: 120,
       render(value) {
         return (
-          <div className="text-blue-500 cursor-pointer underline text-sm">
-            {value.taskNo}
+          <div>
+            {value.startType === 'SAME_FREQ'
+              ? '同频放舱'
+              : ServiceSettingType.find(
+                  (item) => item.value === value.startType
+                )?.label}
           </div>
-        )
+        );
       },
     },
     {
@@ -32,16 +38,28 @@ export const getTemplateSetting = (carrier?: string, statusType?: string) => {
     {
       title: '起运港',
       key: 'porCode',
-      dataIndex: 'porCode',
       align: 'center',
-      width: 100,
+      width: 150,
+      render(value) {
+        return (
+          <div>
+            {value.por.enName ?? ''} - {value.por.cnName ?? ''}
+          </div>
+        );
+      },
     },
     {
       title: '目的港',
       key: 'fndCode',
-      dataIndex: 'fndCode',
       align: 'center',
-      width: 100,
+      width: 150,
+      render(value) {
+        return (
+          <div>
+            {value.fnd.enName ?? ''} - {value.fnd.cnName ?? ''}
+          </div>
+        );
+      },
     },
     {
       title: '船司航线',
@@ -60,7 +78,7 @@ export const getTemplateSetting = (carrier?: string, statusType?: string) => {
           <div className="text-blue-500 cursor-pointer underline text-sm">
             {value.customerName}
           </div>
-        )
+        );
       },
     },
     {
@@ -69,7 +87,7 @@ export const getTemplateSetting = (carrier?: string, statusType?: string) => {
       align: 'center',
       width: 180,
       render(value) {
-        return <div>{formatTime(value.etd, 'M-D')}</div>
+        return <div>{formatTime(value.etd, 'M-D')}</div>;
       },
     },
     {
@@ -88,34 +106,48 @@ export const getTemplateSetting = (carrier?: string, statusType?: string) => {
           <div>
             {value.ctnQty} / {value.ctnTicket}
           </div>
-        )
+        );
       },
     },
-    carrier === 'MSK' && {
+    {
       title: '额外免箱',
       key: 'extra',
       align: 'center',
       width: 150,
+      hidden: carrier !== 'MSK',
       render(value) {
-        return <div>{value.extra?.extentDndFreeDays ?? '-'}</div>
+        return <div>{value.extra?.extentDndFreeDays ?? '-'}</div>;
       },
     },
-    carrier === 'MSK' && {
+    {
       title: 'rollable',
       key: 'extra',
       align: 'center',
       width: 150,
+      hidden: carrier !== 'MSK',
       render(value) {
-        return <div>{value.extra?.withRollable ? '需要' : '不需要'}</div>
+        return <div>{value.extra?.withRollable ? '需要' : '不需要'}</div>;
       },
     },
-    carrier === 'MSK' && {
+    {
+      title: '购买保值服务',
+      key: 'insurance',
+      align: 'center',
+      width: 150,
+      hidden: carrier !== 'OOCL',
+      render(value) {
+        return <div>{value.extra?.insurance ? '需要' : '不需要'}</div>;
+      },
+    },
+
+    {
       title: '合约号',
       key: 'extra',
       align: 'center',
       width: 120,
+      hidden: carrier !== 'MSK',
       render(value) {
-        return <div>{value.extra?.contractNo ?? ''}</div>
+        return <div>{value.extra?.contractNo ?? ''}</div>;
       },
     },
     {
@@ -126,23 +158,15 @@ export const getTemplateSetting = (carrier?: string, statusType?: string) => {
       width: 120,
     },
     {
-      title: '抢舱模式',
-      dataIndex: 'startType',
-      key: 'startType',
-      align: 'center',
-      hidden: statusType === 'NOT_STARTED',
-      width: 120,
-    },
-    {
       title: '创建时间',
       key: 'createTime',
       align: 'center',
       width: 180,
       render(value) {
-        return <div>{formatTime(value.createTime, 'Y-M-D h:m')}</div>
+        return <div>{formatTime(value.createTime, 'Y-M-D h:m')}</div>;
       },
     },
-  ] as TableProps['columns']
+  ] as TableProps['columns'];
 
   const formSetting: Record<string, formSettingType[]> = {
     MSK: [
@@ -175,7 +199,25 @@ export const getTemplateSetting = (carrier?: string, statusType?: string) => {
         ],
       },
     ],
-  }
+    OOCL: [
+      {
+        label: '购买保值服务',
+        isRules: true,
+        formType: 'radio',
+        name: 'insurance',
+        options: [
+          {
+            label: '需要',
+            value: 1,
+          },
+          {
+            label: '不需要',
+            value: 0,
+          },
+        ],
+      },
+    ],
+  };
 
   const operationColumns: TableProps['columns'] = [
     {
@@ -189,7 +231,7 @@ export const getTemplateSetting = (carrier?: string, statusType?: string) => {
       key: 'updateTime',
       align: 'center',
       render(value) {
-        return <div>{formatTime(value.updateTime, 'Y-M-D h:m')}</div>
+        return <div>{formatTime(value.updateTime, 'Y-M-D h:m')}</div>;
       },
     },
     {
@@ -198,10 +240,10 @@ export const getTemplateSetting = (carrier?: string, statusType?: string) => {
       align: 'center',
       dataIndex: 'content',
     },
-  ]
+  ];
   return {
     columns: columns,
     formSetting: formSetting,
     operationColumns: operationColumns,
-  }
-}
+  };
+};

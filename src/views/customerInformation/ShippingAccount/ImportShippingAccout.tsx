@@ -19,7 +19,7 @@ export type ImportShippingAccoutProps = {
   title: string
   options?: CustomerManageType[] | any[]
   type: 'importShippingAccount' | 'importCabinTask'
-  accountType: string
+  accountType?: string
   onOk: (params: Record<string, string | number | boolean>) => void
   onCancel: (e: React.MouseEvent<HTMLButtonElement>) => void
 }
@@ -74,7 +74,8 @@ const ImportShippingAccout: React.FC<ImportShippingAccoutProps> = ({
           return {
             ...item,
             customerId: form.getFieldValue('customerId'),
-            type: accountType,
+            isOrder: accountType === 'ORDER' ? true : null,
+            isQuery: accountType === 'QUERY' ? true : null,
           }
         })
         onOk(map as Omit<ShippingAccounType, 'id'>[] as any)

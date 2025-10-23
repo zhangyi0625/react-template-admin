@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState } from 'react';
 import {
   App,
   Button,
@@ -9,44 +9,44 @@ import {
   TablePaginationConfig,
   TableProps,
   Tag,
-} from 'antd'
-import { ExclamationCircleFilled, PlusOutlined } from '@ant-design/icons'
-import { SearchForm, SearchTable } from 'customer-search-form-table'
-import AddPortManage from './AddPortManage'
+} from 'antd';
+import { ExclamationCircleFilled, PlusOutlined } from '@ant-design/icons';
+import { SearchForm, SearchTable } from 'customer-search-form-table';
+import AddPortManage from './AddPortManage';
 import {
   addPortManage,
   deletePortManage,
   getAllPortManageListByPage,
   updatePortManage,
   updatePortManageStatus,
-} from '@/services/essential/portManage/portManageModel'
+} from '@/services/essential/portManage/portManageModel';
 import type {
   PortManageParams,
   PortManageType,
-} from '@/services/essential/portManage/portManageApi'
-import { SelectPortManageOptions } from './config'
-import { filterKeys } from '@/utils/tool'
-import useParentSize from '@/hooks/useParentSize'
+} from '@/services/essential/portManage/portManageApi';
+import { SelectPortManageOptions } from './config';
+import { filterKeys } from '@/utils/tool';
+import useParentSize from '@/hooks/useParentSize';
 
 const RouteManage: React.FC = () => {
-  const { modal, message } = App.useApp()
+  const { modal, message } = App.useApp();
 
-  const { parentRef, height } = useParentSize()
+  const { parentRef, height } = useParentSize();
 
   const [searchDefaultForm, setSearchDefaultForm] = useState<PortManageParams>({
     page: 1,
     limit: 10,
-  })
+  });
 
   const [params, setParams] = useState<{
-    visible: boolean
-    currentRow: any
-    view: boolean
+    visible: boolean;
+    currentRow: PortManageType | null;
+    view: boolean;
   }>({
     visible: false,
     currentRow: null,
     view: false,
-  })
+  });
 
   const columns: TableProps['columns'] = [
     {
@@ -62,7 +62,7 @@ const RouteManage: React.FC = () => {
       align: 'center',
       width: 100,
       render(value) {
-        return <div>{value.isPopularity ? '热门' : ''}</div>
+        return <div>{value.isPopularity ? '热门' : ''}</div>;
       },
     },
     {
@@ -114,7 +114,7 @@ const RouteManage: React.FC = () => {
               目的港
             </Tag>
           </Space>
-        )
+        );
       },
     },
     {
@@ -127,7 +127,7 @@ const RouteManage: React.FC = () => {
             value={value.enabled}
             onChange={(e) => statusChange(e, value)}
           />
-        )
+        );
       },
     },
     {
@@ -140,17 +140,16 @@ const RouteManage: React.FC = () => {
     {
       title: '操作',
       width: '10%',
-      dataIndex: 'action',
       fixed: 'right',
       align: 'center',
-      render(_, record) {
+      render(_) {
         return (
           <Space size={0}>
             <Button
               type="link"
               size="small"
               onClick={() =>
-                setParams({ visible: true, currentRow: record, view: true })
+                setParams({ visible: true, currentRow: _, view: true })
               }
             >
               修改
@@ -159,22 +158,22 @@ const RouteManage: React.FC = () => {
               type="link"
               danger
               size="small"
-              onClick={() => deleteBatch(record.id)}
+              onClick={() => deleteBatch(_.id)}
             >
               删除
             </Button>
           </Space>
-        )
+        );
       },
     },
-  ]
+  ];
 
   const statusChange = (e: boolean, row: PortManageType) => {
     updatePortManageStatus({ ...row, enabled: e }).then(() => {
-      message.success('修改成功')
-      onUpdateSearch(searchDefaultForm)
-    })
-  }
+      message.success('修改成功');
+      onUpdateSearch(searchDefaultForm);
+    });
+  };
 
   const deleteBatch = (id: string) => {
     modal.confirm({
@@ -183,35 +182,35 @@ const RouteManage: React.FC = () => {
       content: '确定删除该港口吗？数据删除后将无法恢复！',
       onOk() {
         deletePortManage(id).then(() => {
-          message.success('删除成功')
+          message.success('删除成功');
           // 刷新表格数据
-          onUpdateSearch()
-        })
+          onUpdateSearch();
+        });
       },
-    })
-  }
+    });
+  };
 
   const onEditOk = async (customerRow: PortManageType) => {
     try {
       if (params.currentRow == null) {
         // 新增数据
-        await addPortManage(customerRow)
+        await addPortManage(customerRow);
       } else {
         // 编辑数据
-        await updatePortManage(customerRow)
+        await updatePortManage(customerRow);
       }
       // 操作成功，关闭弹窗，刷新数据
-      message.success(!params.currentRow ? '添加成功' : '修改成功')
-      setParams({ visible: false, currentRow: null, view: false })
-      onUpdateSearch()
+      message.success(!params.currentRow ? '添加成功' : '修改成功');
+      setParams({ visible: false, currentRow: null, view: false });
+      onUpdateSearch();
     } catch (error) {}
-  }
+  };
 
   const onUpdateSearch = (info?: PortManageParams | unknown) => {
     const filteredObj = Object.fromEntries(
-      Object.entries(info ?? {}).filter(([, value]) => !!value)
-    )
-    let pageInfo = filterKeys(searchDefaultForm, ['page', 'limit'], true)
+      Object.entries(info ?? {}).filter(([, value]) => value !== undefined)
+    );
+    let pageInfo = filterKeys(searchDefaultForm, ['page', 'limit'], true);
     // 港口标签isPor、isFnd多字段重新匹配接口
     let isPor =
       Object.keys(filteredObj).length > 0
@@ -226,21 +225,21 @@ const RouteManage: React.FC = () => {
                 ? Number(filteredObj.tag === 'isFnd')
                 : null,
           }
-        : {}
+        : {};
 
     setSearchDefaultForm({
       ...(isPor ? pageInfo : searchDefaultForm),
       ...isPor,
-    })
-  }
+    });
+  };
 
   const onUpdatePagination = (pagination: TablePaginationConfig) => {
     setSearchDefaultForm({
       ...searchDefaultForm,
       page: pagination.current as number,
       limit: pagination.pageSize as number,
-    })
-  }
+    });
+  };
   return (
     <>
       {/* 菜单检索条件栏 */}
@@ -281,8 +280,10 @@ const RouteManage: React.FC = () => {
           rowKey="id"
           isPagination={true}
           fetchResultKey="list"
+          pageIndexKey="page"
+          pageSizeKey="limit"
           totalKey="count"
-          scroll={{ x: 'max-content', y: height - 158 }}
+          scroll={{ x: 'max-content', y: height - 168 }}
           fetchData={getAllPortManageListByPage}
           searchFilter={searchDefaultForm}
           isSelection={false}
@@ -297,7 +298,7 @@ const RouteManage: React.FC = () => {
         }
       />
     </>
-  )
-}
+  );
+};
 
-export default RouteManage
+export default RouteManage;

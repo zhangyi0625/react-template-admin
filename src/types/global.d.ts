@@ -7,6 +7,7 @@ export interface Response {
   message: string;
   data: any;
   success: boolean;
+  token?: string;
 }
 
 /**
@@ -15,4 +16,14 @@ export interface Response {
 export interface BasicOptions {
   label: string;
   value: string;
+}
+
+/**
+ * 定义查询表格默认分页参数
+ */
+export interface DefaultPaging {
+  page?: number;
+  limit?: number;
+  pageIndex?: number;
+  pageSize?: number;
 }

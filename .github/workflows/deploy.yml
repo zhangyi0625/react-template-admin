@@ -1,44 +1,57 @@
-name: Deploy to Aliyun
+name: Deploy to GitHub Pages
 
 on:
   push:
     branches:
-      - main   # 推送到主分支时触发该工作流
+      - master
+      - dev
+      - zc-ls-cabin
+      - zc-manager
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: 'pages'
+  cancel-in-progress: false
 
 jobs:
-  build-and-deploy:
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
+      - name: Checkout
+        uses: actions/checkout@v4
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v2
+      - name: Setup Node
+        uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: lts/*
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
 
       - name: Install dependencies
-        run: yarn
+        run: pnpm install
 
-      - name: Build project
-        run: yarn build
+      - name: Build
+        run: pnpm build
 
-      - name: Add known hosts
-        run: |
-          mkdir -p ~/.ssh
-          ssh-keyscan -H ${{ secrets.ALIYUN_HOST }} >> ~/.ssh/known_hosts
+      - name: Setup Pages
+        uses: actions/configure-pages@v4
 
-      - name: Deploy to server
-        env:
-          HOST: ${{ secrets.ALIYUN_HOST }}
-          USERNAME: ${{ secrets.ALIYUN_USERNAME }}
-          PRIVATE_KEY: ${{ secrets.ALIYUN_PRIVATE_KEY }}
-        run: |
-          echo "${{ secrets.ALIYUN_PRIVATE_KEY }}" | tr -d '\r' > private_key.pem
-          chmod 600 private_key.pem
-          # 清空目标目录
-          ssh -i private_key.pem $USERNAME@$HOST "rm -rf /work/fusion/*"
-          scp -i private_key.pem -r dist/* $USERNAME@$HOST:/work/fusion
-          ssh -i private_key.pem $USERNAME@$HOST "sudo systemctl reload nginx"
-          rm private_key.pem
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./dist
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

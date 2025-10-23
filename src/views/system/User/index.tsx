@@ -1,19 +1,4 @@
-import { useState } from 'react'
-import useParentSize from '@/hooks/useParentSize'
-import { changStatus } from '@/services/system/role/roleApi'
-import { SysRoleParams, SysUserType } from '@/services/system/role/roleModel'
-import {
-  addUserList,
-  deletebatchUserList,
-  deleteUserList,
-  editUserList,
-  getUserListByPage,
-} from '@/services/system/user/userApi'
-import {
-  DeleteOutlined,
-  ExclamationCircleFilled,
-  PlusOutlined,
-} from '@ant-design/icons'
+import { useState } from 'react';
 import {
   Button,
   Card,
@@ -23,36 +8,67 @@ import {
   Tag,
   type TableProps,
   TablePaginationConfig,
-} from 'antd'
-import modal from 'antd/es/modal'
-import { SearchForm, SearchTable } from 'customer-search-form-table'
-import AddUser from '../Role/AddUser'
-import { filterKeys } from '@/utils/tool'
-import { SelectUserOptions } from './config'
+  App,
+} from 'antd';
+import {
+  DeleteOutlined,
+  ExclamationCircleFilled,
+  PlusOutlined,
+} from '@ant-design/icons';
+import modal from 'antd/es/modal';
+import { SearchForm, SearchTable } from 'customer-search-form-table';
+import useParentSize from '@/hooks/useParentSize';
+import { changStatus } from '@/services/system/role/roleApi';
+import type {
+  SysRoleParams,
+  SysUserType,
+} from '@/services/system/role/roleModel';
+import {
+  addUserList,
+  deletebatchUserList,
+  deleteUserList,
+  editUserList,
+  getUserListByPage,
+  updateUserPassword,
+} from '@/services/system/user/userApi';
+import AddUser from './AddUser';
+import ResetUserPassword from './ResetUserPassword';
+import { filterKeys } from '@/utils/tool';
+import { SelectUserOptions } from './config';
 
 /**
  * 系统用户维护
  * @returns
  */
 const User: React.FC = () => {
+  const { message } = App.useApp();
+
   // 当前选中的行数据
-  const [selRows, setSelectedRows] = useState<string[]>([])
+  const [selRows, setSelectedRows] = useState<string[]>([]);
 
   // 容器高度计算（表格）
-  const { parentRef, height } = useParentSize()
+  const { parentRef, height } = useParentSize();
 
   const [params, setParams] = useState<{
-    visible: boolean
-    editRow: SysUserType | null
+    visible: boolean;
+    editRow: SysUserType | null;
   }>({
     visible: false,
     editRow: null,
-  })
+  });
 
   const [searchDefaultForm, setSearchDefaultForm] = useState<SysRoleParams>({
     page: 1,
     limit: 10,
-  })
+  });
+
+  const [resetPassword, setResetPassword] = useState<{
+    visible: boolean;
+    currentRow: Pick<SysUserType, 'userId' | 'username' | 'password'> | null;
+  }>({
+    visible: false,
+    currentRow: null,
+  });
 
   const columns: TableProps['columns'] = [
     {
@@ -88,7 +104,7 @@ const User: React.FC = () => {
           <Tag color="blue" style={{ margin: '0 4px' }} key={index}>
             {item.roleName}
           </Tag>
-        ))
+        ));
       },
     },
     {
@@ -103,7 +119,7 @@ const User: React.FC = () => {
             unCheckedChildren="冻结"
             onChange={(e) => switchChange(e, value)}
           />
-        )
+        );
       },
     },
     {
@@ -152,36 +168,52 @@ const User: React.FC = () => {
             >
               删除
             </Button>
+            <Button
+              type="link"
+              size="small"
+              onClick={() =>
+                setResetPassword({
+                  visible: true,
+                  currentRow: filterKeys(
+                    _,
+                    ['userId', 'username', 'password'],
+                    true
+                  ),
+                })
+              }
+            >
+              重置密码
+            </Button>
           </Space>
-        )
+        );
       },
     },
-  ]
+  ];
 
   const switchChange = (e: boolean, row: SysUserType) => {
     changStatus({ ...row, status: Number(e) }).then(() => {
-      onUpdateSearch(searchDefaultForm)
-    })
-  }
+      onUpdateSearch(searchDefaultForm);
+    });
+  };
 
   const onUpdateSearch = (info?: SysRoleParams | unknown) => {
     const filteredObj = Object.fromEntries(
-      Object.entries(info ?? {}).filter(([, value]) => !!value)
-    )
-    let pageInfo = filterKeys(searchDefaultForm, ['page', 'limit'], true)
+      Object.entries(info ?? {}).filter(([, value]) => value !== undefined)
+    );
+    let pageInfo = filterKeys(searchDefaultForm, ['page', 'limit'], true);
     setSearchDefaultForm({
       ...pageInfo,
       ...filteredObj,
-    })
-  }
+    });
+  };
 
   const onUpdatePagination = (pagination: TablePaginationConfig) => {
     setSearchDefaultForm({
       ...searchDefaultForm,
       page: pagination.current as number,
       limit: pagination.pageSize as number,
-    })
-  }
+    });
+  };
 
   /**
    * 点击确定的回调
@@ -191,16 +223,16 @@ const User: React.FC = () => {
     try {
       if (params.editRow == null) {
         // 新增数据
-        await addUserList(roleData)
+        await addUserList(roleData);
       } else {
         // 编辑数据
-        await editUserList(roleData)
+        await editUserList(roleData);
       }
       // 操作成功，关闭弹窗，刷新数据
-      setParams({ visible: false, editRow: null })
-      onUpdateSearch()
+      setParams({ visible: false, editRow: null });
+      onUpdateSearch();
     } catch (error) {}
-  }
+  };
 
   const batchDeleteRole = () => {
     modal.confirm({
@@ -210,11 +242,11 @@ const User: React.FC = () => {
       onOk() {
         deletebatchUserList(selRows).then(() => {
           // 刷新表格数据
-          onUpdateSearch()
-        })
+          onUpdateSearch();
+        });
       },
-    })
-  }
+    });
+  };
 
   const deleteItem = (id: string) => {
     modal.confirm({
@@ -224,11 +256,27 @@ const User: React.FC = () => {
       onOk() {
         deleteUserList(id).then(() => {
           // 刷新表格数据
-          onUpdateSearch(searchDefaultForm)
-        })
+          onUpdateSearch(searchDefaultForm);
+        });
       },
-    })
-  }
+    });
+  };
+
+  const resetUserPassword = (row: SysUserType) => {
+    modal.confirm({
+      title: `重置${row.username}的密码`,
+      icon: <ExclamationCircleFilled />,
+      content: `确定重置${row.username}的密码吗？数据重置后将无法恢复！`,
+      onOk() {
+        updateUserPassword(row).then(() => {
+          message.success('重置成功');
+          setResetPassword({ visible: false, currentRow: null });
+          // 刷新表格数据
+          onUpdateSearch(searchDefaultForm);
+        });
+      },
+    });
+  };
 
   return (
     <>
@@ -284,6 +332,8 @@ const User: React.FC = () => {
           size="middle"
           columns={columns}
           style={{ marginTop: '8px' }}
+          pageIndexKey="page"
+          pageSizeKey="limit"
           bordered
           scroll={{ x: 'max-content', y: height - 158 }}
           rowKey="userId"
@@ -303,7 +353,12 @@ const User: React.FC = () => {
         onCancel={() => setParams({ visible: false, editRow: null })}
         onOk={onEditOk}
       />
+      <ResetUserPassword
+        params={resetPassword}
+        onCancel={() => setResetPassword({ visible: false, currentRow: null })}
+        onOk={resetUserPassword}
+      />
     </>
-  )
-}
-export default User
+  );
+};
+export default User;

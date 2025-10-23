@@ -1,18 +1,19 @@
-import type React from 'react'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { App, Button, Card, ConfigProvider, Space, type TableProps } from 'antd'
 import { ExclamationCircleFilled, PlusOutlined } from '@ant-design/icons'
-import useParentSize from '@/hooks/useParentSize'
+import { SearchTable } from 'customer-search-form-table'
 import {
   addServiceSetting,
   deleteServiceSetting,
   getServiceSetting,
   updateServiceSetting,
-} from '@/services/setting'
-import { SearchTable } from 'customer-search-form-table'
-import type { ServiceSettingType } from '../../services/setting/serviceSettingModel'
+} from '@/services/serviceSetting/serviceSettingApi'
+import type { ServiceSettingType } from '../../services/serviceSetting/serviceSettingModel'
 import ServiceSettingInfo from './ServiceSettingInfo'
+import useParentSize from '@/hooks/useParentSize'
 import { ServiceSettingForm } from './config'
+import useCacheData from '@/hooks/useCacheData'
+import { RouteMangeType } from '@/services/customerInformation/routeManage/routeManageModel'
 
 const ServiceSetting: React.FC = () => {
   const { height } = useParentSize()
@@ -32,9 +33,9 @@ const ServiceSetting: React.FC = () => {
     view: false,
   })
 
-  useEffect(() => {
-    // loadServiceSettingList()
-  }, [])
+  const { essential } = useCacheData({
+    cacheEssentialKeys: ['routeData'],
+  })
 
   const loadServiceSettingList = () => {
     setImmediate(true)
@@ -94,10 +95,17 @@ const ServiceSetting: React.FC = () => {
     },
     {
       title: '细分航线',
-      dataIndex: 'routeFndIds',
       key: 'routeFndIds',
       align: 'center',
       width: 250,
+      render(value) {
+        const newArr: string[] = []
+        ;(essential?.routeData || []).map((item: RouteMangeType) => {
+          if (value.routeFndIds && value.routeFndIds.includes(item.id))
+            newArr.push(item.routeName)
+        })
+        return <div>{newArr.join('、')}</div>
+      },
     },
     {
       title: '启动类型',
@@ -124,6 +132,7 @@ const ServiceSetting: React.FC = () => {
       dataIndex: 'updateTime',
       key: 'updateTime',
       align: 'center',
+      width: 220,
     },
     {
       title: '操作',
@@ -238,6 +247,8 @@ const ServiceSetting: React.FC = () => {
             bordered
             rowKey="id"
             fetchResultKey="data"
+            pageIndexKey="page"
+            pageSizeKey="limit"
             totalKey=""
             immediate={immediate}
             isPagination={false}
@@ -248,13 +259,15 @@ const ServiceSetting: React.FC = () => {
           />
         </Card>
       </ConfigProvider>
-      <ServiceSettingInfo
-        params={params}
-        onOk={onEditOk}
-        onCancel={() =>
-          setParams({ visible: false, currentRow: null, view: false })
-        }
-      />
+      {params.visible && (
+        <ServiceSettingInfo
+          params={params}
+          onOk={onEditOk}
+          onCancel={() =>
+            setParams({ visible: false, currentRow: null, view: false })
+          }
+        />
+      )}
     </>
   )
 }

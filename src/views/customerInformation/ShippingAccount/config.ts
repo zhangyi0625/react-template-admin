@@ -114,6 +114,7 @@ export const ShippingAccountForm: Omit<
       label: 'code',
       value: 'code',
     },
+    options: [],
   },
   {
     label: '客户名称',
@@ -148,6 +149,23 @@ export const ShippingAccountForm: Omit<
     name: 'payPassword',
     formType: 'input',
     span: 12,
+  },
+  {
+    label: '账号状态',
+    isRules: true,
+    formType: 'radio',
+    name: 'isValid',
+    span: 12,
+    options: [
+      {
+        label: '有效',
+        value: 1,
+      },
+      {
+        label: '无效',
+        value: 0,
+      },
+    ],
   },
 ]
 

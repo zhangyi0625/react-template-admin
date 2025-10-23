@@ -280,6 +280,14 @@ const Organization: React.FC = () => {
                       <Button type="primary" onClick={addRow}>
                         新增
                       </Button>
+                      <Button
+                        type="default"
+                        danger
+                        disabled={selRows.length === 0}
+                        onClick={() => deleteDic(selRows, 'batch')}
+                      >
+                        批量删除
+                      </Button>
                     </Space>
                   </Col>
                 </Row>
@@ -290,6 +298,8 @@ const Organization: React.FC = () => {
                 bordered
                 totalKey="count"
                 fetchResultKey="list"
+                pageIndexKey="page"
+                pageSizeKey="limit"
                 isPagination={true}
                 rowKey="organizationId"
                 scroll={{ x: 'max-content', y: height - 158 }}

@@ -1,22 +1,21 @@
-import React, { useEffect, useState } from 'react'
-import { Form, Input, Select } from 'antd'
-import { DefaultOptionType } from 'antd/es/select'
-import DragModal from '@/components/modal/DragModal'
-import type { RouteMangeType } from '@/services/customerInformation/routeManage/routeManageModel'
-import DeleteIcon from '@/assets/svg/icon/delete.svg'
-import AddIcon from '@/assets/svg/icon/add.svg'
-import { getFndPortManageList } from '@/services/essential/portManage/portManageModel'
+import React, { useEffect, useState } from 'react';
+import { App, Form, Input, Select } from 'antd';
+import { SelectProps } from 'antd/es/select';
+import DragModal from '@/components/modal/DragModal';
+import type { RouteMangeType } from '@/services/customerInformation/routeManage/routeManageModel';
+import DeleteIcon from '@/assets/svg/icon/delete.svg';
+import AddIcon from '@/assets/svg/icon/add.svg';
 
 export type AddCustomerManageProps = {
   params: {
-    visible: boolean
-    currentRow: RouteMangeType
-    view: boolean
-  }
-  fndPortOptions: any
-  onOk: (params: RouteMangeType) => void
-  onCancel: (e: React.MouseEvent<HTMLButtonElement>) => void
-}
+    visible: boolean;
+    currentRow: RouteMangeType | null;
+    view: boolean;
+  };
+  fndPortOptions: SelectProps['options'];
+  onOk: (params: RouteMangeType) => void;
+  onCancel: (e: React.MouseEvent<HTMLButtonElement>) => void;
+};
 
 const AddRouteManage: React.FC<AddCustomerManageProps> = ({
   params,
@@ -24,76 +23,67 @@ const AddRouteManage: React.FC<AddCustomerManageProps> = ({
   onOk,
   onCancel,
 }) => {
-  const { visible, currentRow, view } = params
+  const { visible, currentRow, view } = params;
 
-  const [form] = Form.useForm()
+  const { message } = App.useApp();
 
-  const [loading, setLoading] = useState<boolean>(false)
+  const [form] = Form.useForm();
 
-  const [fndOptions, setFndOptions] = useState<string[] | undefined[]>([])
-
-  const [treeData, setTreeData] = useState<Omit<DefaultOptionType, 'label'>[]>(
-    []
-  )
+  const [fndOptions, setFndOptions] = useState<string[] | undefined[]>([]);
 
   useEffect(() => {
-    if (!visible) return
-    loadFndPorts()
+    if (!visible) return;
     if (currentRow) {
-      form.setFieldsValue(currentRow)
-      let fndPort = currentRow.fnds as string[]
-      setFndOptions(fndPort)
+      form.setFieldsValue(currentRow);
+      let fndPort = currentRow.fnds as string[];
+      setFndOptions(fndPort);
     } else {
-      form.resetFields()
-      setFndOptions([undefined])
+      form.resetFields();
+      setFndOptions([undefined]);
     }
-  }, [visible, view])
-
-  const loadFndPorts = () => {
-    setLoading(true)
-    getFndPortManageList()
-      .then((resp) => {
-        // treeData 设置一级节点不可选
-        resp.map((item: { children?: unknown; selectable?: boolean }) => {
-          if (item.children) item.selectable = false
-        })
-        setTreeData(resp)
-        setLoading(false)
-      })
-      .catch(() => setLoading(false))
-  }
+  }, [visible, view]);
 
   const addFndPort = () => {
-    setFndOptions(fndOptions.concat([undefined]) as undefined[])
-  }
+    setFndOptions(fndOptions.concat([undefined]) as undefined[]);
+  };
 
   const deleteFndPort = (index: number) => {
     setFndOptions([
       ...fndOptions.filter((_, i: number) => i !== index),
-    ] as string[])
-  }
+    ] as string[]);
+  };
 
   const selectChange = (value: string, index: number) => {
-    fndOptions[index] = value
-    setFndOptions([...fndOptions] as string[])
-  }
+    if (fndOptions.find((item) => item === value)) {
+      message.error('请勿添加重复的目的港！');
+      onClear(index);
+    }
+    fndOptions[index] = value;
+    setFndOptions([...fndOptions] as string[]);
+  };
+
+  const onClear = (index: number) => {
+    setTimeout(() => {
+      fndOptions[index] = undefined;
+      setFndOptions([...fndOptions] as string[]);
+    }, 300);
+  };
 
   const handleOk = () => {
     form
       .validateFields()
       .then(() => {
-        console.log(form.getFieldsValue(), fndOptions)
         onOk({
           ...form.getFieldsValue(),
           fnds: fndOptions.filter((item) => !!item),
-        })
+        });
       })
       .catch((errorInfo) => {
         // 滚动并聚焦到第一个错误字段
-        form.scrollToField(errorInfo.errorFields[0].name)
-        form.focusField(errorInfo.errorFields[0].name)
-      })
-  }
+        form.scrollToField(errorInfo.errorFields[0].name);
+        form.focusField(errorInfo.errorFields[0].name);
+      });
+  };
 
   return (
     <DragModal
@@ -103,7 +93,6 @@ const AddRouteManage: React.FC<AddCustomerManageProps> = ({
       okButtonProps={{ className: view ? 'hidden' : '' }}
       onOk={handleOk}
       onCancel={onCancel}
-      loading={loading}
     >
       <Form form={form} labelCol={{ span: 4 }}>
         <Form.Item name="id" hidden>
@@ -123,22 +112,8 @@ const AddRouteManage: React.FC<AddCustomerManageProps> = ({
         </Form.Item>
         <Form.Item label="目的港">
           {fndOptions.map((item, index) => (
-            <div className="flex items-center" key={index}>
-              {/* <TreeSelect
-                showSearch
-                style={{ marginBottom: '10px' }}
-                styles={{
-                  popup: { root: { maxHeight: 400, overflow: 'auto' } },
-                }}
-                placeholder="请选择目的港"
-                treeData={treeData}
-                fieldNames={{ label: 'text' }}
-                allowClear
-                onChange={(value) => selectChange(value, index)}
-                value={item}
-              /> */}
+            <div className="flex items-center mb-[10px]" key={index}>
               <Select
-                style={{ marginBottom: '10px' }}
                 allowClear
                 placeholder="请选择目的港"
                 showSearch
@@ -149,6 +124,7 @@ const AddRouteManage: React.FC<AddCustomerManageProps> = ({
                     .includes(input.toLowerCase())
                 }
                 onChange={(value) => selectChange(value, index)}
+                onClear={() => onClear(index)}
                 value={item}
               />
               <img
@@ -175,7 +151,7 @@ const AddRouteManage: React.FC<AddCustomerManageProps> = ({
         </Form.Item>
       </Form>
     </DragModal>
-  )
-}
+  );
+};
 
-export default AddRouteManage
+export default AddRouteManage;

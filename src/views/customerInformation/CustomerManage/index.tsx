@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState } from 'react';
 import {
   App,
   Button,
@@ -7,45 +7,46 @@ import {
   Space,
   TablePaginationConfig,
   TableProps,
-} from 'antd'
-import { ExclamationCircleFilled, PlusOutlined } from '@ant-design/icons'
-import { SearchForm, SearchTable } from 'customer-search-form-table'
+} from 'antd';
+import { ExclamationCircleFilled, PlusOutlined } from '@ant-design/icons';
+import { SearchForm, SearchTable } from 'customer-search-form-table';
 import type {
   CustomerManageParams,
   CustomerManageType,
-} from '@/services/essential/customerManage/customerManageModel'
+} from '@/services/essential/customerManage/customerManageModel';
 import {
   addCustomerManage,
   putCustomerManage,
   deleteCustomerManage,
   getCustomerManageListByPage,
-} from '@/services/essential/customerManage/customerManageApi'
-import { SelectCustomerManageOptions } from './config'
-import AddCustomerManage from './AddCustomerManage'
-import { filterKeys } from '@/utils/tool'
-import useParentSize from '@/hooks/useParentSize'
+} from '@/services/essential/customerManage/customerManageApi';
+import { SelectCustomerManageOptions } from './config';
+import AddCustomerManage from './AddCustomerManage';
+import { filterKeys } from '@/utils/tool';
+import useParentSize from '@/hooks/useParentSize';
 
 const CustomerManage: React.FC = () => {
-  const { modal, message } = App.useApp()
+  const { modal, message } = App.useApp();
 
-  const { parentRef, height } = useParentSize()
+  const { parentRef, height } = useParentSize();
 
   const [searchDefaultForm, setSearchDefaultForm] =
     useState<CustomerManageParams>({
       page: 1,
       limit: 10,
       name: null,
-    })
+      sort: 'create_time desc',
+    });
 
   const [params, setParams] = useState<{
-    visible: boolean
-    currentRow: any
-    view: boolean
+    visible: boolean;
+    currentRow: any;
+    view: boolean;
   }>({
     visible: false,
     currentRow: null,
     view: false,
-  })
+  });
 
   const columns: TableProps['columns'] = [
     {
@@ -100,26 +101,26 @@ const CustomerManage: React.FC = () => {
               删除
             </Button>
           </Space>
-        )
+        );
       },
     },
-  ]
+  ];
 
   const onEditOk = async (customerRow: CustomerManageType) => {
     try {
       if (params.currentRow == null) {
         // 新增数据
-        await addCustomerManage(customerRow)
+        await addCustomerManage(customerRow);
       } else {
         // 编辑数据
-        await putCustomerManage(customerRow)
+        await putCustomerManage(customerRow);
       }
-      message.success(!params.currentRow ? '添加成功' : '修改成功')
+      message.success(!params.currentRow ? '添加成功' : '修改成功');
       // 操作成功，关闭弹窗，刷新数据
-      setParams({ visible: false, currentRow: null, view: false })
-      onUpdateSearch()
+      setParams({ visible: false, currentRow: null, view: false });
+      onUpdateSearch();
     } catch (error) {}
-  }
+  };
 
   const deleteBatch = (id: string) => {
     modal.confirm({
@@ -129,30 +130,30 @@ const CustomerManage: React.FC = () => {
       onOk() {
         deleteCustomerManage(id).then(() => {
           // 刷新表格数据
-          onUpdateSearch()
-        })
+          onUpdateSearch();
+        });
       },
-    })
-  }
+    });
+  };
 
   const onUpdateSearch = (info?: CustomerManageParams | unknown) => {
     const filteredObj = Object.fromEntries(
       Object.entries(info ?? {}).filter(([, value]) => !!value)
-    )
-    let pageInfo = filterKeys(searchDefaultForm, ['page', 'limit'], true)
+    );
+    let pageInfo = filterKeys(searchDefaultForm, ['page', 'limit'], true);
     setSearchDefaultForm({
       ...pageInfo,
       ...filteredObj,
-    })
-  }
+    });
+  };
 
   const onUpdatePagination = (pagination: TablePaginationConfig) => {
     setSearchDefaultForm({
       ...searchDefaultForm,
       page: pagination.current as number,
       limit: pagination.pageSize as number,
-    })
-  }
+    });
+  };
 
   return (
     <>
@@ -202,10 +203,11 @@ const CustomerManage: React.FC = () => {
           rowKey="id"
           fetchResultKey="list"
           totalKey="count"
+          pageIndexKey="page"
+          pageSizeKey="limit"
           isPagination={true}
           scroll={{ x: 'max-content', y: height - 158 }}
           fetchData={getCustomerManageListByPage}
-          isCache="customerData"
           searchFilter={searchDefaultForm}
           isSelection={false}
           onUpdatePagination={onUpdatePagination}
@@ -219,7 +221,7 @@ const CustomerManage: React.FC = () => {
         }
       />
     </>
-  )
-}
+  );
+};
 
-export default CustomerManage
+export default CustomerManage;

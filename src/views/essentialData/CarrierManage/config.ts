@@ -1,6 +1,6 @@
-import type { CustomColumn } from 'customer-search-form-table/SearchForm/type'
-import { PortSettingSelect } from '../PortManage/config'
-import { replaceObjectName } from '@/utils/tool'
+import type { CustomColumn } from 'customer-search-form-table/SearchForm/type';
+import { PortSettingSelect } from '../PortManage/config';
+import { replaceObjectName } from '@/utils/tool';
 
 export const SelectCarrierManageOptions: CustomColumn[] = [
   {
@@ -11,7 +11,7 @@ export const SelectCarrierManageOptions: CustomColumn[] = [
     selectFetch: false,
     hiddenItem: false,
   },
-]
+];
 
 export const CarrierManageForm: Omit<
   CustomColumn,
@@ -52,4 +52,4 @@ export const CarrierManageForm: Omit<
     ),
     span: 12,
   },
-]
+];

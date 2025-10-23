@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import { Form, Select } from 'antd'
-import type { ServiceSettingType } from '@/services/setting/serviceSettingModel'
+import type { ServiceSettingType } from '@/services/serviceSetting/serviceSettingModel'
 import DragModal from '@/components/modal/DragModal'
 
 export type SetRelevanceModalProps = {

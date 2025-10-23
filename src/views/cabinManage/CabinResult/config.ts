@@ -1,4 +1,4 @@
-import type { CustomColumn } from 'customer-search-form-table/SearchForm/type'
+import type { CustomColumn } from 'customer-search-form-table/SearchForm/type';
 
 export const SelectCabinResultOptions: CustomColumn[] = [
   {
@@ -56,9 +56,9 @@ export const SelectCabinResultOptions: CustomColumn[] = [
   {
     label: '订舱时间',
     name: 'createTime',
-    formType: 'date-picker',
+    formType: 'range-picker',
     span: 6,
     selectFetch: false,
     hiddenItem: false,
   },
-]
+];

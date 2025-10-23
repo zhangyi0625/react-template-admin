@@ -4,11 +4,16 @@ import { CheckboxGroupProps } from 'antd/es/checkbox'
 import DragModal from '@/components/modal/DragModal'
 import type { ShippingAccounType } from '@/services/customerInformation/shippingAccount/shippingAccountModel'
 import { ShippingAccountForm } from './config'
+import { filterKeys } from '@/utils/tool'
+import {
+  putShippingAccountLoginPassword,
+  putShippingAccountPayPassword,
+} from '@/services/customerInformation/shippingAccount/shippingAccountApi'
 
 export type AddShippingAccountProps = {
   params: {
     visible: boolean
-    currentRow: ShippingAccounType
+    currentRow: ShippingAccounType | null
     view: boolean
     type?: string | null
   }
@@ -31,22 +36,59 @@ const AddShippingAccount: React.FC<AddShippingAccountProps> = ({
 
   const [initialValues, setInitialValues] = useState({})
 
+  const [passwordInfo, setPasswordInfo] = useState<Pick<
+    ShippingAccounType,
+    'payPassword' | 'loginPassword'
+  > | null>({
+    payPassword: '',
+    loginPassword: '',
+  })
+
   useEffect(() => {
     if (!visible) return
     if (currentRow) {
-      form.setFieldsValue({ ...currentRow, type: type })
+      form.setFieldsValue({
+        ...currentRow,
+        type: type,
+        isValid: currentRow.isValid ? 1 : 0,
+      })
+      // 修改船司账号拷贝密码
+      let pwd = filterKeys(currentRow, ['payPassword', 'loginPassword'], true)
+      setPasswordInfo(pwd)
     } else {
       form.resetFields()
       setInitialValues({ type: type })
-      form.setFieldsValue({ type: type })
+      form.setFieldsValue({ type: type, isValid: 1 })
     }
   }, [visible, view])
 
   const handleOk = () => {
     form
       .validateFields()
-      .then(() => {
-        onOk(form.getFieldsValue())
+      .then(async () => {
+        let params = {
+          ...form.getFieldsValue(),
+          isOrder: type === 'ORDER' ? true : null,
+          isQuery: type === 'QUERY' ? true : null,
+          isValid: Boolean(form.getFieldValue('isValid')),
+        }
+        if (currentRow) {
+          if (
+            form.getFieldValue('loginPassword') !== passwordInfo?.loginPassword
+          ) {
+            await putShippingAccountLoginPassword({
+              id: params.id,
+              loginPassword: params.loginPassword,
+            })
+          } else
+            await putShippingAccountPayPassword({
+              id: params.id,
+              payPassword: params.payPassword,
+            })
+          onOk(filterKeys(params, ['loginPassword', 'payPassword'], false))
+        } else {
+          onOk(params)
+        }
       })
       .catch((errorInfo) => {
         // 滚动并聚焦到第一个错误字段

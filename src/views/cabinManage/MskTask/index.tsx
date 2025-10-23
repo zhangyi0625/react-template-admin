@@ -1,9 +1,8 @@
-import React from 'react'
-import CabinTaskTemplate from '../CabinTaskTemplate'
-// export default <CabinTaskTemplate carrier="MSK" setting={null} />
+import React from 'react';
+import CabinTaskTemplate from '../CabinTaskTemplate';
 
 const MskTaskTem: React.FC = () => {
-  return <CabinTaskTemplate carrier="MSK" setting={null} />
-}
+  return <CabinTaskTemplate key="MSK" carrier="MSK" setting={null} />;
+};
 
-export default MskTaskTem
+export default MskTaskTem;

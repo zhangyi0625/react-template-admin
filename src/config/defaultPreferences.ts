@@ -1,4 +1,4 @@
-import type { Preferences } from '@/stores/storeState'
+import type { Preferences } from '@/stores/storeState';
 
 /**
  * 默认偏好设置
@@ -19,7 +19,7 @@ export const defaultPreferences: Preferences = {
     layout: 'sidebar-nav',
     locale: 'zh-CN',
     loginExpiredMode: 'page',
-    name: '在舱光速抢舱管理平台',
+    name: '在舱管理系统',
     preferencesButtonPosition: 'auto',
     watermark: false,
   },
@@ -115,4 +115,4 @@ export const defaultPreferences: Preferences = {
     sidebarToggle: true,
     themeToggle: true,
   },
-}
+};

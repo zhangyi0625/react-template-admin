@@ -1,5 +1,6 @@
 import { HttpRequest } from '@/utils/request';
 import type {
+  ShipownerEncyclopediaType,
   ShippingCompanyZoneParams,
   ShippingCompanyZoneType,
   UserFeedbackParams,
@@ -12,6 +13,7 @@ export enum WebsiteInfoApi {
   UserFeedbackByPage = '/staff/feedback/page',
   ShippingCompanyZoneByPage = '/staff/carrier/page',
   AddShippingCompanyZone = '/staff/carrier',
+  ShipownerEncyclopedia = '/staff/carrier/',
 }
 
 /**
@@ -51,7 +53,7 @@ export const getShippingCompanyZoneByPage = (
 };
 
 /**
- * 新增查询船司专区数据
+ * 新增船司专区数据
  * @param params 船司专区参数
  * @returns 船司专区列表
  */
@@ -68,7 +70,7 @@ export const addShippingCompanyZone = (params: ShippingCompanyZoneType) => {
 };
 
 /**
- * 修改查询船司专区数据
+ * 修改船司专区数据
  * @param params 船司专区参数
  * @returns 船司专区列表
  */
@@ -88,7 +90,7 @@ export const updateShippingCompanyZone = (
 };
 
 /**
- * 删除查询船司专区数据
+ * 删除船司专区数据
  * @param id 船司专区参数
  * @returns 船司专区列表
  */
@@ -96,6 +98,42 @@ export const deleteShippingCompanyZone = (id: string) => {
   return HttpRequest.delete(
     {
       url: WebsiteInfoApi.AddShippingCompanyZone + '/' + id,
+    },
+    {
+      isTransformResponse: false,
+    }
+  );
+};
+
+/**
+ * 查询船司百科数据
+ * @param id 船司专区参数
+ * @returns 船司专区列表
+ */
+export const getShipownerEncyclopedia = (id: string) => {
+  return HttpRequest.get(
+    {
+      url: WebsiteInfoApi.ShipownerEncyclopedia + id + '/wiki',
+    },
+    {
+      isTransformResponse: false,
+    }
+  );
+};
+
+/**
+ * 修改船司百科数据
+ * @param params 船司专区参数
+ * @returns 船司专区列表
+ */
+export const updateShipownerEncyclopedia = (
+  params: ShipownerEncyclopediaType,
+  id: string
+) => {
+  return HttpRequest.put(
+    {
+      url: WebsiteInfoApi.ShipownerEncyclopedia + id + '/wiki',
+      params: params,
     },
     {
       isTransformResponse: false,

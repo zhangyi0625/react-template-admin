@@ -12,14 +12,18 @@ import { ExclamationCircleFilled, PlusOutlined } from '@ant-design/icons';
 import { SearchForm, SearchTable } from 'customer-search-form-table';
 import useParentSize from '@/hooks/useParentSize';
 import type {
+  ShipownerEncyclopediaType,
   ShippingCompanyZoneParams,
   ShippingCompanyZoneType,
 } from '@/services/websiteInfo/wesiteInfoModel';
 import AddShippingCompanyZone from './AddShippingCompanyZone';
+import ShipownerEncyclopedia from './ShipownerEncyclopedia';
 import {
   addShippingCompanyZone,
   deleteShippingCompanyZone,
+  getShipownerEncyclopedia,
   getShippingCompanyZoneByPage,
+  updateShipownerEncyclopedia,
   updateShippingCompanyZone,
 } from '@/services/websiteInfo/websiteInfoApi';
 import { ShippingCompanyZoneColumns } from './config';
@@ -40,6 +44,14 @@ const ShippingCompanyZone: React.FC = () => {
   const [params, setParams] = useState<{
     visible: boolean;
     currentRow: ShippingCompanyZoneType | null;
+  }>({
+    visible: false,
+    currentRow: null,
+  });
+
+  const [encyclopediaParams, setEncyclopediaParams] = useState<{
+    visible: boolean;
+    currentRow: ShipownerEncyclopediaType | null;
   }>({
     visible: false,
     currentRow: null,
@@ -85,6 +97,13 @@ const ShippingCompanyZone: React.FC = () => {
               variant="outlined"
             >
               删除
+            </Button>
+            <Button
+              color="default"
+              variant="outlined"
+              onClick={() => loadEncyclopediaInfo(_.id)}
+            >
+              船司百科
             </Button>
           </Space>
         );
@@ -144,7 +163,26 @@ const ShippingCompanyZone: React.FC = () => {
       setParams({ visible: false, currentRow: null });
       message.success(!currentRow?.id ? '添加成功～' : '修改成功～');
       setSearchDefaultForm({ ...searchDefaultForm });
-    } catch (error) {}
+    } catch (error) {
+      setParams({ visible: false, currentRow: null });
+    }
+  };
+
+  const loadEncyclopediaInfo = async (id: string) => {
+    const resp = await getShipownerEncyclopedia(id);
+    setEncyclopediaParams({ visible: true, currentRow: resp });
+  };
+
+  const editOkShipownerEncyclopedia = async (
+    info: ShipownerEncyclopediaType
+  ) => {
+    try {
+      await updateShipownerEncyclopedia(info, info.id);
+      message.success('修改成功～');
+      setEncyclopediaParams({ visible: false, currentRow: null });
+    } catch (error) {
+      setEncyclopediaParams({ visible: false, currentRow: null });
+    }
   };
 
   return (
@@ -209,6 +247,13 @@ const ShippingCompanyZone: React.FC = () => {
         params={params}
         onOk={onEditOk}
         onCancel={() => setParams({ visible: false, currentRow: null })}
+      />
+      <ShipownerEncyclopedia
+        params={encyclopediaParams}
+        onCancel={() =>
+          setEncyclopediaParams({ visible: false, currentRow: null })
+        }
+        onOk={editOkShipownerEncyclopedia}
       />
     </>
   );

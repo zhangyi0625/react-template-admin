@@ -1,18 +1,17 @@
 import { HttpRequest } from '@/utils/request';
 import type {
-  SysUserResetPasswordType,
-  SysUserParams,
-  SysUserType,
-} from './userModel';
+  SysStaffResetPasswordType,
+  SysStaffParams,
+  SysStaffType,
+} from './staffManageModel';
 
 /**
  * 枚举用户相关的api
  */
-export enum UserApi {
-  UserManage = '/staff/staff',
-  UserManageByPage = '/staff/staff/page',
-  batchUserManage = '/system/user/batch',
-  ResetUserPassword = '/staff/password',
+export enum StaffApi {
+  StaffManage = '/staff/staff',
+  StaffManageByPage = '/staff/staff/page',
+  ResetStaffPassword = '/staff/password',
   SendVerifycode = '/staff/verify-code',
 }
 
@@ -20,10 +19,10 @@ export enum UserApi {
  * 查询所有用户列表
  * @returns 用户列表
  */
-export const getUserList = () => {
+export const getStaffList = () => {
   return HttpRequest.get(
     {
-      url: UserApi.UserManage,
+      url: StaffApi.StaffManage,
     },
     {
       isTransformResponse: false,
@@ -36,10 +35,10 @@ export const getUserList = () => {
  * @param params 用户参数
  * @returns 用户列表
  */
-export const getUserListByPage = (params: SysUserParams) => {
+export const getStaffListByPage = (params: SysStaffParams) => {
   return HttpRequest.get(
     {
-      url: UserApi.UserManageByPage,
+      url: StaffApi.StaffManageByPage,
       params: params,
     },
     {
@@ -53,10 +52,10 @@ export const getUserListByPage = (params: SysUserParams) => {
  * @param params 用户参数
  * @returns 用户列表
  */
-export const getUserDetail = (id: string) => {
+export const getStaffDetail = (id: string) => {
   return HttpRequest.get(
     {
-      url: UserApi.UserManage + '/' + id,
+      url: StaffApi.StaffManage + '/' + id,
     },
     {
       isTransformResponse: false,
@@ -69,10 +68,10 @@ export const getUserDetail = (id: string) => {
  * @param params 用户参数
  * @returns 结果
  */
-export const addUserList = (params: SysUserType) => {
+export const addStaffList = (params: SysStaffType) => {
   return HttpRequest.post(
     {
-      url: UserApi.UserManage,
+      url: StaffApi.StaffManage,
       data: params,
     },
     {
@@ -86,10 +85,10 @@ export const addUserList = (params: SysUserType) => {
  * @param params 用户参数
  * @returns 结果
  */
-export const editUserList = (params: SysUserType, id: string) => {
+export const editStaffList = (params: SysStaffType, id: string) => {
   return HttpRequest.put(
     {
-      url: UserApi.UserManage + '/' + id,
+      url: StaffApi.StaffManage + '/' + id,
       data: params,
     },
     {
@@ -106,7 +105,7 @@ export const editUserList = (params: SysUserType, id: string) => {
 export const postSendVerifycode = () => {
   return HttpRequest.post(
     {
-      url: UserApi.SendVerifycode,
+      url: StaffApi.SendVerifycode,
     },
     {
       isTransformResponse: false,
@@ -119,10 +118,10 @@ export const postSendVerifycode = () => {
  * @param params 用户参数
  * @returns 结果
  */
-export const updateUserPassword = (params: SysUserResetPasswordType) => {
+export const updateStaffPassword = (params: SysStaffResetPasswordType) => {
   return HttpRequest.post(
     {
-      url: UserApi.ResetUserPassword,
+      url: StaffApi.ResetStaffPassword,
       data: params,
     },
     {
@@ -135,26 +134,10 @@ export const updateUserPassword = (params: SysUserResetPasswordType) => {
  * 删除用户信息
  * @returns 用户列表
  */
-export const deleteUserList = (id: string) => {
+export const deleteStaffList = (id: string) => {
   return HttpRequest.delete(
     {
-      url: UserApi.UserManage + '/' + id,
-    },
-    {
-      successMessageMode: 'none',
-    }
-  );
-};
-
-/**
- * 批量删除用户信息
- * @returns 用户列表
- */
-export const deletebatchUserList = (ids: string[]) => {
-  return HttpRequest.delete(
-    {
-      url: UserApi.batchUserManage,
-      params: ids,
+      url: StaffApi.StaffManage + '/' + id,
     },
     {
       successMessageMode: 'none',

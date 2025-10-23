@@ -4,42 +4,30 @@ import type { DefaultPaging } from '@/types/global';
  * 系统角色
  */
 export interface SysRoleType {
-  /**
-   * 角色ID
-   */
   roleId: string | null;
-
-  /**
-   * 角色名称
-   */
   roleName: string;
-
-  /**
-   * 角色备注
-   */
   comments: string;
+  id: string;
+  name: string;
 }
 
 export interface SysRoleParams
   extends Partial<Omit<SysRoleType, 'id'>>,
     DefaultPaging {}
 
-export interface SysUserParams
-  extends Pick<SysRoleType, 'roleId'>,
-    DefaultPaging {
-  userName: string | null;
-  nickname: string | null;
+export interface SysUserParams extends DefaultPaging {
+  filter:
+    | string
+    | Partial<Pick<SysUserType, 'name' | 'username' | 'valid' | 'roleId'>>;
 }
 
-export interface SysUserType
-  extends Pick<SysUserParams, 'userName' | 'nickname'> {
-  userId: string | null;
-  organizationId: string;
+export interface SysUserType {
+  id: string | number;
   phone: string;
   username: string;
-  introduction: string;
-  roles: string | string[] | any;
-  email: string;
-  status?: boolean | number;
+  valid: boolean | number;
+  name: string;
   password: string | null;
+  roleId: string;
+  remarks: string | null;
 }

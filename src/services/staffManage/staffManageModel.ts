@@ -1,12 +1,12 @@
 import type { DefaultPaging } from '@/types/global';
 
-export interface SysUserParams extends DefaultPaging {
+export interface SysStaffParams extends DefaultPaging {
   filter:
     | string
-    | Partial<Pick<SysUserType, 'name' | 'username' | 'valid' | 'roleId'>>;
+    | Partial<Pick<SysStaffType, 'name' | 'username' | 'valid' | 'roleId'>>;
 }
 
-export interface SysUserType {
+export interface SysStaffType {
   id: string | number;
   phone: string;
   username: string;
@@ -17,7 +17,7 @@ export interface SysUserType {
   remarks: string | null;
 }
 
-export interface SysUserResetPasswordType {
+export interface SysStaffResetPasswordType {
   phone: string;
   password: string;
   verifyCode: string;

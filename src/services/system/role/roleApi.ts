@@ -13,7 +13,7 @@ export enum RoleApi {
   /**
    * 获取角色列表
    */
-  getRoleList = '/system/role',
+  getRoleList = '/staff/staff/role/list',
   /**
    * 分页获取角色列表
    */
@@ -84,7 +84,8 @@ export const getRoleList = () => {
       url: RoleApi.getRoleList,
     },
     {
-      successMessageMode: 'none',
+      // successMessageMode: 'none',
+      isTransformResponse: false,
     }
   );
 };

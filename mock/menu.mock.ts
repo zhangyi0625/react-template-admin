@@ -532,8 +532,8 @@ export default defineMock([
               {
                 id: Math.random().toString(),
                 name: 'other-setting',
-                path: '/otherSetting/packetManage',
-                component: 'otherSetting/PacketManage',
+                path: '/otherSetting/serviceChargeManage',
+                component: 'otherSetting/ServiceChargeManage',
                 route: '1',
                 meta: {
                   keepAlive: false,
@@ -545,8 +545,8 @@ export default defineMock([
               {
                 id: Math.random().toString(),
                 name: 'other-setting',
-                path: '/otherSetting/serviceChargeManage',
-                component: 'otherSetting/ServiceChargeManage',
+                path: '/otherSetting/packetManage',
+                component: 'otherSetting/PacketManage',
                 route: '1',
                 meta: {
                   keepAlive: false,

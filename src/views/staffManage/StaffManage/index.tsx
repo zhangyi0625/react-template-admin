@@ -120,7 +120,7 @@ const StaffManage: React.FC = () => {
               编辑
             </Button>
             <Button
-              onClick={() => deleteItem(_.StaffId)}
+              onClick={() => deleteItem(_.id)}
               color="danger"
               variant="link"
             >
@@ -154,7 +154,11 @@ const StaffManage: React.FC = () => {
     const filteredObj = Object.fromEntries(
       Object.entries(info ?? {}).filter(([, value]) => value !== undefined)
     );
-    let pageInfo = filterKeys(searchDefaultForm, ['page', 'limit'], true);
+    let pageInfo = filterKeys(
+      searchDefaultForm,
+      ['pageIndex', 'pageSize'],
+      true
+    );
     setSearchDefaultForm({
       ...pageInfo,
       filter: JSON.stringify(filteredObj),

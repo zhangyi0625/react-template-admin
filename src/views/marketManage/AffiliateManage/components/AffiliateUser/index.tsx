@@ -15,6 +15,7 @@ import type {
 import AffiliateUserDrawer, {
   AffiliateUserDrawerRef,
 } from './AffiliateUserDrawer';
+import { useNavigate } from 'react-router-dom';
 
 type AffiliateUserProps = {
   affiliateId: string;
@@ -24,6 +25,8 @@ const AffiliateUser: React.FC<AffiliateUserProps> = ({ affiliateId }) => {
   const { message, modal } = App.useApp();
 
   const AffiliateUserDrawerRef = useRef<AffiliateUserDrawerRef>(null);
+
+  const navigate = useNavigate();
 
   const [params, setParams] = useState<{
     visible: boolean;
@@ -112,7 +115,7 @@ const AffiliateUser: React.FC<AffiliateUserProps> = ({ affiliateId }) => {
             <Button
               color="blue"
               variant="outlined"
-              // onClick={() => navigate(`/marketManage/affiliateManage/${_.id}`)}
+              onClick={() => navigate(`/marketManage/userManage/${_.id}`)}
               size="small"
               style={{
                 fontSize: '12px',

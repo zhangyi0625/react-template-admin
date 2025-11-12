@@ -282,7 +282,6 @@ const AffiliateManage: React.FC = () => {
           style={{ marginTop: '8px' }}
           pageIndexKey="pageIndex"
           pageSizeKey="pageSize"
-          bordered
           scroll={{ x: 'max-content', y: height - 178 }}
           rowKey="id"
           totalKey="total"

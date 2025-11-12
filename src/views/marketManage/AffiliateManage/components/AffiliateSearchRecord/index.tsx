@@ -3,7 +3,7 @@ import { Tabs, type TabsProps } from 'antd';
 import OrderTabsItem, { OrderTabsItemRef } from './OrderTabsItem';
 import StatisticsTabsItem, {
   StatisticsTabsItemRef,
-} from './statisticsTabsItem';
+} from './StatisticsTabsItem';
 import RecordTabsItem, { RecordTabsItemRef } from './RecordTabsItem';
 
 export type AffiliateSearchRecordProps = {

@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { App } from 'antd';
 import { getAffiliateManageDetail } from '@/services/marketManage/affiliateManage/affiliateManageApi';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import type { AffiliateDetailType } from '@/services/marketManage/affiliateManage/affiliateManageModel';
 import AffiliateBasicInfo from '../components/AffiliateBasicInfo';
 import AffiliateSearchRecord from '../components/AffiliateSearchRecord';
@@ -16,6 +16,8 @@ const AffiliateDetail: React.FC = () => {
   const location = useLocation();
 
   const [affiliateDetail, setAffiliateDetail] = useState<AffiliateDetailType>();
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     loadAffilateDetail();
@@ -37,7 +39,9 @@ const AffiliateDetail: React.FC = () => {
     }
   };
 
-  const jumpWalletPage = () => {};
+  const jumpWalletPage = (url: string) => {
+    navigate(`${url}?affiliateId=${affiliateDetail?.id}&type=affiliate`);
+  };
   return (
     <>
       {affiliateDetail?.id && (

@@ -31,7 +31,11 @@ const AffiliateFinancialDetail: React.FC<AffiliateFinancialDetailProps> = ({
               {getCurrency(bond, 'zh-CN', 'CNY')}
             </div>
           </div>
-          <div className={styles['button']} onClick={() => jumpWalletPage('')}>
+
+          <div
+            className={styles['button']}
+            onClick={() => jumpWalletPage('/capitalManage/FinancialDetails')}
+          >
             查看
           </div>
         </div>
@@ -42,7 +46,10 @@ const AffiliateFinancialDetail: React.FC<AffiliateFinancialDetailProps> = ({
               {getCurrency(balance, 'zh-CN', 'CNY')}
             </div>
           </div>
-          <div className={styles['button']} onClick={() => jumpWalletPage('')}>
+          <div
+            className={styles['button']}
+            onClick={() => jumpWalletPage('/capitalManage/FinancialDetails')}
+          >
             查看
           </div>
         </div>

@@ -1,0 +1,58 @@
+.basic-title {
+  font-weight: 500;
+  font-size: 16px;
+  color: #303133;
+  margin-bottom: 20px;
+}
+
+.wallet {
+  &-item {
+    width: 100%;
+    height: 101px;
+    background: #fcf6ec;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px;
+    margin-bottom: 10px;
+    font-size: 14px;
+    font-weight: 400;
+    > .button {
+      width: 64px;
+      height: 32px;
+      line-height: 32px;
+      text-align: center;
+      border-radius: 2px;
+      border: 1px solid #95938e;
+      cursor: pointer;
+    }
+  }
+}
+:global {
+  .ant-timeline {
+    padding-top: 10px !important;
+  }
+  .ant-timeline-item {
+    margin-left: 30px !important;
+  }
+}
+
+.queryLimitInput {
+  :global {
+    .ant-input-group-addon {
+      .ant-btn {
+        background: #f5f7fa !important;
+        font-weight: 400;
+        font-size: 14px;
+        color: #303133;
+        border: 1px solid #bfc2cc;
+      }
+      .ant-btn:hover {
+        font-weight: 400;
+        font-size: 14px;
+        color: #303133;
+      }
+    }
+  }
+}

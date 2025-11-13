@@ -61,10 +61,7 @@ const AffiliateUserDrawer = React.forwardRef<
 
   useImperativeHandle(ref, () => ({
     onRefreshUserData: () => {
-      // Todo：设置immediate 会使接口调用两次 关闭drawer 后 第二次就正常调用一次
       setImmediate(false);
-      // setSearchDefaultForm({ ...searchDefaultForm });
-      // console.log(immediate, 'zzzzzz', selected);
     },
   }));
 

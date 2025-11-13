@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="14px" height="14px" viewBox="0 0 14 14" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>切片</title>
+    <g id="用户管理" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="1.用户管理" transform="translate(-289.000000, -388.000000)" fill="#FA8C16" fill-rule="nonzero">
+            <g id="表" transform="translate(98.000000, 284.000000)">
+                <g id="编组-6" transform="translate(37.000000, 95.000000)">
+                    <g id="icon/会员" transform="translate(154.000000, 9.000000)">
+                        <rect id="矩形" opacity="0" x="0" y="0" width="14" height="14"></rect>
+                        <path d="M7,0 C3.134375,0 0,3.134375 0,7 C0,10.865625 3.134375,14 7,14 C10.865625,14 14,10.865625 14,7 C14,3.134375 10.865625,0 7,0 Z M6.1390625,10.4671875 L4.6421875,10.4671875 L4.6421875,4.9703125 L4.1421875,4.9703125 L4.1421875,4.471875 L6.1375,4.471875 L6.1375,7.3609375 L8.6109375,4.46875 L11.10625,4.471875 L6.1390625,10.4671875 Z" id="形状"></path>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

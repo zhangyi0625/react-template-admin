@@ -71,6 +71,7 @@ export default defineMock([
                   icon: '',
                   title: '用户详情信息',
                   internal: false,
+                  menuType: 2,
                 },
               },
               {

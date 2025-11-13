@@ -2,17 +2,17 @@ import { HttpRequest } from '@/utils/request';
 import type {
   StaffJoinAffiliateType,
   StaffManageParams,
+  StaffManageType,
 } from './staffManageModel';
 
 /**
  * 枚举用户管理相关的api
  */
 export enum StaffApi {
-  StaffManage = '/staff/customer/affiliate',
+  StaffManage = '/staff/customer',
   StaffManageByPage = '/staff/customer/page',
   StaffSearchSupplier = '/staff/customer/affiliate/supplier/',
   StaffJoinAffiliate = '/staff/customer/affiliate/join',
-  StaffManageDelete = '/staff/customer/',
   StaffComboPermissionRecord = '/staff/customer/query/log',
   StaffSearchStatistic = '/staff/customer/affiliate/search',
 }
@@ -26,12 +26,62 @@ export const getStaffManageByPage = (params: StaffManageParams) => {
   let qsParams = {
     ...params,
     filter: JSON.stringify(params.filter),
-    // sort: JSON.stringify(params.sort),
+    sort: JSON.stringify(params.sort),
   };
   return HttpRequest.get(
     {
       url: StaffApi.StaffManageByPage,
       params: qsParams,
+    },
+    {
+      isTransformResponse: false,
+    }
+  );
+};
+
+/**
+ * 新增用户
+ * @param params 用户参数
+ * @returns 用户列表
+ */
+export const addStaffManage = (params: StaffManageType) => {
+  return HttpRequest.post(
+    {
+      url: StaffApi.StaffManage,
+      params: params,
+    },
+    {
+      isTransformResponse: false,
+    }
+  );
+};
+
+/**
+ * 修改用户
+ * @param params 用户参数
+ * @returns 用户列表
+ */
+export const updateStaffManage = (params: StaffManageType, id: string) => {
+  return HttpRequest.put(
+    {
+      url: StaffApi.StaffManage + '/' + id,
+      params: params,
+    },
+    {
+      isTransformResponse: false,
+    }
+  );
+};
+
+/**
+ * 删除用户
+ * @param params 用户参数
+ * @returns 用户列表
+ */
+export const deleteStaffManage = (id: string) => {
+  return HttpRequest.delete(
+    {
+      url: StaffApi.StaffManage + '/' + id,
     },
     {
       isTransformResponse: false,
@@ -64,7 +114,27 @@ export const addStaffJoinAffiliate = (params: StaffJoinAffiliateType) => {
 export const deleteStaffInAffiliate = (id: string) => {
   return HttpRequest.post(
     {
-      url: StaffApi.StaffManageDelete + id + '/affiliate',
+      url: StaffApi.StaffManage + '/' + id + '/affiliate',
+    },
+    {
+      isTransformResponse: false,
+    }
+  );
+};
+
+/**
+ * 新增用户跟进记录
+ * @param params 用户参数
+ * @returns 用户列表
+ */
+export const addStaffFollowRecord = (
+  id: string,
+  params: { content: string }
+) => {
+  return HttpRequest.post(
+    {
+      url: StaffApi.StaffManage + '/' + id + '/follow',
+      params: params,
     },
     {
       isTransformResponse: false,
@@ -111,6 +181,22 @@ export const getStaffSearchStatistic = (params: {
     {
       url: StaffApi.StaffSearchStatistic + '/' + params.affiliateId,
       params: params,
+    },
+    {
+      isTransformResponse: false,
+    }
+  );
+};
+
+/**
+ * 登陆后台用户账号(工作台)
+ * @param id 客户参数
+ * @returns 客户列表
+ */
+export const postStaffSearchStatistic = (id: string) => {
+  return HttpRequest.post(
+    {
+      url: StaffApi.StaffManage + '/' + id + '/login',
     },
     {
       isTransformResponse: false,

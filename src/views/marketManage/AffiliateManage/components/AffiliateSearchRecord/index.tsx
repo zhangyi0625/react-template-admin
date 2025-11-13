@@ -30,7 +30,12 @@ const AffiliateSearchRecord: React.FC<AffiliateSearchRecordProps> = ({
       key: 'order',
       label: '订单列表',
       children: (
-        <OrderTabsItem affiliateId={affiliateId} ref={OrderTabsItemRef} />
+        <OrderTabsItem
+          type="affiliate"
+          affiliateId={affiliateId}
+          ref={OrderTabsItemRef}
+          customerId={null}
+        />
       ),
     },
     {
@@ -47,7 +52,12 @@ const AffiliateSearchRecord: React.FC<AffiliateSearchRecordProps> = ({
       key: 'record',
       label: '套餐外权限变更记录',
       children: (
-        <RecordTabsItem affiliateId={affiliateId} ref={RecordTabsItemRef} />
+        <RecordTabsItem
+          type="affiliate"
+          customerId={null}
+          affiliateId={affiliateId}
+          ref={RecordTabsItemRef}
+        />
       ),
     },
   ];

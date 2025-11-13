@@ -7,7 +7,9 @@ import { store } from '@/stores/store';
 import { useNavigate } from 'react-router-dom';
 
 export type OrderTabsItemProps = {
-  affiliateId: string;
+  type: 'affiliate' | 'staff';
+  customerId: string | null;
+  affiliateId: string | null;
 };
 
 export type OrderTabsItemRef = {
@@ -15,7 +17,7 @@ export type OrderTabsItemRef = {
 };
 
 const OrderTabsItem = React.forwardRef<OrderTabsItemRef, OrderTabsItemProps>(
-  ({ affiliateId }, ref) => {
+  ({ type, customerId, affiliateId }, ref) => {
     const { publicSetting } = store.getState()?.publicSetting;
 
     const navigate = useNavigate();
@@ -25,7 +27,8 @@ const OrderTabsItem = React.forwardRef<OrderTabsItemRef, OrderTabsItemProps>(
         pageIndex: 1,
         pageSize: 10,
         filter: {
-          affiliateId: affiliateId,
+          affiliateId: type === 'affiliate' ? affiliateId : null,
+          customerId: type === 'staff' ? customerId : null,
         },
       });
 
@@ -34,7 +37,8 @@ const OrderTabsItem = React.forwardRef<OrderTabsItemRef, OrderTabsItemProps>(
         setSearchDefaultForm({
           ...searchDefaultForm,
           filter: {
-            affiliateId: affiliateId,
+            affiliateId: type === 'affiliate' ? affiliateId : null,
+            customerId: type === 'staff' ? customerId : null,
           },
         });
       },

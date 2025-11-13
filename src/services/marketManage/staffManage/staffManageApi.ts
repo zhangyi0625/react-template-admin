@@ -15,6 +15,7 @@ export enum StaffApi {
   StaffJoinAffiliate = '/staff/customer/affiliate/join',
   StaffComboPermissionRecord = '/staff/customer/query/log',
   StaffSearchStatistic = '/staff/customer/affiliate/search',
+  StaffLevelRecord = '/staff/customer/query/log',
 }
 
 /**
@@ -32,6 +33,22 @@ export const getStaffManageByPage = (params: StaffManageParams) => {
     {
       url: StaffApi.StaffManageByPage,
       params: qsParams,
+    },
+    {
+      isTransformResponse: false,
+    }
+  );
+};
+
+/**
+ * 获取用户详情数据
+ * @param id 客户参数
+ * @returns 客户列表
+ */
+export const getStaffManageDetail = (id: string) => {
+  return HttpRequest.get(
+    {
+      url: StaffApi.StaffManage + '/' + id,
     },
     {
       isTransformResponse: false,
@@ -160,6 +177,31 @@ export const getStaffComboPermissionRecord = (params: {
   return HttpRequest.get(
     {
       url: StaffApi.StaffComboPermissionRecord,
+      params: qsParams,
+    },
+    {
+      isTransformResponse: false,
+    }
+  );
+};
+
+/**
+ * 获取用户等级变更记录
+ * @param id 客户参数
+ * @returns 客户列表
+ */
+export const getStaffLevelRecord = (params: {
+  filter: {
+    customerId: string;
+  };
+}) => {
+  let qsParams = {
+    ...params,
+    filter: JSON.stringify(params.filter),
+  };
+  return HttpRequest.get(
+    {
+      url: StaffApi.StaffLevelRecord,
       params: qsParams,
     },
     {

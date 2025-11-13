@@ -3,9 +3,12 @@ import type { SelectProps, TableProps } from 'antd';
 import { SearchForm, SearchTable } from 'customer-search-form-table';
 import { ComboPermission } from '@/enums/setting';
 import { getStaffComboPermissionRecord } from '@/services/marketManage/staffManage/staffManageApi';
+import type { ComboPermissionRecordParams } from '@/services/marketManage/staffManage/staffManageModel';
 
 export type RecordTabsItemProps = {
-  affiliateId: string;
+  type: 'affiliate' | 'staff';
+  customerId: string | null;
+  affiliateId: string | null;
 };
 
 export type RecordTabsItemRef = {
@@ -13,12 +16,9 @@ export type RecordTabsItemRef = {
 };
 
 const RecordTabsItem = React.forwardRef<RecordTabsItemRef, RecordTabsItemProps>(
-  ({ affiliateId }, ref) => {
+  ({ type, customerId, affiliateId }, ref) => {
     const [searchDefaultForm, setSearchDefaultForm] = useState<{
-      filter: {
-        module: string;
-        affiliateId: string;
-      };
+      filter: ComboPermissionRecordParams;
     }>();
 
     useEffect(() => {
@@ -32,8 +32,9 @@ const RecordTabsItem = React.forwardRef<RecordTabsItemRef, RecordTabsItemProps>(
     const init = () => {
       setSearchDefaultForm({
         filter: {
-          affiliateId: affiliateId,
+          affiliateId: type === 'affiliate' ? affiliateId : null,
           module: '',
+          customerId: type === 'staff' ? customerId : null,
         },
       });
     };
@@ -41,9 +42,15 @@ const RecordTabsItem = React.forwardRef<RecordTabsItemRef, RecordTabsItemProps>(
     const columns: TableProps['columns'] = [
       {
         title: '操作人',
-        dataIndex: 'affiliateName',
         width: 100,
         align: 'center',
+        render(value) {
+          return (
+            <div>
+              {type === 'staff' ? value.customerName : value.affiliateName}
+            </div>
+          );
+        },
       },
       {
         title: '权限类型',
@@ -53,21 +60,31 @@ const RecordTabsItem = React.forwardRef<RecordTabsItemRef, RecordTabsItemProps>(
           return <div>{ComboPermission[value.module]}</div>;
         },
       },
+      {
+        title: '变更内容',
+        width: 180,
+        align: 'center',
+        dataIndex: 'content',
+      },
+      {
+        title: '操作时间',
+        width: 120,
+        align: 'center',
+        dataIndex: 'created',
+      },
     ];
 
-    const onUpdateSearch = (
-      info?: { module: string; affiliateId: string } | unknown
-    ) => {
+    const onUpdateSearch = (info?: unknown) => {
       const filteredObj = Object.fromEntries(
         Object.entries(info ?? {}).filter(
           ([, value]) => !!value && value !== undefined
         )
       );
       setSearchDefaultForm({
-        filter: { ...filteredObj, affiliateId: affiliateId } as {
-          module: string;
-          affiliateId: string;
-        },
+        filter: {
+          ...searchDefaultForm?.filter,
+          ...filteredObj,
+        } as ComboPermissionRecordParams,
       });
     };
 

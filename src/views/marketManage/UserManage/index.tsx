@@ -153,9 +153,7 @@ const UserManage: React.FC = () => {
             <Button
               type="default"
               variant="outlined"
-              onClick={() =>
-                navigate(`/marketManage/affiliateManage/${_.affiliateId}`)
-              }
+              onClick={() => navigate(`/marketManage/userManage/${_.id}`)}
             >
               查看
             </Button>

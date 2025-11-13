@@ -6,11 +6,12 @@ export type OrderSearchFilter = {
   fndCode: string;
   type: string;
   status: string;
-  affiliateId: string;
+  affiliateId: string | null;
+  customerId: string | null;
 };
 
 export interface OrderSearchParams extends DefaultPaging {
-  filter: string | Partial<OrderSearchFilter>;
+  filter: Partial<OrderSearchFilter>;
 }
 
 export interface ShippingScheduleParams

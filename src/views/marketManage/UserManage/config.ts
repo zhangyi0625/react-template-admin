@@ -1,6 +1,5 @@
 import { SelectProps } from 'antd';
-import { CheckboxGroupProps } from 'antd/es/checkbox';
-import { CustomColumn } from 'customer-search-form-table/SearchForm/type';
+import type { CustomColumn } from 'customer-search-form-table/SearchForm/type';
 
 export const UserLevelOptions: SelectProps['options'] = [
   {

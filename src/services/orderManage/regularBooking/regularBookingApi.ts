@@ -2,6 +2,7 @@ import { HttpRequest } from '@/utils/request';
 import type { Response } from '@/types/global';
 import type {
   OrderSearchParams,
+  SearchRoutePageType,
   ShippingScheduleParams,
 } from './regularBookingModel';
 
@@ -113,6 +114,10 @@ export enum OrderApi {
    * 船期数据
    */
   shippingSchedule = '/staff/product/getSchedules',
+  /**
+   * 查询航线列表
+   */
+  SearchRoutePage = '/staff/product/search/page',
 }
 
 /**
@@ -527,6 +532,23 @@ export const getShippingSchedule = (params: ShippingScheduleParams) => {
     {
       url: OrderApi.shippingSchedule,
       params: params,
+    },
+    { isTransformResponse: false }
+  );
+};
+
+/**
+ * 查询船期数据
+ * @param params
+ * @returns
+ */
+
+export const getSearchRoutePage = (params: SearchRoutePageType) => {
+  let qsParams = { ...params, filter: JSON.stringify(params.filter) };
+  return HttpRequest.get<Response>(
+    {
+      url: OrderApi.SearchRoutePage,
+      params: qsParams,
     },
     { isTransformResponse: false }
   );

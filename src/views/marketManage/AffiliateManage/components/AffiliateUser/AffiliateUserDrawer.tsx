@@ -1,4 +1,4 @@
-import React, { memo, useImperativeHandle, useState } from 'react';
+import React, { useImperativeHandle, useState } from 'react';
 import {
   Button,
   Drawer,

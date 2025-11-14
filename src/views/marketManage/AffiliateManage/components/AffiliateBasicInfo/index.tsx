@@ -224,7 +224,7 @@ const AffiliateBasicInfo: React.FC<AffiliateBasicInfoProps> = memo(
           <p className="font-semibold text-base mb-[10px]">
             套餐外权限
             <span
-              className="text-normal-blue ml-[12px] underline cursor-pointer text-sm font-normal"
+              className="text-normal-blue font-meduim ml-[12px] underline cursor-pointer text-sm font-normal"
               onClick={() => {
                 setShowRemark(true),
                   AffiliateComboPermissionRemarkRef.current?.onLoadReamrk();
@@ -463,6 +463,7 @@ const AffiliateBasicInfo: React.FC<AffiliateBasicInfoProps> = memo(
           )}
         </div>
         <AffiliateComboPermissionRemark
+          source="affiliate"
           ref={AffiliateComboPermissionRemarkRef}
           visible={showRemark}
           onCancel={() => setShowRemark(false)}

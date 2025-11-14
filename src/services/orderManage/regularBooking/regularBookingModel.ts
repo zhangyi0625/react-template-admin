@@ -35,3 +35,9 @@ export interface LocationItem {
   /** 港口代码 */
   unlocode: string;
 }
+
+export interface SearchRoutePageType extends DefaultPaging {
+  filter: {
+    customerId: string;
+  };
+}

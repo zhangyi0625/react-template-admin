@@ -16,6 +16,7 @@ export enum StaffApi {
   StaffComboPermissionRecord = '/staff/customer/query/log',
   StaffSearchStatistic = '/staff/customer/affiliate/search',
   StaffLevelRecord = '/staff/customer/query/log',
+  StaffExtraEquityLimit = '/staff/customer/extra/query/rights',
 }
 
 /**
@@ -239,6 +240,23 @@ export const postStaffSearchStatistic = (id: string) => {
   return HttpRequest.post(
     {
       url: StaffApi.StaffManage + '/' + id + '/login',
+    },
+    {
+      isTransformResponse: false,
+    }
+  );
+};
+
+/**
+ * 获取用户额外套餐权限
+ * @param id 客户参数
+ * @returns 客户列表
+ */
+export const getStaffExtraEquityLimit = (params: { customerId: string }) => {
+  return HttpRequest.get(
+    {
+      url: StaffApi.StaffExtraEquityLimit,
+      params: params,
     },
     {
       isTransformResponse: false,

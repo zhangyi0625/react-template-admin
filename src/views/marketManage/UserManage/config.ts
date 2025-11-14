@@ -1,5 +1,7 @@
 import { SelectProps } from 'antd';
 import type { CustomColumn } from 'customer-search-form-table/SearchForm/type';
+import type { AffiliateManageDetailEditFormProps } from '../AffiliateManage/config';
+import { changeSelectOptionsByLabel } from '@/utils/options';
 
 export const UserLevelOptions: SelectProps['options'] = [
   {
@@ -25,17 +27,6 @@ export const UserLevelOptions: SelectProps['options'] = [
   {
     label: '会员',
     value: 9,
-  },
-];
-
-export const UserFormRadioOptions = [
-  {
-    label: '是',
-    value: 1,
-  },
-  {
-    label: '否',
-    value: 0,
   },
 ];
 
@@ -126,7 +117,7 @@ export const UserManageFormsColumns: Omit<CustomColumn, 'selectFetch'>[] = [
     label: '是否有订舱权限',
     name: 'BKG',
     formType: 'radio',
-    options: UserFormRadioOptions,
+    options: changeSelectOptionsByLabel(),
     span: 12,
     hiddenItem: false,
   },
@@ -134,7 +125,7 @@ export const UserManageFormsColumns: Omit<CustomColumn, 'selectFetch'>[] = [
     label: '是否有预定权限',
     name: 'PBK',
     formType: 'radio',
-    options: UserFormRadioOptions,
+    options: changeSelectOptionsByLabel(),
     span: 12,
     hiddenItem: false,
   },
@@ -142,7 +133,7 @@ export const UserManageFormsColumns: Omit<CustomColumn, 'selectFetch'>[] = [
     label: '是否有上传舱位权限',
     name: 'CUP',
     formType: 'radio',
-    options: UserFormRadioOptions,
+    options: changeSelectOptionsByLabel(),
     span: 12,
     hiddenItem: false,
   },
@@ -150,7 +141,7 @@ export const UserManageFormsColumns: Omit<CustomColumn, 'selectFetch'>[] = [
     label: '是否订单免审',
     name: 'OVE',
     formType: 'radio',
-    options: UserFormRadioOptions,
+    options: changeSelectOptionsByLabel(),
     span: 12,
     hiddenItem: false,
   },
@@ -158,7 +149,7 @@ export const UserManageFormsColumns: Omit<CustomColumn, 'selectFetch'>[] = [
     label: '绑定船公司账号权限',
     name: 'CAA',
     formType: 'radio',
-    options: UserFormRadioOptions,
+    options: changeSelectOptionsByLabel(),
     span: 12,
     hiddenItem: false,
   },
@@ -166,8 +157,187 @@ export const UserManageFormsColumns: Omit<CustomColumn, 'selectFetch'>[] = [
     label: '消息订阅权限',
     name: 'NTF',
     formType: 'radio',
-    options: UserFormRadioOptions,
+    options: changeSelectOptionsByLabel(),
     span: 12,
     hiddenItem: false,
   },
 ];
+
+export const UserManageDetailEditForm: AffiliateManageDetailEditFormProps[] = [
+  {
+    label: '真实姓名',
+    name: 'name',
+    formType: 'input',
+    span: 12,
+    disabled: false,
+    isRules: true,
+  },
+  {
+    label: '公司名称',
+    name: 'affiliateName',
+    formType: 'input',
+    span: 12,
+    disabled: true,
+  },
+  {
+    label: '手机号',
+    name: 'phone',
+    formType: 'input',
+    span: 12,
+    disabled: false,
+    isRules: true,
+  },
+  {
+    label: '常用邮箱',
+    name: 'email',
+    formType: 'input',
+    span: 12,
+    disabled: false,
+  },
+  {
+    label: '会员分类',
+    name: 'level',
+    formType: 'normalSelect',
+    options: UserLevelOptions.filter((item) => Number(item.value)),
+    span: 12,
+    disabled: false,
+  },
+  {
+    label: '公司管理员',
+    name: 'AFA',
+    formType: 'radio',
+    options: changeSelectOptionsByLabel(),
+    span: 12,
+    disabled: false,
+  },
+  {
+    label: '订舱权限',
+    name: 'BKG',
+    formType: 'radio',
+    options: changeSelectOptionsByLabel(['开启', '关闭']),
+    span: 12,
+    disabled: false,
+  },
+  {
+    label: '预定权限',
+    name: 'PBK',
+    formType: 'radio',
+    options: changeSelectOptionsByLabel(['开启', '关闭']),
+    span: 12,
+    disabled: false,
+  },
+  {
+    label: '上传舱位权限',
+    name: 'CUP',
+    formType: 'radio',
+    options: changeSelectOptionsByLabel(['开启', '关闭']),
+    span: 12,
+    disabled: false,
+  },
+  {
+    label: '自动下单',
+    name: 'OVE',
+    formType: 'radio',
+    options: changeSelectOptionsByLabel(['开启', '关闭']),
+    span: 12,
+    disabled: false,
+  },
+  {
+    label: '绑定船公司账号权限',
+    name: 'CAA',
+    formType: 'radio',
+    options: changeSelectOptionsByLabel(['开启', '关闭']),
+    span: 12,
+    disabled: false,
+  },
+  {
+    label: '消息订阅权限',
+    name: 'NTF',
+    formType: 'radio',
+    options: changeSelectOptionsByLabel(['开启', '关闭']),
+    span: 12,
+    disabled: false,
+  },
+  {
+    label: '运价变更推送邮箱',
+    name: 'freightPriceNotifyToEmail',
+    formType: 'radio',
+    options: changeSelectOptionsByLabel(),
+    span: 12,
+    ExtraKey: 'businessConfig',
+    disabled: false,
+  },
+  {
+    label: '运价变更推送公众号',
+    name: 'freightPriceNotifyToWxO',
+    formType: 'radio',
+    options: changeSelectOptionsByLabel(),
+    span: 12,
+    ExtraKey: 'businessConfig',
+    disabled: false,
+  },
+  {
+    label: '运价变更推送小程序',
+    name: 'freightPriceNotifyToWxA',
+    formType: 'radio',
+    options: changeSelectOptionsByLabel(),
+    span: 12,
+    ExtraKey: 'businessConfig',
+    disabled: false,
+  },
+  {
+    label: '额外实时查询购买：',
+    name: 'REALTIME_RATE',
+    formType: 'input',
+    span: 12,
+    ExtraKey: 'businessConfig',
+    disabled: false,
+  },
+  {
+    label: '额外运价订阅数：',
+    name: 'RATE_SUBSCRIBE',
+    formType: 'input',
+    span: 12,
+    ExtraKey: 'businessConfig',
+    disabled: false,
+  },
+  {
+    label: '箱货跟踪：',
+    name: 'CARGO_TRACE',
+    formType: 'input',
+    span: 12,
+    ExtraKey: 'businessConfig',
+    disabled: false,
+  },
+  {
+    label: '船舶计划：',
+    name: 'CARRIER_SCHEDULE',
+    formType: 'input',
+    span: 12,
+    ExtraKey: 'businessConfig',
+    disabled: false,
+  },
+  {
+    label: '国内卡车轨迹：',
+    name: 'TRUCK_TRAJECTORY',
+    formType: 'input',
+    span: 12,
+    ExtraKey: 'businessConfig',
+    disabled: false,
+  },
+  {
+    label: '美国清关放行查询：',
+    name: 'US_CLEARANCE',
+    formType: 'input',
+    span: 12,
+    ExtraKey: 'businessConfig',
+    disabled: false,
+  },
+];
+
+// export const UserManageEquityExtraOptions:EquityRightsExtraEditType[] = [
+//   {
+//     customerId:'',
+
+//   }
+// ]

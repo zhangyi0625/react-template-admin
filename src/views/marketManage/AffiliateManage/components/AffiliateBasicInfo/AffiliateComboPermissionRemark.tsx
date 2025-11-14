@@ -10,6 +10,7 @@ import { ComboPermission } from '@/enums/setting';
 
 export type AffiliateComboPermissionRemarkProps = {
   visible: boolean;
+  source: 'affiliate' | 'staff';
   onCancel: () => void;
 };
 
@@ -20,7 +21,7 @@ export type AffiliateComboPermissionRemarkRef = {
 export const AffiliateComboPermissionRemark = React.forwardRef<
   AffiliateComboPermissionRemarkRef,
   AffiliateComboPermissionRemarkProps
->(({ visible, onCancel }, ref) => {
+>(({ visible, source, onCancel }, ref) => {
   const [tableLoading, setTableLoading] = useState<boolean>(true);
 
   const filterExtraKeys = [
@@ -51,9 +52,46 @@ export const AffiliateComboPermissionRemark = React.forwardRef<
       },
     },
     {
+      title: '普通用户',
+      width: 100,
+      align: 'center',
+      hidden: source === 'affiliate',
+      render(value) {
+        return <div>{getBaseValue(value.L0Limit, value.module)}</div>;
+      },
+    },
+    {
+      title: '新用户',
+      width: 100,
+      align: 'center',
+      hidden: source === 'affiliate',
+      render(value) {
+        return <div>{getBaseValue(value.L1Limit, value.module)}</div>;
+      },
+    },
+    {
+      title: '周卡',
+      width: 100,
+      align: 'center',
+      hidden: source === 'affiliate',
+      render(value) {
+        return <div>{getBaseValue(value.L5Limit, value.module)}</div>;
+      },
+    },
+    {
+      title: '年卡',
+      width: 100,
+      align: 'center',
+      hidden: source === 'affiliate',
+      render(value) {
+        return <div>{getBaseValue(value.L7Limit, value.module)}</div>;
+      },
+    },
+    {
       title: '查询会员',
       width: 100,
       align: 'center',
+      hidden: source === 'staff',
       render(value) {
         return <div>{getBaseValue(value.L11Limit, value.module)}</div>;
       },
@@ -62,6 +100,7 @@ export const AffiliateComboPermissionRemark = React.forwardRef<
       title: '认证买家',
       width: 100,
       align: 'center',
+      hidden: source === 'staff',
       render(value) {
         return <div>{getBaseValue(value.L12Limit, value.module)}</div>;
       },
@@ -69,6 +108,7 @@ export const AffiliateComboPermissionRemark = React.forwardRef<
     {
       title: '认证卖家',
       width: 100,
+      hidden: source === 'staff',
       align: 'center',
       render(value) {
         return <div>{getBaseValue(value.L13Limit, value.module)}</div>;
@@ -86,9 +126,58 @@ export const AffiliateComboPermissionRemark = React.forwardRef<
       },
     },
     {
+      title: '普通用户',
+      width: 100,
+      align: 'center',
+      hidden: source === 'affiliate',
+      render(value) {
+        return (
+          <div>
+            {value.module === 'RATE_SUBSCRIBE'
+              ? '禁用'
+              : getExtraValue(value.L0Price, value.module)}
+          </div>
+        );
+      },
+    },
+    {
+      title: '新用户',
+      width: 100,
+      align: 'center',
+      hidden: source === 'affiliate',
+      render(value) {
+        return (
+          <div>
+            {value.module === 'RATE_SUBSCRIBE'
+              ? '禁用'
+              : getExtraValue(value.L1Price, value.module)}
+          </div>
+        );
+      },
+    },
+    {
+      title: '周卡',
+      width: 100,
+      align: 'center',
+      hidden: source === 'affiliate',
+      render(value) {
+        return <div>{getExtraValue(value.L5Price, value.module)}</div>;
+      },
+    },
+    {
+      title: '年卡',
+      width: 100,
+      align: 'center',
+      hidden: source === 'affiliate',
+      render(value) {
+        return <div>{getExtraValue(value.L7Price, value.module)}</div>;
+      },
+    },
+    {
       title: '查询会员',
       width: 100,
       align: 'center',
+      hidden: source === 'staff',
       render(value) {
         return <div>{getExtraValue(value.L11Price, value.module)}</div>;
       },
@@ -97,6 +186,7 @@ export const AffiliateComboPermissionRemark = React.forwardRef<
       title: '认证买家',
       width: 100,
       align: 'center',
+      hidden: source === 'staff',
       render(value) {
         return <div>{getExtraValue(value.L12Price, value.module)}</div>;
       },
@@ -105,6 +195,7 @@ export const AffiliateComboPermissionRemark = React.forwardRef<
       title: '认证卖家',
       width: 100,
       align: 'center',
+      hidden: source === 'staff',
       render(value) {
         return <div>{getExtraValue(value.L13Price, value.module)}</div>;
       },

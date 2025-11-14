@@ -1,5 +1,8 @@
 import { HttpRequest } from '@/utils/request';
-import type { EquityRightsBaseEditType } from './queryRightsSettingsApi';
+import type {
+  EquityRightsBaseEditType,
+  EquityRightsExtraEditType,
+} from './queryRightsSettingsApi';
 
 /**
  * 枚举权益管理相关的api
@@ -8,6 +11,7 @@ export enum EquityApi {
   EquityRightsBase = '/staff/query/rights/base/list',
   EquityRightsExtra = '/staff/query/rights/extra/list',
   EquityRightsEdit = '/staff/customer/affiliate/extra/query/rights',
+  EquityRightsExtraEdit = '/staff/customer/extra/query/rights',
 }
 
 /**
@@ -51,6 +55,25 @@ export const postEquityRightsEdit = (params: EquityRightsBaseEditType) => {
   return HttpRequest.post(
     {
       url: EquityApi.EquityRightsEdit,
+      params: params,
+    },
+    {
+      isTransformResponse: false,
+    }
+  );
+};
+
+/**
+ * 修改额外套餐数据
+ * @param params 权益参数
+ * @returns 权益列表
+ */
+export const postEquityRightsExtraEdit = (
+  params: EquityRightsExtraEditType
+) => {
+  return HttpRequest.post(
+    {
+      url: EquityApi.EquityRightsExtraEdit,
       params: params,
     },
     {

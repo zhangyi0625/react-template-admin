@@ -27,8 +27,8 @@ importers:
         specifier: ^4.2.0
         version: 4.2.0
       customer-search-form-table:
-        specifier: ^1.1.1
-        version: 1.1.1(antd@5.25.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+        specifier: ^1.1.2
+        version: 1.1.2(antd@5.25.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       dayjs:
         specifier: ^1.11.13
         version: 1.11.13
@@ -1400,8 +1400,8 @@ packages:
   csstype@3.1.3:
     resolution: {integrity: sha512-M1uQkMl8rQK/szD0LNhtqxIPLpimGm8sOBwU7lLnCpSbTyY3yeU1Vc7l4KT5zT4s/yOxHH5O7tIuuLOCnLADRw==, tarball: https://registry.npmmirror.com/csstype/-/csstype-3.1.3.tgz}
 
-  customer-search-form-table@1.1.1:
-    resolution: {integrity: sha512-lBBorxsOGcRWlxeHqnA3KF888jxrG+621U+RXYkfKYRT14VgXbyqUhkKkGelQLOerRkhvQqJIOmmmGTz/jSduA==}
+  customer-search-form-table@1.1.2:
+    resolution: {integrity: sha512-z4p9jhr2naT3go6836PrbtXhIh4Mjv1qvKxrxH5nZMD83f+AZMoKt2hcsjomeLNK4PIjVoKw0JMRShvgod+HqA==}
 
   dayjs@1.11.13:
     resolution: {integrity: sha512-oaMBel6gjolK862uaPQOVTA7q3TZhuSvuMQAAglQDOWYO9A91IrAOUJEyKVlqJlHE0vq5p5UXxzdPfMH/x6xNg==, tarball: https://registry.npmmirror.com/dayjs/-/dayjs-1.11.13.tgz}
@@ -4597,7 +4597,7 @@ snapshots:
 
   csstype@3.1.3: {}
 
-  customer-search-form-table@1.1.1(antd@5.25.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
+  customer-search-form-table@1.1.2(antd@5.25.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
     dependencies:
       '@ant-design/v5-patch-for-react-19': 1.0.3(antd@5.25.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
     transitivePeerDependencies:

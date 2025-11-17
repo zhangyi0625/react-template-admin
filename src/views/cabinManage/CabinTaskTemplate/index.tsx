@@ -43,7 +43,7 @@ import {
   SelectCabinTaskTemplateOptions,
 } from './config';
 import type { RouteMangeType } from '@/services/customerInformation/routeManage/routeManageModel';
-import ImportShippingAccout from '@/views/customerInformation/ShippingAccount/ImportShippingAccout';
+// import ImportShippingAccout from '@/views/customerInformation/ShippingAccount/ImportShippingAccout';
 import { filterKeys } from '@/utils/tool';
 
 const API = process.env.RS_STATIC_API;
@@ -543,13 +543,13 @@ const CabinTaskTemplate: React.FC<CabinTaskTemplateProps> = memo(
           params={operationLog}
           onCancel={() => setOperationLog({ visible: false, id: null })}
         />
-        <ImportShippingAccout
+        {/* <ImportShippingAccout
           type="importCabinTask"
           title="批量导入任务"
           visible={importModel}
           onOk={() => {}}
           onCancel={() => setImportModel(false)}
-        />
+        /> */}
         <SetFrequecnyDrawer
           visible={frequecnyParams.visible}
           onCancel={() => setFrequecnyParams({ visible: false, selRow: [] })}

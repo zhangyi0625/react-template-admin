@@ -137,7 +137,7 @@ export const getSearchAffiliate = (params: { keyword?: string }) => {
  * 查询用户列表
  */
 export const getSearchCustomer = (params: { keyword?: string }) => {
-  return HttpRequest.get<Response>(
+  return HttpRequest.get(
     {
       url: OrderApi.customer,
       params: params,

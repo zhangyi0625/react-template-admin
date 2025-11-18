@@ -20,3 +20,16 @@ export enum ComboPermission {
   PORT_WIKI = '港口百科',
   HSCODE_QUERY = 'HSCODE查询',
 }
+
+export enum LevelSetting {
+  L0 = '普通用户',
+  L1 = '新注册用户',
+  L5 = '个人周卡',
+  L7 = '个人年卡',
+  L9 = '子账号权益会员',
+  L10 = '认证企业',
+  L11 = '查询会员',
+  L12 = '认证买家',
+  L13 = '认证卖家',
+  L21 = '定制会员',
+}

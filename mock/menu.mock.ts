@@ -164,6 +164,7 @@ export default defineMock([
                   icon: '',
                   title: '开放接口详情',
                   internal: false,
+                  menuType: 2,
                 },
               },
               {

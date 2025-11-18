@@ -1,8 +1,8 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { Divider, Form, Input, Radio, RadioChangeEvent } from 'antd';
 import DragModal from '@/components/modal/DragModal';
-import type { ShippingAccountAuditType } from '@/services/marketManage/shippingAccount/shippingAccountApi';
-import { getShippingAccountDetail } from '@/services/marketManage/shippingAccount/shippingAccountModel';
+import type { ShippingAccountAuditType } from '@/services/marketManage/shippingAccount/shippingAccountModel';
+import { getShippingAccountDetail } from '@/services/marketManage/shippingAccount/shippingAccountApi';
 import { ShippingAccountStatusOptions } from './config';
 
 export type AuditShippingAccountProps = {

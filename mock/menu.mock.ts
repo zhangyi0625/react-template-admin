@@ -156,6 +156,19 @@ export default defineMock([
               {
                 id: Math.random().toString(),
                 name: 'market-manage',
+                path: '/marketManage/openInterface/:id',
+                component: 'marketManage/OpenInterface/OpenInterfaceDetail',
+                route: '1',
+                meta: {
+                  keepAlive: false,
+                  icon: '',
+                  title: '开放接口详情',
+                  internal: false,
+                },
+              },
+              {
+                id: Math.random().toString(),
+                name: 'market-manage',
                 path: '/marketManage/levelManage',
                 component: 'marketManage/LevelManage',
                 route: '1',

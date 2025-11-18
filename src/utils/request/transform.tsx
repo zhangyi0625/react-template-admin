@@ -300,11 +300,26 @@ export const transform: AxiosTransform = {
     }
 
     if (errMessage) {
-      antdUtils.modal?.error({
-        title: `服务异常（状态码：${responseCode || code}）`,
-        content: errMessage,
-        okText: '确定',
-      });
+      if (responseCode === HttpCodeEnum.RC401) {
+        antdUtils.modal?.confirm({
+          title: '凭证失效',
+          content: '当前用户身份验证凭证已过期或无效，请重新登录！',
+          onOk() {
+            // 登录失效后需要将本地token清除
+            sessionStorage.removeItem('token');
+            sessionStorage.removeItem('isLogin');
+            sessionStorage.removeItem('roleId');
+            window.location.href = '/login';
+          },
+          okText: '确定',
+        });
+      } else {
+        antdUtils.modal?.error({
+          title: `服务异常（状态码：${responseCode || code}）`,
+          content: errMessage,
+          okText: '确定',
+        });
+      }
       return Promise.reject(error);
     }
 

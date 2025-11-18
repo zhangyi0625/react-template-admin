@@ -1,0 +1,178 @@
+import React, { useEffect, useState } from 'react';
+import {
+  Checkbox,
+  Col,
+  Form,
+  Input,
+  Row,
+  Select,
+  type SelectProps,
+} from 'antd';
+import DragModal from '@/components/modal/DragModal';
+import type { OpenInterfaceType } from '@/services/marketManage/openInterface/openInterfaceModel';
+import { OpenInterfaceForms } from './config';
+import { getSearchCustomer } from '@/services/orderManage/regularBooking/regularBookingApi';
+
+export type AddOpenInterfaceModalProps = {
+  visible: boolean;
+  currentRow: OpenInterfaceType | null;
+  onCancel: () => void;
+  onOk: (params: OpenInterfaceType) => void;
+};
+
+let timeout: ReturnType<typeof setTimeout> | null;
+let currentValue: string;
+
+const fetchData = (
+  value: string,
+  callback: (data: { value: string; label: string }[]) => void
+) => {
+  if (timeout) {
+    clearTimeout(timeout);
+    timeout = null;
+  }
+  currentValue = value;
+
+  const fake = () => {
+    getSearchCustomer({ keyword: currentValue }).then((resp) => {
+      callback(
+        resp.map((item: { id: string; name: string }) => ({
+          value: item.id,
+          label: item.name,
+        }))
+      );
+    });
+  };
+  if (value) {
+    timeout = setTimeout(fake, 300);
+  } else callback([]);
+};
+
+const AddOpenInterfaceModal: React.FC<AddOpenInterfaceModalProps> = ({
+  visible,
+  currentRow,
+  onCancel,
+  onOk,
+}) => {
+  const [form] = Form.useForm();
+
+  const [data, setData] = useState<SelectProps['options']>([]);
+
+  const [checked, setChecked] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (!visible) return;
+    setChecked(true);
+    if (currentRow) {
+      form.setFieldsValue({
+        ...currentRow,
+      });
+      handleSearch(currentRow.customerName);
+    } else {
+      form.resetFields();
+    }
+  }, [visible]);
+
+  const handleSearch = (newValue: string) => {
+    if (!newValue || !newValue.trim()) return;
+    fetchData(newValue, setData);
+  };
+
+  const handleOk = () => {
+    form
+      .validateFields()
+      .then(() => {
+        onOk({ ...form.getFieldsValue(), valid: checked });
+      })
+      .catch((errorInfo) => {
+        // 滚动并聚焦到第一个错误字段
+        form.scrollToField(errorInfo.errorFields[0].name);
+        form.focusField(errorInfo.errorFields[0].name);
+      });
+  };
+  return (
+    <>
+      <DragModal
+        open={visible}
+        onCancel={onCancel}
+        title="新增接口信息"
+        width={{ xl: 800, xxl: 1000 }}
+        onOk={handleOk}
+      >
+        <Form
+          form={form}
+          labelCol={{ span: 4 }}
+          labelAlign="left"
+          colon={false}
+        >
+          <Form.Item name="id" hidden>
+            <Input disabled />
+          </Form.Item>
+          <Row gutter={24}>
+            {OpenInterfaceForms.map((item) => (
+              <Col span={item.span} key={item.name}>
+                <Form.Item
+                  label={item.label}
+                  name={item.name}
+                  rules={
+                    item.isRules
+                      ? [
+                          {
+                            required: true,
+                            message: `请${
+                              item.formType === 'input' ? '输入' : '选择'
+                            }${item.label}`,
+                          },
+                        ]
+                      : undefined
+                  }
+                >
+                  {item.formType === 'input' && (
+                    <Input
+                      placeholder={`请输入${item.label}`}
+                      autoComplete="off"
+                      allowClear
+                    />
+                  )}
+                  {item.formType === 'textarea' && (
+                    <Input.TextArea
+                      placeholder={item.customPlaceholder as string}
+                      autoComplete="off"
+                      allowClear
+                    />
+                  )}
+                  {item.formType === 'radio' && (
+                    <Checkbox
+                      onChange={() => setChecked(!checked)}
+                      checked={checked}
+                    >
+                      有效
+                    </Checkbox>
+                  )}
+                  {item.formType === 'focusSelect' && (
+                    <Select
+                      allowClear
+                      placeholder={item.customPlaceholder}
+                      showSearch
+                      defaultActiveFirstOption={false}
+                      suffixIcon={null}
+                      notFoundContent={null}
+                      filterOption={false}
+                      onSearch={handleSearch}
+                      options={(data || []).map((d) => ({
+                        value: d.value,
+                        label: d.label,
+                      }))}
+                    />
+                  )}
+                </Form.Item>
+              </Col>
+            ))}
+          </Row>
+        </Form>
+      </DragModal>
+    </>
+  );
+};
+
+export default AddOpenInterfaceModal;

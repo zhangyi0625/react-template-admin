@@ -17,12 +17,12 @@ import { filterKeys } from '@/utils/tool';
 import type {
   ShippingAccountAuditType,
   ShippingAccountManageParams,
-} from '@/services/marketManage/shippingAccount/shippingAccountApi';
+} from '@/services/marketManage/shippingAccount/shippingAccountModel';
 import useParentSize from '@/hooks/useParentSize';
 import {
   auditShippingAccount,
   getShippingAccountManageByPage,
-} from '@/services/marketManage/shippingAccount/shippingAccountModel';
+} from '@/services/marketManage/shippingAccount/shippingAccountApi';
 import AuditShippingAccount from './AuditShippingAccount';
 
 const ShippingAccount: React.FC = () => {

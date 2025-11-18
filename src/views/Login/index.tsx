@@ -114,13 +114,14 @@ const Login: React.FC = () => {
         if (!homePath) {
           // 获取第一个是路由的地址
           const firstRoute = menu.find(
-            (item: { menuType: number }) => item.menuType === 0
+            (item: { route: string }) => item.route === '1'
           );
           if (firstRoute) {
-            homePath = firstRoute.path;
+            homePath = firstRoute.children
+              ? firstRoute.children[0].path
+              : firstRoute.path;
           }
         }
-
         // 跳转到首页
         navigate(homePath);
         antdUtils.notification?.success({

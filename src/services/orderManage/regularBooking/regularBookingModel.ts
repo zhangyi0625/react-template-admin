@@ -6,8 +6,8 @@ export type RegularBookingSearchFilter = {
   fndCode: string;
   type: string;
   status: string;
-  affiliateId: string | null;
-  customerId: string | null;
+  affiliateId: string;
+  customerId: string;
 };
 
 export interface RegularBookingSearchParams extends DefaultPaging {

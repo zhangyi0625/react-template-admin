@@ -9,7 +9,7 @@ import type {
 /**
  * 枚举订单需要的接口地址
  */
-export enum OrderApi {
+export enum OrderManageApi {
   /**
    * 公司列表
    */
@@ -37,7 +37,7 @@ export enum OrderApi {
   /**
    * 订单列表详情（普通）
    */
-  orderDetail = '/staff/frt/order/detail/',
+  RegularBookingDetail = '/staff/frt/order/detail/',
   /**
    * 取消订舱
    */
@@ -126,7 +126,7 @@ export enum OrderApi {
 export const getSearchAffiliate = (params: { keyword?: string }) => {
   return HttpRequest.get<Response>(
     {
-      url: OrderApi.affiliate,
+      url: OrderManageApi.affiliate,
       params: params,
     },
     { isTransformResponse: false }
@@ -139,7 +139,7 @@ export const getSearchAffiliate = (params: { keyword?: string }) => {
 export const getSearchCustomer = (params: { keyword?: string }) => {
   return HttpRequest.get(
     {
-      url: OrderApi.customer,
+      url: OrderManageApi.customer,
       params: params,
     },
     { isTransformResponse: false }
@@ -152,7 +152,7 @@ export const getSearchCustomer = (params: { keyword?: string }) => {
 export const getSearchPort = (params: { keyword?: string; tag: string }) => {
   return HttpRequest.get<Response>(
     {
-      url: OrderApi.port,
+      url: OrderManageApi.port,
       params: params,
     },
     { isTransformResponse: false }
@@ -165,7 +165,7 @@ export const getSearchPort = (params: { keyword?: string; tag: string }) => {
 export const getSearchCarrierAll = () => {
   return HttpRequest.get<Response>(
     {
-      url: OrderApi.carrierAll,
+      url: OrderManageApi.carrierAll,
     },
     { isTransformResponse: false }
   );
@@ -177,7 +177,7 @@ export const getSearchCarrierAll = () => {
 export const getSearchCarrier = () => {
   return HttpRequest.get<Response>(
     {
-      url: OrderApi.carrier,
+      url: OrderManageApi.carrier,
     },
     { isTransformResponse: false }
   );
@@ -193,7 +193,7 @@ export const getRegularBookingByPage = (params: RegularBookingSearchParams) => {
   let qsParams = { ...params, filter: JSON.stringify(params.filter) };
   return HttpRequest.get<Response>(
     {
-      url: OrderApi.RegularBookingByPage,
+      url: OrderManageApi.RegularBookingByPage,
       params: qsParams,
     },
     { isTransformResponse: false }
@@ -206,10 +206,10 @@ export const getRegularBookingByPage = (params: RegularBookingSearchParams) => {
  * @returns
  */
 
-export const getOrderDetail = (id: string | number) => {
+export const getRegularBookingDetail = (id: string) => {
   return HttpRequest.get<Response>(
     {
-      url: OrderApi.orderDetail + id,
+      url: OrderManageApi.RegularBookingDetail + id,
     },
     { isTransformResponse: false }
   );
@@ -227,7 +227,7 @@ export const postCancelBooking = (
 ) => {
   return HttpRequest.post<Response>(
     {
-      url: OrderApi.cancelBooking + id,
+      url: OrderManageApi.cancelBooking + id,
       data: data,
     },
     { isTransformResponse: false }
@@ -243,7 +243,7 @@ export const postCancelBooking = (
 export const postStartBooking = (id: string | number) => {
   return HttpRequest.post<Response>(
     {
-      url: OrderApi.startBooking + id,
+      url: OrderManageApi.startBooking + id,
     },
     { isTransformResponse: false }
   );
@@ -258,7 +258,7 @@ export const postStartBooking = (id: string | number) => {
 export const postBookingSuccess = (id: string | number) => {
   return HttpRequest.post<Response>(
     {
-      url: OrderApi.settingBookingSuccess + id,
+      url: OrderManageApi.settingBookingSuccess + id,
     },
     { isTransformResponse: false }
   );
@@ -276,7 +276,7 @@ export const postExecutionBreach = (
 ) => {
   return HttpRequest.post<Response>(
     {
-      url: OrderApi.executionBreach + id,
+      url: OrderManageApi.executionBreach + id,
       data: data,
     },
     { isTransformResponse: false }
@@ -292,7 +292,7 @@ export const postExecutionBreach = (
 export const postBookingRefund = (id: string | number) => {
   return HttpRequest.post<Response>(
     {
-      url: OrderApi.bookingRefund + id,
+      url: OrderManageApi.bookingRefund + id,
     },
     { isTransformResponse: false }
   );
@@ -307,7 +307,7 @@ export const postBookingRefund = (id: string | number) => {
 export const postBookingFinish = (id: string | number) => {
   return HttpRequest.post<Response>(
     {
-      url: OrderApi.bookingFinish + id,
+      url: OrderManageApi.bookingFinish + id,
     },
     { isTransformResponse: false }
   );
@@ -322,7 +322,7 @@ export const postBookingFinish = (id: string | number) => {
 export const postAgreeCancelApply = (id: string | number) => {
   return HttpRequest.post<Response>(
     {
-      url: OrderApi.agreeCancelApply + id,
+      url: OrderManageApi.agreeCancelApply + id,
     },
     { isTransformResponse: false }
   );
@@ -340,7 +340,7 @@ export const postRejectCancelApply = (
 ) => {
   return HttpRequest.post<Response>(
     {
-      url: OrderApi.rejectCancelApply + id,
+      url: OrderManageApi.rejectCancelApply + id,
       data: data,
     },
     { isTransformResponse: false }
@@ -356,7 +356,7 @@ export const postRejectCancelApply = (
 export const postLoginOrderAccount = (id: string | number) => {
   return HttpRequest.post<Response>(
     {
-      url: OrderApi.loginOrderAccount + id,
+      url: OrderManageApi.loginOrderAccount + id,
     },
     { isTransformResponse: false }
   );
@@ -378,7 +378,7 @@ export const postBookingFrequency = (
 ) => {
   return HttpRequest.post<Response>(
     {
-      url: OrderApi.editBookingFrequency + id,
+      url: OrderManageApi.editBookingFrequency + id,
       data: data,
     },
     { isTransformResponse: false }
@@ -395,7 +395,7 @@ export const getFastOrderOptions = (params: RegularBookingSearchParams) => {
   let qsParams = { ...params, filter: JSON.stringify(params.filter) };
   return HttpRequest.get<Response>(
     {
-      url: OrderApi.fastOrder,
+      url: OrderManageApi.fastOrder,
       params: qsParams,
     },
     { isTransformResponse: false }
@@ -411,7 +411,7 @@ export const getFastOrderOptions = (params: RegularBookingSearchParams) => {
 export const downFastOrder = (params: { ids: string }) => {
   return HttpRequest.get<Response>(
     {
-      url: OrderApi.exportFastOrder,
+      url: OrderManageApi.exportFastOrder,
       params: params,
       responseType: 'blob',
     },
@@ -428,7 +428,7 @@ export const downFastOrder = (params: { ids: string }) => {
 export const downOrderResult = (params: { ids: string }) => {
   return HttpRequest.get<Response>(
     {
-      url: OrderApi.exportFastOrderResult,
+      url: OrderManageApi.exportFastOrderResult,
       params: params,
       responseType: 'blob',
     },
@@ -446,7 +446,7 @@ export const getCabinResultOptions = (params: RegularBookingSearchParams) => {
   let qsParams = { ...params, filter: JSON.stringify(params.filter) };
   return HttpRequest.get<Response>(
     {
-      url: OrderApi.cabinResult,
+      url: OrderManageApi.cabinResult,
       params: qsParams,
     },
     { isTransformResponse: false }
@@ -462,7 +462,7 @@ export const getCabinResultOptions = (params: RegularBookingSearchParams) => {
 export const postCabinResult = (data: any) => {
   return HttpRequest.post<Response>(
     {
-      url: OrderApi.importCabinResult,
+      url: OrderManageApi.importCabinResult,
       data: data,
     },
     { isTransformResponse: false }
@@ -478,7 +478,7 @@ export const postCabinResult = (data: any) => {
 export const postBatchProduct = (data: string[]) => {
   return HttpRequest.post<Response>(
     {
-      url: OrderApi.batchProduct,
+      url: OrderManageApi.batchProduct,
       data: data,
     },
     { isTransformResponse: false }
@@ -494,7 +494,7 @@ export const postBatchProduct = (data: string[]) => {
 export const postOnRelevance = (data: { ids: string[] }) => {
   return HttpRequest.post<Response>(
     {
-      url: OrderApi.onRelevance,
+      url: OrderManageApi.onRelevance,
       data: data,
     },
     { isTransformResponse: false }
@@ -513,7 +513,7 @@ export const postRelevanceResult = (data: {
 }) => {
   return HttpRequest.post<Response>(
     {
-      url: OrderApi.relevanceResult,
+      url: OrderManageApi.relevanceResult,
       data: data,
     },
     { isTransformResponse: false }
@@ -530,7 +530,7 @@ export const getShippingSchedule = (params: ShippingScheduleParams) => {
   // let qsParams = { ...params, filter: JSON.stringify(params.filter) }
   return HttpRequest.get<Response>(
     {
-      url: OrderApi.shippingSchedule,
+      url: OrderManageApi.shippingSchedule,
       params: params,
     },
     { isTransformResponse: false }
@@ -547,7 +547,7 @@ export const getSearchRoutePage = (params: SearchRoutePageType) => {
   let qsParams = { ...params, filter: JSON.stringify(params.filter) };
   return HttpRequest.get<Response>(
     {
-      url: OrderApi.SearchRoutePage,
+      url: OrderManageApi.SearchRoutePage,
       params: qsParams,
     },
     { isTransformResponse: false }

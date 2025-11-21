@@ -26,7 +26,7 @@ export const ORDER: string[] = [
   '40NOR',
 ];
 
-export const RegularBookingDetailSearchColumns: MergeCustomColumn[] = [
+export const RegularBookingSearchColumns: MergeCustomColumn[] = [
   {
     label: '订单号',
     name: 'orderNo',
@@ -91,7 +91,7 @@ export const RegularBookingDetailSearchColumns: MergeCustomColumn[] = [
   },
   {
     label: '起运港',
-    name: 'porId',
+    name: 'porCode',
     formType: 'focusSelect',
     options: [],
     selectFileldName: {
@@ -115,7 +115,7 @@ export const RegularBookingDetailSearchColumns: MergeCustomColumn[] = [
   },
   {
     label: '目的港',
-    name: 'fndId',
+    name: 'fndCode',
     formType: 'focusSelect',
     options: [],
     selectFileldName: {

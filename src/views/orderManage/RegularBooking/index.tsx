@@ -4,13 +4,13 @@ import {
   Card,
   ConfigProvider,
   Space,
-  TablePaginationConfig,
-  TableProps,
+  type TablePaginationConfig,
+  type TableProps,
 } from 'antd';
 import { SearchForm, SearchTable } from 'customer-search-form-table';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { RegularBookingDetailSearchColumns } from './config';
+import { RegularBookingSearchColumns } from './config';
 import { RootState } from '@/stores/store';
 import useParentSize from '@/hooks/useParentSize';
 import type { RegularBookingSearchParams } from '@/services/orderManage/regularBooking/regularBookingModel';
@@ -34,7 +34,7 @@ const RegularBooking: React.FC = () => {
       },
     });
 
-  const [formMaps, setFormMaps] = useState(RegularBookingDetailSearchColumns);
+  const [formMaps, setFormMaps] = useState(RegularBookingSearchColumns);
 
   const columns: TableProps['columns'] = [
     {
@@ -207,7 +207,7 @@ const RegularBooking: React.FC = () => {
       <ConfigProvider>
         <Card>
           <SearchForm
-            columns={RegularBookingDetailSearchColumns}
+            columns={RegularBookingSearchColumns}
             gutterWidth={24}
             labelPosition="left"
             btnSeparate={false}

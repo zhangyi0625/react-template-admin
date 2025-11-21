@@ -10,13 +10,13 @@ type CarrierAccountsType = {
   payPassword: string;
 };
 
-interface OrderAccountModalProps {
+export type OrderAccountModalProps = {
   params: {
     visible: boolean;
     editRow: CarrierAccountsType[];
   };
   onCancel: (e: React.MouseEvent<HTMLButtonElement>) => void;
-}
+};
 
 const OrderAccountModal: React.FC<OrderAccountModalProps> = memo(
   ({ params, onCancel }) => {
@@ -24,38 +24,33 @@ const OrderAccountModal: React.FC<OrderAccountModalProps> = memo(
       {
         dataIndex: 'name',
         title: '船司',
-        key: 'name',
         align: 'center',
       },
       {
         dataIndex: 'username',
         title: '登录名',
-        key: 'username',
         align: 'center',
       },
       {
         dataIndex: 'affiliate',
         title: '公司名称',
-        key: 'affiliate',
         align: 'center',
       },
       {
         dataIndex: 'password',
         title: '登陆密码',
-        key: 'password',
         align: 'center',
       },
       {
         dataIndex: 'payPassword',
         title: '支付密码',
-        key: 'payPassword',
         align: 'center',
       },
     ];
     return (
       <DragModal
         title="订舱账号"
-        width={'800px'}
+        width="800px"
         open={params.visible}
         onCancel={onCancel}
         footer={null}
@@ -65,6 +60,7 @@ const OrderAccountModal: React.FC<OrderAccountModalProps> = memo(
           dataSource={params.editRow}
           pagination={false}
           rowKey="username"
+          bordered
         />
       </DragModal>
     );

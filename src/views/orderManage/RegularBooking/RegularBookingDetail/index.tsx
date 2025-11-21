@@ -185,7 +185,7 @@ const RegularBookingDetail: React.FC = () => {
 
   const handleClick = (item: RegularBookingDetailBaseInfoType) => {
     if (item.key === 'affiliateName' || item.key === 'customerName') {
-      navigate('/');
+      navigate(`/marketManage/userManage/${orderInfo.customerId}`);
     } else {
       item.key === 'cargo'
         ? setCargoInfo({ visible: true, editRow: orderInfo })
@@ -198,12 +198,15 @@ const RegularBookingDetail: React.FC = () => {
 
   const cancelClick = async (item: RegularBookingStatusConditionType) => {
     try {
-      item.cancelBtnText === '取消订舱' && setCancelReson(true);
-      item.cancelBtnText === '订舱执行违约' &&
-        (await postExecutionBreach(orderInfo?.id, { remark: '执行违约' }));
-      item.cancelBtnText === '同意取消' && postAgreeCancelApply(orderInfo?.id);
-      message.success('操作成功');
-      init();
+      if (item.cancelBtnText === '取消订舱') setCancelReson(true);
+      else {
+        item.cancelBtnText === '订舱执行违约' &&
+          (await postExecutionBreach(orderInfo?.id, { remark: '执行违约' }));
+        item.cancelBtnText === '同意取消' &&
+          postAgreeCancelApply(orderInfo?.id);
+        message.success('操作成功');
+        init();
+      }
     } catch {}
   };
 

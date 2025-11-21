@@ -2,13 +2,13 @@ import React, { memo, useEffect, useState } from 'react';
 import DragModal from '@/components/modal/DragModal';
 import { CargoReuirementOptions } from './config';
 
-interface CargoRequirementModalProps {
+export type CargoRequirementModalProps = {
   params: {
     visible: boolean;
     editRow: any;
   };
   onCancel: (e: React.MouseEvent<HTMLButtonElement>) => void;
-}
+};
 
 const CargoRequirementModal: React.FC<CargoRequirementModalProps> = memo(
   ({ params, onCancel }) => {
@@ -37,7 +37,7 @@ const CargoRequirementModal: React.FC<CargoRequirementModalProps> = memo(
     return (
       <DragModal
         title="补充资料"
-        width={'480px'}
+        width="480px"
         open={params.visible}
         loading={loading}
         onCancel={onCancel}

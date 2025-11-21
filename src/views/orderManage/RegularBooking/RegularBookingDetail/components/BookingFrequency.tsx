@@ -15,11 +15,11 @@ import {
 } from '@/services/orderManage/regularBooking/regularBookingApi';
 import { filterKeys } from '@/utils/tool';
 
-interface BookingFrequencyProps {
+export type BookingFrequencyProps = {
   id: string;
-}
+};
 
-type ParamsOptionsType = {
+type BookingFrequencyOptionsType = {
   label: string;
   type: string;
   options: string[] | CheckboxGroupProps<string>['options'];
@@ -75,7 +75,7 @@ const radioOptions = [
 ];
 
 const BookingFrequency: React.FC<BookingFrequencyProps> = memo(({ id }) => {
-  const API = process.env.VITE_STATIC_API;
+  const API = process.env.RS_STATIC_API;
 
   const { message } = App.useApp();
 
@@ -85,7 +85,7 @@ const BookingFrequency: React.FC<BookingFrequencyProps> = memo(({ id }) => {
 
   const [params, setParams] = useState<Partial<Params>>({});
 
-  const paramsOptions: ParamsOptionsType[] = [
+  const paramsOptions: BookingFrequencyOptionsType[] = [
     {
       label: '设置时间段',
       type: 'checkbox',
@@ -101,7 +101,7 @@ const BookingFrequency: React.FC<BookingFrequencyProps> = memo(({ id }) => {
   ];
 
   const [cronOptions, setCronOptions] = useState<
-    (Pick<ParamsOptionsType, 'label' | 'options'> & {
+    (Pick<BookingFrequencyOptionsType, 'label' | 'options'> & {
       value?: string[];
     })[]
   >([

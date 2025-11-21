@@ -1,13 +1,13 @@
-import { RootState } from '@/stores/store';
 import { memo, useCallback, useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
 import { Table, TableProps } from 'antd';
-import { filterKeys } from '@/utils/tool';
+import { RootState } from '@/stores/store';
+import { useSelector } from 'react-redux';
 import { RegularBookingStatusOptions } from '../../config';
+import { filterKeys } from '@/utils/tool';
 
-interface PayMessageProps {
+export type PayMessageProps = {
   orderInfo: any;
-}
+};
 
 const PayMessage: React.FC<PayMessageProps> = memo(({ orderInfo }) => {
   const [tableData, setTableData] = useState([]);
@@ -37,73 +37,67 @@ const PayMessage: React.FC<PayMessageProps> = memo(({ orderInfo }) => {
   const columns: TableProps['columns'] = [
     {
       title: '总服务费(元)',
-      key: 'totalAmount',
       align: 'center',
-      render(text) {
-        return getAmount(text.totalAmount);
+      render(value) {
+        return getAmount(value.totalAmount);
       },
     },
     {
       title: '优惠金额(元)',
-      key: 'couponAmount',
       align: 'center',
-      render(text) {
-        return getAmount(text.couponAmount);
+      render(value) {
+        return getAmount(value.couponAmount);
       },
     },
     {
       title: '支付金额(元)',
-      key: 'payAmount',
       align: 'center',
-      render(text) {
-        return getAmount(text.payAmount);
+      render(value) {
+        return getAmount(value.payAmount);
       },
     },
     {
       title: '支付状态',
       key: 'payStatus',
       align: 'center',
-      render(text) {
-        return paymentWay[text.payStatus];
+      render(value) {
+        return paymentWay[value.payStatus];
       },
     },
     {
       title: '付款类型',
-      key: 'payType',
       align: 'center',
-      render(text) {
-        return fundRechargeStatus[text.payType];
+      render(value) {
+        return fundRechargeStatus[value.payType];
       },
     },
     {
       dataIndex: 'payTime',
       title: '支付时间',
-      key: 'payTime',
       align: 'center',
     },
     {
       title: '退款状态',
-      key: 'refundStatus',
       align: 'center',
-      render(text) {
-        return refundStatus[text.refundStatus];
+      render(value) {
+        return refundStatus[value.refundStatus];
       },
     },
     {
       title: '退款时间',
       key: 'refundTime',
+      dataIndex: 'refundTime',
       align: 'center',
     },
     {
       dataIndex: 'refundNote',
-      title: '退款描述',
       key: 'refundNote',
       align: 'center',
     },
   ];
   useEffect(() => {
     const filteredObj = filterKeys(orderInfo, keys, true);
-    setTableData([filteredObj] as any);
+    setTableData([filteredObj] as never[]);
   }, []);
 
   const getAmount = useCallback((value: string) => {

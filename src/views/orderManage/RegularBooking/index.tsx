@@ -29,6 +29,9 @@ const RegularBooking: React.FC = () => {
     useState<RegularBookingSearchParams>({
       pageIndex: 1,
       pageSize: 20,
+      filter: {
+        genres: 'PREBOOKING,BOOKING',
+      },
     });
 
   const [formMaps, setFormMaps] = useState(RegularBookingDetailSearchColumns);

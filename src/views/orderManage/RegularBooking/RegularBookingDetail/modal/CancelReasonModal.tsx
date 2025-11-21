@@ -3,11 +3,11 @@ import DragModal from '@/components/modal/DragModal';
 import { Form, Select, Input } from 'antd';
 import { BookingFailReason } from './config';
 
-interface CancelReasonModalProps {
+export type CancelReasonModalProps = {
   visible: boolean;
   onCancel: () => void;
   onOk: (cancelReason: string) => void;
-}
+};
 
 const CancelReasonModal: React.FC<CancelReasonModalProps> = memo(
   ({ visible, onCancel, onOk }) => {
@@ -42,7 +42,7 @@ const CancelReasonModal: React.FC<CancelReasonModalProps> = memo(
     return (
       <DragModal
         title="补充资料"
-        width={'580px'}
+        width="580px"
         open={visible}
         onOk={handleOk}
         onCancel={handleCancel}
@@ -66,6 +66,7 @@ const CancelReasonModal: React.FC<CancelReasonModalProps> = memo(
               <TextArea
                 value={cancelReason}
                 placeholder="点击选择订舱失败原因"
+                allowClear
               />
               {BookingFailReason.map((item) => (
                 <div className="my-[5px]" key={item.label}>

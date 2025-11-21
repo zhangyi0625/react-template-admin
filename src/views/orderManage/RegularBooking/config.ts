@@ -1,4 +1,3 @@
-// import type { CustomColumn } from 'customer-search-form-table/SearchForm/type';
 import {
   postBookingFinish,
   postBookingRefund,

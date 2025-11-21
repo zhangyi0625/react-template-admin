@@ -1,6 +1,6 @@
 import React from 'react';
-import { RegularBookingDetailBaseInfoType } from '../../type';
 import { Divider } from 'antd';
+import type { RegularBookingDetailBaseInfoType } from '../../type';
 
 export type RegularBookingDetailBaseInfoProps = {
   detail: RegularBookingDetailBaseInfoType[];

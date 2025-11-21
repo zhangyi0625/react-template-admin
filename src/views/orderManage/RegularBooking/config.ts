@@ -1,0 +1,158 @@
+import type { CustomColumn } from 'customer-search-form-table/SearchForm/type';
+
+interface MergeCustomColumn extends CustomColumn {
+  publicSettingKey?: string;
+}
+
+export const RegularBookingDetailSearchColumns: MergeCustomColumn[] = [
+  {
+    label: '订单号',
+    name: 'orderNo',
+    formType: 'input',
+    span: 6,
+    selectFetch: false,
+    hiddenItem: false,
+  },
+  {
+    label: '公司名称',
+    name: 'affiliateId',
+    formType: 'focusSelect',
+    options: [],
+    selectFileldName: {
+      label: 'name',
+      value: 'id',
+    },
+    apiByUrl: '/api/staff/customer/affiliate/list',
+    apiByUrlMethod: 'get',
+    setSearchKey: 'keyword',
+    apiByUrlParams: {
+      keyword: null,
+    },
+    apiByUrlHeaders: {
+      authorization: 'Bearer ' + sessionStorage.getItem('token'),
+      'Content-Type': 'application/json',
+    },
+    span: 6,
+    selectFetch: true,
+    hiddenItem: false,
+  },
+  {
+    label: '用户名',
+    name: 'customerId',
+    formType: 'focusSelect',
+    options: [],
+    selectFileldName: {
+      label: 'name',
+      value: 'id',
+    },
+    apiByUrl: '/api/staff/customer/list',
+    apiByUrlMethod: 'get',
+    setSearchKey: 'keyword',
+    apiByUrlParams: {
+      keyword: null,
+    },
+    apiByUrlHeaders: {
+      authorization: 'Bearer ' + sessionStorage.getItem('token'),
+      'Content-Type': 'application/json',
+    },
+    span: 6,
+    selectFetch: true,
+    hiddenItem: false,
+  },
+  {
+    label: '创建时间',
+    name: 'create',
+    formType: 'range-picker',
+    span: 6,
+    selectFetch: false,
+    hiddenItem: false,
+  },
+  {
+    label: '起运港',
+    name: 'porId',
+    formType: 'focusSelect',
+    options: [],
+    selectFileldName: {
+      label: 'localName',
+      value: 'unlocode',
+    },
+    apiByUrl: '/api/common/location/list',
+    apiByUrlMethod: 'get',
+    setSearchKey: 'keyword',
+    apiByUrlParams: {
+      tag: 'POR',
+      keyword: null,
+    },
+    apiByUrlHeaders: {
+      authorization: 'Bearer ' + sessionStorage.getItem('token'),
+      'Content-Type': 'application/json',
+    },
+    span: 6,
+    selectFetch: true,
+    hiddenItem: false,
+  },
+  {
+    label: '目的港',
+    name: 'fndId',
+    formType: 'focusSelect',
+    options: [],
+    selectFileldName: {
+      label: 'localName',
+      value: 'unlocode',
+    },
+    apiByUrl: '/api/common/location/list',
+    apiByUrlMethod: 'get',
+    setSearchKey: 'keyword',
+    apiByUrlParams: {
+      tag: 'POR',
+      keyword: null,
+    },
+    apiByUrlHeaders: {
+      authorization: 'Bearer ' + sessionStorage.getItem('token'),
+      'Content-Type': 'application/json',
+    },
+    span: 6,
+    selectFetch: true,
+    hiddenItem: false,
+  },
+  {
+    label: '订单状态',
+    name: 'status',
+    formType: 'normalSelect',
+    options: [],
+    publicSettingKey: 'frtOrderStatus',
+    span: 6,
+    selectFetch: false,
+    hiddenItem: false,
+  },
+  {
+    label: '订单分类',
+    name: 'type',
+    formType: 'normalSelect',
+    options: [],
+    publicSettingKey: 'serviceType',
+    span: 6,
+    selectFetch: false,
+    hiddenItem: false,
+  },
+  {
+    label: '舱位分类',
+    name: 'productChannel',
+    formType: 'normalSelect',
+    options: [],
+    publicSettingKey: 'productChannel',
+    span: 6,
+    selectFetch: false,
+    hiddenItem: false,
+  },
+  {
+    label: '取消状态',
+    name: 'cancelStatus',
+    formType: 'normalSelect',
+    options: [],
+    publicSettingKey: 'frtOrderCancel',
+    span: 6,
+    selectFetch: false,
+    hiddenItem: false,
+  },
+];

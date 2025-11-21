@@ -1,7 +1,7 @@
 import { HttpRequest } from '@/utils/request';
 import type { Response } from '@/types/global';
 import type {
-  OrderSearchParams,
+  RegularBookingSearchParams,
   SearchRoutePageType,
   ShippingScheduleParams,
 } from './regularBookingModel';
@@ -33,7 +33,7 @@ export enum OrderApi {
   /**
    * 订单列表（普通）
    */
-  order = '/staff/frt/order/page',
+  RegularBookingByPage = '/staff/frt/order/page',
   /**
    * 订单列表详情（普通）
    */
@@ -189,11 +189,11 @@ export const getSearchCarrier = () => {
  * @returns
  */
 
-export const getOrderOptions = (params: OrderSearchParams) => {
+export const getRegularBookingByPage = (params: RegularBookingSearchParams) => {
   let qsParams = { ...params, filter: JSON.stringify(params.filter) };
   return HttpRequest.get<Response>(
     {
-      url: OrderApi.order,
+      url: OrderApi.RegularBookingByPage,
       params: qsParams,
     },
     { isTransformResponse: false }
@@ -391,7 +391,7 @@ export const postBookingFrequency = (
  * @returns
  */
 
-export const getFastOrderOptions = (params: OrderSearchParams) => {
+export const getFastOrderOptions = (params: RegularBookingSearchParams) => {
   let qsParams = { ...params, filter: JSON.stringify(params.filter) };
   return HttpRequest.get<Response>(
     {
@@ -442,7 +442,7 @@ export const downOrderResult = (params: { ids: string }) => {
  * @returns
  */
 
-export const getCabinResultOptions = (params: OrderSearchParams) => {
+export const getCabinResultOptions = (params: RegularBookingSearchParams) => {
   let qsParams = { ...params, filter: JSON.stringify(params.filter) };
   return HttpRequest.get<Response>(
     {

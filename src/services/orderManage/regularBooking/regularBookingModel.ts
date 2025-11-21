@@ -1,6 +1,6 @@
 import type { DefaultPaging } from '@/types/global';
 
-export type OrderSearchFilter = {
+export type RegularBookingSearchFilter = {
   genres: string;
   porCode: string;
   fndCode: string;
@@ -10,12 +10,12 @@ export type OrderSearchFilter = {
   customerId: string | null;
 };
 
-export interface OrderSearchParams extends DefaultPaging {
-  filter: Partial<OrderSearchFilter>;
+export interface RegularBookingSearchParams extends DefaultPaging {
+  filter?: Partial<RegularBookingSearchFilter> | null;
 }
 
 export interface ShippingScheduleParams
-  extends Pick<OrderSearchFilter, 'fndCode' | 'porCode'> {
+  extends Pick<RegularBookingSearchFilter, 'fndCode' | 'porCode'> {
   carrier: string;
 }
 

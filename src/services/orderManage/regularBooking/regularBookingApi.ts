@@ -80,26 +80,6 @@ export enum RegularBookingAPi {
   editBookingFrequency = '/staff/frt/order/prebooking/cron/',
 
   /**
-   * 拍舱结果列表
-   */
-  cabinResult = '/staff/fast/booking/page',
-  /**
-   * 导入拍舱结果
-   */
-  importCabinResult = '/staff/fast/booking/upload/excel/',
-  /**
-   * 批量发布舱位
-   */
-  batchProduct = '/staff/fast/booking/publish/product',
-  /**
-   * 取消关联舱位
-   */
-  onRelevance = '/staff/fast/booking/unbind',
-  /**
-   * 关联订舱结果
-   */
-  relevanceResult = '/staff/fast/booking/bind',
-  /**
    * 船期数据
    */
   shippingSchedule = '/staff/product/getSchedules',
@@ -368,90 +348,6 @@ export const postBookingFrequency = (
   return HttpRequest.post<Response>(
     {
       url: RegularBookingAPi.editBookingFrequency + id,
-      data: data,
-    },
-    { isTransformResponse: false }
-  );
-};
-
-/**
- * 查询拍舱结果
- * @param params
- * @returns
- */
-
-export const getCabinResultOptions = (params: RegularBookingSearchParams) => {
-  let qsParams = { ...params, filter: JSON.stringify(params.filter) };
-  return HttpRequest.get<Response>(
-    {
-      url: RegularBookingAPi.cabinResult,
-      params: qsParams,
-    },
-    { isTransformResponse: false }
-  );
-};
-
-/**
- * 导入拍舱结果
- * @param data
- * @returns
- */
-
-export const postCabinResult = (data: any) => {
-  return HttpRequest.post<Response>(
-    {
-      url: RegularBookingAPi.importCabinResult,
-      data: data,
-    },
-    { isTransformResponse: false }
-  );
-};
-
-/**
- * 批量发布舱位
- * @param data
- * @returns
- */
-
-export const postBatchProduct = (data: string[]) => {
-  return HttpRequest.post<Response>(
-    {
-      url: RegularBookingAPi.batchProduct,
-      data: data,
-    },
-    { isTransformResponse: false }
-  );
-};
-
-/**
- * 取消关联舱位
- * @param data
- * @returns
- */
-
-export const postOnRelevance = (data: { ids: string[] }) => {
-  return HttpRequest.post<Response>(
-    {
-      url: RegularBookingAPi.onRelevance,
-      data: data,
-    },
-    { isTransformResponse: false }
-  );
-};
-
-/**
- * 关联订舱结果
- * @param data
- * @returns
- */
-
-export const postRelevanceResult = (data: {
-  ids: string[];
-  orderId: string;
-}) => {
-  return HttpRequest.post<Response>(
-    {
-      url: RegularBookingAPi.relevanceResult,
       data: data,
     },
     { isTransformResponse: false }

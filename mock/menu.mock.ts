@@ -238,6 +238,20 @@ export default defineMock([
               {
                 id: Math.random().toString(),
                 name: 'order-manage',
+                path: '/orderManage/fastBooking/:id',
+                component: 'orderManage/FastBooking/FastBookingDetail',
+                route: '1',
+                meta: {
+                  keepAlive: false,
+                  icon: '',
+                  title: '光速预定详细信息',
+                  internal: false,
+                  menuType: 2,
+                },
+              },
+              {
+                id: Math.random().toString(),
+                name: 'order-manage',
                 path: '/orderManage/cabinResult',
                 component: 'orderManage/CabinResult',
                 route: '1',

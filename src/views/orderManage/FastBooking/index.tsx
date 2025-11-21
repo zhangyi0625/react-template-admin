@@ -226,7 +226,7 @@ const FastBooking: React.FC = () => {
     );
     setSearchDefaultForm({
       ...pageInfo,
-      filter: { ...filteredObj },
+      filter: { genres: 'FASTBOOKING', ...filteredObj },
     });
   };
 

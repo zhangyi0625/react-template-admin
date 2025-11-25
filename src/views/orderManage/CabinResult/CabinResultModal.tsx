@@ -11,20 +11,21 @@ import { InboxOutlined } from '@ant-design/icons';
 import { SelectProps } from 'antd/lib';
 import DragModal from '@/components/modal/DragModal';
 import { getSearchAffiliate } from '@/services/orderManage/regularBooking/regularBookingApi';
+import type { ImportCabinResultType } from '@/services/orderManage/cabinResult/cabinResultModel';
 import { debounce } from 'lodash-es';
 
-type CabinResultModalProps = {
+export type CabinResultModalProps = {
   params: {
     carrierOptions: { carrierCode: string }[];
     visible: boolean;
   };
-  onOk: (params: Record<string, string | number | boolean>) => void;
-  onCancel: (e: React.MouseEvent<HTMLButtonElement>) => void;
+  onOk: (params: ImportCabinResultType) => void;
+  onCancel: () => void;
 };
 
 const fetchSearch = debounce((value: string, callback: (data: any) => void) => {
-  getSearchAffiliate({ keyword: value }).then((res: any) => {
-    callback(res);
+  getSearchAffiliate({ keyword: value }).then((resp) => {
+    callback(resp);
   });
 }, 300);
 
@@ -100,6 +101,8 @@ const CabinResultModal: React.FC<CabinResultModalProps> = ({
             placeholder="请输入公司名称"
             showSearch
             defaultActiveFirstOption={false}
+            suffixIcon={null}
+            notFoundContent={null}
             filterOption={false}
             onSearch={(value: string) => handleSearch(value)}
             options={(defalueOptions || []).map((d) => ({

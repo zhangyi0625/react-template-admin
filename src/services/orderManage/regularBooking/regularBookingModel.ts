@@ -6,7 +6,7 @@ export type RegularBookingSearchFilter = {
   fndCode: string;
   type: string;
   status: string;
-  affiliateId: string;
+  affiliateId: string | null;
   customerId: string;
 };
 

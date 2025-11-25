@@ -83,3 +83,30 @@ export const CabinResultSearchColumns: CustomColumn[] = [
     hiddenItem: false,
   },
 ];
+
+export const RelevanceOrderOptions: CustomColumn[] = [
+  {
+    label: '目的港',
+    name: 'fndId',
+    formType: 'focusSelect',
+    options: [],
+    selectFileldName: {
+      label: 'localName',
+      value: 'unlocode',
+    },
+    apiByUrl: '/api/common/location/list',
+    apiByUrlMethod: 'get',
+    setSearchKey: 'keyword',
+    apiByUrlParams: {
+      tag: 'POR',
+      keyword: null,
+    },
+    apiByUrlHeaders: {
+      authorization: 'Bearer ' + sessionStorage.getItem('token'),
+      'Content-Type': 'application/json',
+    },
+    span: 12,
+    selectFetch: true,
+    hiddenItem: false,
+  },
+];

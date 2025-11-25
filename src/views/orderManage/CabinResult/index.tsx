@@ -17,12 +17,19 @@ import {
   getCabinResultByPage,
   postBatchProduct,
   postCabinResult,
+  postManualpublication,
   postOnRelevance,
   postRelevanceResult,
 } from '@/services/orderManage/cabinResult/cabinResultApi';
 import CabinResultModal from './CabinResultModal';
+import RelevanceOrderDrawer from './RelevanceOrderDrawer';
+import ManualRelease from './ManualReleaseModal';
 import { filterKeys } from '@/utils/tool';
 import { formatTime } from '@/utils/format';
+import {
+  ImportCabinResultType,
+  ManualpublicationType,
+} from '@/services/orderManage/cabinResult/cabinResultModel';
 
 type CtnTypeParams = {
   ctnType: string;
@@ -50,7 +57,13 @@ const CabinResult: React.FC = () => {
 
   const [selected, setSelected] = useState<string[]>([]);
 
-  const [relevance, setRelevance] = useState<boolean>(false);
+  const [relevance, setRelevance] = useState<{
+    visible: boolean;
+    affiliateId: string | null;
+  }>({
+    visible: false,
+    affiliateId: null,
+  });
 
   const [loading, setLoading] = useState<boolean>(false);
 
@@ -204,7 +217,10 @@ const CabinResult: React.FC = () => {
               className={getClassName(!record.orderId, 'blue')}
               onClick={() => {
                 setManualReleaseId(record.id);
-                setRelevance(true);
+                setRelevance({
+                  visible: true,
+                  affiliateId: record.affiliateId,
+                });
               }}
             >
               关联订单
@@ -228,7 +244,7 @@ const CabinResult: React.FC = () => {
     },
   ];
 
-  const onEditOk = async (params: any) => {
+  const onEditOk = async (params: ImportCabinResultType) => {
     try {
       await postCabinResult(params);
       message.success('导入成功～');
@@ -314,7 +330,7 @@ const CabinResult: React.FC = () => {
         orderId: e.join(','),
       }).then(() => {
         message.success('导入成功');
-        setRelevance(false);
+        setRelevance({ visible: false, affiliateId: null });
         setSearchDefaultForm({ ...searchDefaultForm });
       });
     }
@@ -329,6 +345,15 @@ const CabinResult: React.FC = () => {
       editRow: row,
       carrierOptions: arr?.map((item) => item.name),
     });
+  };
+
+  const manualpublication = async (info: ManualpublicationType) => {
+    try {
+      await postManualpublication(info);
+      message.success('发布成功～');
+      setManualReleaseParmas({ visible: false, editRow: null });
+      setSearchDefaultForm({ ...searchDefaultForm });
+    } catch {}
   };
 
   return (
@@ -402,6 +427,18 @@ const CabinResult: React.FC = () => {
         params={params}
         onOk={onEditOk}
         onCancel={() => setParams({ visible: false, carrierOptions: [] })}
+      />
+      <RelevanceOrderDrawer
+        relevance={relevance}
+        onCancel={() => setRelevance({ visible: false, affiliateId: null })}
+        onOk={handleOk}
+      />
+      <ManualRelease
+        params={manualReleaseParams}
+        onCancel={() =>
+          setManualReleaseParmas({ visible: false, editRow: null })
+        }
+        onOk={manualpublication}
       />
     </>
   );

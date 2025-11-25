@@ -119,7 +119,7 @@ export const getSearchCustomer = (params: { keyword?: string }) => {
  * 查询港口列表
  */
 export const getSearchPort = (params: { keyword?: string; tag: string }) => {
-  return HttpRequest.get<Response>(
+  return HttpRequest.get(
     {
       url: RegularBookingAPi.port,
       params: params,

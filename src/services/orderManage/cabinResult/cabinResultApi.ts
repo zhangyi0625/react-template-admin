@@ -1,6 +1,10 @@
 import { HttpRequest } from '@/utils/request';
 import type { Response } from '@/types/global';
-import type { CabinResultSearchParams } from './cabinResultModel';
+import type {
+  CabinResultSearchParams,
+  ImportCabinResultType,
+  ManualpublicationType,
+} from './cabinResultModel';
 
 /**
  * 枚举怕舱结果需要的接口地址
@@ -26,6 +30,10 @@ export enum CabinResultAPi {
    * 关联订舱结果
    */
   RelevanceResult = '/staff/fast/booking/bind',
+  /**
+   * 手动发布仓位
+   */
+  Manualpublication = '/staff/product/add',
 }
 
 /**
@@ -51,7 +59,7 @@ export const getCabinResultByPage = (params: CabinResultSearchParams) => {
  * @returns
  */
 
-export const postCabinResult = (data: any) => {
+export const postCabinResult = (data: ImportCabinResultType) => {
   return HttpRequest.post<Response>(
     {
       url: CabinResultAPi.ImportCabinResult,
@@ -107,6 +115,22 @@ export const postRelevanceResult = (data: {
     {
       url: CabinResultAPi.RelevanceResult,
       data: data,
+    },
+    { isTransformResponse: false }
+  );
+};
+
+/**
+ * 手动发布舱位
+ * @param params
+ * @returns
+ */
+
+export const postManualpublication = (params: ManualpublicationType) => {
+  return HttpRequest.post<Response>(
+    {
+      url: CabinResultAPi.Manualpublication,
+      data: params,
     },
     { isTransformResponse: false }
   );

@@ -210,15 +210,11 @@ export const transform: AxiosTransform = {
    */
   requestInterceptors: (config, options) => {
     const cpt = options?.requestOptions?.encrypt;
-    console.log(config, 'config');
-
-    if (
-      config.url?.includes('upload') ||
-      config.url?.includes('staff/login') ||
-      options.requestOptions?.dataFormat === ContentTypeEnum.FORM_DATA
-    ) {
+    if (config.url?.includes('upload') || config.url?.includes('staff/login')) {
       config.headers['Content-Type'] = ContentTypeEnum.FORM_DATA;
-    } else config.headers['Content-Type'] = ContentTypeEnum.JSON;
+    } else
+      config.headers['Content-Type'] =
+        config.headers['Content-Type'] ?? ContentTypeEnum.JSON;
     if (config.url?.includes('staff/login')) {
       config.headers['X-Captcha-Answer'] =
         sessionStorage.getItem('captchaAnswer');

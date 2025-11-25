@@ -172,7 +172,10 @@ export const postSendFastBookingResult = (
     {
       url: FastBookingAPi.SendFastBookingResult + id,
       params: params,
+      headers: {
+        'Content-Type': ContentTypeEnum.FORM_DATA,
+      },
     },
-    { isTransformResponse: false, dataFormat: ContentTypeEnum.FORM_DATA }
+    { isTransformResponse: false }
   );
 };

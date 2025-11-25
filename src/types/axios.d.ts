@@ -26,9 +26,4 @@ export interface RequestOptions {
   joinTime?: boolean;
   // 是否加密数据 1 加密 0 不加密 默认1
   encrypt?: number;
-  // 发送接口请求类型
-  dataFormat?:
-    | ContentTypeEnum.JSON
-    | ContentTypeEnum.FORM_DATA
-    | ContentTypeEnum.FORM_URLENCODED;
 }

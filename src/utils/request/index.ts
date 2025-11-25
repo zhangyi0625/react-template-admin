@@ -1,7 +1,7 @@
-import { ContentTypeEnum } from '@/enums/httpEnum'
-import { deepMerge } from '../utils'
-import { RAxios } from './Axios'
-import { type CreateAxiosOptions, transform } from './transform'
+import { ContentTypeEnum } from '@/enums/httpEnum';
+import { deepMerge } from '../utils';
+import { RAxios } from './Axios';
+import { type CreateAxiosOptions, transform } from './transform';
 
 /**
  * 封装axios
@@ -44,12 +44,14 @@ function createAxios(opts?: Partial<CreateAxiosOptions>) {
           // 是否加密数据 1：加密 0：不加密(如果是开发环境下默认不加密，处理mock)
           // encrypt: import.meta.env.MODE === 'development' ? 0 : 1,
           encrypt: 0,
+          // 发送接口请求类型
+          dataFormat: ContentTypeEnum.JSON,
         },
       },
       opts || {}
     )
-  )
+  );
 }
 
 // 导出http请求对象
-export const HttpRequest = createAxios()
+export const HttpRequest = createAxios();

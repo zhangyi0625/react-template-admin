@@ -31,6 +31,10 @@ export enum CabinResultAPi {
    */
   RelevanceResult = '/staff/fast/booking/bind',
   /**
+   * 取消已关联订单
+   */
+  CancelRelevanceResult = '/staff/fast/booking/unbind',
+  /**
    * 手动发布仓位
    */
   Manualpublication = '/staff/product/add',
@@ -114,6 +118,22 @@ export const postRelevanceResult = (data: {
   return HttpRequest.post<Response>(
     {
       url: CabinResultAPi.RelevanceResult,
+      data: data,
+    },
+    { isTransformResponse: false }
+  );
+};
+
+/**
+ * 取消已关联订舱结果
+ * @param data
+ * @returns
+ */
+
+export const postCancelRelevanceResult = (data: { ids: string[] }) => {
+  return HttpRequest.post<Response>(
+    {
+      url: CabinResultAPi.CancelRelevanceResult,
       data: data,
     },
     { isTransformResponse: false }

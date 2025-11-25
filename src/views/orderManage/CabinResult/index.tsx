@@ -24,17 +24,13 @@ import {
 import CabinResultModal from './CabinResultModal';
 import RelevanceOrderDrawer from './RelevanceOrderDrawer';
 import ManualRelease from './ManualReleaseModal';
-import { filterKeys } from '@/utils/tool';
-import { formatTime } from '@/utils/format';
-import {
+import type {
+  CabinResultCtnType,
   ImportCabinResultType,
   ManualpublicationType,
 } from '@/services/orderManage/cabinResult/cabinResultModel';
-
-type CtnTypeParams = {
-  ctnType: string;
-  count: number;
-};
+import { filterKeys } from '@/utils/tool';
+import { formatTime } from '@/utils/format';
 
 const CabinResult: React.FC = () => {
   const { message } = App.useApp();
@@ -150,7 +146,7 @@ const CabinResult: React.FC = () => {
       align: 'center',
       width: 150,
       render(value) {
-        let ctnTypeArr: CtnTypeParams[] = [];
+        let ctnTypeArr: CabinResultCtnType[] = [];
         let inventories = JSON.parse(value.inventories ?? {});
         for (let i in inventories) {
           ctnTypeArr.push({

@@ -48,3 +48,8 @@ export interface ImportCabinResultType {
   carrier: string;
   file: File;
 }
+
+export interface CabinResultCtnType {
+  ctnType: string;
+  count: number;
+}

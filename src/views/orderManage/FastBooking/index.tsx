@@ -15,12 +15,22 @@ import {
   downFastOrder,
   downOrderResult,
   getFastBooingByPage,
+  postSendFastBookingResult,
 } from '@/services/orderManage/fastBooking/fastBookingApi';
 import useParentSize from '@/hooks/useParentSize';
 import type { RegularBookingSearchParams } from '@/services/orderManage/regularBooking/regularBookingModel';
-import { filterKeys } from '@/utils/tool';
 import { FastBookingSearchColumns, FastBookingStatus } from './config';
+import { useSelector } from 'react-redux';
+import FastBooingResultDrawer from './components/FastBooingResultDrawer';
+import type { FastBookingOrderSearchFilter } from '@/services/orderManage/fastBooking/fastBookingModel';
+import {
+  postCancelRelevanceResult,
+  postRelevanceResult,
+} from '@/services/orderManage/cabinResult/cabinResultApi';
+import FastBookingResultNotice from './components/FastBookingResultNotice';
+import { filterKeys } from '@/utils/tool';
 import { formatTime } from '@/utils/format';
+import { RootState } from '@/stores/store';
 
 const FastBooking: React.FC = () => {
   const navigate = useNavigate();
@@ -29,10 +39,14 @@ const FastBooking: React.FC = () => {
 
   const { parentRef, height } = useParentSize();
 
+  const { publicData } = useSelector((state: RootState) => state.publicSetting);
+
+  const orderStatusManager = publicData.orderStatusManager;
+
   const [searchDefaultForm, setSearchDefaultForm] =
     useState<RegularBookingSearchParams>({
       pageIndex: 1,
-      pageSize: 20,
+      pageSize: 10,
       filter: {
         genres: 'FASTBOOKING',
       },
@@ -41,6 +55,25 @@ const FastBooking: React.FC = () => {
   const [selected, setSelected] = useState<string[]>([]);
 
   const [loading, setLoading] = useState<boolean>(false);
+
+  const [fastBookingResult, setFastBookingResult] = useState<{
+    visible: boolean;
+    row: Pick<
+      FastBookingOrderSearchFilter,
+      'affiliateId' | 'porId' | 'orderId'
+    > | null;
+  }>({
+    visible: false,
+    row: null,
+  });
+
+  const [fastBookingNotice, setFastBookingNotice] = useState<{
+    visible: boolean;
+    editId: string | null;
+  }>({
+    visible: false,
+    editId: null,
+  });
 
   const columns: TableProps['columns'] = [
     {
@@ -202,10 +235,46 @@ const FastBooking: React.FC = () => {
         return (
           <Space>
             <Button
-              size="middle"
+              color="default"
+              variant="outlined"
               onClick={() => navigate(`/orderManage/fastBooking/${_.id}`)}
             >
               查看
+            </Button>
+            <Button
+              color="blue"
+              variant="outlined"
+              hidden={!(_.status === 'PREPARED' || _.status === 'PREPARING')}
+              onClick={() =>
+                setFastBookingResult({
+                  visible: true,
+                  row: {
+                    orderId: _.id,
+                    affiliateId: _.affiliateId,
+                    porId: _.content?.por?.id,
+                  },
+                })
+              }
+            >
+              拍舱结果
+            </Button>
+            <Button
+              color="blue"
+              variant="outlined"
+              hidden={
+                !(
+                  (_.status === 'PREPARED' ||
+                    _.status === 'PREPARING' ||
+                    _.status === 'FAILED' ||
+                    _.status === 'CANCELLED') &&
+                  _.source === 'API_YDATA'
+                )
+              }
+              onClick={() =>
+                setFastBookingNotice({ visible: true, editId: _.id })
+              }
+            >
+              结果通知
             </Button>
           </Space>
         );
@@ -263,6 +332,34 @@ const FastBooking: React.FC = () => {
     } catch {
       setLoading(false);
     }
+  };
+
+  const saveFastBookingResult = async (rowIds: string[], type: boolean) => {
+    try {
+      type
+        ? await postRelevanceResult({
+            ids: rowIds,
+            orderId: fastBookingResult.row?.orderId as string,
+          })
+        : await postCancelRelevanceResult({ ids: rowIds });
+      message.success('操作成功～');
+      setFastBookingResult({ visible: false, row: null });
+      setSearchDefaultForm({ ...searchDefaultForm });
+    } catch {
+      setFastBookingResult({ visible: false, row: null });
+    }
+  };
+
+  const sendFastBookingResult = async (remark: string) => {
+    try {
+      await postSendFastBookingResult(
+        { remark: remark },
+        fastBookingNotice.editId as string
+      );
+      message.success('发送成功～');
+      setFastBookingNotice({ visible: false, editId: null });
+      setSearchDefaultForm({ ...searchDefaultForm });
+    } catch {}
   };
   return (
     <>
@@ -331,6 +428,16 @@ const FastBooking: React.FC = () => {
           onUpdateSelection={(options) => setSelected(options)}
         />
       </Card>
+      <FastBooingResultDrawer
+        params={fastBookingResult}
+        onCancel={() => setFastBookingResult({ visible: false, row: null })}
+        onOk={saveFastBookingResult}
+      />
+      <FastBookingResultNotice
+        params={fastBookingNotice}
+        onOk={sendFastBookingResult}
+        onCancel={() => setFastBookingNotice({ visible: false, editId: null })}
+      />
     </>
   );
 };

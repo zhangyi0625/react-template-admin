@@ -110,3 +110,27 @@ export function getPublicSettingByKey(
   });
   return newArr;
 }
+
+/**
+ * 解决JSON.parse抛出异常
+ * @param text
+ * @param options
+ */
+export function safeJsonParse(
+  text: string,
+  options?: {
+    errorMessage?: string;
+    errorCallback?: (error: Error) => void;
+  }
+) {
+  const { errorMessage = '', errorCallback } = options || {};
+  if (typeof text !== 'string') {
+    return errorMessage;
+  }
+  try {
+    return JSON.parse(text);
+  } catch (error) {
+    errorCallback?.(error as Error);
+    return errorMessage;
+  }
+}

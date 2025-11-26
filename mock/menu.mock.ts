@@ -453,6 +453,19 @@ export default defineMock([
               {
                 id: Math.random().toString(),
                 name: 'data-board',
+                path: '/dataBoard/queryRecord',
+                component: 'dataBoard/QueryRecord',
+                route: '1',
+                meta: {
+                  keepAlive: false,
+                  icon: '',
+                  title: '查询记录',
+                  internal: false,
+                },
+              },
+              {
+                id: Math.random().toString(),
+                name: 'data-board',
                 path: '/dataBoard/dailyActiveUserRecord',
                 component: 'dataBoard/DailyActiveUserRecord',
                 route: '1',

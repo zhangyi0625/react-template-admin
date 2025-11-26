@@ -39,6 +39,10 @@ export enum FastBookingAPi {
    * 发送结果通知
    */
   SendFastBookingResult = '/staff/order/external/notify/',
+  /**
+   * 第三方拍舱接口（API 极虎）
+   */
+  FastBookingByOther = '/staff/order/prepare/fast/api',
 }
 
 /**
@@ -99,7 +103,7 @@ export const downOrderResult = (params: { ids: string }) => {
  */
 
 export const getFastBookingDetail = (id: string) => {
-  return HttpRequest.get<Response>(
+  return HttpRequest.get(
     {
       url: FastBookingAPi.FastBookingDetail + id,
     },
@@ -114,7 +118,7 @@ export const getFastBookingDetail = (id: string) => {
  */
 
 export const getFastBookingEvents = (id: string) => {
-  return HttpRequest.get<Response>(
+  return HttpRequest.get(
     {
       url: FastBookingAPi.FastBookingDetail + id + '/events',
     },
@@ -131,7 +135,7 @@ export const getFastBookingEvents = (id: string) => {
 export const getFastBookingOrderAccount = (
   params: FastBookingOrderAccountParams
 ) => {
-  return HttpRequest.get<Response>(
+  return HttpRequest.get(
     {
       url: FastBookingAPi.FastBookingOrderAccount,
       params: params,
@@ -149,7 +153,7 @@ export const getFastBookingOrderAccount = (
 export const getFastBookingCabinResult = (
   params: FastBookingCabinResultParams
 ) => {
-  return HttpRequest.get<Response>(
+  return HttpRequest.get(
     {
       url: FastBookingAPi.FastBookingCabinResult,
       params: params,
@@ -175,6 +179,66 @@ export const postSendFastBookingResult = (
       headers: {
         'Content-Type': ContentTypeEnum.FORM_DATA,
       },
+    },
+    { isTransformResponse: false }
+  );
+};
+
+/**
+ * 光速预定取消预订
+ * @param params
+ * @returns
+ */
+
+export const postFastBookingStatusByCancel = (id: string) => {
+  return HttpRequest.post<Response>(
+    {
+      url: FastBookingAPi.FastBookingDetail + id + '/cancelled',
+    },
+    { isTransformResponse: false }
+  );
+};
+
+/**
+ * 光速预定自有下单
+ * @param params
+ * @returns
+ */
+
+export const postFastBookingStatusByPreparing = (id: string) => {
+  return HttpRequest.post<Response>(
+    {
+      url: FastBookingAPi.FastBookingDetail + id + 'preparing',
+    },
+    { isTransformResponse: false }
+  );
+};
+
+/**
+ * 光速预定API极虎下单
+ * @param params
+ * @returns
+ */
+
+export const postFastBookingByOther = (id: string) => {
+  return HttpRequest.post<Response>(
+    {
+      url: FastBookingAPi.FastBookingByOther + id,
+    },
+    { isTransformResponse: false }
+  );
+};
+
+/**
+ * 光速预定 设置订舱成功
+ * @param params
+ * @returns
+ */
+
+export const postFastBookingStatusByPrepared = (id: string) => {
+  return HttpRequest.post<Response>(
+    {
+      url: FastBookingAPi.FastBookingDetail + id + 'prepared',
     },
     { isTransformResponse: false }
   );

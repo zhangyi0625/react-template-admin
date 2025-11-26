@@ -24,3 +24,9 @@ export interface FastBookingOrderAccountParams {
 export interface FastBookingCabinResultParams extends DefaultPaging {
   orderId: string;
 }
+
+export interface FastBooingEventsType {
+  createdBy: string;
+  title: string;
+  created: string;
+}

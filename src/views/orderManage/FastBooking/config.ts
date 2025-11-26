@@ -1,6 +1,15 @@
 import type { CustomColumn } from 'customer-search-form-table/SearchForm/type';
 import { getSearchCarrier } from '@/services/orderManage/regularBooking/regularBookingApi';
 import { SelectProps } from 'antd';
+import type { RegularBookingDetailBaseInfoType } from '../RegularBooking/type';
+import { formatTime } from '@/utils/format';
+
+export type FastBookingDetailStatusType = {
+  label: string;
+  value: string;
+  icon: string;
+  operationIcon: string;
+};
 
 export const FastBookingSource: SelectProps['options'] = [
   {
@@ -187,5 +196,144 @@ export const FastBookingSearchColumns: CustomColumn[] = [
     options: FastBookingSource,
     selectFetch: false,
     hiddenItem: false,
+  },
+];
+
+export const FastDetailBaseInfoOptions: RegularBookingDetailBaseInfoType[] = [
+  {
+    label: '订单编号',
+    key: 'no',
+    type: 'ALL',
+  },
+  {
+    label: '船公司',
+    key: 'content',
+    type: 'ALL',
+    getValue: (value) => value.carriers![0],
+  },
+  {
+    label: '订单创建时间',
+    key: 'created',
+    type: 'ALL',
+    getValue: (value) => formatTime(value, 'Y/M/D h:m:s'),
+  },
+  {
+    label: '起运港',
+    key: 'content',
+    type: 'ALL',
+    getValue: (value) =>
+      value.por?.name +
+      '--' +
+      value.por?.localName +
+      '--' +
+      value.por?.countryLocalName,
+  },
+  {
+    label: '开航起始时间',
+    key: 'content',
+    type: 'PREBOOKING',
+    getValue: (value) => formatTime(value?.etdStart, 'Y-M-D h:m'),
+  },
+  {
+    label: '航线代码',
+    key: 'content',
+    type: 'ALL',
+    getValue: (value) => value.voyCode,
+  },
+  {
+    label: '开航截止时间',
+    key: 'content',
+    type: 'PREBOOKING',
+    getValue: (value) => formatTime(value?.etdStart, 'Y-M-D h:m'),
+  },
+  {
+    label: '船名航次',
+    key: 'content',
+    type: 'ALL',
+    getValue: (value) => value?.voyageInfo,
+  },
+  {
+    label: '目的港',
+    key: 'content',
+    type: 'ALL',
+    getValue: (value) =>
+      value.por?.name +
+      '--' +
+      value.por?.localName +
+      '--' +
+      value.por?.countryLocalName,
+  },
+  {
+    label: '预计放舱日期',
+    key: 'content',
+    type: 'PREBOOKING',
+    getValue: (value) => formatTime(value?.laydownDate, 'Y-M-D h:m'),
+  },
+  {
+    label: '预定截止时间',
+    key: 'content',
+    type: 'PREBOOKING',
+    getValue: (value) => formatTime(value?.deadline, 'Y-M-D h:m'),
+  },
+  {
+    label: '所属公司',
+    key: 'affiliateName',
+    type: 'ALL',
+  },
+  {
+    label: '订舱账号',
+    key: 'orderCarrierAccounts',
+    type: 'ALL',
+    getValue: (value) => (value ? '使用自有船司账号' : '使用第三方账号'),
+  },
+  {
+    label: '其他要求',
+    key: 'cargo',
+    type: 'ALL',
+    getValue: () => '查看',
+  },
+  {
+    label: '操作人',
+    key: 'customerName',
+    type: 'ALL',
+  },
+];
+
+export const FastBookingDetailStatus: FastBookingDetailStatusType[] = [
+  {
+    value: 'PENDING',
+    label: '预备预定',
+    icon: 'prepareBooking',
+    operationIcon: 'prepareBooking-op',
+  },
+  {
+    value: 'PREPARING',
+    label: '预定中',
+    icon: 'prepareBooking',
+    operationIcon: 'prepareBooking-op',
+  },
+  {
+    value: 'PREPARED',
+    label: '预定成功',
+    icon: 'success',
+    operationIcon: 'success-op',
+  },
+  {
+    value: 'FAILED',
+    label: '预定失败',
+    icon: 'cancel',
+    operationIcon: 'cancel-op',
+  },
+  {
+    value: 'CANCELLED',
+    label: '取消预订',
+    icon: 'cancel',
+    operationIcon: 'cancel-op',
+  },
+  {
+    value: 'CANCELLING',
+    label: '取消申请中',
+    icon: '',
+    operationIcon: '',
   },
 ];

@@ -26,7 +26,9 @@ import BookingResult from './components/BookingResult';
 import PayMessage from './components/PayMessage';
 import CargoRequirementModal from './modal/CargoRequirementModal';
 import CancelReasonModal from './modal/CancelReasonModal';
-import OrderAccountModal from './modal/OrderAccountModal';
+import OrderAccountModal, {
+  CarrierAccountsType,
+} from './modal/OrderAccountModal';
 import { filterKeys } from '@/utils/tool';
 import { ExclamationCircleOutlined } from '@ant-design/icons';
 
@@ -62,7 +64,7 @@ const RegularBookingDetail: React.FC = () => {
     {
       key: 'BookingResult',
       label: '订舱结果',
-      children: <BookingResult orderInfo={orderInfo} />,
+      children: <BookingResult source="RegularBooking" orderInfo={orderInfo} />,
     },
     {
       key: 'PayMessage',
@@ -81,9 +83,12 @@ const RegularBookingDetail: React.FC = () => {
     editRow: null,
   });
 
-  const [accountInfo, setAccountInfo] = useState<ModalContent>({
+  const [accountInfo, setAccountInfo] = useState<{
+    visible: boolean;
+    editRow: CarrierAccountsType[];
+  }>({
     visible: false,
-    editRow: null,
+    editRow: [],
   });
 
   const [cancelReson, setCancelReson] = useState<boolean>(false);
@@ -315,12 +320,14 @@ const RegularBookingDetail: React.FC = () => {
         </div>
       </Spin>
       <CargoRequirementModal
+        source="RegularBooking"
         params={cargoInfo}
         onCancel={() => setCargoInfo({ visible: false, editRow: null })}
       />
       <OrderAccountModal
         params={accountInfo}
-        onCancel={() => setAccountInfo({ visible: false, editRow: null })}
+        source="RegularBooking"
+        onCancel={() => setAccountInfo({ visible: false, editRow: [] })}
       />
       <CancelReasonModal
         visible={cancelReson}

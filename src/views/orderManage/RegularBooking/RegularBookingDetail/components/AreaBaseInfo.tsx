@@ -32,10 +32,10 @@ type OrderInfoParmas = {
   [key: string]: string | any;
 };
 
-interface AreaBaseInfoProps {
+export type AreaBaseInfoProps = {
   type: string;
   orderInfo: OrderInfoParmas;
-}
+};
 
 const OtherRemarkInfo = [
   {

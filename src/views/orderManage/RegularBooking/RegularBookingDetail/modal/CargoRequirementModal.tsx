@@ -1,20 +1,26 @@
 import React, { memo, useEffect, useState } from 'react';
 import DragModal from '@/components/modal/DragModal';
-import { CargoReuirementOptions } from './config';
+import {
+  FastBookingCargoReuirementOptions,
+  RegularBookingCargoReuirementOptions,
+} from './config';
 
 export type CargoRequirementModalProps = {
   params: {
     visible: boolean;
     editRow: any;
   };
+  source: 'RegularBooking' | 'FastBooking';
   onCancel: (e: React.MouseEvent<HTMLButtonElement>) => void;
 };
 
 const CargoRequirementModal: React.FC<CargoRequirementModalProps> = memo(
-  ({ params, onCancel }) => {
+  ({ params, source, onCancel }) => {
     const [loading, setLoading] = useState<boolean>(true);
 
-    const [options, setoptions] = useState(CargoReuirementOptions);
+    const [options, setoptions] = useState(
+      RegularBookingCargoReuirementOptions
+    );
 
     useEffect(() => {
       if (!params.visible) return;
@@ -22,14 +28,17 @@ const CargoRequirementModal: React.FC<CargoRequirementModalProps> = memo(
     }, [params.visible]);
 
     const getOptionsByCarrier = (options: any, carrier: string) => {
-      let arr = CargoReuirementOptions.filter((ele) =>
-        ele.includeCarrier.includes(carrier)
-      );
+      let arr = (
+        source === 'RegularBooking'
+          ? RegularBookingCargoReuirementOptions
+          : FastBookingCargoReuirementOptions
+      ).filter((ele) => ele.includeCarrier.includes(carrier));
       arr.map((item) => {
         item.value = item.replaceFn
           ? item.replaceFn(options[item.key])
           : options[item.key];
       });
+      console.log(arr, 'arr', params.editRow);
       setoptions(arr);
       setLoading(false);
     };

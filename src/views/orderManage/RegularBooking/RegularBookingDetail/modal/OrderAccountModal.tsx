@@ -2,8 +2,9 @@ import { memo } from 'react';
 import DragModal from '@/components/modal/DragModal';
 import { Table, TableProps } from 'antd';
 
-type CarrierAccountsType = {
+export type CarrierAccountsType = {
   name: string;
+  carrier: string;
   username: string;
   affiliate: string;
   password: string;
@@ -15,16 +16,24 @@ export type OrderAccountModalProps = {
     visible: boolean;
     editRow: CarrierAccountsType[];
   };
+  source: 'RegularBooking' | 'FastBooking';
   onCancel: (e: React.MouseEvent<HTMLButtonElement>) => void;
 };
 
 const OrderAccountModal: React.FC<OrderAccountModalProps> = memo(
-  ({ params, onCancel }) => {
+  ({ params, source, onCancel }) => {
     const columns: TableProps['columns'] = [
       {
         dataIndex: 'name',
         title: '船司',
         align: 'center',
+        hidden: source !== 'FastBooking',
+      },
+      {
+        dataIndex: 'carrier',
+        title: '船司',
+        align: 'center',
+        hidden: source !== 'RegularBooking',
       },
       {
         dataIndex: 'username',

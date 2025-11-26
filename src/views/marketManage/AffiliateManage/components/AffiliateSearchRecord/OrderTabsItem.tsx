@@ -1,8 +1,8 @@
 import React, { useImperativeHandle, useState } from 'react';
 import { Button, Space, type TableProps } from 'antd';
 import { SearchTable } from 'customer-search-form-table';
-import { getOrderOptions } from '@/services/orderManage/regularBooking/regularBookingApi';
-import { OrderSearchParams } from '@/services/orderManage/regularBooking/regularBookingModel';
+import { getRegularBookingByPage } from '@/services/orderManage/regularBooking/regularBookingApi';
+import type { RegularBookingSearchParams } from '@/services/orderManage/regularBooking/regularBookingModel';
 import { store } from '@/stores/store';
 import { useNavigate } from 'react-router-dom';
 
@@ -23,7 +23,7 @@ const OrderTabsItem = React.forwardRef<OrderTabsItemRef, OrderTabsItemProps>(
     const navigate = useNavigate();
 
     const [searchDefaultForm, setSearchDefaultForm] =
-      useState<OrderSearchParams>({
+      useState<RegularBookingSearchParams>({
         pageIndex: 1,
         pageSize: 10,
         filter: {
@@ -137,7 +137,7 @@ const OrderTabsItem = React.forwardRef<OrderTabsItemRef, OrderTabsItemProps>(
           totalKey="total"
           fetchResultKey="entries"
           isPagination={false}
-          fetchData={getOrderOptions}
+          fetchData={getRegularBookingByPage}
           searchFilter={searchDefaultForm}
           isSelection={false}
           onUpdatePagination={() => {}}

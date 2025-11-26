@@ -1,7 +1,7 @@
-import { ContentTypeEnum } from '@/enums/httpEnum'
-import { deepMerge } from '../utils'
-import { RAxios } from './Axios'
-import { type CreateAxiosOptions, transform } from './transform'
+import { ContentTypeEnum } from '@/enums/httpEnum';
+import { deepMerge } from '../utils';
+import { RAxios } from './Axios';
+import { type CreateAxiosOptions, transform } from './transform';
 
 /**
  * 封装axios
@@ -48,8 +48,8 @@ function createAxios(opts?: Partial<CreateAxiosOptions>) {
       },
       opts || {}
     )
-  )
+  );
 }
 
 // 导出http请求对象
-export const HttpRequest = createAxios()
+export const HttpRequest = createAxios();

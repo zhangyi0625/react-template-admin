@@ -69,6 +69,10 @@ export function buildTree(data: any | BuildTreeType[], mapId: string) {
   return tree;
 }
 
+/**
+ * 复制copy
+ * @param elementId
+ */
 export function copyValue(elementId: string) {
   // 需要复制文字的节点
   const copyDOM = document.getElementById(elementId);
@@ -84,4 +88,25 @@ export function copyValue(elementId: string) {
   }
   // 移除选中的元素
   window.getSelection()?.removeAllRanges();
+}
+
+/**
+ * 系统参数 数据结构调整
+ * @param key
+ * @param publicSetting
+ * @returns
+ */
+export function getPublicSettingByKey(
+  key: string,
+  publicSetting: { [key: string]: string } = {}
+) {
+  if (!publicSetting || !publicSetting[key]) return;
+  const maps = publicSetting[key] as unknown as { [key: string]: string };
+  const newArr = Object.keys(maps).map((item) => {
+    return {
+      label: maps[item],
+      value: item,
+    };
+  });
+  return newArr;
 }

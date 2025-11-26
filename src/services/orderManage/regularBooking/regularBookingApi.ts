@@ -1,15 +1,15 @@
 import { HttpRequest } from '@/utils/request';
 import type { Response } from '@/types/global';
 import type {
-  OrderSearchParams,
+  RegularBookingSearchParams,
   SearchRoutePageType,
   ShippingScheduleParams,
 } from './regularBookingModel';
 
 /**
- * 枚举订单需要的接口地址
+ * 枚举普通订单需要的接口地址
  */
-export enum OrderApi {
+export enum RegularBookingAPi {
   /**
    * 公司列表
    */
@@ -33,11 +33,11 @@ export enum OrderApi {
   /**
    * 订单列表（普通）
    */
-  order = '/staff/frt/order/page',
+  RegularBookingByPage = '/staff/frt/order/page',
   /**
    * 订单列表详情（普通）
    */
-  orderDetail = '/staff/frt/order/detail/',
+  RegularBookingDetail = '/staff/frt/order/detail/',
   /**
    * 取消订舱
    */
@@ -78,38 +78,7 @@ export enum OrderApi {
    * 修改订舱频率
    */
   editBookingFrequency = '/staff/frt/order/prebooking/cron/',
-  /**
-   * 光速预定
-   */
-  fastOrder = '/staff/order/page',
-  /**
-   * 导出光速预定
-   */
-  exportFastOrder = '/staff/order/fastbooking/export',
-  /**
-   * 导出光速预定订单结果
-   */
-  exportFastOrderResult = '/staff/order/download/booking',
-  /**
-   * 拍舱结果列表
-   */
-  cabinResult = '/staff/fast/booking/page',
-  /**
-   * 导入拍舱结果
-   */
-  importCabinResult = '/staff/fast/booking/upload/excel/',
-  /**
-   * 批量发布舱位
-   */
-  batchProduct = '/staff/fast/booking/publish/product',
-  /**
-   * 取消关联舱位
-   */
-  onRelevance = '/staff/fast/booking/unbind',
-  /**
-   * 关联订舱结果
-   */
-  relevanceResult = '/staff/fast/booking/bind',
+
   /**
    * 船期数据
    */
@@ -126,7 +95,7 @@ export enum OrderApi {
 export const getSearchAffiliate = (params: { keyword?: string }) => {
   return HttpRequest.get<Response>(
     {
-      url: OrderApi.affiliate,
+      url: RegularBookingAPi.affiliate,
       params: params,
     },
     { isTransformResponse: false }
@@ -139,7 +108,7 @@ export const getSearchAffiliate = (params: { keyword?: string }) => {
 export const getSearchCustomer = (params: { keyword?: string }) => {
   return HttpRequest.get(
     {
-      url: OrderApi.customer,
+      url: RegularBookingAPi.customer,
       params: params,
     },
     { isTransformResponse: false }
@@ -150,9 +119,9 @@ export const getSearchCustomer = (params: { keyword?: string }) => {
  * 查询港口列表
  */
 export const getSearchPort = (params: { keyword?: string; tag: string }) => {
-  return HttpRequest.get<Response>(
+  return HttpRequest.get(
     {
-      url: OrderApi.port,
+      url: RegularBookingAPi.port,
       params: params,
     },
     { isTransformResponse: false }
@@ -165,7 +134,7 @@ export const getSearchPort = (params: { keyword?: string; tag: string }) => {
 export const getSearchCarrierAll = () => {
   return HttpRequest.get<Response>(
     {
-      url: OrderApi.carrierAll,
+      url: RegularBookingAPi.carrierAll,
     },
     { isTransformResponse: false }
   );
@@ -177,7 +146,7 @@ export const getSearchCarrierAll = () => {
 export const getSearchCarrier = () => {
   return HttpRequest.get<Response>(
     {
-      url: OrderApi.carrier,
+      url: RegularBookingAPi.carrier,
     },
     { isTransformResponse: false }
   );
@@ -189,11 +158,11 @@ export const getSearchCarrier = () => {
  * @returns
  */
 
-export const getOrderOptions = (params: OrderSearchParams) => {
+export const getRegularBookingByPage = (params: RegularBookingSearchParams) => {
   let qsParams = { ...params, filter: JSON.stringify(params.filter) };
   return HttpRequest.get<Response>(
     {
-      url: OrderApi.order,
+      url: RegularBookingAPi.RegularBookingByPage,
       params: qsParams,
     },
     { isTransformResponse: false }
@@ -206,10 +175,10 @@ export const getOrderOptions = (params: OrderSearchParams) => {
  * @returns
  */
 
-export const getOrderDetail = (id: string | number) => {
+export const getRegularBookingDetail = (id: string) => {
   return HttpRequest.get<Response>(
     {
-      url: OrderApi.orderDetail + id,
+      url: RegularBookingAPi.RegularBookingDetail + id,
     },
     { isTransformResponse: false }
   );
@@ -227,7 +196,7 @@ export const postCancelBooking = (
 ) => {
   return HttpRequest.post<Response>(
     {
-      url: OrderApi.cancelBooking + id,
+      url: RegularBookingAPi.cancelBooking + id,
       data: data,
     },
     { isTransformResponse: false }
@@ -243,7 +212,7 @@ export const postCancelBooking = (
 export const postStartBooking = (id: string | number) => {
   return HttpRequest.post<Response>(
     {
-      url: OrderApi.startBooking + id,
+      url: RegularBookingAPi.startBooking + id,
     },
     { isTransformResponse: false }
   );
@@ -258,7 +227,7 @@ export const postStartBooking = (id: string | number) => {
 export const postBookingSuccess = (id: string | number) => {
   return HttpRequest.post<Response>(
     {
-      url: OrderApi.settingBookingSuccess + id,
+      url: RegularBookingAPi.settingBookingSuccess + id,
     },
     { isTransformResponse: false }
   );
@@ -276,7 +245,7 @@ export const postExecutionBreach = (
 ) => {
   return HttpRequest.post<Response>(
     {
-      url: OrderApi.executionBreach + id,
+      url: RegularBookingAPi.executionBreach + id,
       data: data,
     },
     { isTransformResponse: false }
@@ -292,7 +261,7 @@ export const postExecutionBreach = (
 export const postBookingRefund = (id: string | number) => {
   return HttpRequest.post<Response>(
     {
-      url: OrderApi.bookingRefund + id,
+      url: RegularBookingAPi.bookingRefund + id,
     },
     { isTransformResponse: false }
   );
@@ -307,7 +276,7 @@ export const postBookingRefund = (id: string | number) => {
 export const postBookingFinish = (id: string | number) => {
   return HttpRequest.post<Response>(
     {
-      url: OrderApi.bookingFinish + id,
+      url: RegularBookingAPi.bookingFinish + id,
     },
     { isTransformResponse: false }
   );
@@ -322,7 +291,7 @@ export const postBookingFinish = (id: string | number) => {
 export const postAgreeCancelApply = (id: string | number) => {
   return HttpRequest.post<Response>(
     {
-      url: OrderApi.agreeCancelApply + id,
+      url: RegularBookingAPi.agreeCancelApply + id,
     },
     { isTransformResponse: false }
   );
@@ -340,7 +309,7 @@ export const postRejectCancelApply = (
 ) => {
   return HttpRequest.post<Response>(
     {
-      url: OrderApi.rejectCancelApply + id,
+      url: RegularBookingAPi.rejectCancelApply + id,
       data: data,
     },
     { isTransformResponse: false }
@@ -356,7 +325,7 @@ export const postRejectCancelApply = (
 export const postLoginOrderAccount = (id: string | number) => {
   return HttpRequest.post<Response>(
     {
-      url: OrderApi.loginOrderAccount + id,
+      url: RegularBookingAPi.loginOrderAccount + id,
     },
     { isTransformResponse: false }
   );
@@ -378,142 +347,7 @@ export const postBookingFrequency = (
 ) => {
   return HttpRequest.post<Response>(
     {
-      url: OrderApi.editBookingFrequency + id,
-      data: data,
-    },
-    { isTransformResponse: false }
-  );
-};
-
-/**
- * 查询光速预定
- * @param params
- * @returns
- */
-
-export const getFastOrderOptions = (params: OrderSearchParams) => {
-  let qsParams = { ...params, filter: JSON.stringify(params.filter) };
-  return HttpRequest.get<Response>(
-    {
-      url: OrderApi.fastOrder,
-      params: qsParams,
-    },
-    { isTransformResponse: false }
-  );
-};
-
-/**
- * 导出光速预定列表
- * @param params
- * @returns
- */
-
-export const downFastOrder = (params: { ids: string }) => {
-  return HttpRequest.get<Response>(
-    {
-      url: OrderApi.exportFastOrder,
-      params: params,
-      responseType: 'blob',
-    },
-    { isTransformResponse: false }
-  );
-};
-
-/**
- * 导出光速预定订单结果
- * @param params
- * @returns
- */
-
-export const downOrderResult = (params: { ids: string }) => {
-  return HttpRequest.get<Response>(
-    {
-      url: OrderApi.exportFastOrderResult,
-      params: params,
-      responseType: 'blob',
-    },
-    { isTransformResponse: false }
-  );
-};
-
-/**
- * 查询拍舱结果
- * @param params
- * @returns
- */
-
-export const getCabinResultOptions = (params: OrderSearchParams) => {
-  let qsParams = { ...params, filter: JSON.stringify(params.filter) };
-  return HttpRequest.get<Response>(
-    {
-      url: OrderApi.cabinResult,
-      params: qsParams,
-    },
-    { isTransformResponse: false }
-  );
-};
-
-/**
- * 导入拍舱结果
- * @param data
- * @returns
- */
-
-export const postCabinResult = (data: any) => {
-  return HttpRequest.post<Response>(
-    {
-      url: OrderApi.importCabinResult,
-      data: data,
-    },
-    { isTransformResponse: false }
-  );
-};
-
-/**
- * 批量发布舱位
- * @param data
- * @returns
- */
-
-export const postBatchProduct = (data: string[]) => {
-  return HttpRequest.post<Response>(
-    {
-      url: OrderApi.batchProduct,
-      data: data,
-    },
-    { isTransformResponse: false }
-  );
-};
-
-/**
- * 取消关联舱位
- * @param data
- * @returns
- */
-
-export const postOnRelevance = (data: { ids: string[] }) => {
-  return HttpRequest.post<Response>(
-    {
-      url: OrderApi.onRelevance,
-      data: data,
-    },
-    { isTransformResponse: false }
-  );
-};
-
-/**
- * 关联订舱结果
- * @param data
- * @returns
- */
-
-export const postRelevanceResult = (data: {
-  ids: string[];
-  orderId: string;
-}) => {
-  return HttpRequest.post<Response>(
-    {
-      url: OrderApi.relevanceResult,
+      url: RegularBookingAPi.editBookingFrequency + id,
       data: data,
     },
     { isTransformResponse: false }
@@ -530,7 +364,7 @@ export const getShippingSchedule = (params: ShippingScheduleParams) => {
   // let qsParams = { ...params, filter: JSON.stringify(params.filter) }
   return HttpRequest.get<Response>(
     {
-      url: OrderApi.shippingSchedule,
+      url: RegularBookingAPi.shippingSchedule,
       params: params,
     },
     { isTransformResponse: false }
@@ -547,7 +381,7 @@ export const getSearchRoutePage = (params: SearchRoutePageType) => {
   let qsParams = { ...params, filter: JSON.stringify(params.filter) };
   return HttpRequest.get<Response>(
     {
-      url: OrderApi.SearchRoutePage,
+      url: RegularBookingAPi.SearchRoutePage,
       params: qsParams,
     },
     { isTransformResponse: false }

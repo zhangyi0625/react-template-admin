@@ -1,0 +1,10 @@
+.cabinResult {
+  :global {
+    .ant-select-selection-item > div > p:nth-of-type(2) {
+      display: none !important;
+    }
+    .no-show {
+      display: none !important;
+    }
+  }
+}

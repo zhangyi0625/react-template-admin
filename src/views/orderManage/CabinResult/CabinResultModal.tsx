@@ -13,6 +13,7 @@ import DragModal from '@/components/modal/DragModal';
 import { getSearchAffiliate } from '@/services/orderManage/regularBooking/regularBookingApi';
 import type { ImportCabinResultType } from '@/services/orderManage/cabinResult/cabinResultModel';
 import { debounce } from 'lodash-es';
+import { fetchSystemSearchData } from '@/utils/freight';
 
 export type CabinResultModalProps = {
   params: {
@@ -38,9 +39,11 @@ const CabinResultModal: React.FC<CabinResultModalProps> = ({
 
   const [CabinResultForm] = Form.useForm();
 
-  const [defalueOptions, setDefaultOptions] = useState<SelectProps['options']>(
-    []
-  );
+  const [defalueOptions, setDefaultOptions] = useState<{
+    affiliateId: SelectProps['options'];
+  }>({
+    affiliateId: [],
+  });
 
   const [fileList, setFileList] = useState<UploadFile[]>([]);
 
@@ -78,7 +81,13 @@ const CabinResultModal: React.FC<CabinResultModalProps> = ({
 
   const handleSearch = (value?: string) => {
     if (!value) return;
-    fetchSearch(value, setDefaultOptions);
+    // fetchSearch(value, setDefaultOptions);
+    fetchSystemSearchData(
+      value,
+      'affiliateId',
+      setDefaultOptions,
+      getSearchAffiliate
+    );
   };
 
   return (
@@ -105,7 +114,7 @@ const CabinResultModal: React.FC<CabinResultModalProps> = ({
             notFoundContent={null}
             filterOption={false}
             onSearch={(value: string) => handleSearch(value)}
-            options={(defalueOptions || []).map((d) => ({
+            options={(defalueOptions.affiliateId || []).map((d) => ({
               value: d.id,
               label: d.name,
             }))}

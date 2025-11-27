@@ -25,6 +25,7 @@ import dayjs from 'dayjs';
 import { SearchTable } from 'customer-search-form-table';
 import type { ManualpublicationType } from '@/services/orderManage/cabinResult/cabinResultModel';
 import { changeSelectOptionsByLabel } from '@/utils/options';
+import { loadSearchPortData } from '@/utils/freight';
 
 export type ManualReleaseType = {
   params: {
@@ -45,32 +46,32 @@ type PortType = {
 let timeout: ReturnType<typeof setTimeout> | null;
 let currentValue: string;
 
-const fetchData = (
-  value: string,
-  type: string,
-  callback: (data: any) => void
-) => {
-  if (timeout) {
-    clearTimeout(timeout);
-    timeout = null;
-  }
-  currentValue = value;
+// const fetchData = (
+//   value: string,
+//   type: string,
+//   callback: (data: any) => void
+// ) => {
+//   if (timeout) {
+//     clearTimeout(timeout);
+//     timeout = null;
+//   }
+//   currentValue = value;
 
-  const fake = () => {
-    getSearchPort({ keyword: currentValue, tag: type }).then((resp) => {
-      callback({
-        [type]: resp.map((item: { id: string; name: string }) => ({
-          ...item,
-          value: item.id,
-          label: item.name,
-        })),
-      });
-    });
-  };
-  if (value) {
-    timeout = setTimeout(fake, 300);
-  } else callback({ [type]: [] });
-};
+//   const fake = () => {
+//     getSearchPort({ keyword: currentValue, tag: type }).then((resp) => {
+//       callback({
+//         [type]: resp.map((item: { id: string; name: string }) => ({
+//           ...item,
+//           value: item.id,
+//           label: item.name,
+//         })),
+//       });
+//     });
+//   };
+//   if (value) {
+//     timeout = setTimeout(fake, 300);
+//   } else callback({ [type]: [] });
+// };
 
 const ManualRelease: React.FC<ManualReleaseType> = ({
   params,
@@ -219,7 +220,7 @@ const ManualRelease: React.FC<ManualReleaseType> = ({
 
   const handleSearch = (newValue: string, type: 'POR' | 'FND' | string) => {
     if (!newValue || !newValue.trim()) return;
-    fetchData(newValue, type, setDefaultOptions);
+    loadSearchPortData(newValue, type, setDefaultOptions, getSearchPort);
   };
 
   const changeSelected = (_: string[], checked: any[]) => {

@@ -72,3 +72,44 @@ export const getJudgePush = (
   } else newArr[index][type as any] = el.price;
   return newArr;
 };
+
+/**
+ * 搜索港口数据
+ * @param value 搜索关键字keword
+ * @param type  港口类型：por || fnd
+ * @param callback 保存数据回调
+ * @param API 搜索api
+ */
+export const loadSearchPortData = (
+  value: string,
+  type: string,
+  callback: (data: any) => void,
+  API: (params: { keyword: string; tag: string }) => Promise<any>
+) => {
+  let timeout: ReturnType<typeof setTimeout> | null;
+  let currentValue: string;
+
+  const fetchData = () => {
+    if (timeout) {
+      clearTimeout(timeout);
+      timeout = null;
+    }
+    currentValue = value;
+
+    const fake = () => {
+      API({ keyword: currentValue, tag: type }).then((resp: any[]) => {
+        callback({
+          [type]: resp.map((item: { id: string; name: string }) => ({
+            ...item,
+            value: item.id,
+            label: item.name,
+          })),
+        });
+      });
+    };
+    if (value) {
+      timeout = setTimeout(fake, 300);
+    } else callback({ [type]: [] });
+  };
+  fetchData();
+};

@@ -13,7 +13,7 @@ import {
   type SelectProps,
   App,
 } from 'antd';
-import { DefaultOptionType } from 'antd/es/select';
+import type { DefaultOptionType } from 'antd/es/select';
 import DragModal from '@/components/modal/DragModal';
 import {
   getSearchPort,
@@ -42,36 +42,6 @@ type PortType = {
   FND?: SelectProps['options'];
   [key: string]: SelectProps['options'];
 };
-
-let timeout: ReturnType<typeof setTimeout> | null;
-let currentValue: string;
-
-// const fetchData = (
-//   value: string,
-//   type: string,
-//   callback: (data: any) => void
-// ) => {
-//   if (timeout) {
-//     clearTimeout(timeout);
-//     timeout = null;
-//   }
-//   currentValue = value;
-
-//   const fake = () => {
-//     getSearchPort({ keyword: currentValue, tag: type }).then((resp) => {
-//       callback({
-//         [type]: resp.map((item: { id: string; name: string }) => ({
-//           ...item,
-//           value: item.id,
-//           label: item.name,
-//         })),
-//       });
-//     });
-//   };
-//   if (value) {
-//     timeout = setTimeout(fake, 300);
-//   } else callback({ [type]: [] });
-// };
 
 const ManualRelease: React.FC<ManualReleaseType> = ({
   params,

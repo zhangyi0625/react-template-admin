@@ -9,7 +9,7 @@ import DragModal from '@/components/modal/DragModal';
 import type { FreightTaskConfigurationType } from '@/services/freightSetting/freightTaskConfiguration/freightTaskConfigurationModel';
 import { getSearchPort } from '@/services/orderManage/regularBooking/regularBookingApi';
 import type { DefaultOptionType } from 'antd/es/select';
-import { loadSearchPortData } from '@/utils/freight';
+import { fetchSystemSearchData } from '@/utils/freight';
 
 type PortType = {
   POR?: SelectProps['options'];
@@ -83,7 +83,7 @@ const AddFreightTaskConfiguration: React.FC<
 
   const handleSearch = (newValue: string, type: 'POR' | 'FND' | string) => {
     if (!newValue || !newValue.trim()) return;
-    loadSearchPortData(newValue, type, setDefaultOptions, getSearchPort);
+    fetchSystemSearchData(newValue, type, setDefaultOptions, getSearchPort);
   };
 
   const getPortSelect = (type: string) => {

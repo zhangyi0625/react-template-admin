@@ -127,3 +127,89 @@ export const FreightTaskConfigurationForms: Omit<
     span: 6,
   },
 ];
+
+export const SendCustomizationFreightSearchColumns: CustomColumn[] = [
+  {
+    label: '公司名称',
+    name: 'affiliateId',
+    formType: 'focusSelect',
+    options: [],
+    selectFileldName: {
+      label: 'name',
+      value: 'id',
+    },
+    apiByUrl: '/api/staff/customer/affiliate/list',
+    apiByUrlMethod: 'get',
+    setSearchKey: 'keyword',
+    apiByUrlParams: {
+      keyword: null,
+    },
+    apiByUrlHeaders: {
+      authorization: 'Bearer ' + sessionStorage.getItem('token'),
+      'Content-Type': 'application/json',
+    },
+    span: 6,
+    selectFetch: true,
+    hiddenItem: false,
+  },
+  {
+    label: '用户名',
+    name: 'customerId',
+    formType: 'focusSelect',
+    options: [],
+    selectFileldName: {
+      label: 'name',
+      value: 'id',
+    },
+    apiByUrl: '/api/staff/customer/list',
+    apiByUrlMethod: 'get',
+    setSearchKey: 'keyword',
+    apiByUrlParams: {
+      keyword: null,
+    },
+    apiByUrlHeaders: {
+      authorization: 'Bearer ' + sessionStorage.getItem('token'),
+      'Content-Type': 'application/json',
+    },
+    span: 6,
+    selectFetch: true,
+    hiddenItem: false,
+  },
+  {
+    label: '设置发送时间',
+    name: 'created',
+    formType: 'range-picker',
+    span: 6,
+    selectFetch: false,
+    hiddenItem: false,
+  },
+];
+
+export const SendCustomizationFreightForms: Omit<
+  CustomColumn,
+  'selectFetch' | 'hiddenItem'
+>[] = [
+  {
+    label: '用户名',
+    name: 'customerId',
+    formType: 'focusSelect',
+    options: [],
+    span: 6,
+    customPlaceholder: '请输入用户名',
+    isRules: true,
+  },
+  {
+    label: '设置邮箱',
+    name: 'email',
+    formType: 'input',
+    span: 6,
+    isRules: true,
+  },
+  {
+    label: '设置发送时间',
+    name: 'execTime',
+    formType: 'date-picker',
+    span: 6,
+    isRules: true,
+  },
+];

@@ -8,6 +8,7 @@ import {
   type TablePaginationConfig,
   type TableProps,
 } from 'antd';
+import { ExclamationCircleFilled, PlusOutlined } from '@ant-design/icons';
 import { SearchForm, SearchTable } from 'customer-search-form-table';
 import {
   FreightTaskConfigurationSearchColumns,
@@ -27,7 +28,6 @@ import {
 } from '@/services/freightSetting/freightTaskConfiguration/freightTaskConfigurationApi';
 import AddFreightTaskConfiguration from './AddFreightTaskConfiguration';
 import { filterKeys } from '@/utils/tool';
-import { ExclamationCircleFilled, PlusOutlined } from '@ant-design/icons';
 
 const FreightTaskConfiguration: React.FC = () => {
   const { message, modal } = App.useApp();

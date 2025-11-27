@@ -144,7 +144,7 @@ export const getSearchCarrierAll = () => {
  * 查询船司列表
  */
 export const getSearchCarrier = () => {
-  return HttpRequest.get<Response>(
+  return HttpRequest.get(
     {
       url: RegularBookingAPi.carrier,
     },

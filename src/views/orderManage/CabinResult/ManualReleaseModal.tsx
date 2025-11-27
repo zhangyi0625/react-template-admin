@@ -25,7 +25,7 @@ import dayjs from 'dayjs';
 import { SearchTable } from 'customer-search-form-table';
 import type { ManualpublicationType } from '@/services/orderManage/cabinResult/cabinResultModel';
 import { changeSelectOptionsByLabel } from '@/utils/options';
-import { loadSearchPortData } from '@/utils/freight';
+import { fetchSystemSearchData } from '@/utils/freight';
 
 export type ManualReleaseType = {
   params: {
@@ -190,7 +190,7 @@ const ManualRelease: React.FC<ManualReleaseType> = ({
 
   const handleSearch = (newValue: string, type: 'POR' | 'FND' | string) => {
     if (!newValue || !newValue.trim()) return;
-    loadSearchPortData(newValue, type, setDefaultOptions, getSearchPort);
+    fetchSystemSearchData(newValue, type, setDefaultOptions, getSearchPort);
   };
 
   const changeSelected = (_: string[], checked: any[]) => {

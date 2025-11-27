@@ -74,17 +74,17 @@ export const getJudgePush = (
 };
 
 /**
- * 搜索港口数据
+ * 远程搜索系统数据
  * @param value 搜索关键字keword
- * @param type  港口类型：por || fnd
+ * @param type  搜索类型：'POR' | 'FND' | 'customerId' | 'affiliateId'
  * @param callback 保存数据回调
  * @param API 搜索api
  */
-export const loadSearchPortData = (
+export const fetchSystemSearchData = (
   value: string,
-  type: string,
+  type: 'POR' | 'FND' | 'customerId' | 'affiliateId' | string,
   callback: (data: any) => void,
-  API: (params: { keyword: string; tag: string }) => Promise<any>
+  API: (params: { keyword: string; tag?: string }) => Promise<any>
 ) => {
   let timeout: ReturnType<typeof setTimeout> | null;
   let currentValue: string;
@@ -97,7 +97,10 @@ export const loadSearchPortData = (
     currentValue = value;
 
     const fake = () => {
-      API({ keyword: currentValue, tag: type }).then((resp: any[]) => {
+      (type === 'customerId' || type === 'affiliateId'
+        ? API({ keyword: currentValue })
+        : API({ keyword: currentValue, tag: type })
+      ).then((resp: any[]) => {
         callback({
           [type]: resp.map((item: { id: string; name: string }) => ({
             ...item,

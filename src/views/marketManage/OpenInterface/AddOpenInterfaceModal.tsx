@@ -12,40 +12,13 @@ import DragModal from '@/components/modal/DragModal';
 import type { OpenInterfaceType } from '@/services/marketManage/openInterface/openInterfaceModel';
 import { OpenInterfaceForms } from './config';
 import { getSearchCustomer } from '@/services/orderManage/regularBooking/regularBookingApi';
+import { fetchSystemSearchData } from '@/utils/freight';
 
 export type AddOpenInterfaceModalProps = {
   visible: boolean;
   currentRow: OpenInterfaceType | null;
   onCancel: () => void;
   onOk: (params: OpenInterfaceType) => void;
-};
-
-let timeout: ReturnType<typeof setTimeout> | null;
-let currentValue: string;
-
-const fetchData = (
-  value: string,
-  callback: (data: { value: string; label: string }[]) => void
-) => {
-  if (timeout) {
-    clearTimeout(timeout);
-    timeout = null;
-  }
-  currentValue = value;
-
-  const fake = () => {
-    getSearchCustomer({ keyword: currentValue }).then((resp) => {
-      callback(
-        resp.map((item: { id: string; name: string }) => ({
-          value: item.id,
-          label: item.name,
-        }))
-      );
-    });
-  };
-  if (value) {
-    timeout = setTimeout(fake, 300);
-  } else callback([]);
 };
 
 const AddOpenInterfaceModal: React.FC<AddOpenInterfaceModalProps> = ({
@@ -56,26 +29,32 @@ const AddOpenInterfaceModal: React.FC<AddOpenInterfaceModalProps> = ({
 }) => {
   const [form] = Form.useForm();
 
-  const [data, setData] = useState<SelectProps['options']>([]);
+  const [data, setData] = useState<{ customerId: SelectProps['options'] }>({
+    customerId: [],
+  });
 
   const [checked, setChecked] = useState<boolean>(false);
+
+  const [loading, setLoading] = useState<boolean>(false);
 
   useEffect(() => {
     if (!visible) return;
     setChecked(true);
+    setLoading(true);
     if (currentRow) {
+      handleSearch(currentRow.customerName);
       form.setFieldsValue({
         ...currentRow,
       });
-      handleSearch(currentRow.customerName);
     } else {
       form.resetFields();
     }
+    setLoading(false);
   }, [visible]);
 
   const handleSearch = (newValue: string) => {
     if (!newValue || !newValue.trim()) return;
-    fetchData(newValue, setData);
+    fetchSystemSearchData(newValue, 'customerId', setData, getSearchCustomer);
   };
 
   const handleOk = () => {
@@ -95,9 +74,10 @@ const AddOpenInterfaceModal: React.FC<AddOpenInterfaceModalProps> = ({
       <DragModal
         open={visible}
         onCancel={onCancel}
-        title="新增接口信息"
+        title={currentRow ? '修改接口信息' : '新增接口信息'}
         width={{ xl: 800, xxl: 1000 }}
         onOk={handleOk}
+        loading={loading}
       >
         <Form
           form={form}
@@ -159,7 +139,7 @@ const AddOpenInterfaceModal: React.FC<AddOpenInterfaceModalProps> = ({
                       notFoundContent={null}
                       filterOption={false}
                       onSearch={handleSearch}
-                      options={(data || []).map((d) => ({
+                      options={(data.customerId || []).map((d) => ({
                         value: d.value,
                         label: d.label,
                       }))}

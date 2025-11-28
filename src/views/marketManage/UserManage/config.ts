@@ -333,6 +333,14 @@ export const UserManageDetailEditForm: AffiliateManageDetailEditFormProps[] = [
     ExtraKey: 'businessConfig',
     disabled: false,
   },
+  {
+    label: '短信服务：',
+    name: 'SMS_NOTIFY',
+    formType: 'input',
+    span: 12,
+    ExtraKey: 'businessConfig',
+    disabled: false,
+  },
 ];
 
 // export const UserManageEquityExtraOptions:EquityRightsExtraEditType[] = [

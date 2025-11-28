@@ -28,6 +28,7 @@ export const AffiliateComboPermissionRemark = React.forwardRef<
     'RATE_SUBSCRIBE',
     'TRUCK_TRAJECTORY',
     'US_CLEARANCE',
+    'SMS_NOTIFY',
   ];
 
   const filterBaseKeys = [
@@ -209,12 +210,15 @@ export const AffiliateComboPermissionRemark = React.forwardRef<
     return limit ? (
       <div>
         {limit}
-        {module === 'RATE_SUBSCRIBE' ? '条' : ' / 天'}
+        {module === 'RATE_SUBSCRIBE' || module === 'SMS_NOTIFY'
+          ? '条'
+          : ' / 天'}
       </div>
     ) : filterBaseKeys.includes(module) ? (
       '未限制'
     ) : (
-      0 + (module === 'RATE_SUBSCRIBE' ? ' 条' : ' / 天')
+      0 +
+      (module === 'RATE_SUBSCRIBE' || module === 'SMS_NOTIFY' ? ' 条' : ' / 天')
     );
   };
 

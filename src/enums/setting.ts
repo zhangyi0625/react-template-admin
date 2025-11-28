@@ -19,6 +19,7 @@ export enum ComboPermission {
   CARRIER_ZONE = '船司专区',
   PORT_WIKI = '港口百科',
   HSCODE_QUERY = 'HSCODE查询',
+  SMS_NOTIFY = '短信服务',
 }
 
 export enum LevelSetting {

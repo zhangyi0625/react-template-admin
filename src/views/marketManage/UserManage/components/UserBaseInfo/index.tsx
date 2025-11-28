@@ -178,6 +178,12 @@ const UserBaseInfo: React.FC<UserBaseInfoProps> = memo(
         value: `剩余${getEquityExtraIndexOf('US_CLEARANCE')}条`,
         limit: getEquityExtraIndexOf('US_CLEARANCE'),
       },
+      {
+        label: '短信服务：',
+        key: 'SMS_NOTIFY',
+        value: `剩余${getEquityExtraIndexOf('SMS_NOTIFY')}次`,
+        limit: getEquityExtraIndexOf('SMS_NOTIFY'),
+      },
     ];
 
     const getBasicInfo = () => {

@@ -1,49 +1,49 @@
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { App } from 'antd';
-import { RootState, setEssentail } from '@/stores/store';
 import type { CustomColumn } from 'customer-search-form-table/SearchForm/type';
-import { getRouteManageList } from '@/services/customerInformation/routeManage/routeManageApi';
-import { getCarrierManageList } from '@/services/essential/carrierManage/carrierManageApi';
+import { RootState, setEssentail } from '@/stores/store';
 import {
-  getFndPortManageList,
-  getPorPortManageList,
-} from '@/services/essential/portManage/portManageModel';
-import { getCustomerManageList } from '@/services/essential/customerManage/customerManageApi';
-import type { RouteMangeParams } from '@/services/customerInformation/routeManage/routeManageModel';
-import type { CarrierManageParams } from '@/services/essential/carrierManage/carrierManageModel';
+  getSystemAreaOptions,
+  getSystemCountryOptions,
+  getSystemOrderCarrier,
+  getSystemPort,
+} from '@/services/system/basicData/basicDataApi';
+import { getOurCompanyPortListByPage } from '@/services/portManage/ourCompanyPort/ourCompanyPortApi';
+import type { OurCompanyPortSearchParams } from '@/services/portManage/ourCompanyPort/ourCompanyPortModel';
 
-type CachePromiseFilter = {
-  enabled: number;
-};
+type CachePromiseFilter =
+  | { parentId: number }
+  | {
+      keyword?: string;
+      tag?: string;
+    }
+  | OurCompanyPortSearchParams;
 
-type CacheMergeParams = RouteMangeParams & Partial<CarrierManageParams>;
+type CacheMergeParams = Partial<CachePromiseFilter>;
 
 const cachePromiseList: Record<
   string,
   (params: CacheMergeParams | any) => Promise<any>
 > = {
-  routeData: getRouteManageList,
-  porPortData: getPorPortManageList,
-  fndPortData: getFndPortManageList,
-  carrierData: getCarrierManageList,
-  customerData: getCustomerManageList,
-  // relevanceService: ServiceSettingType[] | undefined
+  routeData: getSystemAreaOptions,
+  carrierData: getSystemOrderCarrier,
+  portData: getSystemPort,
+  countryData: getSystemCountryOptions,
+  ourCompanyPort: getOurCompanyPortListByPage,
 };
 
 // 配置formMap 中 options 回显key值
 const formKeysMap: { [key: string]: string } = {
-  carrier: 'carrierData',
-  routeFndIds: 'routeData',
-  fnds: 'fndPortData',
-  customerId: 'customerData',
-  porCode: 'porPortData',
-  fndCode: 'fndPortData',
   router: 'routeData',
+  carrier: 'carrierData',
+  portCode: 'portData',
+  countryCode: 'countryData',
+  ourCompanyPort: 'ourCompanyPort',
 };
 
 /**
- * useCacheData
+ * useCacheData 缓存系统公共数据 -- basicDataApi
  * @param params
  * @returns
  */

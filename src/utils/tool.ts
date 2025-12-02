@@ -1,4 +1,6 @@
 import message from 'antd/lib/message';
+import type { DefaultOptionType } from 'antd/es/select';
+import type { CustomColumn } from 'customer-search-form-table/SearchForm/type';
 
 /**
  * 拷贝对象中部分属性
@@ -133,4 +135,24 @@ export function safeJsonParse(
     errorCallback?.(error as Error);
     return errorMessage;
   }
+}
+
+/**
+ * 自定义antd-select搜索
+ * @param input 搜索内容
+ * @param fieldNames select fieldNames 定义节点
+ * @param option options
+ * @returns
+ */
+export function searchSelectFilterOption(
+  input: string,
+  fieldNames: CustomColumn['selectFileldName'],
+  option: DefaultOptionType | undefined
+) {
+  const key = fieldNames
+    ? (fieldNames['label'] as keyof DefaultOptionType)
+    : ('label' as keyof DefaultOptionType);
+  return String(option?.[key] ?? '')
+    .toLowerCase()
+    .includes(input.toLowerCase());
 }

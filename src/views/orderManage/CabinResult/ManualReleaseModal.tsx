@@ -15,15 +15,13 @@ import {
 } from 'antd';
 import type { DefaultOptionType } from 'antd/es/select';
 import DragModal from '@/components/modal/DragModal';
-import {
-  getSearchPort,
-  getShippingSchedule,
-} from '@/services/orderManage/regularBooking/regularBookingApi';
+import { getShippingSchedule } from '@/services/orderManage/regularBooking/regularBookingApi';
 import { formatTime } from '@/utils/format';
 import { filterKeys } from '@/utils/tool';
 import dayjs from 'dayjs';
 import { SearchTable } from 'customer-search-form-table';
 import type { ManualpublicationType } from '@/services/orderManage/cabinResult/cabinResultModel';
+import { getSystemPort } from '@/services/system/basicData/basicDataApi';
 import { changeSelectOptionsByLabel } from '@/utils/options';
 import { fetchSystemSearchData } from '@/utils/freight';
 
@@ -125,11 +123,11 @@ const ManualRelease: React.FC<ManualReleaseType> = ({
       true
     );
 
-    const porInfo: DefaultOptionType[] = await getSearchPort({
+    const porInfo: DefaultOptionType[] = await getSystemPort({
       keyword: editRow.porName.split(',')[0],
       tag: 'POR',
     });
-    const fndInfo: DefaultOptionType[] = await getSearchPort({
+    const fndInfo: DefaultOptionType[] = await getSystemPort({
       keyword: editRow.fndName.split(',')[0],
       tag: 'FND',
     });
@@ -190,7 +188,7 @@ const ManualRelease: React.FC<ManualReleaseType> = ({
 
   const handleSearch = (newValue: string, type: 'POR' | 'FND' | string) => {
     if (!newValue || !newValue.trim()) return;
-    fetchSystemSearchData(newValue, type, setDefaultOptions, getSearchPort);
+    fetchSystemSearchData(newValue, type, setDefaultOptions, getSystemPort);
   };
 
   const changeSelected = (_: string[], checked: any[]) => {

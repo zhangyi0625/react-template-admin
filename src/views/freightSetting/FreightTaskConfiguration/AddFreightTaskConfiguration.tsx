@@ -7,7 +7,7 @@ import {
 } from '../config';
 import DragModal from '@/components/modal/DragModal';
 import type { FreightTaskConfigurationType } from '@/services/freightSetting/freightTaskConfiguration/freightTaskConfigurationModel';
-import { getSearchPort } from '@/services/orderManage/regularBooking/regularBookingApi';
+import { getSystemPort } from '@/services/system/basicData/basicDataApi';
 import type { DefaultOptionType } from 'antd/es/select';
 import { fetchSystemSearchData } from '@/utils/freight';
 
@@ -58,11 +58,11 @@ const AddFreightTaskConfiguration: React.FC<
 
   const init = async () => {
     if (currentRow) {
-      const porInfo: DefaultOptionType[] = await getSearchPort({
+      const porInfo: DefaultOptionType[] = await getSystemPort({
         keyword: currentRow.porCode,
         tag: 'POR',
       });
-      const fndInfo: DefaultOptionType[] = await getSearchPort({
+      const fndInfo: DefaultOptionType[] = await getSystemPort({
         keyword: currentRow.fndCode,
         tag: 'FND',
       });
@@ -83,7 +83,7 @@ const AddFreightTaskConfiguration: React.FC<
 
   const handleSearch = (newValue: string, type: 'POR' | 'FND' | string) => {
     if (!newValue || !newValue.trim()) return;
-    fetchSystemSearchData(newValue, type, setDefaultOptions, getSearchPort);
+    fetchSystemSearchData(newValue, type, setDefaultOptions, getSystemPort);
   };
 
   const getPortSelect = (type: string) => {

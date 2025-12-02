@@ -4,3 +4,32 @@ export interface SystemAreaOptionsType {
   code: string;
   parentId?: string;
 }
+
+export interface SystemCountryOptionsType {
+  id: string;
+  name: string;
+  code: string;
+  localName: string;
+}
+
+export interface SystemCarrierOptionsType {
+  booking: boolean;
+  carrierCode: string;
+  carrierName: string;
+  code: string;
+  fastbooking: boolean;
+  name: string;
+  settings: { hasPayPassword: boolean };
+}
+
+export interface SystemPortOptionsType {
+  areaCode: string;
+  areaName: string;
+  countryCode: string;
+  countryLocalName: string;
+  countryName: string;
+  id: number;
+  localName: string;
+  name: string;
+  unlocode: string;
+}

@@ -1,12 +1,12 @@
 /**
  * 全局的状态（如系统设置、主题等）
  */
-
-import type { RouteMangeType } from '@/services/customerInformation/routeManage/routeManageModel'
-import type { CarrierManageType } from '@/services/essential/carrierManage/carrierManageModel'
-import type { CustomerManageType } from '@/services/essential/customerManage/customerManageModel'
-import type { PortManageType } from '@/services/essential/portManage/portManageApi'
-import type { ServiceSettingType } from '@/services/serviceSetting/serviceSettingModel'
+import {
+  SystemAreaOptionsType,
+  SystemCarrierOptionsType,
+  SystemCountryOptionsType,
+  SystemPortOptionsType,
+} from '@/services/system/basicData/basicDataModel';
 import type {
   BreadcrumbStyleType,
   BuiltinThemeType,
@@ -20,61 +20,61 @@ import type {
   PreferencesButtonPositionType,
   TabsStyleType,
   ThemeModeType,
-} from '@/types/app'
+} from '@/types/app';
 
 // 菜单状态（独立出来，不做持久化）
 export interface MenuState {
   // 菜单
-  menus: any[]
+  menus: any[];
 }
 
 export const initMenuState: MenuState = {
   // 菜单
   menus: [],
-}
+};
 
-type SupportedLanguagesType = 'en-US' | 'zh-CN'
+type SupportedLanguagesType = 'en-US' | 'zh-CN';
 
 // 全局偏好设置
 interface AppPreferences {
   /** 检查更新轮询时间 */
-  checkUpdatesInterval: number
+  checkUpdatesInterval: number;
   /** 是否开启灰色模式 */
-  colorGrayMode: boolean
+  colorGrayMode: boolean;
   /** 是否开启色弱模式 */
-  colorWeakMode: boolean
+  colorWeakMode: boolean;
   /** 是否开启紧凑模式 */
-  compact: boolean
+  compact: boolean;
   /** 是否开启内容紧凑模式 */
-  contentCompact: ContentCompactType
+  contentCompact: ContentCompactType;
   /** 应用默认头像 */
-  defaultAvatar: string
+  defaultAvatar: string;
   /** 开启动态标题 */
-  dynamicTitle: boolean
+  dynamicTitle: boolean;
   /** 是否开启检查更新 */
-  enableCheckUpdates: boolean
+  enableCheckUpdates: boolean;
   /** 是否显示偏好设置 */
-  enablePreferences: boolean
+  enablePreferences: boolean;
   /**
    * @zh_CN 是否开启refreshToken
    */
-  enableRefreshToken: boolean
+  enableRefreshToken: boolean;
   /** 是否移动端（目前考虑暂不支持移动端） - 后续移动端用RN（Flutter）开发 */
-  isMobile: boolean
+  isMobile: boolean;
   /** 布局方式 */
-  layout: LayoutType
+  layout: LayoutType;
   /** 支持的语言 */
-  locale: SupportedLanguagesType
+  locale: SupportedLanguagesType;
   /** 登录过期模式 */
-  loginExpiredMode: LoginExpiredModeType
+  loginExpiredMode: LoginExpiredModeType;
   /** 应用名 */
-  name: string
+  name: string;
   /** 偏好设置按钮位置 */
-  preferencesButtonPosition: PreferencesButtonPositionType
+  preferencesButtonPosition: PreferencesButtonPositionType;
   /**
    * @zh_CN 是否开启水印
    */
-  watermark: boolean
+  watermark: boolean;
 }
 
 /**
@@ -82,15 +82,15 @@ interface AppPreferences {
  */
 interface BreadcrumbPreferences {
   /** 面包屑是否启用 */
-  enable: boolean
+  enable: boolean;
   /** 面包屑是否只有一个时隐藏 */
-  hideOnlyOne: boolean
+  hideOnlyOne: boolean;
   /** 面包屑首页图标是否可见 */
-  showHome: boolean
+  showHome: boolean;
   /** 面包屑图标是否可见 */
-  showIcon: boolean
+  showIcon: boolean;
   /** 面包屑风格 */
-  styleType: BreadcrumbStyleType
+  styleType: BreadcrumbStyleType;
 }
 
 /**
@@ -98,13 +98,13 @@ interface BreadcrumbPreferences {
  */
 interface HeaderPreferences {
   /** 顶栏是否启用 */
-  enable: boolean
+  enable: boolean;
   /** 顶栏是否隐藏,css-隐藏 */
-  hidden: boolean
+  hidden: boolean;
   /** 顶栏菜单位置 */
-  menuAlign: LayoutHeaderMenuAlignType
+  menuAlign: LayoutHeaderMenuAlignType;
   /** header显示模式 */
-  mode: LayoutHeaderModeType
+  mode: LayoutHeaderModeType;
 }
 
 /**
@@ -112,21 +112,21 @@ interface HeaderPreferences {
  */
 interface SidebarPreferences {
   /** 点击目录时自动激活子菜单   */
-  autoActivateChild: boolean
+  autoActivateChild: boolean;
   /** 侧边栏是否折叠 */
-  collapsed: boolean
+  collapsed: boolean;
   /** 侧边栏折叠时，是否显示title */
-  collapsedShowTitle: boolean
+  collapsedShowTitle: boolean;
   /** 侧边栏是否可见 */
-  enable: boolean
+  enable: boolean;
   /** 菜单自动展开状态 */
-  expandOnHover: boolean
+  expandOnHover: boolean;
   /** 侧边栏扩展区域是否折叠 */
-  extraCollapse: boolean
+  extraCollapse: boolean;
   /** 侧边栏是否隐藏 - css */
-  hidden: boolean
+  hidden: boolean;
   /** 侧边栏宽度 */
-  width: number
+  width: number;
 }
 
 /**
@@ -134,9 +134,9 @@ interface SidebarPreferences {
  */
 interface FooterPreferences {
   /** 底栏是否可见 */
-  enable: boolean
+  enable: boolean;
   /** 底栏是否固定 */
-  fixed: boolean
+  fixed: boolean;
 }
 
 /**
@@ -144,9 +144,9 @@ interface FooterPreferences {
  */
 interface LogoPreferences {
   /** logo是否可见 */
-  enable: boolean
+  enable: boolean;
   /** logo地址 */
-  source: string
+  source: string;
 }
 
 /**
@@ -154,25 +154,25 @@ interface LogoPreferences {
  */
 interface TabbarPreferences {
   /** 是否开启多标签页拖拽 */
-  draggable: boolean
+  draggable: boolean;
   /** 是否开启多标签页 */
-  enable: boolean
+  enable: boolean;
   /** 标签页高度 */
-  height: number
+  height: number;
   /** 开启标签页缓存功能 */
-  keepAlive: boolean
+  keepAlive: boolean;
   /** 是否持久化标签 */
-  persist: boolean
+  persist: boolean;
   /** 是否开启多标签页图标 */
-  showIcon: boolean
+  showIcon: boolean;
   /** 显示最大化按钮 */
-  showMaximize: boolean
+  showMaximize: boolean;
   /** 显示更多按钮 */
-  showMore: boolean
+  showMore: boolean;
   /** 标签页风格 */
-  styleType: TabsStyleType
+  styleType: TabsStyleType;
   /** 是否开启鼠标滚轮响应 */
-  wheelable: boolean
+  wheelable: boolean;
 }
 
 /**
@@ -180,23 +180,23 @@ interface TabbarPreferences {
  */
 interface ThemePreferences {
   /** 内置主题名 */
-  builtinType: BuiltinThemeType
+  builtinType: BuiltinThemeType;
   /** 错误色 */
-  colorError: string
+  colorError: string;
   /** 主题色 */
-  colorPrimary: string
+  colorPrimary: string;
   /** 成功色 */
-  colorSuccess: string
+  colorSuccess: string;
   /** 警告色 */
-  colorWarning: string
+  colorWarning: string;
   /** 当前主题 */
-  mode: ThemeModeType
+  mode: ThemeModeType;
   /** 圆角 */
-  radius: string
+  radius: string;
   /** 是否开启半深色header（只在theme='light'时生效） */
-  semiDarkHeader: boolean
+  semiDarkHeader: boolean;
   /** 是否开启半深色菜单（只在theme='light'时生效） */
-  semiDarkSidebar: boolean
+  semiDarkSidebar: boolean;
 }
 
 /**
@@ -204,13 +204,13 @@ interface ThemePreferences {
  */
 interface AnimationPreferences {
   /** 页面切换动画是否启用 */
-  enable: boolean
+  enable: boolean;
   // /** 是否开启页面加载loading */
-  loading: boolean
+  loading: boolean;
   /** 页面切换动画 */
-  name: PageAnimationType | string
+  name: PageAnimationType | string;
   /** 是否开启页面加载进度动画 */
-  progress: boolean
+  progress: boolean;
 }
 
 /**
@@ -218,23 +218,23 @@ interface AnimationPreferences {
  */
 interface WidgetPreferences {
   /** 是否启用全屏部件 */
-  fullscreen: boolean
+  fullscreen: boolean;
   /** 是否启用全局搜索部件 */
-  globalSearch: boolean
+  globalSearch: boolean;
   /** 是否启用语言切换部件 */
-  languageToggle: boolean
+  languageToggle: boolean;
   /** 是否开启锁屏功能 */
-  lockScreen: boolean
+  lockScreen: boolean;
   /** 锁屏状态 */
-  lockScreenStatus: boolean
+  lockScreenStatus: boolean;
   /** 是否显示通知部件 */
-  notification: boolean
+  notification: boolean;
   /** 显示刷新按钮 */
-  refresh: boolean
+  refresh: boolean;
   /** 是否显示侧边栏显示/隐藏部件 */
-  sidebarToggle: boolean
+  sidebarToggle: boolean;
   /** 是否显示主题切换部件 */
-  themeToggle: boolean
+  themeToggle: boolean;
 }
 
 /**
@@ -242,15 +242,15 @@ interface WidgetPreferences {
  */
 interface ShortcutKeyPreferences {
   /** 是否启用快捷键-全局 */
-  enable: boolean
+  enable: boolean;
   /** 是否启用全局锁屏快捷键 */
-  globalLockScreen: boolean
+  globalLockScreen: boolean;
   /** 是否启用全局注销快捷键 */
-  globalLogout: boolean
+  globalLogout: boolean;
   /** 是否启用全局偏好设置快捷键 */
-  globalPreferences: boolean
+  globalPreferences: boolean;
   /** 是否启用全局搜索快捷键 */
-  globalSearch: boolean
+  globalSearch: boolean;
 }
 
 /**
@@ -258,11 +258,11 @@ interface ShortcutKeyPreferences {
  */
 interface NavigationPreferences {
   /** 导航菜单手风琴模式 */
-  accordion: boolean
+  accordion: boolean;
   /** 导航菜单是否切割，只在 layout=mixed-nav 生效 */
-  split: boolean
+  split: boolean;
   /** 导航菜单风格 */
-  styleType: NavigationStyleType
+  styleType: NavigationStyleType;
 }
 
 /**
@@ -270,19 +270,19 @@ interface NavigationPreferences {
  */
 export interface CopyrightPreferences {
   /** 版权公司名 */
-  companyName: string
+  companyName: string;
   /** 版权公司名链接 */
-  companySiteLink: string
+  companySiteLink: string;
   /** 版权日期 */
-  date: string
+  date: string;
   /** 版权是否可见 */
-  enable: boolean
+  enable: boolean;
   /** 备案号 */
-  icp: string
+  icp: string;
   /** 备案号链接 */
-  icpLink: string
+  icpLink: string;
   /** 设置面板是否显示*/
-  settingShow?: boolean
+  settingShow?: boolean;
 }
 
 /**
@@ -290,8 +290,8 @@ export interface CopyrightPreferences {
  */
 
 export interface sysSettingPreferences {
-  publicData: any
-  publicSetting: any
+  publicData: any;
+  publicSetting: any;
 }
 
 /**
@@ -300,18 +300,16 @@ export interface sysSettingPreferences {
 
 export interface essentailPreferences {
   /** 细分航线缓存 */
-  routeData: RouteMangeType[] | undefined
+  routeData: SystemAreaOptionsType[] | undefined;
   /** 起运港缓存 */
-  porPortData: PortManageType[] | undefined
+  porPortData: SystemPortOptionsType[] | undefined;
   /** 目的港缓存 */
-  fndPortData: PortManageType[] | undefined
+  fndPortData: SystemPortOptionsType[] | undefined;
   /** 船司数据缓存 */
-  carrierData: CarrierManageType[] | undefined
-  /** 客户数据缓存 */
-  customerData: CustomerManageType[] | undefined
-  /** 关联服务缓存 */
-  relevanceService: ServiceSettingType[] | undefined
-  [key: string]: any
+  carrierData: SystemCarrierOptionsType[] | undefined;
+  /** 港口国家数据缓存 */
+  countryData: SystemCountryOptionsType[] | undefined;
+  [key: string]: any;
 }
 
 /**
@@ -319,29 +317,29 @@ export interface essentailPreferences {
  */
 export interface Preferences {
   /** 全局偏好设置 */
-  app: AppPreferences
+  app: AppPreferences;
   /** 面包屑配置 */
-  breadcrumb: BreadcrumbPreferences
+  breadcrumb: BreadcrumbPreferences;
   /** 顶栏配置 */
-  header: HeaderPreferences
+  header: HeaderPreferences;
   /** 侧边栏配置 */
-  sidebar: SidebarPreferences
+  sidebar: SidebarPreferences;
   /** 底栏配置 */
-  footer: FooterPreferences
+  footer: FooterPreferences;
   /** logo配置 */
-  logo: LogoPreferences
+  logo: LogoPreferences;
   /** 标签页配置 */
-  tabbar: TabbarPreferences
+  tabbar: TabbarPreferences;
   /** 主题配置 */
-  theme: ThemePreferences
+  theme: ThemePreferences;
   /** 动画配置 */
-  animation: AnimationPreferences
+  animation: AnimationPreferences;
   /** 功能配置 */
-  widget: WidgetPreferences
+  widget: WidgetPreferences;
   /** 快捷键配置 */
-  shortcut: ShortcutKeyPreferences
+  shortcut: ShortcutKeyPreferences;
   /** 导航配置 */
-  navigation: NavigationPreferences
+  navigation: NavigationPreferences;
   /** 版权配置 */
-  copyright: CopyrightPreferences
+  copyright: CopyrightPreferences;
 }

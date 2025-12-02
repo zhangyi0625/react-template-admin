@@ -18,10 +18,7 @@ export enum RegularBookingAPi {
    * 用户列表
    */
   customer = '/staff/customer/list',
-  /**
-   * 港口列表
-   */
-  port = '/common/location/list',
+
   /**
    * 订单列表（普通）
    */
@@ -101,19 +98,6 @@ export const getSearchCustomer = (params: { keyword?: string }) => {
   return HttpRequest.get(
     {
       url: RegularBookingAPi.customer,
-      params: params,
-    },
-    { isTransformResponse: false }
-  );
-};
-
-/**
- * 查询港口列表
- */
-export const getSearchPort = (params: { keyword?: string; tag?: string }) => {
-  return HttpRequest.get(
-    {
-      url: RegularBookingAPi.port,
       params: params,
     },
     { isTransformResponse: false }

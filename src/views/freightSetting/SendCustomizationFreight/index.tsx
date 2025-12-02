@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
   App,
   Button,
@@ -25,6 +25,7 @@ import type {
 } from '@/services/freightSetting/sendCustomizationFreight/sendCustomizationFreightModel';
 import AddSendCustomizationFreight from './AddSendCustomizationFreight';
 import { filterKeys } from '@/utils/tool';
+import useCacheData from '@/hooks/useCacheData';
 
 const SendCustomizationFreight: React.FC = () => {
   const { message, modal } = App.useApp();
@@ -38,10 +39,17 @@ const SendCustomizationFreight: React.FC = () => {
       filter: undefined,
     });
 
+  const { essential } = useCacheData({
+    cacheEssentialKeys: ['carrierData'],
+    formMap: SendCustomizationFreightSearchColumns,
+  });
+
   const [params, setParams] = useState<{
     visible: boolean;
     currentRow: SendCustomizationFreightType | null;
   }>({ visible: false, currentRow: null });
+
+  useEffect(() => {}, [essential]);
 
   const columns: TableProps['columns'] = [
     {

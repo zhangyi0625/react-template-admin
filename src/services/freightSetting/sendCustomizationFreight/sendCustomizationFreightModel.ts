@@ -14,7 +14,12 @@ export interface SendCustomizationFreightSearchParams extends DefaultPaging {
 export interface SendCustomizationFreightType {
   id: string | null;
   customerId: string;
+  customerName: string;
   email: string;
   execTime: string;
-  freights: { porCode: string; fndCode: string; carrier: string }[];
+  freights: {
+    porCode: string | undefined;
+    fndCode: string | undefined;
+    carrier: string | undefined;
+  }[];
 }

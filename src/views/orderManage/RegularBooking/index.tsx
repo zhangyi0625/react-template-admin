@@ -8,18 +8,21 @@ import {
   type TableProps,
 } from 'antd';
 import { SearchForm, SearchTable } from 'customer-search-form-table';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { RegularBookingSearchColumns } from './config';
-import { RootState } from '@/stores/store';
+import { RootState, setPublicData } from '@/stores/store';
 import useParentSize from '@/hooks/useParentSize';
 import type { RegularBookingSearchParams } from '@/services/orderManage/regularBooking/regularBookingModel';
 import { getRegularBookingByPage } from '@/services/orderManage/regularBooking/regularBookingApi';
+import { getPublicData, getPublicSetting } from '@/services/system/setting';
 import { formatTime } from '@/utils/format';
 import { filterKeys, getPublicSettingByKey } from '@/utils/tool';
 
 const RegularBooking: React.FC = () => {
   const navigate = useNavigate();
+
+  const dispatch = useDispatch();
 
   const { parentRef, height } = useParentSize();
 
@@ -170,6 +173,9 @@ const RegularBooking: React.FC = () => {
   ];
 
   useEffect(() => {
+    Promise.all([getPublicData(), getPublicSetting()]).then((res) => {
+      dispatch(setPublicData(res));
+    });
     formMaps.map((item) => {
       if (item.formType === 'normalSelect' && item.publicSettingKey) {
         item.options = getPublicSettingByKey(item.publicSettingKey, publicData);

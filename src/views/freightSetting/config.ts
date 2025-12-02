@@ -1,7 +1,6 @@
 import type { SelectProps } from 'antd';
 import type { CustomColumn } from 'customer-search-form-table/SearchForm/type';
 import { changeSelectOptionsByLabel } from '@/utils/options';
-import { getSystemOrderCarrier } from '@/services/system/basicData/basicDataApi';
 
 export const FreightTaskConfigurationSource: SelectProps['options'] = [
   {
@@ -24,14 +23,12 @@ export const FreightTaskConfigurationSearchColumns: CustomColumn[] = [
     name: 'carrierCode',
     formType: 'normalSelect',
     options: [],
-    api: getSystemOrderCarrier,
     selectFileldName: {
       label: 'carrierCode',
       value: 'carrierCode',
     },
-    selectResultKey: null,
     span: 6,
-    selectFetch: true,
+    selectFetch: false,
     hiddenItem: false,
   },
   {

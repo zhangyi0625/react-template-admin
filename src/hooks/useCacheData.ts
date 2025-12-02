@@ -11,6 +11,7 @@ import {
 } from '@/services/system/basicData/basicDataApi';
 import { getOurCompanyPortListByPage } from '@/services/portManage/ourCompanyPort/ourCompanyPortApi';
 import type { OurCompanyPortSearchParams } from '@/services/portManage/ourCompanyPort/ourCompanyPortModel';
+import { isArray } from 'lodash-es';
 
 type CachePromiseFilter =
   | { parentId: number }
@@ -37,6 +38,7 @@ const cachePromiseList: Record<
 const formKeysMap: { [key: string]: string } = {
   router: 'routeData',
   carrier: 'carrierData',
+  carrierCode: 'carrierData',
   portCode: 'portData',
   countryCode: 'countryData',
   ourCompanyPort: 'ourCompanyPort',
@@ -88,7 +90,9 @@ export default function useCacheData(params: {
           cacheEssentialKeys.map(async (_, index: number) => {
             await dispatch(
               setEssentail({
-                value: resp[index],
+                value: isArray(resp[index])
+                  ? resp[index]
+                  : resp[index]?.entries,
                 key: cacheEssentialKeys[index],
               })
             );

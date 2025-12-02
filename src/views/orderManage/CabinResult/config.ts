@@ -1,6 +1,6 @@
-import { getSearchCarrier } from '@/services/orderManage/regularBooking/regularBookingApi';
-import { changeSelectOptionsByLabel } from '@/utils/options';
 import type { CustomColumn } from 'customer-search-form-table/SearchForm/type';
+import { getSystemOrderCarrier } from '@/services/system/basicData/basicDataApi';
+import { changeSelectOptionsByLabel } from '@/utils/options';
 
 export const CabinResultSearchColumns: CustomColumn[] = [
   {
@@ -31,7 +31,7 @@ export const CabinResultSearchColumns: CustomColumn[] = [
     name: 'carrier',
     formType: 'normalSelect',
     options: [],
-    api: getSearchCarrier,
+    api: getSystemOrderCarrier,
     selectFileldName: {
       label: 'carrierCode',
       value: 'carrierCode',

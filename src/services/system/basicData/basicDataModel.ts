@@ -11,3 +11,13 @@ export interface SystemCountryOptionsType {
   code: string;
   localName: string;
 }
+
+export interface SystemCarrierOptionsType {
+  booking: boolean;
+  carrierCode: string;
+  carrierName: string;
+  code: string;
+  fastbooking: boolean;
+  name: string;
+  settings: { hasPayPassword: boolean };
+}

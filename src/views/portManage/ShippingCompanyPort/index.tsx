@@ -25,6 +25,7 @@ import type {
 import { ShippingCompanyPortSearchColumns } from '../config';
 import AddShippingCompanyPort from './AddShippingCompanyPort';
 import { filterKeys } from '@/utils/tool';
+import { SystemCarrierOptionsType } from '@/services/system/basicData/basicDataModel';
 
 const ShippingCompanyPort: React.FC = () => {
   const { message, modal } = App.useApp();
@@ -49,9 +50,21 @@ const ShippingCompanyPort: React.FC = () => {
   const columns: TableProps['columns'] = [
     {
       title: '船司',
-      dataIndex: 'carrier',
       width: 100,
       align: 'center',
+      render(value) {
+        let carrierOptions = ShippingCompanyPortSearchColumns.find(
+          (item) => item.name === 'carrier'
+        )?.options as SystemCarrierOptionsType[];
+        return (
+          <div>
+            {
+              carrierOptions?.find((item) => item.code === value.brand)
+                ?.carrierCode
+            }
+          </div>
+        );
+      },
     },
     {
       title: '船司港口代码',

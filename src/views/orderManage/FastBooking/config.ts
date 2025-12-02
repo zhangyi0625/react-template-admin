@@ -1,7 +1,7 @@
 import type { CustomColumn } from 'customer-search-form-table/SearchForm/type';
-import { getSearchCarrier } from '@/services/orderManage/regularBooking/regularBookingApi';
-import { SelectProps } from 'antd';
+import type { SelectProps } from 'antd';
 import type { RegularBookingDetailBaseInfoType } from '../RegularBooking/type';
+import { getSystemOrderCarrier } from '@/services/system/basicData/basicDataApi';
 import { formatTime } from '@/utils/format';
 
 export type FastBookingDetailStatusType = {
@@ -121,7 +121,7 @@ export const FastBookingSearchColumns: CustomColumn[] = [
     name: 'carrier',
     formType: 'normalSelect',
     options: [],
-    api: getSearchCarrier,
+    api: getSystemOrderCarrier,
     selectFileldName: {
       label: 'carrierCode',
       value: 'carrierCode',

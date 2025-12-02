@@ -1,6 +1,7 @@
 import { HttpRequest } from '@/utils/request';
 import {
   SystemAreaOptionsType,
+  SystemCarrierOptionsType,
   SystemCountryOptionsType,
 } from './basicDataModel';
 
@@ -13,6 +14,14 @@ export enum SystemBasicDataApi {
    * 系统国家列表
    */
   SystemCountryOptions = '/common/location/country/list',
+  /**
+   * 系统全部船司列表
+   */
+  SystemAllCarrier = '/common/carrier/list',
+  /**
+   * 系统下单船司列表
+   */
+  SystemOrderCarrier = '/common/carrier/brand/list',
 }
 
 /**
@@ -39,6 +48,30 @@ export const getSystemCountryOptions = () => {
   return HttpRequest.get<SystemCountryOptionsType[]>(
     {
       url: SystemBasicDataApi.SystemCountryOptions,
+    },
+    { isTransformResponse: false }
+  );
+};
+
+/**
+ * 系统全部船司列表
+ */
+export const getSystemAllCarrier = () => {
+  return HttpRequest.get<SystemCarrierOptionsType[]>(
+    {
+      url: SystemBasicDataApi.SystemAllCarrier,
+    },
+    { isTransformResponse: false }
+  );
+};
+
+/**
+ * 系统下单船司列表
+ */
+export const getSystemOrderCarrier = () => {
+  return HttpRequest.get<SystemCarrierOptionsType[]>(
+    {
+      url: SystemBasicDataApi.SystemOrderCarrier,
     },
     { isTransformResponse: false }
   );

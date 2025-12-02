@@ -1,8 +1,10 @@
 import type { CustomColumn } from 'customer-search-form-table/SearchForm/type';
-import { getSystemCountryOptions } from '@/services/system/basicData/basicDataApi';
-import { SelectProps } from 'antd';
+import {
+  getSystemCountryOptions,
+  getSystemOrderCarrier,
+} from '@/services/system/basicData/basicDataApi';
+import type { SelectProps } from 'antd';
 import { changeSelectOptionsByLabel } from '@/utils/options';
-import { getSearchCarrier } from '@/services/orderManage/regularBooking/regularBookingApi';
 
 export const PortTagsOptions: SelectProps['options'] = [
   {
@@ -162,7 +164,7 @@ export const ShippingCompanyPortSearchColumns: CustomColumn[] = [
     name: 'carrier',
     formType: 'normalSelect',
     options: [],
-    api: getSearchCarrier,
+    api: getSystemOrderCarrier,
     selectFileldName: {
       label: 'carrierCode',
       value: 'carrierCode',

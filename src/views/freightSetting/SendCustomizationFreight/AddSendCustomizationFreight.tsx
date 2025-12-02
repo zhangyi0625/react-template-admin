@@ -5,10 +5,10 @@ import DragModal from '@/components/modal/DragModal';
 import type { SendCustomizationFreightType } from '@/services/freightSetting/sendCustomizationFreight/sendCustomizationFreightModel';
 import { SendCustomizationFreightForms } from '../config';
 import {
-  getSearchCarrier,
   getSearchCustomer,
   getSearchPort,
 } from '@/services/orderManage/regularBooking/regularBookingApi';
+import { getSystemOrderCarrier } from '@/services/system/basicData/basicDataApi';
 import { fetchSystemSearchData } from '@/utils/freight';
 import dayjs from 'dayjs';
 import { formatTime } from '@/utils/format';
@@ -69,7 +69,7 @@ const AddSendCustomizationFreight: React.FC<
   }, [visible]);
 
   const init = async () => {
-    const resp = await getSearchCarrier();
+    const resp = await getSystemOrderCarrier();
     setCarrierOptions(resp);
     if (currentRow) {
       setFreightOptions([...currentRow.freights]);

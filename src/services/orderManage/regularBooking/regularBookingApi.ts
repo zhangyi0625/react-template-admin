@@ -23,14 +23,6 @@ export enum RegularBookingAPi {
    */
   port = '/common/location/list',
   /**
-   * 船司列表（全）
-   */
-  carrierAll = '/common/carrier/list',
-  /**
-   * 船司列表（下单）
-   */
-  carrier = '/common/carrier/brand/list',
-  /**
    * 订单列表（普通）
    */
   RegularBookingByPage = '/staff/frt/order/page',
@@ -123,30 +115,6 @@ export const getSearchPort = (params: { keyword?: string; tag?: string }) => {
     {
       url: RegularBookingAPi.port,
       params: params,
-    },
-    { isTransformResponse: false }
-  );
-};
-
-/**
- * 查询船司列表
- */
-export const getSearchCarrierAll = () => {
-  return HttpRequest.get<Response>(
-    {
-      url: RegularBookingAPi.carrierAll,
-    },
-    { isTransformResponse: false }
-  );
-};
-
-/**
- * 查询船司列表
- */
-export const getSearchCarrier = () => {
-  return HttpRequest.get(
-    {
-      url: RegularBookingAPi.carrier,
     },
     { isTransformResponse: false }
   );

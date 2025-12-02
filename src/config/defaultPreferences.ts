@@ -93,7 +93,7 @@ export const defaultPreferences: Preferences = {
     colorPrimary: '#1677ff',
     colorSuccess: '#52c41a',
     colorWarning: '#faad14',
-    mode: 'light',
+    mode: 'dark',
     radius: '0.5',
     semiDarkHeader: false,
     semiDarkSidebar: false,

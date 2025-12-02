@@ -21,3 +21,15 @@ export interface SystemCarrierOptionsType {
   name: string;
   settings: { hasPayPassword: boolean };
 }
+
+export interface SystemPortOptionsType {
+  areaCode: string;
+  areaName: string;
+  countryCode: string;
+  countryLocalName: string;
+  countryName: string;
+  id: number;
+  localName: string;
+  name: string;
+  unlocode: string;
+}

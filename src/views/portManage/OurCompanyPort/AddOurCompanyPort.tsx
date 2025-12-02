@@ -3,11 +3,9 @@ import { Col, Form, Input, Row, Select } from 'antd';
 import { OurCompanyPortForms } from '../config';
 import DragModal from '@/components/modal/DragModal';
 import type { OurCompanyPortType } from '@/services/portManage/ourCompanyPort/ourCompanyPortModel';
-import {
-  getSystemAreaOptions,
-  getSystemCountryOptions,
-} from '@/services/system/basicData/basicDataApi';
+import { getSystemAreaOptions } from '@/services/system/basicData/basicDataApi';
 import { filterKeys, searchSelectFilterOption } from '@/utils/tool';
+import useCacheData from '@/hooks/useCacheData';
 
 export type AddOurCompanyPortProps = {
   params: {
@@ -29,6 +27,10 @@ const AddOurCompanyPort: React.FC<AddOurCompanyPortProps> = ({
 
   const [loading, setLoading] = useState<boolean>(false);
 
+  const { essential } = useCacheData({
+    cacheEssentialKeys: ['routerData', 'countryData'],
+  });
+
   const [formMaps, setFormMaps] = useState(OurCompanyPortForms);
 
   useEffect(() => {
@@ -44,22 +46,18 @@ const AddOurCompanyPort: React.FC<AddOurCompanyPortProps> = ({
     } else {
       form.resetFields();
     }
-  }, [visible]);
+  }, [visible, essential]);
 
   const init = async () => {
     try {
-      Promise.all([getSystemAreaOptions(), getSystemCountryOptions()]).then(
-        (result) => {
-          formMaps.map((item) => {
-            if (item.name === 'parentAreaId') item.options = result[0];
-            else if (item.name === 'countryId') item.options = result[1];
-          });
-          currentRow?.parentAreaId &&
-            getRouteChange(currentRow?.parentAreaId ?? 0);
-          setFormMaps([...formMaps]);
-          setLoading(false);
-        }
-      );
+      formMaps.map((item) => {
+        if (item.name === 'parentAreaId') item.options = essential['routeData'];
+        else if (item.name === 'countryId')
+          item.options = essential['countryData'];
+      });
+      currentRow?.parentAreaId && getRouteChange(currentRow?.parentAreaId ?? 0);
+      setFormMaps([...formMaps]);
+      setLoading(false);
     } catch {
       setLoading(false);
     }

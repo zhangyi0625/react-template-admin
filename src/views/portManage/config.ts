@@ -1,8 +1,4 @@
 import type { CustomColumn } from 'customer-search-form-table/SearchForm/type';
-import {
-  getSystemCountryOptions,
-  getSystemOrderCarrier,
-} from '@/services/system/basicData/basicDataApi';
 import type { SelectProps } from 'antd';
 import { changeSelectOptionsByLabel } from '@/utils/options';
 
@@ -62,14 +58,12 @@ export const OurCompanyPortSearchColumns: CustomColumn[] = [
     name: 'countryCode',
     formType: 'normalSelect',
     options: [],
-    api: getSystemCountryOptions,
     selectFileldName: {
       label: 'localName',
       value: 'code',
     },
-    selectResultKey: null,
     span: 6,
-    selectFetch: true,
+    selectFetch: false,
     hiddenItem: false,
   },
 ];
@@ -164,14 +158,12 @@ export const ShippingCompanyPortSearchColumns: CustomColumn[] = [
     name: 'carrier',
     formType: 'normalSelect',
     options: [],
-    api: getSystemOrderCarrier,
     selectFileldName: {
       label: 'carrierCode',
       value: 'carrierCode',
     },
-    selectResultKey: null,
     span: 6,
-    selectFetch: true,
+    selectFetch: false,
     hiddenItem: false,
   },
   {

@@ -3,6 +3,7 @@ import {
   SystemAreaOptionsType,
   SystemCarrierOptionsType,
   SystemCountryOptionsType,
+  SystemPortOptionsType,
 } from './basicDataModel';
 
 export enum SystemBasicDataApi {
@@ -22,6 +23,10 @@ export enum SystemBasicDataApi {
    * 系统下单船司列表
    */
   SystemOrderCarrier = '/common/carrier/brand/list',
+  /**
+   * 系统港口列表
+   */
+  SystemPort = '/common/location/list',
 }
 
 /**
@@ -72,6 +77,19 @@ export const getSystemOrderCarrier = () => {
   return HttpRequest.get<SystemCarrierOptionsType[]>(
     {
       url: SystemBasicDataApi.SystemOrderCarrier,
+    },
+    { isTransformResponse: false }
+  );
+};
+
+/**
+ * 查询港口列表
+ */
+export const getSystemPort = (params: { keyword?: string; tag?: string }) => {
+  return HttpRequest.get<SystemPortOptionsType[]>(
+    {
+      url: SystemBasicDataApi.SystemPort,
+      params: params,
     },
     { isTransformResponse: false }
   );

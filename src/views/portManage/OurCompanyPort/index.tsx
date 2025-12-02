@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
   App,
   Button,
@@ -26,11 +26,17 @@ import {
 import AddOurCompanyPort from './AddOurCompanyPort';
 import useParentSize from '@/hooks/useParentSize';
 import { filterKeys } from '@/utils/tool';
+import useCacheData from '@/hooks/useCacheData';
 
 const OurCompanyPort: React.FC = () => {
   const { message, modal } = App.useApp();
 
   const { parentRef, height } = useParentSize();
+
+  const { essential } = useCacheData({
+    cacheEssentialKeys: ['routeData', 'countryData'],
+    formMap: OurCompanyPortSearchColumns,
+  });
 
   const [searchDefaultForm, setSearchDefaultForm] =
     useState<OurCompanyPortSearchParams>({
@@ -46,6 +52,8 @@ const OurCompanyPort: React.FC = () => {
     visible: false,
     currentRow: null,
   });
+
+  useEffect(() => {}, [essential]);
 
   const columns: TableProps['columns'] = [
     {

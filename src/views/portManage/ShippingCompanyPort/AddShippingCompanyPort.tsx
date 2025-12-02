@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { App, Col, Form, Input, Row, Select, type TableProps } from 'antd';
-import type { DefaultOptionType } from 'antd/es/select';
 import {
   OurCompanyPortSearchColumns,
   ShippingCompanyPortSearchColumns,
@@ -14,6 +13,7 @@ import type {
   OurCompanyPortSearchParams,
 } from '@/services/portManage/ourCompanyPort/ourCompanyPortModel';
 import { filterKeys } from '@/utils/tool';
+import useCacheData from '@/hooks/useCacheData';
 
 export type AddShippingCompanyPortProps = {
   params: {
@@ -37,7 +37,10 @@ const AddShippingCompanyPort: React.FC<AddShippingCompanyPortProps> = ({
 
   const [loading, setLoading] = useState<boolean>(false);
 
-  const [carrierOptions, setCarrierOptions] = useState<DefaultOptionType[]>([]);
+  const { essential } = useCacheData({
+    cacheEssentialKeys: ['carrierData'],
+    formMap: ShippingCompanyPortSearchColumns,
+  });
 
   const [selected, setSelected] = useState<string[]>([]);
 
@@ -71,10 +74,6 @@ const AddShippingCompanyPort: React.FC<AddShippingCompanyPortProps> = ({
         });
       }
     }
-    let carrierOptions = ShippingCompanyPortSearchColumns.find(
-      (item) => item.name === 'carrier'
-    )?.options;
-    setCarrierOptions(carrierOptions as unknown as DefaultOptionType[]);
     setLoading(false);
   };
 
@@ -172,7 +171,7 @@ const AddShippingCompanyPort: React.FC<AddShippingCompanyPortProps> = ({
                       placeholder="请选择船公司"
                       showSearch
                       allowClear
-                      options={carrierOptions}
+                      options={essential['carrierData']}
                       fieldNames={{
                         label: 'carrierCode',
                         value: 'code',

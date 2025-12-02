@@ -5,8 +5,8 @@ import {
   Card,
   ConfigProvider,
   Space,
-  TablePaginationConfig,
-  TableProps,
+  type TablePaginationConfig,
+  type TableProps,
   Tag,
 } from 'antd';
 import { ExclamationCircleFilled, PlusOutlined } from '@ant-design/icons';
@@ -175,6 +175,7 @@ const OurCompanyPort: React.FC = () => {
       content: '确定删除该我司港口吗？数据删除后将无法恢复！',
       onOk() {
         deleteOurCompanyPort(id).then(() => {
+          message.success('删除成功～');
           setSearchDefaultForm({ ...searchDefaultForm });
         });
       },

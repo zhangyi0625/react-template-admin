@@ -3,7 +3,7 @@ import { DefaultPaging } from '@/types/global';
 export interface OurCompanyPortSearchFilterParams {
   code: string;
   name: string;
-  countryCode: string;
+  countryCode?: string;
 }
 
 export interface OurCompanyPortSearchParams extends DefaultPaging {

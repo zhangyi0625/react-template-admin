@@ -77,7 +77,7 @@ export const putOurCompanyPort = (params: OurCompanyPortType) => {
 export const deleteOurCompanyPort = (id: string) => {
   return HttpRequest.delete(
     {
-      url: OurCompanyPortApi.OurCompanyPort + id,
+      url: OurCompanyPortApi.OurCompanyPort + '/' + id,
     },
     {
       isTransformResponse: false,

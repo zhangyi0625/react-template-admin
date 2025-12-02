@@ -2,6 +2,7 @@ import type { CustomColumn } from 'customer-search-form-table/SearchForm/type';
 import { getSystemCountryOptions } from '@/services/system/basicData/basicDataApi';
 import { SelectProps } from 'antd';
 import { changeSelectOptionsByLabel } from '@/utils/options';
+import { getSearchCarrier } from '@/services/orderManage/regularBooking/regularBookingApi';
 
 export const PortTagsOptions: SelectProps['options'] = [
   {
@@ -19,6 +20,21 @@ export const PortTagsOptions: SelectProps['options'] = [
   {
     label: '内陆点',
     value: 'LDP',
+  },
+];
+
+export const ShippingCompanyUnmatchedType: SelectProps['options'] = [
+  {
+    label: '我司港口为空',
+    value: 1,
+  },
+  {
+    label: '船司港口为空',
+    value: 2,
+  },
+  {
+    label: '我司或船司港口为空',
+    value: 3,
   },
 ];
 
@@ -137,5 +153,71 @@ export const OurCompanyPortForms: Omit<
     formType: 'normalSelect',
     options: changeSelectOptionsByLabel(),
     span: 12,
+  },
+];
+
+export const ShippingCompanyPortSearchColumns: CustomColumn[] = [
+  {
+    label: '船公司',
+    name: 'carrier',
+    formType: 'normalSelect',
+    options: [],
+    api: getSearchCarrier,
+    selectFileldName: {
+      label: 'carrierCode',
+      value: 'carrierCode',
+    },
+    selectResultKey: null,
+    span: 6,
+    selectFetch: true,
+    hiddenItem: false,
+  },
+  {
+    label: '船司港口代码',
+    name: 'code',
+    formType: 'input',
+    span: 6,
+    selectFetch: false,
+    hiddenItem: false,
+  },
+  {
+    label: '船司港口名称',
+    name: 'name',
+    formType: 'input',
+    span: 6,
+    selectFetch: false,
+    hiddenItem: false,
+  },
+  {
+    label: '对应我司港口',
+    name: 'porId',
+    formType: 'focusSelect',
+    options: [],
+    selectFileldName: {
+      label: 'localName',
+      value: 'unlocode',
+    },
+    apiByUrl: '/api/common/location/list',
+    apiByUrlMethod: 'get',
+    setSearchKey: 'keyword',
+    apiByUrlParams: {
+      keyword: null,
+    },
+    apiByUrlHeaders: {
+      authorization: 'Bearer ' + sessionStorage.getItem('token'),
+      'Content-Type': 'application/json',
+    },
+    span: 6,
+    selectFetch: true,
+    hiddenItem: false,
+  },
+  {
+    label: '未匹配筛选',
+    name: 'unmatchedType',
+    formType: 'normalSelect',
+    options: ShippingCompanyUnmatchedType,
+    span: 6,
+    selectFetch: false,
+    hiddenItem: false,
   },
 ];

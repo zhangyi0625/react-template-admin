@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
   App,
   Button,
@@ -25,12 +25,17 @@ import type {
 import { ShippingCompanyPortSearchColumns } from '../config';
 import AddShippingCompanyPort from './AddShippingCompanyPort';
 import { filterKeys } from '@/utils/tool';
-import { SystemCarrierOptionsType } from '@/services/system/basicData/basicDataModel';
+import useCacheData from '@/hooks/useCacheData';
 
 const ShippingCompanyPort: React.FC = () => {
   const { message, modal } = App.useApp();
 
   const { parentRef, height } = useParentSize();
+
+  const { essential } = useCacheData({
+    cacheEssentialKeys: ['carrierData', 'countryData'],
+    formMap: ShippingCompanyPortSearchColumns,
+  });
 
   const [searchDefaultForm, setSearchDefaultForm] =
     useState<ShippingCompanyPortSearchParams>({
@@ -47,15 +52,15 @@ const ShippingCompanyPort: React.FC = () => {
     currentRow: null,
   });
 
+  useEffect(() => {}, [essential]);
+
   const columns: TableProps['columns'] = [
     {
       title: '船司',
       width: 100,
       align: 'center',
       render(value) {
-        let carrierOptions = ShippingCompanyPortSearchColumns.find(
-          (item) => item.name === 'carrier'
-        )?.options as SystemCarrierOptionsType[];
+        let carrierOptions = essential['carrierData'];
         return (
           <div>
             {

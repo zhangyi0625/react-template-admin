@@ -115,7 +115,7 @@ const RouteManage: React.FC = () => {
 
   const init = () => {
     let { fndPortData = [] } = essential;
-    let fnd = fndPortData.map((item: PortManageType) => {
+    let fnd = fndPortData.map((item: any) => {
       return {
         value: item.code,
         label: item.enName + '-' + item.cnName,

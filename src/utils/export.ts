@@ -31,7 +31,7 @@ export function ExportTableDataByXLSX(
   tableData.forEach((item: any, index: number) => {
     const arr: string[] = tableColumns.map((key) => {
       return key.key
-        ? item[key.key as string]
+        ? item[key.key as string] ?? ''
         : typeof key.render === 'function'
         ? (() => {
             const rendered = key.render(item, item, index);

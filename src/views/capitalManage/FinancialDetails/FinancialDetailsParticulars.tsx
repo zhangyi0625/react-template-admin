@@ -24,11 +24,14 @@ import {
 import { copyValue, filterKeys } from '@/utils/tool';
 import { fetchSystemSearchData } from '@/utils/freight';
 import { formatTime } from '@/utils/format';
+import { getDepositManage } from '@/services/capitalManage/depositManage/depositManageApi';
+import { DepositManageStatusOptions } from '../DepositManage/config';
 
 export type FinancialDetailsParticularsPorps = {
   params: {
     visible: boolean;
     type: 'add' | 'view';
+    viewSource: 'FinancialDetails' | 'DepositManage';
     financialDetailsId: string;
   };
   onCancel: () => void;
@@ -39,6 +42,7 @@ type DetailViewOptionsType = {
   label: string;
   key: string;
   value: string | React.FC;
+  hidden: boolean;
 };
 
 const FundType = ['RECHARGE_ACCOUNT_FUND', 'RECHARGE_BOND'];
@@ -48,7 +52,7 @@ const PaymentWay = ['OFFLINE', 'VIRTUAL'];
 const FinancialDetailsParticulars: React.FC<
   FinancialDetailsParticularsPorps
 > = ({ params, onCancel, onOk }) => {
-  const { visible, type, financialDetailsId } = params;
+  const { visible, type, viewSource, financialDetailsId } = params;
 
   const [form] = Form.useForm();
 
@@ -81,7 +85,7 @@ const FinancialDetailsParticulars: React.FC<
 
   const detailViewOptions: DetailViewOptionsType[] = [
     {
-      label: '资金编号',
+      label: viewSource === 'FinancialDetails' ? '资金编号' : '提现编号',
       key: 'no',
       value: () => {
         return (
@@ -93,6 +97,7 @@ const FinancialDetailsParticulars: React.FC<
           </div>
         );
       },
+      hidden: false,
     },
     {
       label: '客户名',
@@ -100,6 +105,7 @@ const FinancialDetailsParticulars: React.FC<
       value: () => {
         return <div>{getdetailByKey('affiliateName') ?? ''}</div>;
       },
+      hidden: false,
     },
     {
       label: '用户名',
@@ -107,6 +113,7 @@ const FinancialDetailsParticulars: React.FC<
       value: () => {
         return <div>{getdetailByKey('customerName') ?? ''}</div>;
       },
+      hidden: false,
     },
     {
       label: '手机号',
@@ -114,16 +121,18 @@ const FinancialDetailsParticulars: React.FC<
       value: () => {
         return <div>{getdetailByKey('customerPhone') ?? ''}</div>;
       },
+      hidden: false,
     },
     {
-      label: '交易金额',
+      label: viewSource === 'FinancialDetails' ? '交易金额' : '提现金额',
       key: 'amount',
       value: () => {
         return <div>{getdetailByKey('amount') ?? ''}</div>;
       },
+      hidden: false,
     },
     {
-      label: '资金类型归属',
+      label: viewSource === 'FinancialDetails' ? '资金类型归属' : '业务归属',
       key: 'fund',
       value: () => {
         let fundSource = publicData['fundSource'];
@@ -135,18 +144,24 @@ const FinancialDetailsParticulars: React.FC<
           </div>
         );
       },
+      hidden: false,
     },
     {
-      label: '创建时间',
+      label: viewSource === 'FinancialDetails' ? '创建时间' : '提现发起时间',
       key: 'created',
       value: () => {
         return <div>{getdetailByKey('created') ?? ''}</div>;
       },
+      hidden: false,
     },
     {
-      label: '付款时间',
+      label: viewSource === 'FinancialDetails' ? '付款时间' : '提现处理时间',
       key: 'accomplished',
-      value: getdetailByKey('accomplished') ?? '',
+      value:
+        getdetailByKey(
+          viewSource === 'FinancialDetails' ? 'accomplished' : 'handled'
+        ) ?? '',
+      hidden: false,
     },
     {
       label: '付款状态',
@@ -155,6 +170,7 @@ const FinancialDetailsParticulars: React.FC<
         let fundRechargeStatus = publicData['fundRechargeStatus'];
         return <div>{fundRechargeStatus[getdetailByKey('status') ?? '']}</div>;
       },
+      hidden: viewSource !== 'FinancialDetails',
     },
     {
       label: '付款渠道',
@@ -163,6 +179,7 @@ const FinancialDetailsParticulars: React.FC<
         let paymentWay = publicData['paymentWay'];
         return <div>{paymentWay[getdetailByKey('paymentWay') ?? '']}</div>;
       },
+      hidden: viewSource !== 'FinancialDetails',
     },
     {
       label: '付款渠道流水号',
@@ -180,26 +197,51 @@ const FinancialDetailsParticulars: React.FC<
           </div>
         );
       },
+      hidden: viewSource !== 'FinancialDetails',
     },
     {
       label: '付款人',
       key: 'paymentPayer',
       value: getdetailByKey('paymentPayer') ?? '',
+      hidden: viewSource !== 'FinancialDetails',
     },
     {
       label: '收款人',
       key: 'paymentPayee',
       value: getdetailByKey('paymentPayee') ?? '',
+      hidden: viewSource !== 'FinancialDetails',
     },
     {
       label: '付款说明',
       key: 'paymentNote',
       value: getdetailByKey('paymentNote') ?? '',
+      hidden: viewSource !== 'FinancialDetails',
+    },
+    {
+      label: '交易类型',
+      key: 'paymentPayee',
+      value: () => {
+        return (
+          <div>
+            {DepositManageStatusOptions?.find(
+              (item) => item.value === getdetailByKey('status')
+            )?.label ?? ''}
+          </div>
+        );
+      },
+      hidden: viewSource !== 'DepositManage',
+    },
+    {
+      label: '提现操作人',
+      key: 'paymentPayee',
+      value: getdetailByKey('handledBy') ?? '',
+      hidden: viewSource !== 'DepositManage',
     },
     {
       label: '备注',
       key: 'remarks',
       value: getdetailByKey('remarks') ?? '',
+      hidden: false,
     },
   ];
 
@@ -233,7 +275,10 @@ const FinancialDetailsParticulars: React.FC<
 
   const loadDetail = async () => {
     try {
-      const resp = await getFinancialDetails(financialDetailsId);
+      const resp =
+        viewSource === 'FinancialDetails'
+          ? await getFinancialDetails(financialDetailsId)
+          : await getDepositManage(financialDetailsId);
       setDetailInfo(resp);
       setLoading(false);
     } catch {}
@@ -243,14 +288,21 @@ const FinancialDetailsParticulars: React.FC<
     return (
       <>
         <div className="grid gap-y-[10px]">
-          {detailViewOptions.map((item) => (
-            <div key={item.key} className="flex items-center text-gray-800">
-              <span className="text-gray-400">{item.label}：</span>
-              <span id={item.key}>
-                {typeof item.value === 'function' ? <item.value /> : item.value}
-              </span>
-            </div>
-          ))}
+          {detailViewOptions.map(
+            (item) =>
+              !item.hidden && (
+                <div key={item.key} className="flex items-center text-gray-800">
+                  <span className="text-gray-400">{item.label}：</span>
+                  <span id={item.key}>
+                    {typeof item.value === 'function' ? (
+                      <item.value />
+                    ) : (
+                      item.value
+                    )}
+                  </span>
+                </div>
+              )
+          )}
         </div>
       </>
     );

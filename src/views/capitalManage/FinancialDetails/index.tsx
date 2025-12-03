@@ -22,7 +22,7 @@ import {
   getFinancialDetailsListByPage,
 } from '@/services/capitalManage/financialDetails/financialDetailsApi';
 import { getPublicData, getPublicSetting } from '@/services/system/setting';
-import FinancialDetailsParticulars from './FinancialDetailsFinancialDetailsParticulars';
+import FinancialDetailsParticulars from './FinancialDetailsParticulars';
 import { RootState, setPublicData } from '@/stores/store';
 import { useDispatch, useSelector } from 'react-redux';
 import { filterKeys } from '@/utils/tool';
@@ -52,8 +52,14 @@ const FinancialDetails: React.FC = () => {
   const [params, setParams] = useState<{
     visible: boolean;
     type: 'add' | 'view';
+    viewSource: 'FinancialDetails';
     financialDetailsId: string;
-  }>({ visible: false, type: 'add', financialDetailsId: '' });
+  }>({
+    visible: false,
+    type: 'add',
+    viewSource: 'FinancialDetails',
+    financialDetailsId: '',
+  });
 
   const columns: TableProps['columns'] = [
     {
@@ -131,6 +137,7 @@ const FinancialDetails: React.FC = () => {
                 setParams({
                   visible: true,
                   type: 'view',
+                  viewSource: 'FinancialDetails',
                   financialDetailsId: _.id,
                 })
               }
@@ -197,7 +204,12 @@ const FinancialDetails: React.FC = () => {
       }
       message.success(!params.financialDetailsId ? '新增成功~' : '修改成功~');
       // 操作成功，关闭弹窗，刷新数据
-      setParams({ visible: false, financialDetailsId: '', type: 'add' });
+      setParams({
+        visible: false,
+        financialDetailsId: '',
+        viewSource: 'FinancialDetails',
+        type: 'add',
+      });
       onUpdateSearch({ searchDefaultForm });
     } catch (error) {}
   };
@@ -246,7 +258,12 @@ const FinancialDetails: React.FC = () => {
             type="primary"
             icon={<PlusOutlined />}
             onClick={() =>
-              setParams({ visible: true, type: 'add', financialDetailsId: '' })
+              setParams({
+                visible: true,
+                type: 'add',
+                financialDetailsId: '',
+                viewSource: 'FinancialDetails',
+              })
             }
           >
             新增线下转账
@@ -281,7 +298,12 @@ const FinancialDetails: React.FC = () => {
       <FinancialDetailsParticulars
         params={params}
         onCancel={() =>
-          setParams({ visible: false, type: 'add', financialDetailsId: '' })
+          setParams({
+            visible: false,
+            type: 'add',
+            financialDetailsId: '',
+            viewSource: 'FinancialDetails',
+          })
         }
         onOk={onEditOk}
       />

@@ -3,7 +3,7 @@ import * as XLSX from 'xlsx';
 import XLSXJSStyle from 'xlsx-js-style';
 import FileSaver from 'file-saver';
 
-export type TableColumns = TableProps['columns'];
+type TableColumns = TableProps['columns'];
 
 /**
  * 导出表格数据
@@ -26,16 +26,29 @@ export function ExportTableDataByXLSX(
   }
   const data: any[] = [];
   let index = 0;
-  const keyArray: any[] = tableColumns.map((item) => item.key); //获取key
-  const titleArr: any[] = tableColumns.map((item) => item.title); //获取表头
-
-  tableData.forEach((item: any) => {
-    const arr: any[] = keyArray.map((key) => {
-      return item[key];
+  // const keyArray: string[] = tableColumns.map((item) => item.key as string); //获取key
+  const titleArr: string[] = tableColumns.map((item) => item.title as string); //获取表头
+  tableData.forEach((item: any, index: number) => {
+    const arr: string[] = tableColumns.map((key) => {
+      return key.key
+        ? item[key.key as string] ?? ''
+        : typeof key.render === 'function'
+        ? (() => {
+            const rendered = key.render(item, item, index);
+            // If it's a React element, get its children, else use as is
+            if (
+              rendered &&
+              typeof rendered === 'object' &&
+              'props' in rendered
+            ) {
+              return (rendered as any).props?.children;
+            }
+            return rendered ?? '';
+          })()
+        : '';
     });
     data.push(arr);
   });
-
   data.splice(0, 0, titleArr);
   const itemWidth = []; // 设置列宽
   const itemHeight = []; // 设置行高

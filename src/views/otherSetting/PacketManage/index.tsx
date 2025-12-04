@@ -28,7 +28,7 @@ import type {
 // import PacketAwardDetail from './PacketAwardDetail';
 import AddPacketManage from './AddPacketManage';
 import { formatTime } from '@/utils/format';
-import { ExportTableDataByXLSX } from './export';
+import { ExportTableDataByXLSX } from '../../../utils/export';
 import { PacketRecordColumms } from './config';
 
 const PacketManage: React.FC = () => {

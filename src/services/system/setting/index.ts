@@ -27,7 +27,7 @@ export const getPublicData = () => {
 export const getPublicSetting = () => {
   return HttpRequest.get<Response>(
     {
-      url: PublicApi.PublicData,
+      url: PublicApi.PublicSetting,
     },
     { isTransformResponse: false }
   );

@@ -556,6 +556,20 @@ export default defineMock([
                   internal: false,
                 },
               },
+              {
+                id: Math.random().toString(),
+                name: 'capital-manage',
+                path: '/capitalManage/invoiceApply/:id',
+                component: 'capitalManage/InvoiceApply/InvoiceApplyDetail',
+                route: '1',
+                meta: {
+                  keepAlive: false,
+                  icon: '',
+                  title: '开票申请详细信息',
+                  internal: false,
+                  menuType: 2,
+                },
+              },
             ],
           },
           {

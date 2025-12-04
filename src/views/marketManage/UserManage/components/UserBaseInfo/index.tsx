@@ -52,7 +52,7 @@ const UserBaseInfo: React.FC<UserBaseInfoProps> = memo(
     const AffiliateComboPermissionRemarkRef =
       useRef<AffiliateComboPermissionRemarkRef>(null);
 
-    const { publicSetting } = store.getState().publicSetting;
+    const { publicData } = store.getState().publicSetting;
 
     const [isEdit, setIsEdit] = useState<boolean>(false);
 
@@ -109,7 +109,7 @@ const UserBaseInfo: React.FC<UserBaseInfoProps> = memo(
       },
       {
         label: '客户类型：',
-        value: publicSetting['customerLevel'][detail.level],
+        value: publicData['customerLevel'][detail.level],
       },
       {
         label: '订舱权限：',
@@ -427,7 +427,7 @@ const UserBaseInfo: React.FC<UserBaseInfoProps> = memo(
                         className="w-[80px] text-center py-[7px] rounded-[16px] mx-[12px] text-normal-blue text-sm font-medium"
                         style={{ background: '#ECF5FF' }}
                       >
-                        {publicSetting['customerLevel'][detail.level]}
+                        {publicData['customerLevel'][detail.level]}
                       </div>
                       <img
                         src={AffiliateEdit}

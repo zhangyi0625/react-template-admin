@@ -55,7 +55,7 @@ const AffiliateBasicInfo: React.FC<AffiliateBasicInfoProps> = memo(
     const AffiliateComboPermissionRemarkRef =
       useRef<AffiliateComboPermissionRemarkRef>(null);
 
-    const { publicSetting } = store.getState().publicSetting;
+    const { publicData } = store.getState().publicSetting;
 
     const BasicOptions = [
       {
@@ -65,7 +65,7 @@ const AffiliateBasicInfo: React.FC<AffiliateBasicInfoProps> = memo(
       },
       {
         label: '企业类型：',
-        value: setting.publicSetting['customerAffiliateType'][detail.type],
+        value: publicData['customerAffiliateType'][detail.type],
       },
       {
         label: '社会统一信用代码：',
@@ -168,9 +168,9 @@ const AffiliateBasicInfo: React.FC<AffiliateBasicInfoProps> = memo(
       formMaps.map((item) => {
         if (item.name === 'type') {
           let newArr: SelectProps['options'] = [];
-          for (let key in publicSetting.customerAffiliateType) {
+          for (let key in publicData['customerAffiliateType']) {
             newArr.push({
-              label: publicSetting.customerAffiliateType[key],
+              label: publicData['customerAffiliateType'][key],
               value: key,
             });
           }

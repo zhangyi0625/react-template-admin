@@ -7,7 +7,7 @@ export type RegularBookingSearchFilter = {
   type: string;
   status: string;
   affiliateId: string | null;
-  customerId: string;
+  customerId: string | null;
 };
 
 export interface RegularBookingSearchParams extends DefaultPaging {

@@ -18,7 +18,7 @@ export type OrderTabsItemRef = {
 
 const OrderTabsItem = React.forwardRef<OrderTabsItemRef, OrderTabsItemProps>(
   ({ type, customerId, affiliateId }, ref) => {
-    const { publicSetting } = store.getState()?.publicSetting;
+    const { publicData } = store.getState()?.publicSetting;
 
     const navigate = useNavigate();
 
@@ -80,7 +80,7 @@ const OrderTabsItem = React.forwardRef<OrderTabsItemRef, OrderTabsItemProps>(
         width: 100,
         align: 'center',
         render(value) {
-          return <div>{publicSetting['frtOrderStatus'][value.status]}</div>;
+          return <div>{publicData['frtOrderStatus'][value.status]}</div>;
         },
       },
       {

@@ -21,17 +21,18 @@ import {
   getSearchAffiliate,
   getSearchCustomer,
 } from '@/services/orderManage/regularBooking/regularBookingApi';
+import { getDepositManage } from '@/services/capitalManage/depositManage/depositManageApi';
+import { DepositManageStatusOptions } from '../DepositManage/config';
+import { getClientsCapital } from '@/services/capitalManage/clientsCapital/clientsCapitalApi';
 import { copyValue, filterKeys } from '@/utils/tool';
 import { fetchSystemSearchData } from '@/utils/freight';
 import { formatTime } from '@/utils/format';
-import { getDepositManage } from '@/services/capitalManage/depositManage/depositManageApi';
-import { DepositManageStatusOptions } from '../DepositManage/config';
 
 export type FinancialDetailsParticularsPorps = {
   params: {
     visible: boolean;
     type: 'add' | 'view';
-    viewSource: 'FinancialDetails' | 'DepositManage';
+    viewSource: 'FinancialDetails' | 'DepositManage' | 'ClientsCapital';
     financialDetailsId: string;
   };
   onCancel: () => void;
@@ -97,7 +98,25 @@ const FinancialDetailsParticulars: React.FC<
           </div>
         );
       },
-      hidden: false,
+      hidden: viewSource === 'ClientsCapital',
+    },
+    {
+      label: '交易流水号',
+      key: 'tradeNo',
+      value: () => {
+        return (
+          <div>
+            {getdetailByKey('tradeNo') ?? ''}
+            <Tag
+              style={{ margin: '0 10px' }}
+              onClick={() => copyValue('tradeNo')}
+            >
+              复制
+            </Tag>
+          </div>
+        );
+      },
+      hidden: viewSource !== 'ClientsCapital',
     },
     {
       label: '客户名',
@@ -124,7 +143,7 @@ const FinancialDetailsParticulars: React.FC<
       hidden: false,
     },
     {
-      label: viewSource === 'FinancialDetails' ? '交易金额' : '提现金额',
+      label: viewSource === 'DepositManage' ? '提现金额' : '交易金额',
       key: 'amount',
       value: () => {
         return <div>{getdetailByKey('amount') ?? ''}</div>;
@@ -132,7 +151,20 @@ const FinancialDetailsParticulars: React.FC<
       hidden: false,
     },
     {
-      label: viewSource === 'FinancialDetails' ? '资金类型归属' : '业务归属',
+      label: '账号余额',
+      key: 'balance',
+      value: () => {
+        return <div>{getdetailByKey('balance') ?? ''}</div>;
+      },
+      hidden: false,
+    },
+    {
+      label:
+        viewSource === 'FinancialDetails'
+          ? '资金类型归属'
+          : viewSource === 'DepositManage'
+          ? '业务归属'
+          : '资金类型',
       key: 'fund',
       value: () => {
         let fundSource = publicData['fundSource'];
@@ -147,7 +179,12 @@ const FinancialDetailsParticulars: React.FC<
       hidden: false,
     },
     {
-      label: viewSource === 'FinancialDetails' ? '创建时间' : '提现发起时间',
+      label:
+        viewSource === 'FinancialDetails'
+          ? '创建时间'
+          : viewSource === 'DepositManage'
+          ? '提现发起时间'
+          : '交易创建时间',
       key: 'created',
       value: () => {
         return <div>{getdetailByKey('created') ?? ''}</div>;
@@ -161,7 +198,7 @@ const FinancialDetailsParticulars: React.FC<
         getdetailByKey(
           viewSource === 'FinancialDetails' ? 'accomplished' : 'handled'
         ) ?? '',
-      hidden: false,
+      hidden: viewSource === 'ClientsCapital',
     },
     {
       label: '付款状态',
@@ -173,13 +210,23 @@ const FinancialDetailsParticulars: React.FC<
       hidden: viewSource !== 'FinancialDetails',
     },
     {
-      label: '付款渠道',
-      key: 'paymentWay',
+      label: viewSource === 'FinancialDetails' ? '付款渠道' : '付款方式',
+      key: viewSource === 'ClientsCapital' ? 'type' : 'paymentWay',
       value: () => {
         let paymentWay = publicData['paymentWay'];
-        return <div>{paymentWay[getdetailByKey('paymentWay') ?? '']}</div>;
+        return (
+          <div>
+            {
+              paymentWay[
+                getdetailByKey(
+                  viewSource === 'ClientsCapital' ? 'type' : 'paymentWay'
+                ) ?? ''
+              ]
+            }
+          </div>
+        );
       },
-      hidden: viewSource !== 'FinancialDetails',
+      hidden: false,
     },
     {
       label: '付款渠道流水号',
@@ -238,6 +285,12 @@ const FinancialDetailsParticulars: React.FC<
       hidden: viewSource !== 'DepositManage',
     },
     {
+      label: '交易内容',
+      key: 'tradeTitle',
+      value: getdetailByKey('tradeTitle') ?? '',
+      hidden: viewSource !== 'ClientsCapital',
+    },
+    {
       label: '备注',
       key: 'remarks',
       value: getdetailByKey('remarks') ?? '',
@@ -278,7 +331,9 @@ const FinancialDetailsParticulars: React.FC<
       const resp =
         viewSource === 'FinancialDetails'
           ? await getFinancialDetails(financialDetailsId)
-          : await getDepositManage(financialDetailsId);
+          : viewSource === 'DepositManage'
+          ? await getDepositManage(financialDetailsId)
+          : await getClientsCapital(financialDetailsId);
       setDetailInfo(resp);
       setLoading(false);
     } catch {}

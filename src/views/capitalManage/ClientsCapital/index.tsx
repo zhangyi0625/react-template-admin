@@ -203,6 +203,7 @@ const ClientsCapital: React.FC = () => {
     setDownLoading(true);
     try {
       const resp = await getClientsCapitalListByPage({
+        ...searchDefaultForm,
         pageIndex: 1,
         pageSize: 9999,
       });

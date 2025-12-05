@@ -251,6 +251,7 @@ const DepositManage: React.FC = () => {
     setDownLoading(true);
     try {
       const resp = await getDepositManageListByPage({
+        ...searchDefaultForm,
         pageIndex: 1,
         pageSize: 9999,
       });

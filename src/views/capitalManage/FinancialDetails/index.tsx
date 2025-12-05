@@ -218,6 +218,7 @@ const FinancialDetails: React.FC = () => {
     setDownLoading(true);
     try {
       const resp = await getFinancialDetailsListByPage({
+        ...searchDefaultForm,
         pageIndex: 1,
         pageSize: 9999,
       });

@@ -95,14 +95,14 @@ export type DndPriceType = {
 } & { showDayNum?: string; copyDayNum?: number };
 
 export interface FreightPriceListType {
-  count: number;
+  count?: number;
   basePrice: number;
   costDetailList: CostDetailType[];
   ctnType: string;
   currency: string;
   dndDetailList: DndPriceType[];
   inventory: string | number;
-  productId: string;
+  productId?: string;
   totalPrice: number;
 }
 

@@ -1,5 +1,5 @@
 import { memo, useEffect, useState } from 'react';
-import DragModal from '@/components/modal/DragModal';
+import DragModal from '@/components/Modal/DragModal';
 import { Form, Select, Input } from 'antd';
 import { BookingFailReason } from './config';
 

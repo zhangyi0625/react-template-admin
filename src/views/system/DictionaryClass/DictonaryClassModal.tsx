@@ -1,21 +1,21 @@
-import React, { useEffect, useRef } from 'react'
-import { Form, Input, InputNumber, type InputRef } from 'antd'
-import DragModal from '@/components/modal/DragModal'
-import { SysDictionaryClassType } from '@/services/system/dictionary/dictionaryModel'
+import React, { useEffect, useRef } from 'react';
+import { Form, Input, InputNumber, type InputRef } from 'antd';
+import DragModal from '@/components/Modal/DragModal';
+import { SysDictionaryClassType } from '@/services/system/dictionary/dictionaryModel';
 
 export interface DictonaryClassModalProps {
   params: {
     // 弹窗可见性
-    visible: boolean
+    visible: boolean;
     // 弹窗需要的数据
-    currentRow: SysDictionaryClassType | null
-    view: boolean
-  }
+    currentRow: SysDictionaryClassType | null;
+    view: boolean;
+  };
 
   // 点击确定的回调
-  onOk: (params: SysDictionaryClassType) => void
+  onOk: (params: SysDictionaryClassType) => void;
   // 点击取消的回调
-  onCancel: (e: React.MouseEvent<HTMLButtonElement>) => void
+  onCancel: (e: React.MouseEvent<HTMLButtonElement>) => void;
 }
 
 const DictonaryClassModal: React.FC<DictonaryClassModalProps> = ({
@@ -23,22 +23,22 @@ const DictonaryClassModal: React.FC<DictonaryClassModalProps> = ({
   onOk,
   onCancel,
 }) => {
-  const { visible, currentRow, view } = params
+  const { visible, currentRow, view } = params;
 
-  const [form] = Form.useForm()
+  const [form] = Form.useForm();
 
-  const dictNameRef = useRef<InputRef>(null)
+  const dictNameRef = useRef<InputRef>(null);
 
   useEffect(() => {
-    if (!visible) return
+    if (!visible) return;
     if (currentRow) {
       // 填充表单数据
-      form.setFieldsValue(currentRow)
+      form.setFieldsValue(currentRow);
     } else {
       // 清空表单数据，表示新增
-      form.resetFields()
+      form.resetFields();
     }
-  }, [currentRow, visible])
+  }, [currentRow, visible]);
 
   /**
    * 弹窗打开关闭的回调（打开后默认聚焦到名称输入框）
@@ -46,9 +46,9 @@ const DictonaryClassModal: React.FC<DictonaryClassModalProps> = ({
    */
   const onAfterOpenChange = (open: boolean) => {
     if (open) {
-      dictNameRef.current?.focus()
+      dictNameRef.current?.focus();
     }
-  }
+  };
 
   /**
    * 点击确认的时候先做数据校验
@@ -57,14 +57,14 @@ const DictonaryClassModal: React.FC<DictonaryClassModalProps> = ({
     form
       .validateFields()
       .then(() => {
-        onOk(form.getFieldsValue())
+        onOk(form.getFieldsValue());
       })
       .catch((errorInfo) => {
         // 滚动并聚焦到第一个错误字段
-        form.scrollToField(errorInfo.errorFields[0].name)
-        form.focusField(errorInfo.errorFields[0].name)
-      })
-  }
+        form.scrollToField(errorInfo.errorFields[0].name);
+        form.focusField(errorInfo.errorFields[0].name);
+      });
+  };
   return (
     <DragModal
       width="40%"
@@ -113,7 +113,7 @@ const DictonaryClassModal: React.FC<DictonaryClassModalProps> = ({
         </Form.Item>
       </Form>
     </DragModal>
-  )
-}
+  );
+};
 
-export default DictonaryClassModal
+export default DictonaryClassModal;

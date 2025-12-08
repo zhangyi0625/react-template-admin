@@ -1,6 +1,6 @@
 import React, { useImperativeHandle, useState } from 'react';
 import { type TableProps } from 'antd';
-import DragModal from '@/components/modal/DragModal';
+import DragModal from '@/components/Modal/DragModal';
 import {
   getEquityRightsBase,
   getEquityRightsExtra,

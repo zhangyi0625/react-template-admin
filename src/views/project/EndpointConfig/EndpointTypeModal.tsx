@@ -1,4 +1,4 @@
-import DragModal from '@/components/modal/DragModal';
+import DragModal from '@/components/Modal/DragModal';
 import { Button, Form, Input, type InputRef } from 'antd';
 import { useEffect, useRef } from 'react';
 

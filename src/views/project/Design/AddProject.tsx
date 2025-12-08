@@ -1,4 +1,4 @@
-import DragModal from '@/components/modal/DragModal';
+import DragModal from '@/components/Modal/DragModal';
 
 /**
  * 添加项目弹窗

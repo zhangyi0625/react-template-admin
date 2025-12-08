@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Col, Form, Input, Row, Space } from 'antd';
-import DragModal from '@/components/modal/DragModal';
+import DragModal from '@/components/Modal/DragModal';
 import type { ShipownerEncyclopediaType } from '@/services/websiteInfo/wesiteInfoModel';
 import {
   ShipownerEncyclopediaForm,

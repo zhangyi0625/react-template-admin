@@ -13,7 +13,7 @@ import {
 } from 'antd';
 import type { FinancialDetailsType } from '@/services/capitalManage/financialDetails/financialDetailsModel';
 import { getFinancialDetails } from '@/services/capitalManage/financialDetails/financialDetailsApi';
-import DragModal from '@/components/modal/DragModal';
+import DragModal from '@/components/Modal/DragModal';
 import { RootState } from '@/stores/store';
 import { useSelector } from 'react-redux';
 import { FinancialDetailsForms } from './config';

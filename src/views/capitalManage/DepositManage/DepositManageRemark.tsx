@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Form, Input, Select } from 'antd';
 import { DisposeOptions } from './config';
-import DragModal from '@/components/modal/DragModal';
+import DragModal from '@/components/Modal/DragModal';
 import type { DepositManageType } from '@/services/capitalManage/depositManage/depositManageModel';
 
 export type DepositManageRemarkProps = {

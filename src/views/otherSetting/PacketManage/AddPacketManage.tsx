@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { Form, Input, Radio, DatePicker } from 'antd';
-import DragModal from '@/components/modal/DragModal';
+import DragModal from '@/components/Modal/DragModal';
 import type { PacketManageType } from '@/services/otherSetting/packetManage/packetManageModel';
 import { filterKeys } from '@/utils/tool';
 import dayjs from 'dayjs';

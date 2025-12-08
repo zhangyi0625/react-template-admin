@@ -1,5 +1,5 @@
 import React from 'react';
-import DragModal from '@/components/modal/DragModal';
+import DragModal from '@/components/Modal/DragModal';
 
 export type PacketAwardDetailProps = {
   params: {

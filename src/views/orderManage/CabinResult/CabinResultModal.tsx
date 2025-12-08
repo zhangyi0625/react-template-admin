@@ -9,7 +9,7 @@ import {
 } from 'antd';
 import { InboxOutlined } from '@ant-design/icons';
 import { SelectProps } from 'antd/lib';
-import DragModal from '@/components/modal/DragModal';
+import DragModal from '@/components/Modal/DragModal';
 import { getSearchAffiliate } from '@/services/orderManage/regularBooking/regularBookingApi';
 import type { ImportCabinResultType } from '@/services/orderManage/cabinResult/cabinResultModel';
 import { debounce } from 'lodash-es';

@@ -1,21 +1,21 @@
-import React, { useEffect, useRef, useState } from 'react'
-import { Form, Input, InputNumber, Select, type InputRef } from 'antd'
-import DragModal from '@/components/modal/DragModal'
-import type { SysOrganizationType } from '@/services/system/organization/organizationModel'
-import { getOrganizationList } from '@/services/system/organization/organization'
+import React, { useEffect, useRef, useState } from 'react';
+import { Form, Input, InputNumber, Select, type InputRef } from 'antd';
+import DragModal from '@/components/Modal/DragModal';
+import type { SysOrganizationType } from '@/services/system/organization/organizationModel';
+import { getOrganizationList } from '@/services/system/organization/organization';
 
 export interface AddOrganizationProps {
   params: {
     // 弹窗可见性
-    visible: boolean
+    visible: boolean;
     // 弹窗需要的数据
-    currentRow: SysOrganizationType | null
-  }
-  parentId: string | null
+    currentRow: SysOrganizationType | null;
+  };
+  parentId: string | null;
   // 点击确定的回调
-  onOk: (params: SysOrganizationType) => void
+  onOk: (params: SysOrganizationType) => void;
   // 点击取消的回调
-  onCancel: (e: React.MouseEvent<HTMLButtonElement>) => void
+  onCancel: (e: React.MouseEvent<HTMLButtonElement>) => void;
 }
 
 const AddOrganization: React.FC<AddOrganizationProps> = ({
@@ -24,37 +24,37 @@ const AddOrganization: React.FC<AddOrganizationProps> = ({
   onOk,
   onCancel,
 }) => {
-  const { visible, currentRow } = params
+  const { visible, currentRow } = params;
 
-  const [form] = Form.useForm()
+  const [form] = Form.useForm();
 
-  const organizationRef = useRef<InputRef>(null)
+  const organizationRef = useRef<InputRef>(null);
 
-  const [organization, setOrganization] = useState([])
+  const [organization, setOrganization] = useState([]);
 
   useEffect(() => {
-    if (!visible) return
-    getAllOranization()
+    if (!visible) return;
+    getAllOranization();
     if (currentRow) {
       // 填充表单数据
       form.setFieldsValue({
         ...currentRow,
         parentId: currentRow.parentId === '0' ? null : currentRow.parentId,
-      })
+      });
     } else {
       // 清空表单数据，表示新增
-      form.resetFields()
+      form.resetFields();
       form.setFieldsValue({
         parentId: parentId ?? null,
-      })
+      });
     }
-  }, [currentRow, visible])
+  }, [currentRow, visible]);
 
   const getAllOranization = () => {
     getOrganizationList().then((resp) => {
-      setOrganization(resp)
-    })
-  }
+      setOrganization(resp);
+    });
+  };
 
   /**
    * 弹窗打开关闭的回调（打开后默认聚焦到名称输入框）
@@ -62,9 +62,9 @@ const AddOrganization: React.FC<AddOrganizationProps> = ({
    */
   const onAfterOpenChange = (open: boolean) => {
     if (open) {
-      organizationRef.current?.focus()
+      organizationRef.current?.focus();
     }
-  }
+  };
 
   /**
    * 点击确认的时候先做数据校验
@@ -73,14 +73,14 @@ const AddOrganization: React.FC<AddOrganizationProps> = ({
     form
       .validateFields()
       .then(() => {
-        onOk(form.getFieldsValue())
+        onOk(form.getFieldsValue());
       })
       .catch((errorInfo) => {
         // 滚动并聚焦到第一个错误字段
-        form.scrollToField(errorInfo.errorFields[0].name)
-        form.focusField(errorInfo.errorFields[0].name)
-      })
-  }
+        form.scrollToField(errorInfo.errorFields[0].name);
+        form.focusField(errorInfo.errorFields[0].name);
+      });
+  };
   return (
     <DragModal
       width="40%"
@@ -150,7 +150,7 @@ const AddOrganization: React.FC<AddOrganizationProps> = ({
         </Form.Item>
       </Form>
     </DragModal>
-  )
-}
+  );
+};
 
-export default AddOrganization
+export default AddOrganization;

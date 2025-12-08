@@ -2,7 +2,7 @@ import styles from '@/views/marketManage/AffiliateManage/AffiliateManage.module.
 import React, { useEffect, useState } from 'react';
 import { DatePicker, Form, Input, Select } from 'antd';
 import { OpenInterfaceBusinessForms } from './config';
-import DragModal from '@/components/modal/DragModal';
+import DragModal from '@/components/Modal/DragModal';
 import type { OpenInterfaceBusinessType } from '@/services/marketManage/openInterface/openInterfaceModel';
 import { store } from '@/stores/store';
 import dayjs from 'dayjs';

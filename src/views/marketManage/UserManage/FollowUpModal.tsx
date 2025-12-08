@@ -1,6 +1,6 @@
 import React from 'react';
 import { Form, Input } from 'antd';
-import DragModal from '@/components/modal/DragModal';
+import DragModal from '@/components/Modal/DragModal';
 
 export type FollowUpModalProps = {
   followUpModalVisible: boolean;

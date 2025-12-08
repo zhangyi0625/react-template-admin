@@ -3,7 +3,7 @@ import styles from '../../orderManage/CabinResult/cabinResult.module.scss';
 import DeleteIcon from '@/assets/svg/icon/delete.svg';
 import AddIcon from '@/assets/svg/icon/add.svg';
 import { Form, Input, Select, Space, TimePicker, type SelectProps } from 'antd';
-import DragModal from '@/components/modal/DragModal';
+import DragModal from '@/components/Modal/DragModal';
 import type { SendCustomizationFreightType } from '@/services/freightSetting/sendCustomizationFreight/sendCustomizationFreightModel';
 import { SendCustomizationFreightForms } from '../config';
 import { getSearchCustomer } from '@/services/orderManage/regularBooking/regularBookingApi';

@@ -143,7 +143,7 @@ export const CabinManageSearchColumns: CustomColumn[] = [
   },
   {
     label: '有效时间',
-    name: 'valid',
+    name: ['validForm', 'validTo'],
     formType: 'range-picker',
     span: 6,
     selectFetch: false,

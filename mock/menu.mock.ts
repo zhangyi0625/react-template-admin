@@ -306,6 +306,20 @@ export default defineMock([
               {
                 id: Math.random().toString(),
                 name: 'cabin-information',
+                path: '/cabinInformation/cabinManage/:id',
+                component: 'cabinInformation/CabinManage/CabinManageDetail',
+                route: '1',
+                meta: {
+                  keepAlive: false,
+                  icon: '',
+                  title: '舱位管理详细信息',
+                  internal: false,
+                  menuType: 2,
+                },
+              },
+              {
+                id: Math.random().toString(),
+                name: 'cabin-information',
                 path: '/cabinInformation/routeManage',
                 component: 'cabinInformation/RouteManage',
                 route: '1',

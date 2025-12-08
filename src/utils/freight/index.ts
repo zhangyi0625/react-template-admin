@@ -64,7 +64,8 @@ export const getJudgePush = (
     newArr.push({
       [type]: el.price,
       chargeType: el.chargeType,
-      chargeName: el.chargeName,
+      // chargeName: el.chargeName,
+      chargeName: `${el.chargeName}(${el.currency})`,
       currency: el.currency,
       isIncludeTotal: el.showOnly != null && el.showOnly ? '否' : '是',
     });

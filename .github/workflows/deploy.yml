@@ -7,6 +7,7 @@ on:
       - dev
       - zc-ls-cabin
       - zc-manager
+      - zc-manager-rsbuild/config-alias
   workflow_dispatch:
 
 permissions:

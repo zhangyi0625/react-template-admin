@@ -23,7 +23,8 @@
     "paths": {
       "@/*": [
         "src/*"
-      ]
+      ],
+      "@components/*": ["src/components/*"]
     },
     "ignoreDeprecations": "6.0"
   },

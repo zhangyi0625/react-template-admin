@@ -1,13 +1,13 @@
 import type { DefaultPaging } from '@/types/global';
 
 export interface RouteManageSearchFilterParams {
-  carrier: string;
+  carrier?: string;
   channel: string;
-  porId: string;
-  fndId: string;
-  route: string;
-  updatedStart: string;
-  updatedEnd: string;
+  porId?: string;
+  fndId?: string;
+  route?: string;
+  updatedStart?: string;
+  updatedEnd?: string;
 }
 
 export interface RouteManageSearchParams extends DefaultPaging {
@@ -18,6 +18,7 @@ export interface RouteManageSearchParams extends DefaultPaging {
 }
 
 export interface RouteManageByCarrierRouteType {
+  id: string | null;
   carriers: string[];
   porIds: string[];
   fndIds: string[];

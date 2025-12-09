@@ -28,7 +28,6 @@ export const getRouteManageListByPage = (params: RouteManageSearchParams) => {
     {
       url: RouteManageApi.RouteManageByPage,
       params: qsParams,
-      timeout: 30000,
     },
     {
       isTransformResponse: false,
@@ -38,15 +37,13 @@ export const getRouteManageListByPage = (params: RouteManageSearchParams) => {
 
 /**
  * 获取航线管理详情
- * @param params 航线管理参数
+ * @param id 航线管理参数
  * @returns 航线管理列表
  */
-export const getRouteManageDetail = (id: string, params: { type: string }) => {
+export const getRouteManageDetail = (id: string) => {
   return HttpRequest.get(
     {
       url: RouteManageApi.RouteManage + '/' + id,
-      params: params,
-      timeout: 30000,
     },
     {
       isTransformResponse: false,
@@ -114,7 +111,7 @@ export const deleteRouteManage = (id: string) => {
  * @param id 航线管理参数
  * @returns 航线管理列表
  */
-export const updateRouteManage = (id: string) => {
+export const updateShippingRouteManage = (id: string) => {
   return HttpRequest.post(
     {
       url: RouteManageApi.RouteManage + id + '/updating',

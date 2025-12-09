@@ -47,12 +47,10 @@ export default defineConfig({
   },
   // 配置路径别名
   source: {
-    define: publicVars,
-  },
-  resolve: {
     alias: {
       '@': path.resolve(__dirname, './src'),
     },
+    define: publicVars,
   },
   dev: {
     // 按需编译

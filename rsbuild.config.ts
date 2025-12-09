@@ -51,8 +51,9 @@ export default defineConfig({
   },
   resolve: {
     alias: {
-      '@': path.resolve(__dirname, 'src'),
+      '@': path.resolve(__dirname, './src'),
     },
+    aliasStrategy: 'prefer-tsconfig',
   },
   dev: {
     // 按需编译

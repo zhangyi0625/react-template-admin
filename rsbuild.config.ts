@@ -49,12 +49,6 @@ export default defineConfig({
   source: {
     define: publicVars,
   },
-  resolve: {
-    alias: {
-      '@components': 'src/components',
-    },
-    aliasStrategy: 'prefer-tsconfig',
-  },
   dev: {
     // 按需编译
     lazyCompilation: true,

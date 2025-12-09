@@ -49,6 +49,11 @@ export default defineConfig({
   source: {
     define: publicVars,
   },
+  resolve: {
+    alias: {
+      '@components': './src/components',
+    },
+  },
   dev: {
     // 按需编译
     lazyCompilation: true,

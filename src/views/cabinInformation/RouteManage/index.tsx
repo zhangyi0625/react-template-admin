@@ -63,7 +63,6 @@ const RouteManage: React.FC = () => {
       if (item.name === 'route') item.options = essential['routeData'];
     });
     setFormMaps([...formMaps]);
-    console.log(formMaps, 'zzzz');
   }, [essential]);
 
   const columns: TableProps['columns'] = [

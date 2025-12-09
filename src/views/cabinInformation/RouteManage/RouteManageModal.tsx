@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Form, Input, Select, type SelectProps } from 'antd';
 import styles from '@/views/orderManage/CabinResult/cabinResult.module.scss';
-import DragModal from '@/components/Modal/DragModal';
+import DragModal from '@/components/modal/DragModal';
 import { getRouteManageDetail } from '@/services/cabinInformation/routeManage/routeManageApi';
 import type { RouteManageByCarrierRouteType } from '@/services/cabinInformation/routeManage/routeManageModel';
 import { CabinManageChannelOptions } from '../CabinManage/config';

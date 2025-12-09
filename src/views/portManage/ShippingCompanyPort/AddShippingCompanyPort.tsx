@@ -4,7 +4,7 @@ import {
   OurCompanyPortSearchColumns,
   ShippingCompanyPortSearchColumns,
 } from '../config';
-import DragModal from '@/components/Modal/DragModal';
+import DragModal from '@/components/modal/DragModal';
 import type { ShippingCompanyPortType } from '@/services/portManage/shippingCompanyPort/shippingCompanyPortModel';
 import { SearchForm, SearchTable } from 'customer-search-form-table';
 import { getOurCompanyPortListByPage } from '@/services/portManage/ourCompanyPort/ourCompanyPortApi';

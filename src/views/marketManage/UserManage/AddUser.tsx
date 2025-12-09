@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import type { StaffManageType } from '@/services/marketManage/staffManage/staffManageModel';
 import { Col, Form, Input, Radio, Row, Select } from 'antd';
-import DragModal from '@/components/Modal/DragModal';
+import DragModal from '@/components/modal/DragModal';
 import { UserManageFormsColumns } from './config';
 import { CheckboxGroupProps } from 'antd/es/checkbox';
 import { filterKeys } from '@/utils/tool';

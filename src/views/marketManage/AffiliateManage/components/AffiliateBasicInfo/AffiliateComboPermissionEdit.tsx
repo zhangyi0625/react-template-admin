@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import styles from '../../AffiliateManage.module.scss';
 import { Form, Input, Radio } from 'antd';
-import DragModal from '@/components/Modal/DragModal';
+import DragModal from '@/components/modal/DragModal';
 import { ComboPermission } from '@/enums/setting';
 import type { EquityRightsBaseEditType } from '@/services/otherSetting/queryRightsSettings/queryRightsSettingsApi';
 

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Table, TableProps } from 'antd';
-import DragModal from '@/components/Modal/DragModal';
+import DragModal from '@/components/modal/DragModal';
 import { getAuthenticationManageDetail } from '@/services/marketManage/authenticationManage/authenticationManageApi';
 
 export type AuthenticationDetailModalProps = {

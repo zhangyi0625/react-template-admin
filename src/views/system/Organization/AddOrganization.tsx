@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Form, Input, InputNumber, Select, type InputRef } from 'antd';
-import DragModal from '@/components/Modal/DragModal';
+import DragModal from '@/components/modal/DragModal';
 import type { SysOrganizationType } from '@/services/system/organization/organizationModel';
 import { getOrganizationList } from '@/services/system/organization/organization';
 

@@ -1,5 +1,5 @@
 import { memo } from 'react';
-import DragModal from '@/components/Modal/DragModal';
+import DragModal from '@/components/modal/DragModal';
 import { Table, TableProps } from 'antd';
 
 export type CarrierAccountsType = {

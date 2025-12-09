@@ -1,5 +1,5 @@
 import React, { memo, useEffect, useState } from 'react';
-import DragModal from '@/components/Modal/DragModal';
+import DragModal from '@/components/modal/DragModal';
 import {
   FastBookingCargoReuirementOptions,
   RegularBookingCargoReuirementOptions,

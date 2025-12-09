@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Col, Form, Input, Row, Select } from 'antd';
 import { OurCompanyPortForms } from '../config';
-import DragModal from '@/components/Modal/DragModal';
+import DragModal from '@/components/modal/DragModal';
 import type { OurCompanyPortType } from '@/services/portManage/ourCompanyPort/ourCompanyPortModel';
 import { getSystemAreaOptions } from '@/services/system/basicData/basicDataApi';
 import { filterKeys, searchSelectFilterOption } from '@/utils/tool';

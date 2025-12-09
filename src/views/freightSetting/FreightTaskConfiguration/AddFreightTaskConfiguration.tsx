@@ -5,7 +5,7 @@ import {
   FreightTaskConfigurationForms,
   FreightTaskConfigurationSearchColumns,
 } from '../config';
-import DragModal from '@/components/Modal/DragModal';
+import DragModal from '@/components/modal/DragModal';
 import type { FreightTaskConfigurationType } from '@/services/freightSetting/freightTaskConfiguration/freightTaskConfigurationModel';
 import { getSystemPort } from '@/services/system/basicData/basicDataApi';
 import type { DefaultOptionType } from 'antd/es/select';

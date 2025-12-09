@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { App, Form, Input, Select } from 'antd';
-import DragModal from '@/components/Modal/DragModal';
+import DragModal from '@/components/modal/DragModal';
 import type { AffiliateManageType } from '@/services/marketManage/affiliateManage/affiliateManageModel';
 import { AffiliateManageForm } from './config';
 import { RootState } from '@/stores/store';

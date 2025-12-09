@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import { Form, Input, InputNumber, Select, type InputRef } from 'antd';
 import { SelectProps } from 'antd/lib';
-import DragModal from '@/components/Modal/DragModal';
+import DragModal from '@/components/modal/DragModal';
 import type { SysDictionaryType } from '@/services/system/dictionary/dictionaryModel';
 
 export type DictonaryModalProps = {

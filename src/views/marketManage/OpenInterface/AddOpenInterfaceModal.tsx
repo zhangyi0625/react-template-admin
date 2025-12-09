@@ -8,7 +8,7 @@ import {
   Select,
   type SelectProps,
 } from 'antd';
-import DragModal from '@/components/Modal/DragModal';
+import DragModal from '@/components/modal/DragModal';
 import type { OpenInterfaceType } from '@/services/marketManage/openInterface/openInterfaceModel';
 import { OpenInterfaceForms } from './config';
 import { getSearchCustomer } from '@/services/orderManage/regularBooking/regularBookingApi';

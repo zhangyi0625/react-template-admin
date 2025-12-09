@@ -12,7 +12,7 @@ import {
   Tooltip,
   TreeSelect,
 } from 'antd';
-import DragModal from '@/components/Modal/DragModal';
+import DragModal from '@/components/modal/DragModal';
 import { getMenusList } from '@/services/system/menu/menuApi';
 import IconPanel from '@/components/IconPanel';
 

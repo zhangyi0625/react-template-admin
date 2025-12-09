@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import { Form, Input, type InputRef } from 'antd';
-import DragModal from '@/components/Modal/DragModal';
+import DragModal from '@/components/modal/DragModal';
 import type { ShippingCompanyZoneType } from '@/services/websiteInfo/wesiteInfoModel';
 import { ShippingCompanyZoneForm } from './config';
 

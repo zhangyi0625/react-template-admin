@@ -14,7 +14,7 @@ import {
   App,
 } from 'antd';
 import type { DefaultOptionType } from 'antd/es/select';
-import DragModal from '@/components/Modal/DragModal';
+import DragModal from '@/components/modal/DragModal';
 import { getShippingSchedule } from '@/services/orderManage/regularBooking/regularBookingApi';
 import { formatTime } from '@/utils/format';
 import { filterKeys } from '@/utils/tool';

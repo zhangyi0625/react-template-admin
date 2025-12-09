@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Col, Form, Input, Row, Select } from 'antd';
-import DragModal from '@/components/Modal/DragModal';
+import DragModal from '@/components/modal/DragModal';
 import { getRoleList } from '@/services/system/role/roleApi';
 import type { SysUserType } from '@/services/system/user/userModel';
 import type { SysRoleType } from '@/services/system/role/roleModel';

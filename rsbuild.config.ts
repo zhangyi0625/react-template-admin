@@ -48,7 +48,7 @@ export default defineConfig({
   // 配置路径别名
   source: {
     alias: {
-      '@': path.resolve(__dirname, './src'),
+      '@': path.resolve(__dirname, 'src'),
     },
     define: publicVars,
   },

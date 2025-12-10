@@ -34,3 +34,13 @@ export enum LevelSetting {
   L13 = '认证卖家',
   L21 = '定制会员',
 }
+
+export enum ShippingCabinPlanScheduleType {
+  周一 = 'MONDAY',
+  周二 = 'TUESDAY',
+  周三 = 'WEDNESDAY',
+  周四 = 'THURSDAY',
+  周五 = 'FRIDAY',
+  周六 = 'SATURDAY',
+  周日 = 'SUNDAY',
+}

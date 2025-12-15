@@ -1,0 +1,30 @@
+.cabinMonitoring-detail {
+  p {
+    font-size: 14px;
+    font-weight: bold;
+    color: #303133;
+  }
+  > .title-item {
+    border: 4px;
+    margin: 10px 0;
+    background: #e7effa;
+    padding: 7px 8px;
+    display: flex;
+    align-items: center;
+    > span {
+      width: 2px;
+      height: 14px;
+      background: #1677ff;
+      margin-right: 10px;
+    }
+  }
+  .basic-title {
+    white-space: nowrap;
+    color: #909399;
+  }
+  .basic-value {
+    overflow: scroll;
+    text-wrap: wrap;
+    font-weight: 500 !important;
+  }
+}

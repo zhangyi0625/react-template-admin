@@ -2,6 +2,7 @@ import { message, type TableProps } from 'antd';
 import * as XLSX from 'xlsx';
 import XLSXJSStyle from 'xlsx-js-style';
 import FileSaver from 'file-saver';
+import { isArray } from 'lodash-es';
 
 type TableColumns = TableProps['columns'];
 
@@ -28,6 +29,22 @@ export function ExportTableDataByXLSX(
   let index = 0;
   // const keyArray: string[] = tableColumns.map((item) => item.key as string); //获取key
   const titleArr: string[] = tableColumns.map((item) => item.title as string); //获取表头
+  const getTableRenderValue = (props: { children: string | object }) => {
+    if (typeof props?.children === 'string') {
+      return props.children + '';
+    }
+    if (isArray(props.children)) {
+      let value = '';
+      value = props.children.reduce(
+        (prev, cur: string | { props: { children: string | object } }) => {
+          return (prev += typeof cur === 'string' ? cur : cur.props?.children);
+        },
+        ''
+      );
+      return value;
+    }
+    return '';
+  };
   tableData.forEach((item: any, index: number) => {
     const arr: string[] = tableColumns.map((key) => {
       return key.key
@@ -41,7 +58,9 @@ export function ExportTableDataByXLSX(
               typeof rendered === 'object' &&
               'props' in rendered
             ) {
-              return (rendered as any).props?.children;
+              return getTableRenderValue({
+                children: (rendered as any).props?.children,
+              });
             }
             return rendered ?? '';
           })()
@@ -62,6 +81,12 @@ export function ExportTableDataByXLSX(
     itemWidth.push({ wch: 50 });
     if (key != '!rows' && key != '!merges' && key != '!ref') {
       ws[key].s = {
+        fill: {
+          //背景色
+          fgColor: {
+            rgb: key.replace(/[^0-9]/gi, '') == '1' ? 'C0C0C0' : 'FFFFFF',
+          },
+        },
         alignment: {
           horizontal: 'center', //水平居中
           vertical: 'center', //垂直居中

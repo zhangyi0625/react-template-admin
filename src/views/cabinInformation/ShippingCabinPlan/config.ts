@@ -1,6 +1,6 @@
 import type { CustomColumn } from 'customer-search-form-table/SearchForm/type';
 import { getSystemOrderCarrier } from '@/services/system/basicData/basicDataApi';
-import { CheckboxOptionType, SelectProps } from 'antd';
+import type { CheckboxOptionType } from 'antd';
 
 export const ShippingCabinPlanSearchColumns: CustomColumn[] = [
   {

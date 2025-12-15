@@ -62,6 +62,12 @@ export function ExportTableDataByXLSX(
     itemWidth.push({ wch: 50 });
     if (key != '!rows' && key != '!merges' && key != '!ref') {
       ws[key].s = {
+        fill: {
+          //背景色
+          fgColor: {
+            rgb: key.replace(/[^0-9]/gi, '') == '1' ? 'C0C0C0' : 'FFFFFF',
+          },
+        },
         alignment: {
           horizontal: 'center', //水平居中
           vertical: 'center', //垂直居中

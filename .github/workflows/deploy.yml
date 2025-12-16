@@ -7,7 +7,6 @@ on:
       - dev
       - zc-ls-cabin
       - zc-manager
-      - zc-manager-cabinInformation/releaseShippingHistory
   workflow_dispatch:
 
 permissions:

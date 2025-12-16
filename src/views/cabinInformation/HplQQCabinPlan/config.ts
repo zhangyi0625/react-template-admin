@@ -1,23 +1,36 @@
 import type { CustomColumn } from 'customer-search-form-table/SearchForm/type';
-import { getSystemOrderCarrier } from '@/services/system/basicData/basicDataApi';
-import { SelectProps } from 'antd';
 
-export const CabinManageChannelOptions: SelectProps['options'] = [
-  {
-    label: '全部',
-    value: '',
-  },
-  {
-    label: '庄家舱位',
-    value: 'CUSTOMER',
-  },
-  {
-    label: '船公司舱位',
-    value: 'CARRIER',
-  },
-];
+export const HplQQCabinPlanStatusMap = {
+  未执行: 'SUBMITTED',
+  已取消: 'CANCEL',
+  执行成功: 'SUCCESS',
+  执行失败: 'FAIL',
+};
 
-export const CabinManageSearchColumns: CustomColumn[] = [
+export const HplQQCabinPlanSearchColumns: CustomColumn[] = [
+  {
+    label: '用户名',
+    name: 'customerId',
+    formType: 'focusSelect',
+    options: [],
+    selectFileldName: {
+      label: 'name',
+      value: 'id',
+    },
+    apiByUrl: '/api/staff/customer/list',
+    apiByUrlMethod: 'get',
+    setSearchKey: 'keyword',
+    apiByUrlParams: {
+      keyword: null,
+    },
+    apiByUrlHeaders: {
+      authorization: 'Bearer ' + sessionStorage.getItem('token'),
+      'Content-Type': 'application/json',
+    },
+    span: 6,
+    selectFetch: true,
+    hiddenItem: false,
+  },
   {
     label: '公司名称',
     name: 'affiliateId',
@@ -42,23 +55,8 @@ export const CabinManageSearchColumns: CustomColumn[] = [
     hiddenItem: false,
   },
   {
-    label: '船公司',
-    name: 'carrier',
-    formType: 'normalSelect',
-    options: [],
-    api: getSystemOrderCarrier,
-    selectFileldName: {
-      label: 'carrierCode',
-      value: 'carrierCode',
-    },
-    selectResultKey: null,
-    span: 6,
-    selectFetch: true,
-    hiddenItem: false,
-  },
-  {
     label: '起运港名称',
-    name: 'porId',
+    name: 'porCode',
     formType: 'focusSelect',
     options: [],
     selectFileldName: {
@@ -82,7 +80,7 @@ export const CabinManageSearchColumns: CustomColumn[] = [
   },
   {
     label: '目的港名称',
-    name: 'fndId',
+    name: 'fndCode',
     formType: 'focusSelect',
     options: [],
     selectFileldName: {
@@ -105,58 +103,16 @@ export const CabinManageSearchColumns: CustomColumn[] = [
     hiddenItem: false,
   },
   {
-    label: '航线',
-    name: 'route',
+    label: '状态',
+    name: 'status',
     formType: 'normalSelect',
-    span: 6,
-    options: [],
-    selectFetch: false,
-    hiddenItem: false,
-    selectFileldName: {
-      label: 'name',
-      value: 'code',
-    },
-  },
-  {
-    label: '船名',
-    name: 'vesselName',
-    formType: 'input',
+    options: Object.keys(HplQQCabinPlanStatusMap).map((key) => ({
+      label: key,
+      value:
+        HplQQCabinPlanStatusMap[key as keyof typeof HplQQCabinPlanStatusMap],
+    })),
     span: 6,
     selectFetch: false,
     hiddenItem: false,
-  },
-  {
-    label: '航次',
-    name: 'voyNo',
-    formType: 'input',
-    span: 6,
-    selectFetch: false,
-    hiddenItem: false,
-  },
-  {
-    label: 'ETD',
-    name: 'etd',
-    formType: 'range-picker',
-    span: 6,
-    selectFetch: false,
-    hiddenItem: false,
-  },
-  {
-    label: '有效时间',
-    name: ['validForm', 'validTo'],
-    formType: 'range-picker',
-    span: 6,
-    selectFetch: false,
-    hiddenItem: false,
-  },
-  {
-    label: '舱位分类',
-    name: 'channel',
-    formType: 'normalSelect',
-    span: 6,
-    options: CabinManageChannelOptions,
-    selectFetch: false,
-    hiddenItem: false,
-    defaultValue: '',
   },
 ];

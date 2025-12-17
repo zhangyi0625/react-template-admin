@@ -1,5 +1,5 @@
 import React, { useEffect, useImperativeHandle, useState } from 'react';
-import styles from './SystemPortSelect.module.scss';
+import styles from './systemPortSelect.module.scss';
 import { Select } from 'antd';
 import type { PortCodeType, PortInfoType } from './type';
 import { getSystemPort } from '@/services/system/basicData/basicDataApi';

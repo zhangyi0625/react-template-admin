@@ -185,6 +185,7 @@ const DepositManage: React.FC = () => {
   ];
 
   useEffect(() => {
+    console.log(publicData);
     formMaps.map((item) => {
       if (item.name === 'fund') {
         item.options = Object.keys(publicData['fundSource'])

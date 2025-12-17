@@ -1,13 +1,14 @@
-import React, { useEffect, useState } from 'react';
-import { Form, Input, Select, type SelectProps } from 'antd';
-import styles from '@/views/orderManage/CabinResult/cabinResult.module.scss';
+import React, { useEffect, useRef, useState } from 'react';
+import { Form, Input, Select } from 'antd';
 import DragModal from '@/components/modal/DragModal';
 import type { ReleaseShippingHistoryMonitoringPortType } from '@/services/cabinInformation/releaseShippingHistory/releaseShippingHistoryModel';
 import { ReleaseShippingHistoryForms } from './config';
-import { getSystemPort } from '@/services/system/basicData/basicDataApi';
 import { ORDER } from '@/views/orderManage/RegularBooking/config';
+import SystemPortSelect, {
+  SystemPortSelectRef,
+} from '@/components/SystemPortSelect';
+import type { PortInfoType } from '@/components/SystemPortSelect/type';
 import useCacheData from '@/hooks/useCacheData';
-import { fetchSystemSearchData } from '@/utils/freight';
 
 export type MonitoringPortModalProps = {
   params: {
@@ -16,12 +17,6 @@ export type MonitoringPortModalProps = {
   };
   onCancel: () => void;
   onOk: (params: ReleaseShippingHistoryMonitoringPortType) => void;
-};
-
-type PortType = {
-  POR?: SelectProps['options'];
-  FND?: SelectProps['options'];
-  [key: string]: SelectProps['options'];
 };
 
 const MonitoringPortModal: React.FC<MonitoringPortModalProps> = ({
@@ -37,13 +32,15 @@ const MonitoringPortModal: React.FC<MonitoringPortModalProps> = ({
 
   const [formMap, setFormMap] = useState(ReleaseShippingHistoryForms);
 
+  const systemPortSelectRef = useRef<SystemPortSelectRef>(null);
+
   const { essential } = useCacheData({
     cacheEssentialKeys: ['carrierData'],
   });
 
-  const [defalueOptions, setDefaultOptions] = useState<PortType>({
-    POR: [],
-    FND: [],
+  const [portCode, setPortCode] = useState<PortInfoType>({
+    porInfo: undefined,
+    fndInfo: undefined,
   });
 
   useEffect(() => {
@@ -64,50 +61,30 @@ const MonitoringPortModal: React.FC<MonitoringPortModalProps> = ({
           };
         });
     });
+    let portInfo = {
+      porInfo: currentRow?.por.unlocode ?? undefined,
+      fndInfo: currentRow?.fnd?.unlocode ?? undefined,
+    };
+    setPortCode(portInfo);
     currentRow
       ? form.setFieldsValue({
           ...currentRow,
-          porCode: currentRow?.por.unlocode,
-          fndCode: currentRow?.fnd?.unlocode,
+          ...portInfo,
         })
       : form.resetFields();
-    handleSearch(currentRow?.por.unlocode || '', 'POR');
-    handleSearch(currentRow?.fnd?.unlocode || '', 'FND');
+    systemPortSelectRef.current?.init(currentRow ? 'EDIT' : 'ADD');
     setFormMap([...formMap]);
     setLoading(false);
   };
 
-  const handleSearch = (newValue: string, type: 'POR' | 'FND' | string) => {
-    if (!newValue || !newValue.trim()) return;
-    fetchSystemSearchData(newValue, type, setDefaultOptions, getSystemPort);
-  };
-
-  const getPortSelect = (type: string) => {
-    return (
-      <Select
-        allowClear
-        placeholder={`请输入${type === 'POR' ? '起运' : '目的'}港`}
-        showSearch
-        defaultActiveFirstOption={false}
-        suffixIcon={null}
-        notFoundContent={null}
-        filterOption={false}
-        onSearch={(value: string) => handleSearch(value, type)}
-        options={(defalueOptions[type] || []).map((d) => ({
-          label: (
-            <div className="">
-              <p>
-                {d.localName} - {d.name}
-              </p>
-              <p>
-                {d.countryLocalName} - {d.countryName}
-              </p>
-            </div>
-          ),
-          value: d.unlocode,
-        }))}
-      />
-    );
+  const systemPortSelect = (value: string | undefined, name: string) => {
+    form.setFieldsValue({
+      [name]: value,
+    });
+    setPortCode({
+      ...portCode,
+      [name === 'porCode' ? 'porInfo' : 'fndInfo']: value ?? undefined,
+    } as typeof portCode);
   };
 
   const handleOk = () => {
@@ -131,7 +108,6 @@ const MonitoringPortModal: React.FC<MonitoringPortModalProps> = ({
       onCancel={onCancel}
       loading={loading}
       onOk={handleOk}
-      className={styles['cabinResult']}
     >
       <Form form={form} labelCol={{ span: 4 }} labelAlign="left">
         <Form.Item name="id" hidden>
@@ -155,8 +131,16 @@ const MonitoringPortModal: React.FC<MonitoringPortModalProps> = ({
                 : undefined
             }
           >
-            {item.formType === 'focusSelect' &&
-              getPortSelect(item.name === 'porCode' ? 'POR' : 'FND')}
+            {item.formType === 'focusSelect' && (
+              <SystemPortSelect
+                ref={systemPortSelectRef}
+                type={item.name === 'porCode' ? 'POR' : 'FND'}
+                portInfo={portCode}
+                onSystemPortSelect={(value) =>
+                  systemPortSelect(value, item.name)
+                }
+              />
+            )}
             {item.formType === 'normalSelect' && (
               <Select
                 placeholder={`请选择${item.label}`}

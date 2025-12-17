@@ -1,21 +1,15 @@
-import React, { useEffect, useState } from 'react';
-import { Form, Input, Select, type SelectProps } from 'antd';
-import styles from '../../orderManage/CabinResult/cabinResult.module.scss';
+import React, { useEffect, useRef, useState } from 'react';
+import { Form, Input, Select } from 'antd';
 import {
   FreightTaskConfigurationForms,
   FreightTaskConfigurationSearchColumns,
 } from '../config';
 import DragModal from '@/components/modal/DragModal';
 import type { FreightTaskConfigurationType } from '@/services/freightSetting/freightTaskConfiguration/freightTaskConfigurationModel';
-import { getSystemPort } from '@/services/system/basicData/basicDataApi';
-import type { DefaultOptionType } from 'antd/es/select';
-import { fetchSystemSearchData } from '@/utils/freight';
-
-type PortType = {
-  POR?: SelectProps['options'];
-  FND?: SelectProps['options'];
-  [key: string]: SelectProps['options'];
-};
+import SystemPortSelect, {
+  SystemPortSelectRef,
+} from '@/components/SystemPortSelect';
+import type { PortInfoType } from '@/components/SystemPortSelect/type';
 
 export type AddFreightTaskConfigurationProps = {
   params: {
@@ -35,11 +29,12 @@ const AddFreightTaskConfiguration: React.FC<
 
   const [formMaps, setFormMaps] = useState(FreightTaskConfigurationForms);
 
-  const [defalueOptions, setDefaultOptions] = useState<PortType>({
-    POR: [],
-    FND: [],
-  });
+  const systemPortSelectRef = useRef<SystemPortSelectRef>(null);
 
+  const [portCode, setPortCode] = useState<PortInfoType>({
+    porInfo: undefined,
+    fndInfo: undefined,
+  });
   const [loading, setLoading] = useState<boolean>(false);
 
   useEffect(() => {
@@ -58,60 +53,31 @@ const AddFreightTaskConfiguration: React.FC<
 
   const init = async () => {
     if (currentRow) {
-      const porInfo: DefaultOptionType[] = await getSystemPort({
-        keyword: currentRow.porCode,
-        tag: 'POR',
-      });
-      const fndInfo: DefaultOptionType[] = await getSystemPort({
-        keyword: currentRow.fndCode,
-        tag: 'FND',
-      });
-      setDefaultOptions({
-        POR: porInfo ?? [],
-        FND: fndInfo ?? [],
-      });
+      let portInfo = {
+        porInfo: currentRow?.por?.unlocode ?? undefined,
+        fndInfo: currentRow?.fnd?.unlocode ?? undefined,
+      };
+      setPortCode(portInfo);
       form.setFieldsValue({
         ...currentRow,
-        porCode: porInfo[0].unlocode ?? '',
-        fndCode: fndInfo[0].unlocode || '',
+        porCode: currentRow?.por?.unlocode ?? '',
+        fndCode: currentRow?.fnd?.unlocode ?? '',
       });
+      systemPortSelectRef.current?.init(currentRow ? 'EDIT' : 'ADD');
     } else {
       form.resetFields();
     }
     setLoading(false);
   };
 
-  const handleSearch = (newValue: string, type: 'POR' | 'FND' | string) => {
-    if (!newValue || !newValue.trim()) return;
-    fetchSystemSearchData(newValue, type, setDefaultOptions, getSystemPort);
-  };
-
-  const getPortSelect = (type: string) => {
-    return (
-      <Select
-        allowClear
-        placeholder={`请输入${type === 'POR' ? '起运' : '目的'}港`}
-        showSearch
-        defaultActiveFirstOption={false}
-        suffixIcon={null}
-        notFoundContent={null}
-        filterOption={false}
-        onSearch={(value: string) => handleSearch(value, type)}
-        options={(defalueOptions[type] || []).map((d) => ({
-          label: (
-            <div className="">
-              <p>
-                {d.localName} - {d.name}
-              </p>
-              <p>
-                {d.countryLocalName} - {d.countryName}
-              </p>
-            </div>
-          ),
-          value: d.unlocode,
-        }))}
-      />
-    );
+  const systemPortSelect = (value: string | undefined, name: string) => {
+    form.setFieldsValue({
+      [name]: value,
+    });
+    setPortCode({
+      ...portCode,
+      [name === 'porCode' ? 'porInfo' : 'fndInfo']: value ?? undefined,
+    } as typeof portCode);
   };
 
   const handleOk = () => {
@@ -134,7 +100,6 @@ const AddFreightTaskConfiguration: React.FC<
         title={!currentRow ? '新增运价任务' : '修改运价任务'}
         width={{ xl: 600, xxl: 1000 }}
         onOk={handleOk}
-        className={styles['cabinResult']}
         loading={loading}
       >
         <Form form={form} labelCol={{ span: 6 }}>
@@ -179,8 +144,16 @@ const AddFreightTaskConfiguration: React.FC<
                   }
                 />
               )}
-              {item.formType === 'focusSelect' &&
-                getPortSelect(item.name === 'porCode' ? 'POR' : 'FND')}
+              {item.formType === 'focusSelect' && (
+                <SystemPortSelect
+                  ref={systemPortSelectRef}
+                  type={item.name === 'porCode' ? 'POR' : 'FND'}
+                  portInfo={portCode}
+                  onSystemPortSelect={(value) =>
+                    systemPortSelect(value, item.name)
+                  }
+                />
+              )}
             </Form.Item>
           ))}
         </Form>

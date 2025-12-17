@@ -58,12 +58,11 @@ const SystemPortSelect = React.forwardRef<
   }, [portInfo]);
 
   useEffect(() => {
-    if (isSearch) {
+    if (isSearch)
       setPortDefaultValue({
         porCode: defalueOptions['POR']?.[0]?.[valueKey] as string,
         fndCode: defalueOptions['FND']?.[0]?.[valueKey] as string,
       });
-    }
   }, [defalueOptions, isSearch]);
 
   const initPort = async () => {

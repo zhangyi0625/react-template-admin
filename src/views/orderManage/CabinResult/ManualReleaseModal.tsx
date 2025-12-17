@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import styles from './cabinResult.module.scss';
 import {
   Form,
@@ -10,10 +10,8 @@ import {
   Input,
   type TableProps,
   DatePicker,
-  type SelectProps,
   App,
 } from 'antd';
-import type { DefaultOptionType } from 'antd/es/select';
 import DragModal from '@/components/modal/DragModal';
 import { getShippingSchedule } from '@/services/orderManage/regularBooking/regularBookingApi';
 import { formatTime } from '@/utils/format';
@@ -21,9 +19,11 @@ import { filterKeys } from '@/utils/tool';
 import dayjs from 'dayjs';
 import { SearchTable } from 'customer-search-form-table';
 import type { ManualpublicationType } from '@/services/orderManage/cabinResult/cabinResultModel';
-import { getSystemPort } from '@/services/system/basicData/basicDataApi';
+import SystemPortSelect, {
+  SystemPortSelectRef,
+} from '@/components/SystemPortSelect';
+import { PortInfoType } from '@/components/SystemPortSelect/type';
 import { changeSelectOptionsByLabel } from '@/utils/options';
-import { fetchSystemSearchData } from '@/utils/freight';
 
 export type ManualReleaseType = {
   params: {
@@ -33,12 +33,6 @@ export type ManualReleaseType = {
   };
   onOk: (params: ManualpublicationType) => void;
   onCancel: () => void;
-};
-
-type PortType = {
-  POR?: SelectProps['options'];
-  FND?: SelectProps['options'];
-  [key: string]: SelectProps['options'];
 };
 
 const ManualRelease: React.FC<ManualReleaseType> = ({
@@ -57,9 +51,11 @@ const ManualRelease: React.FC<ManualReleaseType> = ({
 
   const [searchDefaultForm, setSearchDefaultForm] = useState();
 
-  const [defalueOptions, setDefaultOptions] = useState<PortType>({
-    POR: [],
-    FND: [],
+  const systemPortSelectRef = useRef<SystemPortSelectRef>(null);
+
+  const [portCode, setPortCode] = useState<PortInfoType>({
+    porInfo: undefined,
+    fndInfo: undefined,
   });
 
   const columns: TableProps['columns'] = [
@@ -123,28 +119,32 @@ const ManualRelease: React.FC<ManualReleaseType> = ({
       true
     );
 
-    const porInfo: DefaultOptionType[] = await getSystemPort({
-      keyword: editRow.porName.split(',')[0],
-      tag: 'POR',
-    });
-    const fndInfo: DefaultOptionType[] = await getSystemPort({
-      keyword: editRow.fndName.split(',')[0],
-      tag: 'FND',
-    });
-    setDefaultOptions({
-      POR: porInfo ?? [],
-      FND: fndInfo ?? [],
-    });
+    let portInfo = {
+      porInfo: params.editRow.porName.split(',')[0] ?? undefined,
+      fndInfo: params.editRow.fndName.split(',')[0] ?? undefined,
+    };
+    setPortCode(portInfo);
+    systemPortSelectRef.current?.init(params.editRow ? 'EDIT' : 'ADD');
     setTimeout(() => {
       setLoading(false);
       form.setFieldsValue({
         ...params.editRow,
         ...info,
-        porCode: porInfo[0].unlocode ?? '',
-        fndCode: fndInfo[0].unlocode || '',
+        porCode: 'CNNGB',
+        fndCode: 'CNNGB',
         etd: dayjs(info.etd) ?? '',
       });
     }, 500);
+  };
+
+  const systemPortSelect = (value: string | undefined, name: string) => {
+    form.setFieldsValue({
+      [name]: value,
+    });
+    setPortCode({
+      ...portCode,
+      [name]: value ?? undefined,
+    } as typeof portCode);
   };
 
   const loadShippingSchedule = () => {
@@ -156,39 +156,6 @@ const ManualRelease: React.FC<ManualReleaseType> = ({
       filterKeys(form.getFieldsValue(), ['porCode', 'fndCode', 'carrier'], true)
     );
     setImmediate(false);
-  };
-
-  const getPortSelect = (type: string) => {
-    return (
-      <Select
-        allowClear
-        placeholder={`请输入${type === 'POR' ? '起运' : '目的'}港`}
-        showSearch
-        defaultActiveFirstOption={false}
-        suffixIcon={null}
-        notFoundContent={null}
-        filterOption={false}
-        onSearch={(value: string) => handleSearch(value, type)}
-        options={(defalueOptions[type] || []).map((d) => ({
-          label: (
-            <div className="">
-              <p>
-                {d.localName} - {d.name}
-              </p>
-              <p>
-                {d.countryLocalName} - {d.countryName}
-              </p>
-            </div>
-          ),
-          value: d.unlocode,
-        }))}
-      />
-    );
-  };
-
-  const handleSearch = (newValue: string, type: 'POR' | 'FND' | string) => {
-    if (!newValue || !newValue.trim()) return;
-    fetchSystemSearchData(newValue, type, setDefaultOptions, getSystemPort);
   };
 
   const changeSelected = (_: string[], checked: any[]) => {
@@ -215,8 +182,8 @@ const ManualRelease: React.FC<ManualReleaseType> = ({
         const prices = JSON.parse(form.getFieldValue('price')) ?? {};
         const params = {
           ...info,
-          porId: defalueOptions['POR']![0].id || '',
-          fndId: defalueOptions['FND']![0].id || '',
+          // porId: defalueOptions['POR']![0].id || '',
+          // fndId: defalueOptions['FND']![0].id || '',
           voyageNo: form.getFieldValue('voyNo'),
           haulage: 'CY-CY',
           transitDays: '',
@@ -272,12 +239,26 @@ const ManualRelease: React.FC<ManualReleaseType> = ({
         <Row gutter={24}>
           <Col span={12}>
             <Form.Item label="起运港" name="porCode">
-              {getPortSelect('POR')}
+              <SystemPortSelect
+                ref={systemPortSelectRef}
+                type={'POR'}
+                portInfo={portCode}
+                onSystemPortSelect={(value) =>
+                  systemPortSelect(value, 'porCode')
+                }
+              />
             </Form.Item>
           </Col>
           <Col span={12}>
             <Form.Item label="目的港" name="fndCode">
-              {getPortSelect('FND')}
+              <SystemPortSelect
+                ref={systemPortSelectRef}
+                type={'FND'}
+                portInfo={portCode}
+                onSystemPortSelect={(value) =>
+                  systemPortSelect(value, 'fndCode')
+                }
+              />
             </Form.Item>
           </Col>
           <Col span={12}>

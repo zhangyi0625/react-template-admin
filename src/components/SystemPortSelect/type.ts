@@ -9,10 +9,14 @@ export type PortType = {
   [key: string]: PortSelectOpionsType;
 };
 
+export type PortInfoType = {
+  porInfo: string | number | string[] | undefined;
+  fndInfo: string | number | string[] | undefined;
+  [key: string]: string | number | string[] | undefined;
+};
+
 export type PortCodeType = {
-  porCode?: string | undefined;
-  porIds?: string[] | undefined;
-  fndCode?: string | undefined;
-  fndIds?: string[] | undefined;
+  porCode?: string | string[] | undefined;
+  fndCode?: string | string[] | undefined;
   [key: string]: string | string[] | undefined;
 };

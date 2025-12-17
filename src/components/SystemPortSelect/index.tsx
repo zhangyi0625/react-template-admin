@@ -50,14 +50,6 @@ const SystemPortSelect = React.forwardRef<
   useImperativeHandle(ref, () => ({
     init: async (status: 'ADD' | 'EDIT' | 'VIEW') => {
       status === 'ADD' && resetCache();
-      // Todo 处理编辑和查看状态(暂不能通过ref回显数据)
-      // for (let i in portInfo) {
-      // setTimeout(() => {
-      //   portInfo && handleSearch(portInfo['porCode'], 'POR');
-      //   portInfo && handleSearch(portInfo['fndCode'], 'FND');
-      // }, 500);
-      // }
-      // portInfo && handleSearch(portInfo[`${type.toLowerCase()}Code`], type);
     },
   }));
 

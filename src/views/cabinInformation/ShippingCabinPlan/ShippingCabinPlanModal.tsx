@@ -1,22 +1,15 @@
-import React, { useEffect, useState } from 'react';
-import {
-  Form,
-  Input,
-  Radio,
-  Select,
-  Space,
-  TimePicker,
-  type SelectProps,
-} from 'antd';
-import styles from '@/views/orderManage/CabinResult/cabinResult.module.scss';
+import React, { useEffect, useRef, useState } from 'react';
+import { Form, Input, Radio, Select, Space, TimePicker } from 'antd';
 import type { ShippingCabinPlanType } from '@/services/cabinInformation/shippingCabinPlan/shippingCabinPlanModel';
 import DragModal from '@/components/modal/DragModal';
 import { planModeOptions, ShippingCabinPlanFormMaps } from './config';
-import { getSystemPort } from '@/services/system/basicData/basicDataApi';
 import type { LocationItem } from '@/services/orderManage/regularBooking/regularBookingModel';
 import useCacheData from '@/hooks/useCacheData';
-import { fetchSystemSearchData } from '@/utils/freight';
 import { ShippingCabinPlanScheduleType } from '@/enums/setting';
+import SystemPortSelect, {
+  SystemPortSelectRef,
+} from '@/components/SystemPortSelect';
+import type { PortInfoType } from '@/components/SystemPortSelect/type';
 import dayjs from 'dayjs';
 import { formatTime } from '@/utils/format';
 import { filterKeys } from '@/utils/tool';
@@ -30,12 +23,6 @@ export type ShippingCabinPlanModalProps = {
   onOk: (params: ShippingCabinPlanType) => void;
 };
 
-type PortType = {
-  POR?: SelectProps['options'];
-  FND?: SelectProps['options'];
-  [key: string]: SelectProps['options'];
-};
-
 const ShippingCabinPlanModal: React.FC<ShippingCabinPlanModalProps> = ({
   params,
   onCancel,
@@ -47,13 +34,15 @@ const ShippingCabinPlanModal: React.FC<ShippingCabinPlanModalProps> = ({
 
   const [loading, setLoading] = useState<boolean>(false);
 
-  const [defalueOptions, setDefaultOptions] = useState<PortType>({
-    POR: [],
-    FND: [],
-  });
+  const systemPortSelectRef = useRef<SystemPortSelectRef>(null);
 
   const { essential } = useCacheData({
     cacheEssentialKeys: ['carrierData'],
+  });
+
+  const [portCode, setPortCode] = useState<PortInfoType>({
+    porInfo: undefined,
+    fndInfo: undefined,
   });
 
   const [formMaps, setFormMaps] = useState(ShippingCabinPlanFormMaps);
@@ -72,15 +61,20 @@ const ShippingCabinPlanModal: React.FC<ShippingCabinPlanModalProps> = ({
   }, [visible]);
 
   const init = () => {
-    fetchSystemSearchData(
-      currentRow?.por.unlocode as string,
-      'POR',
-      setDefaultOptions,
-      getSystemPort
-    );
+    // fetchSystemSearchData(
+    //   currentRow?.por.unlocode as string,
+    //   'POR',
+    //   setDefaultOptions,
+    //   getSystemPort
+    // );
     formMaps.map((item) => {
       if (item.name === 'carrier')
         item.options = essential['carrierData'] || [];
+    });
+    systemPortSelectRef.current?.init(currentRow ? 'EDIT' : 'ADD');
+    setPortCode({
+      ...portCode,
+      porInfo: currentRow?.por.unlocode as string,
     });
     setFormMaps([...formMaps]);
     if (!currentRow) {
@@ -107,41 +101,17 @@ const ShippingCabinPlanModal: React.FC<ShippingCabinPlanModalProps> = ({
           'h:m:s'
         ) ?? '',
     });
-    handleSearch(currentRow?.por.unlocode as string, 'POR');
     setLoading(false);
   };
 
-  const handleSearch = (newValue: string, type: 'POR' | 'FND' | string) => {
-    if (!newValue || !newValue.trim()) return;
-    fetchSystemSearchData(newValue, type, setDefaultOptions, getSystemPort);
-  };
-
-  const getPortSelect = (type: string) => {
-    return (
-      <Select
-        allowClear
-        placeholder={`请输入${type === 'POR' ? '起运' : '目的'}港`}
-        showSearch
-        defaultActiveFirstOption={false}
-        suffixIcon={null}
-        notFoundContent={null}
-        filterOption={false}
-        onSearch={(value: string) => handleSearch(value, type)}
-        options={(defalueOptions[type] || []).map((d) => ({
-          label: (
-            <div className="">
-              <p>
-                {d.localName} - {d.name}
-              </p>
-              <p>
-                {d.countryLocalName} - {d.countryName}
-              </p>
-            </div>
-          ),
-          value: d.unlocode,
-        }))}
-      />
-    );
+  const systemPortSelect = (value: string | undefined, name: string) => {
+    form.setFieldsValue({
+      [name]: value,
+    });
+    setPortCode({
+      ...portCode,
+      [name === 'porInfo' ? 'porInfo' : 'fndInfo']: value ?? undefined,
+    } as typeof portCode);
   };
 
   const handleOk = () => {
@@ -175,7 +145,6 @@ const ShippingCabinPlanModal: React.FC<ShippingCabinPlanModalProps> = ({
         onOk={handleOk}
         onCancel={onCancel}
         loading={loading}
-        className={styles['cabinResult']}
       >
         <Form form={form} labelCol={{ span: 4 }} labelAlign="left">
           <Form.Item name="id" hidden>
@@ -199,7 +168,16 @@ const ShippingCabinPlanModal: React.FC<ShippingCabinPlanModalProps> = ({
                   : undefined
               }
             >
-              {item.formType === 'focusSelect' && getPortSelect('POR')}
+              {item.formType === 'focusSelect' && (
+                <SystemPortSelect
+                  ref={systemPortSelectRef}
+                  type={'POR'}
+                  portInfo={portCode}
+                  onSystemPortSelect={(value) =>
+                    systemPortSelect(value, item.name)
+                  }
+                />
+              )}
               {item.formType === 'input' && (
                 <Input
                   placeholder={`请输入${item.label}`}

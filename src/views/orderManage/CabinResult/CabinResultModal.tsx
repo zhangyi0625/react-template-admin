@@ -81,7 +81,6 @@ const CabinResultModal: React.FC<CabinResultModalProps> = ({
 
   const handleSearch = (value?: string) => {
     if (!value) return;
-    // fetchSearch(value, setDefaultOptions);
     fetchSystemSearchData(
       value,
       'affiliateId',

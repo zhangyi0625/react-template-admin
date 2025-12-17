@@ -1,15 +1,25 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { Form, Input, Select, type SelectProps } from 'antd';
-import styles from '@/views/orderManage/CabinResult/cabinResult.module.scss';
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
+import { Form, Input, Select } from 'antd';
 import DragModal from '@/components/modal/DragModal';
 import { getRouteManageDetail } from '@/services/cabinInformation/routeManage/routeManageApi';
 import type { RouteManageByCarrierRouteType } from '@/services/cabinInformation/routeManage/routeManageModel';
 import { CabinManageChannelOptions } from '../CabinManage/config';
 import type { LocationItem } from '@/services/orderManage/regularBooking/regularBookingModel';
-import { getSystemPort } from '@/services/system/basicData/basicDataApi';
 import useCacheData from '@/hooks/useCacheData';
+import SystemPortSelect, {
+  SystemPortSelectRef,
+} from '@/components/SystemPortSelect';
+import type {
+  PortCodeType,
+  PortInfoType,
+} from '@/components/SystemPortSelect/type';
 import { filterKeys } from '@/utils/tool';
-import { fetchSystemSearchData } from '@/utils/freight';
 
 export type RouteManageModalProps = {
   params: {
@@ -18,12 +28,6 @@ export type RouteManageModalProps = {
   };
   onCancel: () => void;
   onOk: (params: RouteManageByCarrierRouteType) => void;
-};
-
-type PortType = {
-  POR?: SelectProps['options'];
-  FND?: SelectProps['options'];
-  [key: string]: SelectProps['options'];
 };
 
 const RouteManageModal: React.FC<RouteManageModalProps> = ({
@@ -45,6 +49,8 @@ const RouteManageModal: React.FC<RouteManageModalProps> = ({
     {}
   );
 
+  const systemPortSelectRef = useRef<SystemPortSelectRef>(null);
+
   const HaulageModesOptions = ['CY-CY', 'CY-SD', 'CY-DR'];
 
   const productChannel = (CabinManageChannelOptions || []).reduce(
@@ -57,9 +63,9 @@ const RouteManageModal: React.FC<RouteManageModalProps> = ({
     {} as Record<string, string>
   );
 
-  const [defalueOptions, setDefaultOptions] = useState<PortType>({
-    POR: [],
-    FND: [],
+  const [portCode, setPortCode] = useState<PortInfoType>({
+    porInfo: [],
+    fndInfo: [],
   });
 
   useEffect(() => {
@@ -70,6 +76,11 @@ const RouteManageModal: React.FC<RouteManageModalProps> = ({
       form.setFieldsValue({
         options: ['CY-CY'],
       });
+      setPortCode({
+        porInfo: [],
+        fndInfo: [],
+      });
+      systemPortSelectRef.current?.init('ADD');
       setLoading(false);
     } else loadDetail();
   }, [visible]);
@@ -99,38 +110,17 @@ const RouteManageModal: React.FC<RouteManageModalProps> = ({
     [updateForm]
   );
 
-  const handleSearch = (newValue: string, type: 'POR' | 'FND' | string) => {
-    if (!newValue || !newValue.trim()) return;
-    fetchSystemSearchData(newValue, type, setDefaultOptions, getSystemPort);
-  };
-
-  const getPortSelect = (type: string) => {
-    return (
-      <Select
-        allowClear
-        placeholder={`请输入${type === 'POR' ? '起运' : '目的'}港`}
-        showSearch
-        defaultActiveFirstOption={false}
-        suffixIcon={null}
-        notFoundContent={null}
-        filterOption={false}
-        onSearch={(value: string) => handleSearch(value, type)}
-        mode={'tags'}
-        options={(defalueOptions[type] || []).map((d) => ({
-          label: (
-            <div className="">
-              <p>
-                {d.localName} - {d.name}
-              </p>
-              <p>
-                {d.countryLocalName} - {d.countryName}
-              </p>
-            </div>
-          ),
-          value: d.id,
-        }))}
-      />
-    );
+  const systemPortSelect = (value: string | undefined, name: string) => {
+    let ids = value
+      ? (form.getFieldValue(name) ?? []).concat([value || ''])
+      : [];
+    form.setFieldsValue({
+      [name]: ids,
+    });
+    setPortCode({
+      ...portCode,
+      [name === 'porIds' ? 'porInfo' : 'fndInfo']: ids ?? undefined,
+    } as typeof portCode);
   };
 
   const handleOk = () => {
@@ -161,7 +151,6 @@ const RouteManageModal: React.FC<RouteManageModalProps> = ({
         onOk={handleOk}
         onCancel={onCancel}
         loading={loading}
-        className={styles['cabinResult']}
       >
         <Form form={form} labelCol={{ span: 4 }} labelAlign="left">
           <Form.Item name="id" hidden>
@@ -197,10 +186,28 @@ const RouteManageModal: React.FC<RouteManageModalProps> = ({
                 />
               </Form.Item>
               <Form.Item label="起运港" name="porIds">
-                {getPortSelect('POR')}
+                <SystemPortSelect
+                  ref={systemPortSelectRef}
+                  type={'POR'}
+                  portInfo={portCode}
+                  isMultiple={true}
+                  valueKey="id"
+                  onSystemPortSelect={(value) =>
+                    systemPortSelect(value, 'porIds')
+                  }
+                />
               </Form.Item>
               <Form.Item label="目的港" name="fndIds">
-                {getPortSelect('FND')}
+                <SystemPortSelect
+                  ref={systemPortSelectRef}
+                  type={'FND'}
+                  portInfo={portCode}
+                  isMultiple={true}
+                  valueKey="id"
+                  onSystemPortSelect={(value) =>
+                    systemPortSelect(value, 'fndIds')
+                  }
+                />
               </Form.Item>
             </>
           )}

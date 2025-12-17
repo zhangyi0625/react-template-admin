@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Form, Input, Select, type SelectProps } from 'antd';
+import { Form, Input, Select } from 'antd';
 import DragModal from '@/components/modal/DragModal';
 import type { ReleaseShippingHistoryMonitoringPortType } from '@/services/cabinInformation/releaseShippingHistory/releaseShippingHistoryModel';
 import { ReleaseShippingHistoryForms } from './config';
@@ -7,7 +7,7 @@ import { ORDER } from '@/views/orderManage/RegularBooking/config';
 import SystemPortSelect, {
   SystemPortSelectRef,
 } from '@/components/SystemPortSelect';
-import type { PortCodeType } from '@/components/SystemPortSelect/type';
+import type { PortInfoType } from '@/components/SystemPortSelect/type';
 import useCacheData from '@/hooks/useCacheData';
 
 export type MonitoringPortModalProps = {
@@ -38,9 +38,9 @@ const MonitoringPortModal: React.FC<MonitoringPortModalProps> = ({
     cacheEssentialKeys: ['carrierData'],
   });
 
-  const [portCode, setPortCode] = useState<PortCodeType>({
-    porCode: undefined,
-    fndCode: undefined,
+  const [portCode, setPortCode] = useState<PortInfoType>({
+    porInfo: undefined,
+    fndInfo: undefined,
   });
 
   useEffect(() => {
@@ -62,8 +62,8 @@ const MonitoringPortModal: React.FC<MonitoringPortModalProps> = ({
         });
     });
     let portInfo = {
-      porCode: currentRow?.por.unlocode ?? undefined,
-      fndCode: currentRow?.fnd?.unlocode ?? undefined,
+      porInfo: currentRow?.por.unlocode ?? undefined,
+      fndInfo: currentRow?.fnd?.unlocode ?? undefined,
     };
     setPortCode(portInfo);
     currentRow
@@ -83,7 +83,7 @@ const MonitoringPortModal: React.FC<MonitoringPortModalProps> = ({
     });
     setPortCode({
       ...portCode,
-      [name]: value ?? undefined,
+      [name === 'porCode' ? 'porInfo' : 'fndInfo']: value ?? undefined,
     } as typeof portCode);
   };
 
@@ -135,7 +135,6 @@ const MonitoringPortModal: React.FC<MonitoringPortModalProps> = ({
               <SystemPortSelect
                 ref={systemPortSelectRef}
                 type={item.name === 'porCode' ? 'POR' : 'FND'}
-                valueKey="unlocode"
                 portInfo={portCode}
                 onSystemPortSelect={(value) =>
                   systemPortSelect(value, item.name)

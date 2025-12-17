@@ -1,4 +1,5 @@
 import type { DefaultPaging } from '@/types/global';
+import type { LocationItem } from '@/services/orderManage/regularBooking/regularBookingModel';
 
 export interface FreightTaskConfigurationSearchFilterParams {
   carrierCode?: string;
@@ -18,4 +19,6 @@ export interface FreightTaskConfigurationType
   username: string;
   password: string;
   etdOffsetDay: string;
+  por: LocationItem;
+  fnd: LocationItem;
 }

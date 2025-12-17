@@ -4,8 +4,8 @@ import { Select } from 'antd';
 import type { PortCodeType, PortInfoType } from './type';
 import { getSystemPort } from '@/services/system/basicData/basicDataApi';
 import type { LocationItem } from '@/services/orderManage/regularBooking/regularBookingModel';
-import { fetchSystemSearchData } from '@/utils/freight';
 import { isArray } from 'lodash-es';
+import { fetchSystemSearchData } from '@/utils/freight';
 
 export type SystemPortSelectPropsType = {
   type: 'POR' | 'FND';
@@ -97,7 +97,6 @@ const SystemPortSelect = React.forwardRef<
           fndCode: (portInfo['fndInfo'] as string[]) ?? undefined,
         });
       }
-      console.log(portDefaultValue, 'typ', filedType, portInfo, defalueOptions);
     }
   };
 

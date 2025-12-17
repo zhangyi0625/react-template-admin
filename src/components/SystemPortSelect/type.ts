@@ -10,7 +10,9 @@ export type PortType = {
 };
 
 export type PortCodeType = {
-  porCode: string | undefined;
-  fndCode: string | undefined;
-  [key: string]: string | undefined;
+  porCode?: string | undefined;
+  porIds?: string[] | undefined;
+  fndCode?: string | undefined;
+  fndIds?: string[] | undefined;
+  [key: string]: string | string[] | undefined;
 };

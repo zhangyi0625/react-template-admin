@@ -8,8 +8,9 @@ import { LocationItem } from '@/services/orderManage/regularBooking/regularBooki
 
 export type SystemPortSelectPropsType = {
   type: 'POR' | 'FND';
-  valueKey: 'unlocode' | 'id';
-  portInfo?: PortCodeType | null;
+  portInfo: PortCodeType | null;
+  valueKey?: 'unlocode' | 'id';
+  isMultiple?: boolean;
   onSystemPortSelect: (value: string | undefined) => void;
 };
 
@@ -23,82 +24,112 @@ export type SystemPortSelectRef = {
 const SystemPortSelect = React.forwardRef<
   SystemPortSelectRef,
   SystemPortSelectPropsType
->(({ type, valueKey, portInfo, onSystemPortSelect }, ref) => {
-  const [defalueOptions, setDefaultOptions] = useState<
-    Record<SystemPortSelectPropsType['type'], LocationItem[]>
-  >({
-    POR: [],
-    FND: [],
-  });
-
-  useImperativeHandle(ref, () => ({
-    init: async (status: 'ADD' | 'EDIT' | 'VIEW') => {
-      status === 'ADD' && resetCache();
-      // Todo 处理编辑和查看状态(暂不能通过ref回显数据)
-      // for (let i in portInfo) {
-      // setTimeout(() => {
-      //   portInfo && handleSearch(portInfo['porCode'], 'POR');
-      //   portInfo && handleSearch(portInfo['fndCode'], 'FND');
-      // }, 500);
-      // }
-      // portInfo && handleSearch(portInfo[`${type.toLowerCase()}Code`], type);
+>(
+  (
+    {
+      type,
+      portInfo,
+      valueKey = 'unlocode',
+      isMultiple = false,
+      onSystemPortSelect,
     },
-  }));
-
-  useEffect(() => {
-    if (portInfo && portInfo[`${type.toLowerCase()}Code`])
-      handleSearch(portInfo[`${type.toLowerCase()}Code`] || '', type);
-  }, [portInfo]);
-
-  const resetCache = () => {
-    setDefaultOptions({
+    ref
+  ) => {
+    const [defalueOptions, setDefaultOptions] = useState<
+      Record<SystemPortSelectPropsType['type'], LocationItem[]>
+    >({
       POR: [],
       FND: [],
     });
-  };
 
-  const handleSelect = (value: string | undefined) => {
-    onSystemPortSelect(value);
-  };
+    useImperativeHandle(ref, () => ({
+      init: async (status: 'ADD' | 'EDIT' | 'VIEW') => {
+        status === 'ADD' && resetCache();
+        // Todo 处理编辑和查看状态(暂不能通过ref回显数据)
+        // for (let i in portInfo) {
+        // setTimeout(() => {
+        //   portInfo && handleSearch(portInfo['porCode'], 'POR');
+        //   portInfo && handleSearch(portInfo['fndCode'], 'FND');
+        // }, 500);
+        // }
+        // portInfo && handleSearch(portInfo[`${type.toLowerCase()}Code`], type);
+      },
+    }));
 
-  const getPortSelect = (type: 'POR' | 'FND') => {
-    return (
-      <Select
-        allowClear
-        placeholder={`请输入${type === 'POR' ? '起运' : '目的'}港`}
-        showSearch
-        defaultActiveFirstOption={false}
-        suffixIcon={null}
-        notFoundContent={null}
-        filterOption={false}
-        value={portInfo?.[`${type.toLowerCase()}Code`]}
-        className={styles['system-port-select']}
-        onSearch={(value: string) => handleSearch(value, type)}
-        onSelect={(value: string) => handleSelect(value)}
-        onClear={() => handleSelect(undefined)}
-        options={(defalueOptions[type] || []).map((d) => ({
-          label: (
-            <div className={styles['system-port-select-item']}>
-              <p>
-                {d.localName} - {d.name}
-              </p>
-              <p>
-                {d.countryLocalName} - {d.countryName}
-              </p>
-            </div>
-          ),
-          value: d[valueKey],
-        }))}
-      />
-    );
-  };
+    useEffect(() => {
+      if (
+        portInfo &&
+        portInfo[
+          `${type.toLowerCase()}${valueKey === 'unlocode' ? 'Code' : 'Ids'}`
+        ]
+      ) {
+        if (valueKey === 'unlocode') {
+          handleSearch(portInfo[`${type.toLowerCase()}Code`] as string, type);
+        } else {
+          // Todo 处理多选情况 (循环请求不可取)
+          console.log(portInfo);
 
-  const handleSearch = (newValue: string, type: 'POR' | 'FND' | string) => {
-    if (!newValue || !newValue.trim()) return;
-    fetchSystemSearchData(newValue, type, setDefaultOptions, getSystemPort);
-  };
+          handleSearch(portInfo[`${type.toLowerCase()}Ids}`]?.[0] || '', type);
+        }
+      }
+    }, [portInfo]);
 
-  return <>{getPortSelect(type)}</>;
-});
+    const resetCache = () => {
+      setDefaultOptions({
+        POR: [],
+        FND: [],
+      });
+    };
+
+    const handleSelect = (value: string | undefined) => {
+      console.log(value, portInfo);
+      onSystemPortSelect(value);
+    };
+
+    const getPortSelect = (type: 'POR' | 'FND') => {
+      return (
+        <Select
+          allowClear
+          placeholder={`请输入${type === 'POR' ? '起运' : '目的'}港`}
+          showSearch
+          defaultActiveFirstOption={false}
+          suffixIcon={null}
+          notFoundContent={null}
+          filterOption={false}
+          value={
+            portInfo?.[
+              `${type.toLowerCase()}${valueKey === 'unlocode' ? 'Code' : 'Ids'}`
+            ]
+          }
+          className={styles['system-port-select']}
+          onSearch={(value: string) => handleSearch(value, type)}
+          onSelect={(value: string) => handleSelect(value)}
+          onClear={() => handleSelect(undefined)}
+          mode={isMultiple ? 'multiple' : undefined}
+          options={(defalueOptions[type] || []).map((d) => ({
+            label: (
+              <div className={styles['system-port-select-item']}>
+                <p>
+                  {d.localName} - {d.name}
+                </p>
+                <p>
+                  {d.countryLocalName} - {d.countryName}
+                </p>
+              </div>
+            ),
+            value: d[valueKey],
+          }))}
+        />
+      );
+    };
+
+    const handleSearch = (newValue: string, type: 'POR' | 'FND' | string) => {
+      if (!newValue || !newValue.trim()) return;
+      fetchSystemSearchData(newValue, type, setDefaultOptions, getSystemPort);
+    };
+
+    return <>{getPortSelect(type)}</>;
+  }
+);
 
 export default SystemPortSelect;

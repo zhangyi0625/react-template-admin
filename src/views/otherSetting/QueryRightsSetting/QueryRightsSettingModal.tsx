@@ -54,17 +54,15 @@ const QueryRightsSettingModal: React.FC<QueryRightsSettingModalProps> = ({
       };
     });
     setFormMaps([...newArr]);
-    console.log(newArr, currentRow, form.getFieldsValue());
     setLoading(false);
   };
 
   const changeStatus = (checked: boolean, index: number) => {
-    !checked &&
-      setFormMaps((prev) => [
-        ...prev.map((m, i) =>
-          i === index ? { ...m, defaultValue: undefined } : m
-        ),
-      ]);
+    setFormMaps((prev) => [
+      ...prev.map((m, i) =>
+        i === index ? { ...m, defaultValue: !checked ? undefined : 0 } : m
+      ),
+    ]);
   };
 
   const handleOk = () => {
@@ -121,7 +119,7 @@ const QueryRightsSettingModal: React.FC<QueryRightsSettingModalProps> = ({
                 }
                 suffix={'次'}
                 prefix={'¥'}
-                disabled={!item.defaultValue}
+                disabled={!isNumber(item.defaultValue)}
               />
               <div className="flex items-center ml-[30px]">
                 状态

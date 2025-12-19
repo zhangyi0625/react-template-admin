@@ -1,4 +1,4 @@
-import { ComboPermission, LevelSetting } from '@/enums/setting';
+import { ComboPermission } from '@/enums/setting';
 
 export interface EquityRightsBaseEditType {
   affiliateId: string;

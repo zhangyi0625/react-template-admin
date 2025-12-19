@@ -18,7 +18,6 @@ export enum EquityApi {
 
 /**
  * 查询基本权益数据
- * @param params 权益参数
  * @returns 权益列表
  */
 export const getEquityRightsBase = () => {
@@ -34,7 +33,6 @@ export const getEquityRightsBase = () => {
 
 /**
  * 查询额外权益数据
- * @param params 权益参数
  * @returns 权益列表
  */
 export const getEquityRightsExtra = () => {

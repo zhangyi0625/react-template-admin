@@ -2,6 +2,7 @@ import { HttpRequest } from '@/utils/request';
 import type {
   EquityRightsBaseEditType,
   EquityRightsExtraEditType,
+  EquityRightsExtraPriceUpdateType,
 } from './queryRightsSettingsApi';
 
 /**
@@ -12,11 +13,11 @@ export enum EquityApi {
   EquityRightsExtra = '/staff/query/rights/extra/list',
   EquityRightsEdit = '/staff/customer/affiliate/extra/query/rights',
   EquityRightsExtraEdit = '/staff/customer/extra/query/rights',
+  EquityRightsExtraPriceUpdate = '/staff/query/rights/extra/update',
 }
 
 /**
  * 查询基本权益数据
- * @param params 权益参数
  * @returns 权益列表
  */
 export const getEquityRightsBase = () => {
@@ -32,7 +33,6 @@ export const getEquityRightsBase = () => {
 
 /**
  * 查询额外权益数据
- * @param params 权益参数
  * @returns 权益列表
  */
 export const getEquityRightsExtra = () => {
@@ -74,6 +74,25 @@ export const postEquityRightsExtraEdit = (
   return HttpRequest.post(
     {
       url: EquityApi.EquityRightsExtraEdit,
+      params: params,
+    },
+    {
+      isTransformResponse: false,
+    }
+  );
+};
+
+/**
+ * 修改额外套餐费用
+ * @param params 权益参数
+ * @returns 权益列表
+ */
+export const postEquityRightsExtraPriceUpdate = (
+  params: EquityRightsExtraPriceUpdateType
+) => {
+  return HttpRequest.post(
+    {
+      url: EquityApi.EquityRightsExtraPriceUpdate,
       params: params,
     },
     {

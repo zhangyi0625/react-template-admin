@@ -656,6 +656,19 @@ export default defineMock([
               {
                 id: Math.random().toString(),
                 name: 'other-setting',
+                path: '/otherSetting/queryRightsSetting',
+                component: 'otherSetting/QueryRightsSetting',
+                route: '1',
+                meta: {
+                  keepAlive: false,
+                  icon: '',
+                  title: '查询权益设置',
+                  internal: false,
+                },
+              },
+              {
+                id: Math.random().toString(),
+                name: 'other-setting',
                 path: '/otherSetting/noticeManage',
                 component: 'otherSetting/NoticeManage',
                 route: '1',

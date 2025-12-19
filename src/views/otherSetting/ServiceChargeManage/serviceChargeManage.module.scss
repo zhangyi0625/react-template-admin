@@ -1,0 +1,37 @@
+.service-chargeManage-detail {
+  &-flex {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    &-title {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      width: 100%;
+    }
+    &-items {
+      display: flex;
+      align-items: center;
+      margin-top: 6px;
+      .label {
+        display: none;
+      }
+      .input {
+        width: 90px;
+      }
+      .input:nth-of-type(2n) {
+        margin-left: 12px;
+      }
+    }
+  }
+  .service-chargeManage-detail-flex:nth-of-type(1) {
+    flex: 1.5;
+    .service-chargeManage-detail-flex-title {
+      margin-left: 90px;
+    }
+    .label {
+      width: 90px;
+      display: block;
+    }
+  }
+}

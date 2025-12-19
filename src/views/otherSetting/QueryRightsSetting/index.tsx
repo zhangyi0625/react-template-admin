@@ -144,7 +144,6 @@ const QueryRightsSetting: React.FC = () => {
       <ConfigProvider>
         <Card
           style={{ flex: 1, marginTop: '8px', minHeight: 0 }}
-          styles={{ body: { height: '100%' } }}
           ref={parentRef}
           tabList={[
             { key: 'packageBenefit', tab: '套餐内权益' },

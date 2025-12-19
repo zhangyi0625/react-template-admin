@@ -1,5 +1,6 @@
 import { HttpRequest } from '@/utils/request';
 import type { Response } from '@/types/global';
+import { ContentTypeEnum } from '@/enums/httpEnum';
 
 /**
  * 枚举系统配置需要的接口地址
@@ -7,6 +8,7 @@ import type { Response } from '@/types/global';
 export enum UploadApi {
   uploadFile = '/api/file/upload',
   getFileUrl = '/staff/file/',
+  uploadBulletinFile = '/staff/bulletin/file',
 }
 
 /**
@@ -32,6 +34,24 @@ export const getFileUrl = (id: string) => {
     {
       url: UploadApi.getFileUrl + id,
       responseType: 'blob',
+    },
+    { isTransformResponse: false }
+  );
+};
+
+/**
+ * 获取源文件
+ * @param params
+ * @returns
+ */
+export const postUploadBulletinFile = (params: FormData) => {
+  return HttpRequest.post(
+    {
+      url: UploadApi.uploadBulletinFile,
+      params: params,
+      headers: {
+        'Content-Type': ContentTypeEnum.FORM_DATA,
+      },
     },
     { isTransformResponse: false }
   );

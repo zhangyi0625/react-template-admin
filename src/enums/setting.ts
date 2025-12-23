@@ -44,3 +44,13 @@ export enum ShippingCabinPlanScheduleType {
   周六 = 'SATURDAY',
   周日 = 'SUNDAY',
 }
+
+export enum SystemOrderType {
+  BOOKING = '现舱订单',
+  PREBOOKING = '预定订单',
+}
+
+export enum SystemCabinType {
+  CARRIER = '船公司舱位',
+  CUSTOMER = '庄家舱位',
+}

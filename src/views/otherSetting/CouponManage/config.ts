@@ -1,0 +1,121 @@
+import type { CustomColumn } from 'customer-search-form-table/SearchForm/type';
+
+export const CouponManageForms: Omit<CustomColumn, 'selectFetch'>[] = [
+  {
+    label: '优惠券名称',
+    name: 'name',
+    formType: 'input',
+    span: 12,
+    isRules: true,
+    hiddenItem: false,
+  },
+  {
+    label: '类型及金额',
+    name: 'discountType',
+    formType: 'normalSelect',
+    options: [],
+    span: 24,
+    hiddenItem: false,
+  },
+  {
+    label: '应用范围',
+    name: 'applyRange',
+    formType: 'radio',
+    options: [],
+    span: 24,
+    hiddenItem: false,
+  },
+  {
+    label: '适用人群',
+    name: 'customerLevel',
+    options: [],
+    formType: 'radio',
+    span: 24,
+    hiddenItem: false,
+  },
+  {
+    label: '优惠券描述',
+    name: 'desc',
+    formType: 'textarea',
+    customPlaceholder: '填写优惠券描述',
+    span: 24,
+    hiddenItem: false,
+  },
+  {
+    label: '订单类型',
+    name: 'orderTypes',
+    formType: 'normalSelect',
+    options: [],
+    span: 12,
+    hiddenItem: false,
+  },
+  {
+    label: '舱位分类',
+    name: 'productChannels',
+    formType: 'normalSelect',
+    options: [],
+    span: 12,
+    hiddenItem: false,
+  },
+  {
+    label: '出口港口',
+    name: 'porIds',
+    formType: 'normalSelect',
+    options: [],
+    span: 12,
+    hiddenItem: false,
+  },
+  {
+    label: '航线范围',
+    name: 'routes',
+    formType: 'normalSelect',
+    options: [],
+    span: 12,
+    hiddenItem: false,
+  },
+  {
+    label: '使用有效时间',
+    name: 'validRuleType',
+    formType: 'normalSelect',
+    options: [],
+    span: 24,
+    hiddenItem: false,
+  },
+  {
+    label: '发放方式',
+    name: 'distributeType',
+    formType: 'normalSelect',
+    options: [],
+    span: 24,
+    hiddenItem: false,
+  },
+];
+
+export const CouponProviderForms: Omit<
+  CustomColumn,
+  'selectFetch' | 'hiddenItem'
+>[] = [
+  {
+    label: '发放数量',
+    name: 'count',
+    formType: 'input',
+    span: 6,
+    isRules: true,
+  },
+  {
+    label: '发送用户',
+    name: 'customerIds',
+    formType: 'focusSelect',
+    customPlaceholder: '搜索用户名/手机号',
+    options: [],
+    span: 12,
+  },
+  {
+    label: '发送企业',
+    name: 'affiliateIds',
+    formType: 'focusSelect',
+    customPlaceholder: '输入企业名',
+    options: [],
+    span: 12,
+  },
+];

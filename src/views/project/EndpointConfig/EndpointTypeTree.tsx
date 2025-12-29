@@ -52,7 +52,7 @@ const EndpointTypeTree: React.FC<EndpointTypeTreeProps> = memo(
     const [visible, setVisible] = useState<boolean>(false);
     // 选中的节点
     const [selectedNode, setSelectedNode] = useState<ConfigTypeNode | null>(
-      null,
+      null
     );
     const dropdownRef = useRef<HTMLDivElement>(null);
     // 点击其他地方关闭菜单
@@ -265,7 +265,6 @@ const EndpointTypeTree: React.FC<EndpointTypeTreeProps> = memo(
         endpointConfigs: node.endpointConfigs,
       });
       onSelect(info);
-      console.log(selectedKeys, info);
     };
 
     // 新增分类
@@ -284,7 +283,7 @@ const EndpointTypeTree: React.FC<EndpointTypeTreeProps> = memo(
       } else {
         //
         setExpandedKeys(
-          expandedKeys.filter((key: any) => info.node.id !== key),
+          expandedKeys.filter((key: any) => info.node.id !== key)
         );
       }
     };
@@ -375,7 +374,7 @@ const EndpointTypeTree: React.FC<EndpointTypeTreeProps> = memo(
         />
       </>
     );
-  },
+  }
 );
 
 export default EndpointTypeTree;

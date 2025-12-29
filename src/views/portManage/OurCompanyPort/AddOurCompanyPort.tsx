@@ -64,7 +64,6 @@ const AddOurCompanyPort: React.FC<AddOurCompanyPortProps> = ({
   };
 
   const getRouteChange = async (value: number) => {
-    console.log(value, 'value');
     try {
       const resp = await getSystemAreaOptions({ parentId: value });
       formMaps.map((item) => {

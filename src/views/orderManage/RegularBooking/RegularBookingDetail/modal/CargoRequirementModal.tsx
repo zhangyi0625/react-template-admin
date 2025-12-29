@@ -38,7 +38,6 @@ const CargoRequirementModal: React.FC<CargoRequirementModalProps> = memo(
           ? item.replaceFn(options[item.key])
           : options[item.key];
       });
-      console.log(arr, 'arr', params.editRow);
       setoptions(arr);
       setLoading(false);
     };

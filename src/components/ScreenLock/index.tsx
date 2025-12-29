@@ -27,9 +27,7 @@ const ScreenLock: React.FC = () => {
   /**
    * 验证解锁密码
    */
-  const validatePassword = (e: any) => {
-    console.log(e.target.value);
-
+  const validatePassword = (_: any) => {
     // 如果密码验证正确，则解除锁屏
     dispatch(updatePreferences('widget', 'lockScreenStatus', false));
   };

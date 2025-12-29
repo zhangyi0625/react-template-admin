@@ -24,25 +24,19 @@ const ProjectCard: React.FC<ProjectCardProps> = (props) => {
       label: '复制',
       icon: <CopyOutlined className="text-blue-500" />,
       key: 'copy',
-      onClick: () => {
-        console.log('复制');
-      },
+      onClick: () => {},
     },
     {
       label: '导出',
       icon: <ExportOutlined className="text-orange-400" />,
       key: 'export',
-      onClick: () => {
-        console.log('导出');
-      },
+      onClick: () => {},
     },
     {
       label: '删除',
       icon: <DeleteOutlined className="text-red-500" />,
       key: 'delete',
-      onClick: () => {
-        console.log('删除');
-      },
+      onClick: () => {},
     },
   ];
   return (
@@ -69,7 +63,11 @@ const ProjectCard: React.FC<ProjectCardProps> = (props) => {
         </Button>
       </div>
       <div className="dropdownItems">
-        <Dropdown menu={{ items: dropdownItems }} trigger={['click']} placement='bottomRight'>
+        <Dropdown
+          menu={{ items: dropdownItems }}
+          trigger={['click']}
+          placement="bottomRight"
+        >
           <Button type="text" icon={<EllipsisOutlined />} />
         </Dropdown>
       </div>

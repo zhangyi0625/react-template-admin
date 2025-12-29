@@ -70,9 +70,7 @@ const MyLayout: React.FC = () => {
             cursor: 'pointer',
             width: '100px',
           }}
-          onClick={() => {
-            console.log(item.name);
-          }}
+          onClick={() => {}}
         >
           <div
             className="outline-box"

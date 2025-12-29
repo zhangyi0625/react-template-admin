@@ -56,7 +56,7 @@ const Notify: React.FC = () => {
     // 数据加载完成后将数据进行分组
     const groupData: { [key: string]: MessageListType } = groupBy(
       dataSource,
-      'type',
+      'type'
     );
     setGroupData(groupData);
   }, [dataSource]);
@@ -65,9 +65,7 @@ const Notify: React.FC = () => {
    * 标记消息已读
    * @param data 消息数据
    */
-  const readMessage = (data: MessageListType) => {
-    console.log('标记消息已读', data);
-  };
+  const readMessage = (_: MessageListType) => {};
 
   // tab列表
   const tabList: TabsProps['items'] = [
@@ -124,12 +122,7 @@ const Notify: React.FC = () => {
           size="small"
           style={{ height: '100%' }}
           tabBarExtraContent={
-            <Button
-              type="link"
-              onClick={() => {
-                console.log('清除');
-              }}
-            >
+            <Button type="link" onClick={() => {}}>
               清空
             </Button>
           }

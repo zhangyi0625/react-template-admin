@@ -22,7 +22,6 @@ const CurrentCabinDetail: React.FC<CurrentCabinDetailProps> = ({
 
   const settingFeeRules = () => {
     // Todo:需要先实现其他设置中  服务费保证金管理列表
-    console.log('设置费用规则');
   };
 
   useEffect(() => {

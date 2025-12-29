@@ -193,8 +193,7 @@ const PacketManage: React.FC = () => {
   };
 
   const openPacketDetail = async (id: string) => {
-    const resp = await getPacketRecordDetail(id);
-    console.log(resp, 'resp');
+    await getPacketRecordDetail(id);
   };
 
   const exportPacketData = async (id: string) => {

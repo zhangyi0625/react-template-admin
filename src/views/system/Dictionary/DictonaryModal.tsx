@@ -43,7 +43,6 @@ const DictonaryModal: React.FC<DictonaryModalProps> = ({
       form.resetFields();
       defaultdictId && form.setFieldsValue({ dictId: defaultdictId });
     }
-    console.log(dictionaryClass);
   }, [currentRow, visible]);
 
   /**

@@ -27,7 +27,6 @@ const AffiliateDetail: React.FC = () => {
     try {
       const id = location.pathname.split('/marketManage/affiliateManage/')[1];
       const resp = await getAffiliateManageDetail(id);
-      console.log(location, 'location', id);
       setAffiliateDetail({
         ...resp,
         businessConfig: !!resp.businessConfig

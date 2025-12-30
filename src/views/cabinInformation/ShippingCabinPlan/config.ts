@@ -9,7 +9,7 @@ export const ShippingCabinPlanSearchColumns: CustomColumn[] = [
     formType: 'normalSelect',
     options: [],
     api: getSystemOrderCarrier,
-    selectFileldName: {
+    selectFieldName: {
       label: 'carrierCode',
       value: 'carrierCode',
     },
@@ -23,7 +23,7 @@ export const ShippingCabinPlanSearchColumns: CustomColumn[] = [
     name: 'porCode',
     formType: 'focusSelect',
     options: [],
-    selectFileldName: {
+    selectFieldName: {
       label: 'localName',
       value: 'unlocode',
     },
@@ -47,7 +47,7 @@ export const ShippingCabinPlanSearchColumns: CustomColumn[] = [
     name: 'fndCode',
     formType: 'focusSelect',
     options: [],
-    selectFileldName: {
+    selectFieldName: {
       label: 'localName',
       value: 'unlocode',
     },
@@ -86,7 +86,7 @@ export const ShippingCabinPlanFormMaps: Omit<
     name: 'carrier',
     formType: 'normalSelect',
     options: [],
-    selectFileldName: {
+    selectFieldName: {
       label: 'carrierCode',
       value: 'carrierCode',
     },

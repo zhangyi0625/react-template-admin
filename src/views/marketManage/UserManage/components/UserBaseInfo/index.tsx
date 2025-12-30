@@ -56,7 +56,7 @@ const UserBaseInfo: React.FC<UserBaseInfoProps> = memo(
 
     const [isEdit, setIsEdit] = useState<boolean>(false);
 
-    const [formMaps, setFormMaps] = useState(UserManageDetailEditForm);
+    const [formMaps] = useState(UserManageDetailEditForm);
 
     const moduleKeys = ['REALTIME_RATE', 'CARGO_TRACE', 'CARRIER_SCHEDULE'];
 
@@ -232,10 +232,10 @@ const UserBaseInfo: React.FC<UserBaseInfoProps> = memo(
           <p className="font-semibold text-base mb-[10px]">
             套餐外权限
             <span
-              className="text-normal-blue font-meduim ml-[12px] underline cursor-pointer text-sm font-normal"
+              className="text-normal-blue font-medium ml-[12px] underline cursor-pointer text-sm font-normal"
               onClick={() => {
                 setShowRemark(true),
-                  AffiliateComboPermissionRemarkRef.current?.onLoadReamrk();
+                  AffiliateComboPermissionRemarkRef.current?.onLoadRemark();
               }}
             >
               点击查看套餐内权限及额外购买费用
@@ -524,7 +524,7 @@ const UserBaseInfo: React.FC<UserBaseInfoProps> = memo(
                             filterOption
                             options={item.options}
                             fieldNames={
-                              item.selectFileldName ?? {
+                              item.selectFieldName ?? {
                                 label: 'label',
                                 value: 'value',
                               }

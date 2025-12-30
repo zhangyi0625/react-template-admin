@@ -20,7 +20,6 @@ import {
 import useParentSize from '@/hooks/useParentSize';
 import type { RegularBookingSearchParams } from '@/services/orderManage/regularBooking/regularBookingModel';
 import { FastBookingSearchColumns, FastBookingStatus } from './config';
-import { useSelector } from 'react-redux';
 import FastBooingResultDrawer from './components/FastBooingResultDrawer';
 import type { FastBookingOrderSearchFilter } from '@/services/orderManage/fastBooking/fastBookingModel';
 import {
@@ -30,7 +29,6 @@ import {
 import FastBookingResultNotice from './components/FastBookingResultNotice';
 import { filterKeys } from '@/utils/tool';
 import { formatTime } from '@/utils/format';
-import { RootState } from '@/stores/store';
 
 const FastBooking: React.FC = () => {
   const navigate = useNavigate();
@@ -38,10 +36,6 @@ const FastBooking: React.FC = () => {
   const { message } = App.useApp();
 
   const { parentRef, height } = useParentSize();
-
-  const { publicData } = useSelector((state: RootState) => state.publicSetting);
-
-  const orderStatusManager = publicData.orderStatusManager;
 
   const [searchDefaultForm, setSearchDefaultForm] =
     useState<RegularBookingSearchParams>({
@@ -322,13 +316,13 @@ const FastBooking: React.FC = () => {
       const blob = new Blob([content], {
         type: 'application/vnd.ms-excel',
       });
-      const elink = document.createElement('a');
-      elink.download = `(${type} !== 'table' ? 拍舱结果 : '光速预定列表').xlsx`;
-      elink.style.display = 'none';
-      elink.href = URL.createObjectURL(blob);
-      document.body.appendChild(elink);
-      elink.click();
-      URL.revokeObjectURL(elink.href);
+      const link = document.createElement('a');
+      link.download = `(${type} !== 'table' ? 拍舱结果 : '光速预定列表').xlsx`;
+      link.style.display = 'none';
+      link.href = URL.createObjectURL(blob);
+      document.body.appendChild(link);
+      link.click();
+      URL.revokeObjectURL(link.href);
     } catch {
       setLoading(false);
     }

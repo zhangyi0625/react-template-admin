@@ -31,7 +31,7 @@ const DepositManageRemark: React.FC<DepositManageRemarkProps> = ({
       currentRow?.status === 'FAILED'
         ? 'reject'
         : currentRow?.status === 'DISCHARGED'
-        ? 'accpet'
+        ? 'accept'
         : undefined
     );
     form.setFieldsValue({
@@ -91,13 +91,13 @@ const DepositManageRemark: React.FC<DepositManageRemarkProps> = ({
           </Form.Item>
           {dispose && (
             <Form.Item
-              label={dispose === 'accpet' ? '备注' : '驳回原因'}
+              label={dispose === 'accept' ? '备注' : '驳回原因'}
               name="remarks"
             >
               <Input.TextArea
                 disabled={currentRow?.status !== 'CREATED'}
                 placeholder={`请填写${
-                  dispose === 'accpet' ? '备注' : '驳回原因'
+                  dispose === 'accept' ? '备注' : '驳回原因'
                 }`}
                 allowClear
               />

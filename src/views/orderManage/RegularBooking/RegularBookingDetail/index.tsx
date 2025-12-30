@@ -12,7 +12,7 @@ import {
 import { RootState } from '@/stores/store';
 import {
   RegularBookingDetailBaseInfoOptions,
-  RegularBookingstatusList,
+  RegularBookingStatusList,
 } from '../config';
 import type {
   RegularBookingDetailBaseInfoType,
@@ -91,7 +91,7 @@ const RegularBookingDetail: React.FC = () => {
     editRow: [],
   });
 
-  const [cancelReson, setCancelReson] = useState<boolean>(false);
+  const [cancelReason, setCancelReason] = useState<boolean>(false);
 
   useEffect(() => {
     setLoading(true);
@@ -142,10 +142,10 @@ const RegularBookingDetail: React.FC = () => {
     refundStatus: string | null;
     payStatus: string | null;
   }) => {
-    return RegularBookingstatusList.find((item) => item.conditionFun(value));
+    return RegularBookingStatusList.find((item) => item.conditionFun(value));
   };
 
-  const statusOtions = useCallback(() => {
+  const statusOptions = useCallback(() => {
     return (
       orderInfo &&
       OtherJudgeCondition(
@@ -203,7 +203,7 @@ const RegularBookingDetail: React.FC = () => {
 
   const cancelClick = async (item: RegularBookingStatusConditionType) => {
     try {
-      if (item.cancelBtnText === '取消订舱') setCancelReson(true);
+      if (item.cancelBtnText === '取消订舱') setCancelReason(true);
       else {
         item.cancelBtnText === '订舱执行违约' &&
           (await postExecutionBreach(orderInfo?.id, { remark: '执行违约' }));
@@ -241,7 +241,7 @@ const RegularBookingDetail: React.FC = () => {
     try {
       await postCancelBooking(orderInfo?.id, { remark: reason });
       message.success('修改成功');
-      setCancelReson(false);
+      setCancelReason(false);
       init();
     } catch {}
   };
@@ -254,12 +254,12 @@ const RegularBookingDetail: React.FC = () => {
             <div className="bg-white">
               <div className="h-[70px] leading-[70px] bg-dull-blue pl-[20px] rounded-t-[6px] flex items-center">
                 <img
-                  src={getIcon(statusOtions()?.titleIcon) + '.png'}
+                  src={getIcon(statusOptions()?.titleIcon) + '.png'}
                   className="w-[38px] h-[38px]"
                   alt=""
                 />
                 <div className="font-bold text-[28px] text-white ml-[10px]">
-                  {statusOtions()?.valueText}
+                  {statusOptions()?.valueText}
                 </div>
               </div>
               <div className="px-[24px] py-[20px]">
@@ -288,29 +288,29 @@ const RegularBookingDetail: React.FC = () => {
               <h3 className="text-dull-grey text-base font-medium">订单操作</h3>
               <div className="mt-[24px] text-center">
                 <img
-                  src={getIcon(statusOtions()?.titleIcon) + '-op.png'}
+                  src={getIcon(statusOptions()?.titleIcon) + '-op.png'}
                   className="w-[58px] h-[58px] m-auto"
                   alt=""
                 />
                 <p className="text-[28px] font-bold text-orange-400 mt-[16px]">
-                  {statusOtions()?.valueText}
+                  {statusOptions()?.valueText}
                 </p>
               </div>
-              {statusOtions()?.showBtn && (
+              {statusOptions()?.showBtn && (
                 <div className="mt-[33px] flex items-center justify-center">
                   <Button
                     size="large"
                     className={'button cancel-type'}
-                    onClick={() => cancelClick(statusOtions())}
+                    onClick={() => cancelClick(statusOptions())}
                   >
-                    {statusOtions()?.cancelBtnText}
+                    {statusOptions()?.cancelBtnText}
                   </Button>
                   <Button
                     size="large"
                     className={'button confirm-type ml-[8px]'}
-                    onClick={() => confirmClick(statusOtions())}
+                    onClick={() => confirmClick(statusOptions())}
                   >
-                    {statusOtions()?.confirmBtnText}
+                    {statusOptions()?.confirmBtnText}
                   </Button>
                 </div>
               )}
@@ -330,8 +330,8 @@ const RegularBookingDetail: React.FC = () => {
         onCancel={() => setAccountInfo({ visible: false, editRow: [] })}
       />
       <CancelReasonModal
-        visible={cancelReson}
-        onCancel={() => setCancelReson(false)}
+        visible={cancelReason}
+        onCancel={() => setCancelReason(false)}
         onOk={cancelBooking}
       />
     </>

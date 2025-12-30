@@ -191,7 +191,7 @@ const ShippingCabinPlanModal: React.FC<ShippingCabinPlanModalProps> = ({
                   filterOption
                   options={item.options}
                   fieldNames={
-                    item.selectFileldName ?? {
+                    item.selectFieldName ?? {
                       label: 'label',
                       value: 'value',
                     }

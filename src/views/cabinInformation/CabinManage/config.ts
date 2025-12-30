@@ -23,7 +23,7 @@ export const CabinManageSearchColumns: CustomColumn[] = [
     name: 'affiliateId',
     formType: 'focusSelect',
     options: [],
-    selectFileldName: {
+    selectFieldName: {
       label: 'name',
       value: 'id',
     },
@@ -47,7 +47,7 @@ export const CabinManageSearchColumns: CustomColumn[] = [
     formType: 'normalSelect',
     options: [],
     api: getSystemOrderCarrier,
-    selectFileldName: {
+    selectFieldName: {
       label: 'carrierCode',
       value: 'carrierCode',
     },
@@ -61,7 +61,7 @@ export const CabinManageSearchColumns: CustomColumn[] = [
     name: 'porId',
     formType: 'focusSelect',
     options: [],
-    selectFileldName: {
+    selectFieldName: {
       label: 'localName',
       value: 'unlocode',
     },
@@ -85,7 +85,7 @@ export const CabinManageSearchColumns: CustomColumn[] = [
     name: 'fndId',
     formType: 'focusSelect',
     options: [],
-    selectFileldName: {
+    selectFieldName: {
       label: 'localName',
       value: 'unlocode',
     },
@@ -112,7 +112,7 @@ export const CabinManageSearchColumns: CustomColumn[] = [
     options: [],
     selectFetch: false,
     hiddenItem: false,
-    selectFileldName: {
+    selectFieldName: {
       label: 'name',
       value: 'code',
     },

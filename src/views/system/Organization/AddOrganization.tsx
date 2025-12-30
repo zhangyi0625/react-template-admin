@@ -34,7 +34,7 @@ const AddOrganization: React.FC<AddOrganizationProps> = ({
 
   useEffect(() => {
     if (!visible) return;
-    getAllOranization();
+    getAllOrganization();
     if (currentRow) {
       // 填充表单数据
       form.setFieldsValue({
@@ -50,7 +50,7 @@ const AddOrganization: React.FC<AddOrganizationProps> = ({
     }
   }, [currentRow, visible]);
 
-  const getAllOranization = () => {
+  const getAllOrganization = () => {
     getOrganizationList().then((resp) => {
       setOrganization(resp);
     });

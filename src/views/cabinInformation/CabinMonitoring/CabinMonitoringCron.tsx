@@ -13,7 +13,7 @@ const CabinMonitoringCron: React.FC<CabinMonitoringCronProps> = ({
   params,
   onCancel,
 }) => {
-  const { visible, executeCron } = params;
+  const { visible } = params;
 
   const [loading, setLoading] = useState<boolean>(false);
 

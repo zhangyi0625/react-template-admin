@@ -227,7 +227,7 @@ const AffiliateBasicInfo: React.FC<AffiliateBasicInfoProps> = memo(
               className="text-normal-blue font-meduim ml-[12px] underline cursor-pointer text-sm font-normal"
               onClick={() => {
                 setShowRemark(true),
-                  AffiliateComboPermissionRemarkRef.current?.onLoadReamrk();
+                  AffiliateComboPermissionRemarkRef.current?.onLoadRemark();
               }}
             >
               点击查看套餐内权限及额外购买费用
@@ -429,7 +429,7 @@ const AffiliateBasicInfo: React.FC<AffiliateBasicInfoProps> = memo(
                             filterOption
                             options={item.options}
                             fieldNames={
-                              item.selectFileldName ?? {
+                              item.selectFieldName ?? {
                                 label: 'label',
                                 value: 'value',
                               }

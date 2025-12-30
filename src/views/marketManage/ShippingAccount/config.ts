@@ -42,7 +42,7 @@ export const ShippingAccountSearchColumns: CustomColumn[] = [
     name: 'customerId',
     formType: 'focusSelect',
     options: [],
-    selectFileldName: {
+    selectFieldName: {
       label: 'name',
       value: 'id',
     },
@@ -65,7 +65,7 @@ export const ShippingAccountSearchColumns: CustomColumn[] = [
     name: 'affiliateId',
     formType: 'focusSelect',
     options: [],
-    selectFileldName: {
+    selectFieldName: {
       label: 'name',
       value: 'id',
     },
@@ -89,7 +89,7 @@ export const ShippingAccountSearchColumns: CustomColumn[] = [
     formType: 'normalSelect',
     options: [],
     api: getSystemOrderCarrier,
-    selectFileldName: {
+    selectFieldName: {
       label: 'carrierCode',
       value: 'carrierCode',
     },

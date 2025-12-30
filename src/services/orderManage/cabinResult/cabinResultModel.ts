@@ -14,7 +14,7 @@ export interface CabinResultSearchParams extends DefaultPaging {
   filter?: CabinResultSearchFilterParams | null;
 }
 
-export interface ManualpublicationType {
+export interface ManualPublicationType {
   etaEtdDay: string;
   carrier: string;
   porId: string;

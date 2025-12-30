@@ -1,6 +1,6 @@
-import type React from 'react'
-import { Key, useEffect, useState } from 'react'
-import useParentSize from '@/hooks/useParentSize'
+import type React from 'react';
+import { Key, useEffect, useState } from 'react';
+import useParentSize from '@/hooks/useParentSize';
 
 import {
   App,
@@ -15,8 +15,8 @@ import {
   Col,
   Tree,
   Input,
-} from 'antd'
-import { DownOutlined, ExclamationCircleFilled } from '@ant-design/icons'
+} from 'antd';
+import { DownOutlined, ExclamationCircleFilled } from '@ant-design/icons';
 import {
   getOrganizationListByPage,
   addOrganization,
@@ -24,37 +24,37 @@ import {
   deleteOrganization,
   deleteBatchOrganization,
   getOrganizationList,
-} from '@/services/system/organization/organization'
-import { SearchTable } from 'customer-search-form-table'
-import AddOrganization from './AddOrganization'
-import { buildTree, filterKeys } from '@/utils/tool'
+} from '@/services/system/organization/organization';
+import { SearchTable } from 'customer-search-form-table';
+import AddOrganization from './AddOrganization';
+import { buildTree, filterKeys } from '@/utils/tool';
 import type {
   SysOrganizationParams,
   SysOrganizationType,
-} from '@/services/system/organization/organizationModel'
+} from '@/services/system/organization/organizationModel';
 
 /**
  * 系统角色维护
  * @returns
  */
 const Organization: React.FC = () => {
-  const { modal, message } = App.useApp()
+  const { modal, message } = App.useApp();
 
-  const { parentRef, height } = useParentSize()
+  const { parentRef, height } = useParentSize();
 
-  const [immediate, setImmediate] = useState<boolean>(true)
+  const [immediate, setImmediate] = useState<boolean>(true);
 
   // 当前选中的行数据
-  const [selRows, setSelectedRows] = useState<string[]>([])
+  const [selRows, setSelectedRows] = useState<string[]>([]);
 
   // 将当前编辑行和窗口开关合并为一个状态对象
   const [params, setParams] = useState<{
-    visible: boolean
-    currentRow: any
+    visible: boolean;
+    currentRow: any;
   }>({
     visible: false,
     currentRow: null,
-  })
+  });
 
   const [searchDefaultForm, setSearchDefaultForm] =
     useState<SysOrganizationParams>({
@@ -62,13 +62,13 @@ const Organization: React.FC = () => {
       limit: 10,
       organizationName: null,
       parentId: null,
-    })
+    });
 
   useEffect(() => {
-    getAllOranization()
-  }, [])
+    getAllOrganization();
+  }, []);
 
-  const [treeData, setTreeData] = useState([])
+  const [treeData, setTreeData] = useState([]);
 
   // 表格的列配置
   const columns: TableProps['columns'] = [
@@ -123,7 +123,7 @@ const Organization: React.FC = () => {
               type="link"
               size="small"
               onClick={() => {
-                setParams({ visible: true, currentRow: record })
+                setParams({ visible: true, currentRow: record });
               }}
             >
               修改
@@ -137,49 +137,49 @@ const Organization: React.FC = () => {
               删除
             </Button>
           </Space>
-        )
+        );
       },
     },
-  ]
+  ];
 
-  const getAllOranization = () => {
+  const getAllOrganization = () => {
     getOrganizationList().then((resp) => {
       let newArr = resp.map((item: SysOrganizationType) => {
         return {
           ...item,
           title: item.organizationName,
           key: item.organizationId,
-        }
-      })
+        };
+      });
       let parId = newArr.find(
         (item: SysOrganizationType) => item.parentId === '0'
-      ).organizationId
-      setTreeData(buildTree(newArr, 'organizationId') as any)
-      setSearchDefaultForm({ ...searchDefaultForm, parentId: parId })
-    })
+      ).organizationId;
+      setTreeData(buildTree(newArr, 'organizationId') as any);
+      setSearchDefaultForm({ ...searchDefaultForm, parentId: parId });
+    });
     setTimeout(() => {
-      setImmediate(false)
-    }, 300)
-  }
+      setImmediate(false);
+    }, 300);
+  };
 
   const onUpdateSearch = (info?: SysOrganizationType | unknown) => {
     const filteredObj = Object.fromEntries(
       Object.entries(info ?? {}).filter(([, value]) => !!value)
-    )
-    let pageInfo = filterKeys(searchDefaultForm, ['page', 'limit'], true)
+    );
+    let pageInfo = filterKeys(searchDefaultForm, ['page', 'limit'], true);
     setSearchDefaultForm({
       ...pageInfo,
       ...filteredObj,
-    })
-  }
+    });
+  };
 
   const onUpdatePagination = (pagination: TablePaginationConfig) => {
     setSearchDefaultForm({
       ...searchDefaultForm,
       page: pagination.current as number,
       limit: pagination.pageSize as number,
-    })
-  }
+    });
+  };
 
   /**
    * 点击确定的回调
@@ -189,17 +189,17 @@ const Organization: React.FC = () => {
     try {
       if (params.currentRow == null) {
         // 新增数据
-        await addOrganization(OrganizationData)
+        await addOrganization(OrganizationData);
       } else {
         // 编辑数据
-        await updateOrganization(OrganizationData)
+        await updateOrganization(OrganizationData);
       }
-      message.success(!params.currentRow ? '添加成功' : '修改成功')
+      message.success(!params.currentRow ? '添加成功' : '修改成功');
       // 操作成功，关闭弹窗，刷新数据
-      setParams({ visible: false, currentRow: null })
-      onUpdateSearch()
+      setParams({ visible: false, currentRow: null });
+      onUpdateSearch();
     } catch (error) {}
-  }
+  };
 
   const deleteDic = (id: string[] | string, type?: string) => {
     // 删除操作需要二次确定
@@ -211,29 +211,29 @@ const Organization: React.FC = () => {
       }删除组织机构吗？数据删除后将无法恢复！`,
       onOk() {
         // 调用删除接口，删除成功后刷新页面数据
-        ;(type
+        (type
           ? deleteBatchOrganization(id as string[])
           : deleteOrganization(id as string)
         ).then(() => {
           // 刷新表格数据
-          onUpdateSearch({ ...searchDefaultForm })
+          onUpdateSearch({ ...searchDefaultForm });
           // 清空选择项
-          setSelectedRows([])
-        })
+          setSelectedRows([]);
+        });
       },
-    })
-  }
+    });
+  };
 
   const addRow = () => {
     setParams({
       visible: true,
       currentRow: null,
-    })
-  }
+    });
+  };
 
   const treeClick = (e: Key[]) => {
-    setSearchDefaultForm({ ...searchDefaultForm, parentId: e[0] as string })
-  }
+    setSearchDefaultForm({ ...searchDefaultForm, parentId: e[0] as string });
+  };
 
   return (
     <>
@@ -322,6 +322,6 @@ const Organization: React.FC = () => {
         onOk={onEditOk}
       />
     </>
-  )
-}
-export default Organization
+  );
+};
+export default Organization;

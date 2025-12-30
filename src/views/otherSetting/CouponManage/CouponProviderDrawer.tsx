@@ -34,13 +34,13 @@ const CouponProviderDrawer: React.FC<CouponProviderDrawerProps> = ({
 
   const [form] = Form.useForm();
 
-  const [customerData, setcustomerData] = useState<{
+  const [customerData, setCustomerData] = useState<{
     customerId: SelectProps['options'];
   }>({
     customerId: [],
   });
 
-  const [affiliatedata, setAffiliateData] = useState<{
+  const [affiliateData, setAffiliateData] = useState<{
     affiliateId: SelectProps['options'];
   }>({
     affiliateId: [],
@@ -49,7 +49,7 @@ const CouponProviderDrawer: React.FC<CouponProviderDrawerProps> = ({
   useEffect(() => {
     if (!visible) return;
     form.resetFields();
-    setcustomerData({ customerId: [] });
+    setCustomerData({ customerId: [] });
     setAffiliateData({ affiliateId: [] });
   }, [visible]);
 
@@ -58,7 +58,7 @@ const CouponProviderDrawer: React.FC<CouponProviderDrawerProps> = ({
     fetchSystemSearchData(
       newValue,
       name === 'customerIds' ? 'customerId' : 'affiliateId',
-      name === 'customerIds' ? setcustomerData : setAffiliateData,
+      name === 'customerIds' ? setCustomerData : setAffiliateData,
       name === 'customerIds' ? getSearchCustomer : getSearchAffiliate
     );
   };
@@ -134,7 +134,7 @@ const CouponProviderDrawer: React.FC<CouponProviderDrawerProps> = ({
                 options={(
                   (item.name === 'customerIds'
                     ? customerData['customerId']
-                    : affiliatedata['affiliateId']) || []
+                    : affiliateData['affiliateId']) || []
                 ).map((d) => ({
                   value: d.value,
                   label: d.label,

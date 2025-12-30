@@ -8,7 +8,7 @@ export const CabinResultSearchColumns: CustomColumn[] = [
     name: 'affiliateId',
     formType: 'focusSelect',
     options: [],
-    selectFileldName: {
+    selectFieldName: {
       label: 'name',
       value: 'id',
     },
@@ -32,7 +32,7 @@ export const CabinResultSearchColumns: CustomColumn[] = [
     formType: 'normalSelect',
     options: [],
     api: getSystemOrderCarrier,
-    selectFileldName: {
+    selectFieldName: {
       label: 'carrierCode',
       value: 'carrierCode',
     },
@@ -46,7 +46,7 @@ export const CabinResultSearchColumns: CustomColumn[] = [
     name: 'porId',
     formType: 'focusSelect',
     options: [],
-    selectFileldName: {
+    selectFieldName: {
       label: 'localName',
       value: 'unlocode',
     },
@@ -90,7 +90,7 @@ export const RelevanceOrderOptions: CustomColumn[] = [
     name: 'fndId',
     formType: 'focusSelect',
     options: [],
-    selectFileldName: {
+    selectFieldName: {
       label: 'localName',
       value: 'unlocode',
     },

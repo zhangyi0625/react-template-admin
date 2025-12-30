@@ -45,7 +45,7 @@ export const SelectStaffOptions: CustomColumn[] = [
     name: 'roleId',
     formType: 'focusSelect',
     options: [],
-    selectFileldName: {
+    selectFieldName: {
       label: 'name',
       value: 'id',
     },
@@ -121,7 +121,7 @@ export const SelectStaffForm: Omit<CustomColumn, 'selectFetch'>[] = [
     name: 'roleId',
     formType: 'normalSelect',
     options: [],
-    selectFileldName: {
+    selectFieldName: {
       label: 'name',
       value: 'id',
     },

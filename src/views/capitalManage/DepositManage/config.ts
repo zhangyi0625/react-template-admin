@@ -19,7 +19,7 @@ export const DepositManageStatusOptions: SelectProps['options'] = [
 export const DisposeOptions: SelectProps['options'] = [
   {
     label: '接受',
-    value: 'accpet',
+    value: 'accept',
   },
   {
     label: '驳回',
@@ -33,7 +33,7 @@ export const DepositManageSearchColumns: CustomColumn[] = [
     name: 'customerId',
     formType: 'focusSelect',
     options: [],
-    selectFileldName: {
+    selectFieldName: {
       label: 'name',
       value: 'id',
     },

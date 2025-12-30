@@ -146,7 +146,7 @@ export function safeJsonParse(
  */
 export function searchSelectFilterOption(
   input: string,
-  fieldNames: CustomColumn['selectFileldName'],
+  fieldNames: CustomColumn['selectFieldName'],
   option: DefaultOptionType | undefined
 ) {
   const key = fieldNames

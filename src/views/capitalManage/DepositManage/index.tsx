@@ -8,7 +8,7 @@ import {
   type TablePaginationConfig,
   type TableProps,
 } from 'antd';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { DownloadOutlined } from '@ant-design/icons';
 import { SearchForm, SearchTable } from 'customer-search-form-table';
 import {
@@ -31,13 +31,10 @@ import FinancialDetailsParticulars from '../FinancialDetails/FinancialDetailsPar
 import { RootState } from '@/stores/store';
 import { filterKeys } from '@/utils/tool';
 import { ExportTableDataByXLSX } from '@/utils/export';
-
 import { formatTime } from '@/utils/format';
 
 const DepositManage: React.FC = () => {
   const { message } = App.useApp();
-
-  const dispatch = useDispatch();
 
   const { parentRef, height } = useParentSize();
 
@@ -109,7 +106,7 @@ const DepositManage: React.FC = () => {
       align: 'center',
       render(value) {
         let fundSource = publicData['fundSource'];
-        return <div>{fundSource[value.fund] ?? value.fundTitile}</div>;
+        return <div>{fundSource[value.fund] ?? value.fundTitle}</div>;
       },
     },
     {
@@ -232,13 +229,13 @@ const DepositManage: React.FC = () => {
     disposeStatus: string
   ) => {
     try {
-      if (disposeStatus === 'accpet') {
+      if (disposeStatus === 'accept') {
         await postAcceptDepositManage(customerRow);
       } else {
         await postRejectDepositManage(customerRow);
       }
       message.success(
-        disposeStatus === 'accpet' ? '接受已提现~' : '提现已驳回~'
+        disposeStatus === 'accept' ? '接受已提现~' : '提现已驳回~'
       );
       // 操作成功，关闭弹窗，刷新数据
       setDepositRemark({ visible: false, currentRow: null });

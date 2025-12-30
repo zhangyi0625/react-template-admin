@@ -58,7 +58,7 @@ export const OurCompanyPortSearchColumns: CustomColumn[] = [
     name: 'countryCode',
     formType: 'normalSelect',
     options: [],
-    selectFileldName: {
+    selectFieldName: {
       label: 'localName',
       value: 'code',
     },
@@ -83,7 +83,7 @@ export const OurCompanyPortForms: Omit<
     label: '航线',
     name: 'parentAreaId',
     formType: 'normalSelect',
-    selectFileldName: {
+    selectFieldName: {
       label: 'name',
       value: 'id',
     },
@@ -104,7 +104,7 @@ export const OurCompanyPortForms: Omit<
     formType: 'normalSelect',
     options: [],
     span: 12,
-    selectFileldName: {
+    selectFieldName: {
       label: 'name',
       value: 'id',
     },
@@ -122,7 +122,7 @@ export const OurCompanyPortForms: Omit<
     name: 'countryId',
     formType: 'normalSelect',
     options: [],
-    selectFileldName: {
+    selectFieldName: {
       label: 'localName',
       value: 'id',
     },
@@ -158,7 +158,7 @@ export const ShippingCompanyPortSearchColumns: CustomColumn[] = [
     name: 'carrier',
     formType: 'normalSelect',
     options: [],
-    selectFileldName: {
+    selectFieldName: {
       label: 'carrierCode',
       value: 'carrierCode',
     },
@@ -187,7 +187,7 @@ export const ShippingCompanyPortSearchColumns: CustomColumn[] = [
     name: 'porId',
     formType: 'focusSelect',
     options: [],
-    selectFileldName: {
+    selectFieldName: {
       label: 'localName',
       value: 'unlocode',
     },

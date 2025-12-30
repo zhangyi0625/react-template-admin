@@ -162,7 +162,7 @@ const CabinMonitoringExtraSettingModal: React.FC<
                     options={item.options}
                     mode="tags"
                     fieldNames={
-                      item.selectFileldName ?? {
+                      item.selectFieldName ?? {
                         label: 'label',
                         value: 'value',
                       }

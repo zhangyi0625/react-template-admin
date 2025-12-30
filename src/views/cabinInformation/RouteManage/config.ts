@@ -9,7 +9,7 @@ export const RouteManageSearchColumns: CustomColumn[] = [
     formType: 'normalSelect',
     options: [],
     api: getSystemOrderCarrier,
-    selectFileldName: {
+    selectFieldName: {
       label: 'carrierCode',
       value: 'carrierCode',
     },
@@ -33,7 +33,7 @@ export const RouteManageSearchColumns: CustomColumn[] = [
     name: 'porId',
     formType: 'focusSelect',
     options: [],
-    selectFileldName: {
+    selectFieldName: {
       label: 'localName',
       value: 'unlocode',
     },
@@ -57,7 +57,7 @@ export const RouteManageSearchColumns: CustomColumn[] = [
     name: 'fndId',
     formType: 'focusSelect',
     options: [],
-    selectFileldName: {
+    selectFieldName: {
       label: 'localName',
       value: 'unlocode',
     },
@@ -84,7 +84,7 @@ export const RouteManageSearchColumns: CustomColumn[] = [
     options: [],
     selectFetch: false,
     hiddenItem: false,
-    selectFileldName: {
+    selectFieldName: {
       label: 'name',
       value: 'code',
     },

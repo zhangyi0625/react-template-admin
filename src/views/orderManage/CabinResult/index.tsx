@@ -12,12 +12,11 @@ import { DownloadOutlined, SendOutlined } from '@ant-design/icons';
 import { SearchForm, SearchTable } from 'customer-search-form-table';
 import { CabinResultSearchColumns } from './config';
 import useParentSize from '@/hooks/useParentSize';
-import type { CabinResultParams } from '@/services/cabinManage/cabinManageModel';
 import {
   getCabinResultByPage,
   postBatchProduct,
   postCabinResult,
-  postManualpublication,
+  postManualPublication,
   postOnRelevance,
   postRelevanceResult,
 } from '@/services/orderManage/cabinResult/cabinResultApi';
@@ -26,8 +25,9 @@ import RelevanceOrderDrawer from './RelevanceOrderDrawer';
 import ManualRelease from './ManualReleaseModal';
 import type {
   CabinResultCtnType,
+  CabinResultSearchParams,
   ImportCabinResultType,
-  ManualpublicationType,
+  ManualPublicationType,
 } from '@/services/orderManage/cabinResult/cabinResultModel';
 import { filterKeys } from '@/utils/tool';
 import { formatTime } from '@/utils/format';
@@ -37,12 +37,11 @@ const CabinResult: React.FC = () => {
 
   const { parentRef, height } = useParentSize();
 
-  const [searchDefaultForm, setSearchDefaultForm] = useState<CabinResultParams>(
-    {
+  const [searchDefaultForm, setSearchDefaultForm] =
+    useState<CabinResultSearchParams>({
       pageIndex: 1,
       pageSize: 20,
-    }
-  );
+    });
 
   const [params, setParams] = useState<{
     visible: boolean;
@@ -63,7 +62,7 @@ const CabinResult: React.FC = () => {
 
   const [loading, setLoading] = useState<boolean>(false);
 
-  const [manualReleaseParams, setManualReleaseParmas] = useState<{
+  const [manualReleaseParams, setManualReleaseParams] = useState<{
     visible: boolean;
     editRow: any | null;
     carrierOptions?: string[];
@@ -286,7 +285,7 @@ const CabinResult: React.FC = () => {
     return status ? `cursor-pointer text-${color}-500` : 'hidden';
   };
 
-  const onUpdateSearch = (info?: CabinResultParams | unknown) => {
+  const onUpdateSearch = (info?: CabinResultSearchParams | unknown) => {
     const filteredObj = Object.fromEntries(
       Object.entries(info ?? {}).filter(
         ([, value]) => !!value && value !== undefined
@@ -336,18 +335,18 @@ const CabinResult: React.FC = () => {
     let arr = CabinResultSearchColumns.find(
       (item) => item.name === 'carrier'
     )?.options;
-    setManualReleaseParmas({
+    setManualReleaseParams({
       visible: true,
       editRow: row,
       carrierOptions: arr?.map((item) => item.name),
     });
   };
 
-  const manualpublication = async (info: ManualpublicationType) => {
+  const manualPublication = async (info: ManualPublicationType) => {
     try {
-      await postManualpublication(info);
+      await postManualPublication(info);
       message.success('发布成功～');
-      setManualReleaseParmas({ visible: false, editRow: null });
+      setManualReleaseParams({ visible: false, editRow: null });
       setSearchDefaultForm({ ...searchDefaultForm });
     } catch {}
   };
@@ -432,9 +431,9 @@ const CabinResult: React.FC = () => {
       <ManualRelease
         params={manualReleaseParams}
         onCancel={() =>
-          setManualReleaseParmas({ visible: false, editRow: null })
+          setManualReleaseParams({ visible: false, editRow: null })
         }
-        onOk={manualpublication}
+        onOk={manualPublication}
       />
     </>
   );

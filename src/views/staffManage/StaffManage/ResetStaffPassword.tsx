@@ -5,7 +5,7 @@ import type {
   SysStaffResetPasswordType,
   SysStaffType,
 } from '@/services/staffManage/staffManageModel';
-import { postSendVerifycode } from '@/services/staffManage/staffManageApi';
+import { postSendVerifyCode } from '@/services/staffManage/staffManageApi';
 
 export type ResetStaffPasswordProps = {
   params: {
@@ -39,7 +39,7 @@ const ResetStaffPassword: React.FC<ResetStaffPasswordProps> = ({
   const sendMessage = async () => {
     setIsSendCheckCode(true);
     try {
-      const resp = await postSendVerifycode();
+      const resp = await postSendVerifyCode();
       const timer = setInterval(function () {
         setCountdownNumber((prev) => prev - 1);
         if (countdownNumber === 0) {

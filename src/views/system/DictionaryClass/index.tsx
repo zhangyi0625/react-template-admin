@@ -1,5 +1,5 @@
-import type React from 'react'
-import { useEffect, useState } from 'react'
+import type React from 'react';
+import { useEffect, useState } from 'react';
 import {
   App,
   Button,
@@ -8,51 +8,51 @@ import {
   Space,
   Table,
   type TableProps,
-} from 'antd'
+} from 'antd';
 import {
   addDictionary,
   deleteDictionary,
   getDictionaryListByPage,
   updateDictionary,
-} from '@/services/system/dictionary/dictionaryApi'
-import { ExclamationCircleFilled, PlusOutlined } from '@ant-design/icons'
-import useParentSize from '@/hooks/useParentSize'
-import { SysDictionaryClassType } from '@/services/system/dictionary/dictionaryModel'
-import DictonaryClassModal from './DictonaryClassModal'
+} from '@/services/system/dictionary/dictionaryApi';
+import { ExclamationCircleFilled, PlusOutlined } from '@ant-design/icons';
+import useParentSize from '@/hooks/useParentSize';
+import { SysDictionaryClassType } from '@/services/system/dictionary/dictionaryModel';
+import DictionaryClassModal from './DictionaryClassModal';
 
 const DictionaryClass: React.FC = () => {
-  const { height } = useParentSize()
+  const { height } = useParentSize();
 
-  const { modal, message } = App.useApp()
+  const { modal, message } = App.useApp();
 
-  const [loading, setLoading] = useState<boolean>(false)
+  const [loading, setLoading] = useState<boolean>(false);
 
-  const [tableData, setTableData] = useState([])
+  const [tableData, setTableData] = useState([]);
 
   // 将当前编辑行和窗口开关合并为一个状态对象
   const [params, setParams] = useState<{
-    visible: boolean
-    currentRow: SysDictionaryClassType | null
-    view: boolean
+    visible: boolean;
+    currentRow: SysDictionaryClassType | null;
+    view: boolean;
   }>({
     visible: false,
     currentRow: null,
     view: false,
-  })
+  });
 
   useEffect(() => {
-    loadDictionaryList()
-  }, [])
+    loadDictionaryList();
+  }, []);
 
   const loadDictionaryList = () => {
-    setLoading(true)
+    setLoading(true);
     getDictionaryListByPage()
       .then((resp) => {
-        setTableData(resp.list)
-        setLoading(false)
+        setTableData(resp.list);
+        setLoading(false);
       })
-      .catch(() => setLoading(false))
-  }
+      .catch(() => setLoading(false));
+  };
 
   const columns: TableProps['columns'] = [
     {
@@ -99,7 +99,7 @@ const DictionaryClass: React.FC = () => {
                   visible: true,
                   currentRow: record as SysDictionaryClassType,
                   view: true,
-                })
+                });
               }}
             >
               修改
@@ -113,10 +113,10 @@ const DictionaryClass: React.FC = () => {
               删除
             </Button>
           </Space>
-        )
+        );
       },
     },
-  ]
+  ];
 
   const deleteDic = (id: string) => {
     modal.confirm({
@@ -126,31 +126,31 @@ const DictionaryClass: React.FC = () => {
       onOk() {
         deleteDictionary(id).then(() => {
           // 刷新表格数据
-          loadDictionaryList()
-        })
+          loadDictionaryList();
+        });
       },
-    })
-  }
+    });
+  };
 
   const onAddDicClick = () => {
-    setParams({ visible: true, currentRow: null, view: false })
-  }
+    setParams({ visible: true, currentRow: null, view: false });
+  };
 
   const onEditOk = async (roleData: SysDictionaryClassType) => {
     try {
       if (params.currentRow == null) {
         // 新增数据
-        await addDictionary(roleData)
+        await addDictionary(roleData);
       } else {
         // 编辑数据
-        await updateDictionary(roleData)
+        await updateDictionary(roleData);
       }
-      message.success(!params.currentRow ? '添加成功' : '修改成功')
+      message.success(!params.currentRow ? '添加成功' : '修改成功');
       // 操作成功，关闭弹窗，刷新数据
-      setParams({ visible: false, currentRow: null, view: false })
-      loadDictionaryList()
+      setParams({ visible: false, currentRow: null, view: false });
+      loadDictionaryList();
     } catch (error) {}
-  }
+  };
   return (
     <>
       {/* 菜单检索条件栏 */}
@@ -190,7 +190,7 @@ const DictionaryClass: React.FC = () => {
           />
         </Card>
       </ConfigProvider>
-      <DictonaryClassModal
+      <DictionaryClassModal
         params={params}
         onOk={onEditOk}
         onCancel={() =>
@@ -198,7 +198,7 @@ const DictionaryClass: React.FC = () => {
         }
       />
     </>
-  )
-}
+  );
+};
 
-export default DictionaryClass
+export default DictionaryClass;

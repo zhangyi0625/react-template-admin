@@ -29,7 +29,7 @@ import type {
 import AddPacketManage from './AddPacketManage';
 import { formatTime } from '@/utils/format';
 import { ExportTableDataByXLSX } from '../../../utils/export';
-import { PacketRecordColumms } from './config';
+import { PacketRecordColumns } from './config';
 
 const PacketManage: React.FC = () => {
   const { message } = App.useApp();
@@ -198,7 +198,7 @@ const PacketManage: React.FC = () => {
 
   const exportPacketData = async (id: string) => {
     const resp = await getPacketRecord(id);
-    ExportTableDataByXLSX(resp, PacketRecordColumms, '活动红包奖励列表');
+    ExportTableDataByXLSX(resp, PacketRecordColumns, '活动红包奖励列表');
   };
   return (
     <>

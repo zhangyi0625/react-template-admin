@@ -137,7 +137,7 @@ const AddOurCompanyPort: React.FC<AddOurCompanyPortProps> = ({
                       filterOption={(input, option) =>
                         searchSelectFilterOption(
                           input,
-                          item.selectFileldName,
+                          item.selectFieldName,
                           option
                         )
                       }
@@ -145,7 +145,7 @@ const AddOurCompanyPort: React.FC<AddOurCompanyPortProps> = ({
                       allowClear
                       options={item.options}
                       fieldNames={
-                        item.selectFileldName ?? {
+                        item.selectFieldName ?? {
                           label: 'label',
                           value: 'value',
                         }

@@ -35,8 +35,6 @@ const FastBookingDetail: React.FC = () => {
 
   const { publicData } = useSelector((state: RootState) => state.publicSetting);
 
-  const orderStatusManager = publicData.orderStatusManager;
-
   const [loading, setLoading] = useState<boolean>(false);
 
   const [baseInfo, setBaseInfo] = useState(FastDetailBaseInfoOptions);
@@ -168,7 +166,7 @@ const FastBookingDetail: React.FC = () => {
     );
   };
 
-  const statusOtions = useCallback(() => {
+  const statusOptions = useCallback(() => {
     return (
       orderInfo?.status &&
       FastBookingDetailStatus.find((item) => item.value === orderInfo?.status)
@@ -219,7 +217,7 @@ const FastBookingDetail: React.FC = () => {
             <div className="bg-white">
               <div className="h-[70px] leading-[70px] bg-dull-blue pl-[20px] rounded-t-[6px] flex items-center">
                 <img
-                  src={getIcon(statusOtions()) + '.png'}
+                  src={getIcon(statusOptions()) + '.png'}
                   className="w-[38px] h-[38px]"
                   alt=""
                 />
@@ -253,7 +251,7 @@ const FastBookingDetail: React.FC = () => {
               <h3 className="text-dull-grey text-base font-medium">订单操作</h3>
               <div className="mt-[24px] text-center">
                 <img
-                  src={getIcon(statusOtions()) + '-op.png'}
+                  src={getIcon(statusOptions()) + '-op.png'}
                   className="w-[58px] h-[58px] m-auto"
                   alt=""
                 />

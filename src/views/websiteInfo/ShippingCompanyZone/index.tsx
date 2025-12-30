@@ -15,7 +15,7 @@ import type {
   ShipownerEncyclopediaType,
   ShippingCompanyZoneParams,
   ShippingCompanyZoneType,
-} from '@/services/websiteInfo/wesiteInfoModel';
+} from '@/services/websiteInfo/websiteInfoModel';
 import AddShippingCompanyZone from './AddShippingCompanyZone';
 import ShipownerEncyclopedia from './ShipownerEncyclopedia';
 import {

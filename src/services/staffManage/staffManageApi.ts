@@ -12,7 +12,7 @@ export enum StaffApi {
   StaffManage = '/staff/staff',
   StaffManageByPage = '/staff/staff/page',
   ResetStaffPassword = '/staff/password',
-  SendVerifycode = '/staff/verify-code',
+  SendVerifyCode = '/staff/verify-code',
 }
 
 /**
@@ -102,10 +102,10 @@ export const editStaffList = (params: SysStaffType, id: string) => {
  * @param params 用户参数
  * @returns 结果
  */
-export const postSendVerifycode = () => {
+export const postSendVerifyCode = () => {
   return HttpRequest.post(
     {
-      url: StaffApi.SendVerifycode,
+      url: StaffApi.SendVerifyCode,
     },
     {
       isTransformResponse: false,

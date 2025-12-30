@@ -2,7 +2,7 @@ import type { DefaultPaging } from '@/types/global';
 
 export interface ShippingAccountManageFilterParams {
   customerId: string;
-  affilateId: string;
+  affiliateId: string;
   carrier: string;
   type: string | 'WEB' | 'API';
   username: string;

@@ -8,7 +8,7 @@ export const ReleaseShippingHistorySearchColumns: CustomColumn[] = [
     formType: 'normalSelect',
     options: [],
     api: getSystemOrderCarrier,
-    selectFileldName: {
+    selectFieldName: {
       label: 'carrierCode',
       value: 'carrierCode',
     },
@@ -22,7 +22,7 @@ export const ReleaseShippingHistorySearchColumns: CustomColumn[] = [
     name: 'porCode',
     formType: 'focusSelect',
     options: [],
-    selectFileldName: {
+    selectFieldName: {
       label: 'localName',
       value: 'unlocode',
     },
@@ -46,7 +46,7 @@ export const ReleaseShippingHistorySearchColumns: CustomColumn[] = [
     name: 'fndCode',
     formType: 'focusSelect',
     options: [],
-    selectFileldName: {
+    selectFieldName: {
       label: 'localName',
       value: 'unlocode',
     },
@@ -73,7 +73,7 @@ export const ReleaseShippingHistorySearchColumns: CustomColumn[] = [
     options: [],
     selectFetch: false,
     hiddenItem: false,
-    selectFileldName: {
+    selectFieldName: {
       label: 'name',
       value: 'id',
     },
@@ -106,7 +106,7 @@ export const ReleaseShippingHistoryForms: Omit<
     formType: 'normalSelect',
     options: [],
     span: 6,
-    selectFileldName: {
+    selectFieldName: {
       label: 'carrierCode',
       value: 'carrierCode',
     },

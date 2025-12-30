@@ -67,7 +67,7 @@ export const FastBookingSearchColumns: CustomColumn[] = [
     name: 'affiliateId',
     formType: 'focusSelect',
     options: [],
-    selectFileldName: {
+    selectFieldName: {
       label: 'name',
       value: 'id',
     },
@@ -90,7 +90,7 @@ export const FastBookingSearchColumns: CustomColumn[] = [
     name: 'customerId',
     formType: 'focusSelect',
     options: [],
-    selectFileldName: {
+    selectFieldName: {
       label: 'name',
       value: 'id',
     },
@@ -122,7 +122,7 @@ export const FastBookingSearchColumns: CustomColumn[] = [
     formType: 'normalSelect',
     options: [],
     api: getSystemOrderCarrier,
-    selectFileldName: {
+    selectFieldName: {
       label: 'carrierCode',
       value: 'carrierCode',
     },
@@ -136,7 +136,7 @@ export const FastBookingSearchColumns: CustomColumn[] = [
     name: 'porId',
     formType: 'focusSelect',
     options: [],
-    selectFileldName: {
+    selectFieldName: {
       label: 'localName',
       value: 'unlocode',
     },
@@ -160,7 +160,7 @@ export const FastBookingSearchColumns: CustomColumn[] = [
     name: 'fndId',
     formType: 'focusSelect',
     options: [],
-    selectFileldName: {
+    selectFieldName: {
       label: 'localName',
       value: 'unlocode',
     },

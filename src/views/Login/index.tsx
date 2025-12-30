@@ -8,7 +8,7 @@ import { login } from '@/services/login/loginApi';
 import { useDispatch } from 'react-redux';
 import { setMenus } from '@/stores/store';
 import { antdUtils } from '@/utils/antdUtil';
-import { buildTree } from '@/utils/tool';
+// import { buildTree } from '@/utils/tool';
 import { useGeeTest } from 'react-geetest-v4';
 import { getMenusList } from '@/services/system/menu/menuApi';
 
@@ -18,7 +18,7 @@ const LOGIN_BC =
 const LOGIN_BG =
   process.env.RS_STATIC_API + '/static/website/background-img/login-bg.png';
 
-const WX_OFFICAL =
+const WX_OFFICIAL =
   process.env.RS_STATIC_API + '/static/website/qrcode/wx-official.png';
 
 const WX_MINI =
@@ -149,7 +149,7 @@ const Login: React.FC = () => {
           {/* 左边图案和标题 */}
           <div className={styles['login-left']}>
             <div className={styles['login-left-qrcode']}>
-              <img className="image" src={WX_OFFICAL} alt="official" />
+              <img className="image" src={WX_OFFICIAL} alt="official" />
               <img className="image ml-[20px]" src={WX_MINI} alt="mini" />
             </div>
           </div>

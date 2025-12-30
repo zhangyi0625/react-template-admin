@@ -12,7 +12,6 @@ import { SelectProps } from 'antd/lib';
 import DragModal from '@/components/modal/DragModal';
 import { getSearchAffiliate } from '@/services/orderManage/regularBooking/regularBookingApi';
 import type { ImportCabinResultType } from '@/services/orderManage/cabinResult/cabinResultModel';
-import { debounce } from 'lodash-es';
 import { fetchSystemSearchData } from '@/utils/freight';
 
 export type CabinResultModalProps = {
@@ -24,12 +23,6 @@ export type CabinResultModalProps = {
   onCancel: () => void;
 };
 
-const fetchSearch = debounce((value: string, callback: (data: any) => void) => {
-  getSearchAffiliate({ keyword: value }).then((resp) => {
-    callback(resp);
-  });
-}, 300);
-
 const CabinResultModal: React.FC<CabinResultModalProps> = ({
   params,
   onOk,
@@ -39,7 +32,7 @@ const CabinResultModal: React.FC<CabinResultModalProps> = ({
 
   const [CabinResultForm] = Form.useForm();
 
-  const [defalueOptions, setDefaultOptions] = useState<{
+  const [defaultOptions, setDefaultOptions] = useState<{
     affiliateId: SelectProps['options'];
   }>({
     affiliateId: [],
@@ -113,7 +106,7 @@ const CabinResultModal: React.FC<CabinResultModalProps> = ({
             notFoundContent={null}
             filterOption={false}
             onSearch={(value: string) => handleSearch(value)}
-            options={(defalueOptions.affiliateId || []).map((d) => ({
+            options={(defaultOptions.affiliateId || []).map((d) => ({
               value: d.id,
               label: d.name,
             }))}

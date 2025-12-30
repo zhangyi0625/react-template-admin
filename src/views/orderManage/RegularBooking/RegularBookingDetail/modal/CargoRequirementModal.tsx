@@ -1,8 +1,8 @@
 import React, { memo, useEffect, useState } from 'react';
 import DragModal from '@/components/modal/DragModal';
 import {
-  FastBookingCargoReuirementOptions,
-  RegularBookingCargoReuirementOptions,
+  FastBookingCargoRequirementOptions,
+  RegularBookingCargoRequirementOptions,
 } from './config';
 
 export type CargoRequirementModalProps = {
@@ -19,7 +19,7 @@ const CargoRequirementModal: React.FC<CargoRequirementModalProps> = memo(
     const [loading, setLoading] = useState<boolean>(true);
 
     const [options, setoptions] = useState(
-      RegularBookingCargoReuirementOptions
+      RegularBookingCargoRequirementOptions
     );
 
     useEffect(() => {
@@ -30,8 +30,8 @@ const CargoRequirementModal: React.FC<CargoRequirementModalProps> = memo(
     const getOptionsByCarrier = (options: any, carrier: string) => {
       let arr = (
         source === 'RegularBooking'
-          ? RegularBookingCargoReuirementOptions
-          : FastBookingCargoReuirementOptions
+          ? RegularBookingCargoRequirementOptions
+          : FastBookingCargoRequirementOptions
       ).filter((ele) => ele.includeCarrier.includes(carrier));
       arr.map((item) => {
         item.value = item.replaceFn

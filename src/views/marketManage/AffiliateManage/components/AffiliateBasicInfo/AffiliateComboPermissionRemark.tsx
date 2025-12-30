@@ -15,7 +15,7 @@ export type AffiliateComboPermissionRemarkProps = {
 };
 
 export type AffiliateComboPermissionRemarkRef = {
-  onLoadReamrk: () => void;
+  onLoadRemark: () => void;
 };
 
 export const AffiliateComboPermissionRemark = React.forwardRef<
@@ -40,7 +40,7 @@ export const AffiliateComboPermissionRemark = React.forwardRef<
   ];
 
   useImperativeHandle(ref, () => ({
-    onLoadReamrk: () => setTableLoading(false),
+    onLoadRemark: () => setTableLoading(false),
   }));
 
   const baseEquityColumns: TableProps['columns'] = [

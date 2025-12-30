@@ -43,7 +43,7 @@ export type RegularBookingFailReasonType = {
   reason: string[];
 };
 
-export interface CargoReuirementOptionsType {
+export interface CargoRequirementOptionsType {
   label: string;
   includeCarrier: string;
   key: string;

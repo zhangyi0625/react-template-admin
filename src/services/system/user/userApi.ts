@@ -13,7 +13,7 @@ export enum UserApi {
   UserManageByPage = '/staff/staff/page',
   batchUserManage = '/system/user/batch',
   ResetUserPassword = '/staff/password',
-  SendVerifycode = '/staff/verify-code',
+  SendVerifyCode = '/staff/verify-code',
 }
 
 /**
@@ -103,10 +103,10 @@ export const editUserList = (params: SysUserType, id: string) => {
  * @param params 用户参数
  * @returns 结果
  */
-export const postSendVerifycode = () => {
+export const postSendVerifyCode = () => {
   return HttpRequest.post(
     {
-      url: UserApi.SendVerifycode,
+      url: UserApi.SendVerifyCode,
     },
     {
       isTransformResponse: false,
@@ -150,7 +150,7 @@ export const deleteUserList = (id: string) => {
  * 批量删除用户信息
  * @returns 用户列表
  */
-export const deletebatchUserList = (ids: string[]) => {
+export const deleteBatchUserList = (ids: string[]) => {
   return HttpRequest.delete(
     {
       url: UserApi.batchUserManage,

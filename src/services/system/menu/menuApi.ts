@@ -1,5 +1,5 @@
-import { HttpRequest } from '@/utils/request'
-import { MenuParams } from './menuModel'
+import { HttpRequest } from '@/utils/request';
+import { MenuParams } from './menuModel';
 
 /**
  * 枚举菜单相关的请求API
@@ -8,7 +8,7 @@ export enum Api {
   // 根据token获取菜单（多用于框架上根据角色获取菜单那种）
   // getMenuList = '/system/getMenusByRole',
   getMenuList = '/system/menu',
-  getMemuListByPage = '/system/menu/page',
+  getMenuListByPage = '/system/menu/page',
   // 获取所有菜单
   // getAllMenus = '/system/menu',
   // 获取所有上级菜单
@@ -34,8 +34,8 @@ export const getMenuListByRoleId = (roleId: string) => {
       url: Api.getMenuList + roleId,
     },
     { successMessageMode: 'none' }
-  )
-}
+  );
+};
 
 /**
  * 查询所有菜单
@@ -50,8 +50,8 @@ export const getMenusList = (params?: MenuParams) => {
     {
       successMessageMode: 'none',
     }
-  )
-}
+  );
+};
 
 /**
  * 分页查询菜单
@@ -60,14 +60,14 @@ export const getMenusList = (params?: MenuParams) => {
 export const getMenusByPage = (params: MenuParams) => {
   return HttpRequest.get(
     {
-      url: Api.getMemuListByPage,
+      url: Api.getMenuListByPage,
       params: params,
     },
     {
       successMessageMode: 'none',
     }
-  )
-}
+  );
+};
 
 /**
  * 获取所有的一级菜单
@@ -77,8 +77,8 @@ export const getDirectory = () => {
   return HttpRequest.get(
     { url: Api.getDirectory },
     { successMessageMode: 'none' }
-  )
-}
+  );
+};
 
 /**
  * 新增菜单
@@ -89,8 +89,8 @@ export const addMenu = (params: Record<string, any>) => {
   return HttpRequest.post({
     url: Api.getMenuList,
     data: params,
-  })
-}
+  });
+};
 
 /**
  * 修改菜单数据
@@ -101,8 +101,8 @@ export const updateMenu = (params: Record<string, any>) => {
   return HttpRequest.put({
     url: Api.getMenuList,
     data: params,
-  })
-}
+  });
+};
 
 /**
  * 删除菜单
@@ -112,8 +112,8 @@ export const updateMenu = (params: Record<string, any>) => {
 export const deleteMenu = (menuId: string) => {
   return HttpRequest.delete({
     url: Api.getMenuList + '/' + menuId,
-  })
-}
+  });
+};
 
 /**
  * 批量删除菜单
@@ -124,8 +124,8 @@ export const deleteMenuBatch = (menuIds: string[]) => {
   return HttpRequest.delete({
     url: Api.deleteMenuBatch,
     data: menuIds,
-  })
-}
+  });
+};
 
 /**
  * 导出菜单（导出到Excel）
@@ -136,8 +136,8 @@ export const exportMenu = (menus: any) => {
   return HttpRequest.post({
     url: Api.exportMenus,
     data: menus,
-  })
-}
+  });
+};
 
 /**
  * 导入菜单（从Excel里面导入）
@@ -148,8 +148,8 @@ export const importMenu = (file: any) => {
   return HttpRequest.post({
     url: Api.importMenus,
     data: file,
-  })
-}
+  });
+};
 
 /**
  * 验证菜单权限
@@ -160,5 +160,5 @@ export const checkPermission = (params: any) => {
   return HttpRequest.post({
     url: Api.checkPermission,
     data: params,
-  })
-}
+  });
+};

@@ -3,7 +3,7 @@ import type { Response } from '@/types/global';
 import type {
   CabinResultSearchParams,
   ImportCabinResultType,
-  ManualpublicationType,
+  ManualPublicationType,
 } from './cabinResultModel';
 
 /**
@@ -37,7 +37,7 @@ export enum CabinResultAPi {
   /**
    * 手动发布仓位
    */
-  Manualpublication = '/staff/product/add',
+  ManualPublication = '/staff/product/add',
 }
 
 /**
@@ -146,10 +146,10 @@ export const postCancelRelevanceResult = (data: { ids: string[] }) => {
  * @returns
  */
 
-export const postManualpublication = (params: ManualpublicationType) => {
+export const postManualPublication = (params: ManualPublicationType) => {
   return HttpRequest.post<Response>(
     {
-      url: CabinResultAPi.Manualpublication,
+      url: CabinResultAPi.ManualPublication,
       data: params,
     },
     { isTransformResponse: false }

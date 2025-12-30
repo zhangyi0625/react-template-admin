@@ -85,7 +85,7 @@ export const defaultPreferences: Preferences = {
     showMaximize: true,
     showMore: true,
     styleType: 'chrome',
-    wheelable: true,
+    enableWheel: true,
   },
   theme: {
     builtinType: 'default',

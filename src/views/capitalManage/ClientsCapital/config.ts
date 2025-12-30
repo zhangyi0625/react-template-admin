@@ -6,7 +6,7 @@ export const ClientsCapitalSearchColumns: CustomColumn[] = [
     name: 'customerId',
     formType: 'focusSelect',
     options: [],
-    selectFileldName: {
+    selectFieldName: {
       label: 'name',
       value: 'id',
     },

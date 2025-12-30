@@ -2,7 +2,7 @@ export type FastBooingDetailItemsType = {
   containerQuantity: number;
   containerType: string;
   orderNum: number;
-  priceLimi: unknown;
+  priceLimit: unknown;
 };
 
 export type FastBooingDetailExtraInfoType = {

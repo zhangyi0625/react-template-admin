@@ -267,7 +267,7 @@ const AuthenticationManage: React.FC = () => {
 
   useEffect(() => {
     formMaps.map((item) => {
-      item.selectFileldName = {
+      item.selectFieldName = {
         label: 'label',
         value:
           defaultActiveTabKey === 'authentication' ? 'strValue' : 'intValue',

@@ -28,7 +28,7 @@ import { copyValue, filterKeys } from '@/utils/tool';
 import { fetchSystemSearchData } from '@/utils/freight';
 import { formatTime } from '@/utils/format';
 
-export type FinancialDetailsParticularsPorps = {
+export type FinancialDetailsParticularsProps = {
   params: {
     visible: boolean;
     type: 'add' | 'view';
@@ -51,7 +51,7 @@ const FundType = ['RECHARGE_ACCOUNT_FUND', 'RECHARGE_BOND'];
 const PaymentWay = ['OFFLINE', 'VIRTUAL'];
 
 const FinancialDetailsParticulars: React.FC<
-  FinancialDetailsParticularsPorps
+  FinancialDetailsParticularsProps
 > = ({ params, onCancel, onOk }) => {
   const { visible, type, viewSource, financialDetailsId } = params;
 
@@ -65,19 +65,19 @@ const FinancialDetailsParticulars: React.FC<
 
   const [detailInfo, setDetailInfo] = useState<{ [key: string]: string }>({});
 
-  const [customerData, setcustomerData] = useState<{
+  const [customerData, setCustomerData] = useState<{
     customerId: SelectProps['options'];
   }>({
     customerId: [],
   });
 
-  const [affiliatedata, setAffiliateData] = useState<{
+  const [affiliateData, setAffiliateData] = useState<{
     affiliateId: SelectProps['options'];
   }>({
     affiliateId: [],
   });
 
-  const getdetailByKey = useCallback(
+  const getDetailByKey = useCallback(
     (key: string) => {
       return detailInfo[key] ?? '-';
     },
@@ -91,7 +91,7 @@ const FinancialDetailsParticulars: React.FC<
       value: () => {
         return (
           <div>
-            {getdetailByKey('no') ?? ''}
+            {getDetailByKey('no') ?? ''}
             <Tag style={{ margin: '0 10px' }} onClick={() => copyValue('no')}>
               复制
             </Tag>
@@ -106,7 +106,7 @@ const FinancialDetailsParticulars: React.FC<
       value: () => {
         return (
           <div>
-            {getdetailByKey('tradeNo') ?? ''}
+            {getDetailByKey('tradeNo') ?? ''}
             <Tag
               style={{ margin: '0 10px' }}
               onClick={() => copyValue('tradeNo')}
@@ -122,7 +122,7 @@ const FinancialDetailsParticulars: React.FC<
       label: '客户名',
       key: 'affiliateName',
       value: () => {
-        return <div>{getdetailByKey('affiliateName') ?? ''}</div>;
+        return <div>{getDetailByKey('affiliateName') ?? ''}</div>;
       },
       hidden: false,
     },
@@ -130,7 +130,7 @@ const FinancialDetailsParticulars: React.FC<
       label: '用户名',
       key: 'customerName',
       value: () => {
-        return <div>{getdetailByKey('customerName') ?? ''}</div>;
+        return <div>{getDetailByKey('customerName') ?? ''}</div>;
       },
       hidden: false,
     },
@@ -138,7 +138,7 @@ const FinancialDetailsParticulars: React.FC<
       label: '手机号',
       key: 'customerPhone',
       value: () => {
-        return <div>{getdetailByKey('customerPhone') ?? ''}</div>;
+        return <div>{getDetailByKey('customerPhone') ?? ''}</div>;
       },
       hidden: false,
     },
@@ -146,7 +146,7 @@ const FinancialDetailsParticulars: React.FC<
       label: viewSource === 'DepositManage' ? '提现金额' : '交易金额',
       key: 'amount',
       value: () => {
-        return <div>{getdetailByKey('amount') ?? ''}</div>;
+        return <div>{getDetailByKey('amount') ?? ''}</div>;
       },
       hidden: false,
     },
@@ -154,7 +154,7 @@ const FinancialDetailsParticulars: React.FC<
       label: '账号余额',
       key: 'balance',
       value: () => {
-        return <div>{getdetailByKey('balance') ?? ''}</div>;
+        return <div>{getDetailByKey('balance') ?? ''}</div>;
       },
       hidden: false,
     },
@@ -170,8 +170,8 @@ const FinancialDetailsParticulars: React.FC<
         let fundSource = publicData['fundSource'];
         return (
           <div>
-            {fundSource[getdetailByKey('fund') ?? ''] ??
-              getdetailByKey('fundTitile') ??
+            {fundSource[getDetailByKey('fund') ?? ''] ??
+              getDetailByKey('fundTitle') ??
               ''}
           </div>
         );
@@ -187,7 +187,7 @@ const FinancialDetailsParticulars: React.FC<
           : '交易创建时间',
       key: 'created',
       value: () => {
-        return <div>{getdetailByKey('created') ?? ''}</div>;
+        return <div>{getDetailByKey('created') ?? ''}</div>;
       },
       hidden: false,
     },
@@ -195,7 +195,7 @@ const FinancialDetailsParticulars: React.FC<
       label: viewSource === 'FinancialDetails' ? '付款时间' : '提现处理时间',
       key: 'accomplished',
       value:
-        getdetailByKey(
+        getDetailByKey(
           viewSource === 'FinancialDetails' ? 'accomplished' : 'handled'
         ) ?? '',
       hidden: viewSource === 'ClientsCapital',
@@ -205,7 +205,7 @@ const FinancialDetailsParticulars: React.FC<
       key: 'status',
       value: () => {
         let fundRechargeStatus = publicData['fundRechargeStatus'];
-        return <div>{fundRechargeStatus[getdetailByKey('status') ?? '']}</div>;
+        return <div>{fundRechargeStatus[getDetailByKey('status') ?? '']}</div>;
       },
       hidden: viewSource !== 'FinancialDetails',
     },
@@ -218,7 +218,7 @@ const FinancialDetailsParticulars: React.FC<
           <div>
             {
               paymentWay[
-                getdetailByKey(
+                getDetailByKey(
                   viewSource === 'ClientsCapital' ? 'type' : 'paymentWay'
                 ) ?? ''
               ]
@@ -234,7 +234,7 @@ const FinancialDetailsParticulars: React.FC<
       value: () => {
         return (
           <div>
-            {getdetailByKey('paymentNo') ?? ''}
+            {getDetailByKey('paymentNo') ?? ''}
             <Tag
               style={{ margin: '0 10px' }}
               onClick={() => copyValue('paymentNo')}
@@ -249,19 +249,19 @@ const FinancialDetailsParticulars: React.FC<
     {
       label: '付款人',
       key: 'paymentPayer',
-      value: getdetailByKey('paymentPayer') ?? '',
+      value: getDetailByKey('paymentPayer') ?? '',
       hidden: viewSource !== 'FinancialDetails',
     },
     {
       label: '收款人',
       key: 'paymentPayee',
-      value: getdetailByKey('paymentPayee') ?? '',
+      value: getDetailByKey('paymentPayee') ?? '',
       hidden: viewSource !== 'FinancialDetails',
     },
     {
       label: '付款说明',
       key: 'paymentNote',
-      value: getdetailByKey('paymentNote') ?? '',
+      value: getDetailByKey('paymentNote') ?? '',
       hidden: viewSource !== 'FinancialDetails',
     },
     {
@@ -271,7 +271,7 @@ const FinancialDetailsParticulars: React.FC<
         return (
           <div>
             {DepositManageStatusOptions?.find(
-              (item) => item.value === getdetailByKey('status')
+              (item) => item.value === getDetailByKey('status')
             )?.label ?? ''}
           </div>
         );
@@ -281,19 +281,19 @@ const FinancialDetailsParticulars: React.FC<
     {
       label: '提现操作人',
       key: 'paymentPayee',
-      value: getdetailByKey('handledBy') ?? '',
+      value: getDetailByKey('handledBy') ?? '',
       hidden: viewSource !== 'DepositManage',
     },
     {
       label: '交易内容',
       key: 'tradeTitle',
-      value: getdetailByKey('tradeTitle') ?? '',
+      value: getDetailByKey('tradeTitle') ?? '',
       hidden: viewSource !== 'ClientsCapital',
     },
     {
       label: '备注',
       key: 'remarks',
-      value: getdetailByKey('remarks') ?? '',
+      value: getDetailByKey('remarks') ?? '',
       hidden: false,
     },
   ];
@@ -368,7 +368,7 @@ const FinancialDetailsParticulars: React.FC<
     fetchSystemSearchData(
       newValue,
       type,
-      type === 'customerId' ? setcustomerData : setAffiliateData,
+      type === 'customerId' ? setCustomerData : setAffiliateData,
       type === 'customerId' ? getSearchCustomer : getSearchAffiliate
     );
   };
@@ -458,7 +458,7 @@ const FinancialDetailsParticulars: React.FC<
                         options={(
                           (item.name === 'customerId'
                             ? customerData.customerId
-                            : affiliatedata.affiliateId) || []
+                            : affiliateData.affiliateId) || []
                         ).map((d) => ({
                           value: d.value,
                           label: d.label,
@@ -478,7 +478,7 @@ const FinancialDetailsParticulars: React.FC<
                         filterOption
                         options={item.options}
                         fieldNames={
-                          item.selectFileldName ?? {
+                          item.selectFieldName ?? {
                             label: 'label',
                             value: 'value',
                           }

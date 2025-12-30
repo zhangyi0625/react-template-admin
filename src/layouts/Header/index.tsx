@@ -1,16 +1,12 @@
 import {
-  BellOutlined,
-  GithubOutlined,
   LockOutlined,
-  MailOutlined,
   SearchOutlined,
   SettingOutlined,
 } from '@ant-design/icons';
-import { Badge, Dropdown, Input, Layout, Skeleton, Space, Tooltip } from 'antd';
+import { Input, Layout, Skeleton, Space, Tooltip } from 'antd';
 import React, { Suspense } from 'react';
 import { memo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import MessageBox from './component/MessageBox';
 import FullScreen from './component/FullScreen';
 import BreadcrumbNav from './component/BreadcrumbNav';
 import UserDropdown from './component/UserDropdown';
@@ -30,9 +26,9 @@ const Header: React.FC = memo(() => {
   /**
    * 跳转到github
    */
-  const routeGitHub = () => {
-    // window.open('https://github.com/yecongling/fusion-admin', '_blank')
-  };
+  // const routeGitHub = () => {
+  // window.open('https://github.com/yecongling/fusion-admin', '_blank')
+  // };
 
   /**
    * 检索菜单

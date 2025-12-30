@@ -1,5 +1,5 @@
-import type React from 'react'
-import { Key, useEffect, useState } from 'react'
+import type React from 'react';
+import { Key, useEffect, useState } from 'react';
 import {
   App,
   Button,
@@ -13,9 +13,9 @@ import {
   TablePaginationConfig,
   Tree,
   type TableProps,
-} from 'antd'
-import { DownOutlined, ExclamationCircleFilled } from '@ant-design/icons'
-import { SearchTable } from 'customer-search-form-table'
+} from 'antd';
+import { DownOutlined, ExclamationCircleFilled } from '@ant-design/icons';
+import { SearchTable } from 'customer-search-form-table';
 import {
   addDictionaryById,
   deleteDictionaryById,
@@ -26,24 +26,23 @@ import {
   deleteDictionary,
   addDictionary,
   updateDictionary,
-} from '@/services/system/dictionary/dictionaryApi'
+} from '@/services/system/dictionary/dictionaryApi';
 import type {
   SysDictionaryClassType,
   SysDictionaryParams,
   SysDictionaryType,
-} from '@/services/system/dictionary/dictionaryModel'
-import DictonaryModal from './DictonaryModal'
-import DictonaryClassModal from '../DictionaryClass/DictonaryClassModal'
-
-import useParentSize from '@/hooks/useParentSize'
-import { filterKeys } from '@/utils/tool'
+} from '@/services/system/dictionary/dictionaryModel';
+import DictionaryModal from './DictionaryModal';
+import DictionaryClassModal from '../DictionaryClass/DictionaryClassModal';
+import useParentSize from '@/hooks/useParentSize';
+import { filterKeys } from '@/utils/tool';
 
 const Dictionary: React.FC = () => {
-  const { modal, message } = App.useApp()
+  const { modal, message } = App.useApp();
 
-  const { parentRef, height } = useParentSize()
+  const { parentRef, height } = useParentSize();
 
-  const [dictionaryClass, setDictionaryClass] = useState([])
+  const [dictionaryClass, setDictionaryClass] = useState([]);
 
   const [searchDefaultForm, setSearchDefaultForm] = useState<
     Partial<SysDictionaryParams>
@@ -52,57 +51,57 @@ const Dictionary: React.FC = () => {
     limit: 10,
     dictId: null,
     keywords: '',
-  })
+  });
 
   // 将当前编辑行和窗口开关合并为一个状态对象
   const [params, setParams] = useState<{
-    visible: boolean
-    currentRow: SysDictionaryType | null
-    view: boolean
+    visible: boolean;
+    currentRow: SysDictionaryType | null;
+    view: boolean;
   }>({
     visible: false,
     currentRow: null,
     view: false,
-  })
+  });
 
-  const [dictonaryParams, setDictonaryParams] = useState<{
-    visible: boolean
-    currentRow: SysDictionaryClassType | null
-    view: boolean
+  const [dictionaryParams, setDictionaryParams] = useState<{
+    visible: boolean;
+    currentRow: SysDictionaryClassType | null;
+    view: boolean;
   }>({
     visible: false,
     currentRow: null,
     view: false,
-  })
+  });
 
-  const [selRows, setSelectedRows] = useState<string[]>([])
+  const [selRows, setSelectedRows] = useState<string[]>([]);
 
-  const [immediate, setImmediate] = useState<boolean>(true)
+  const [immediate, setImmediate] = useState<boolean>(true);
 
   useEffect(() => {
-    getDicOptions()
-  }, [])
+    getDicOptions();
+  }, []);
 
   const getDicOptions = async () => {
-    setImmediate(true)
-    let res = await getDictionaryList()
+    setImmediate(true);
+    let res = await getDictionaryList();
     let newArr = res.map((item: SysDictionaryClassType) => {
       return {
         ...item,
         key: item.dictId,
         title: item.dictName,
-      }
-    })
-    setDictionaryClass(newArr)
+      };
+    });
+    setDictionaryClass(newArr);
     newArr.length &&
       setSearchDefaultForm({
         ...searchDefaultForm,
         dictId: searchDefaultForm.dictId ?? newArr[0]?.dictId,
-      })
+      });
     setTimeout(() => {
-      setImmediate(false)
-    }, 300)
-  }
+      setImmediate(false);
+    }, 300);
+  };
 
   const columns: TableProps['columns'] = [
     {
@@ -148,7 +147,7 @@ const Dictionary: React.FC = () => {
                   visible: true,
                   currentRow: record as SysDictionaryType,
                   view: true,
-                })
+                });
               }}
             >
               修改
@@ -162,10 +161,10 @@ const Dictionary: React.FC = () => {
               删除
             </Button>
           </Space>
-        )
+        );
       },
     },
-  ]
+  ];
 
   const deleteDic = (id: string[] | string, type?: string) => {
     // 删除操作需要二次确定
@@ -177,73 +176,73 @@ const Dictionary: React.FC = () => {
       }删除字典分类吗？数据删除后将无法恢复！`,
       onOk() {
         // 调用删除接口，删除成功后刷新页面数据
-        ;(type
+        (type
           ? batchDeleteDictionaryById({ ids: id as string[] })
           : deleteDictionaryById(id as string)
         ).then(() => {
           // 刷新表格数据
-          onUpdateSearch({ ...searchDefaultForm })
+          onUpdateSearch({ ...searchDefaultForm });
           // 清空选择项
-          setSelectedRows([])
-        })
+          setSelectedRows([]);
+        });
       },
-    })
-  }
+    });
+  };
 
   const onEditOk = async (roleData: SysDictionaryType) => {
     try {
       if (params.currentRow == null) {
         // 新增数据
-        await addDictionaryById(roleData)
+        await addDictionaryById(roleData);
       } else {
         // 编辑数据
-        await updateDictionaryById(roleData)
+        await updateDictionaryById(roleData);
       }
-      message.success(!params.currentRow ? '添加成功' : '修改成功')
+      message.success(!params.currentRow ? '添加成功' : '修改成功');
       // 操作成功，关闭弹窗，刷新数据
-      setParams({ visible: false, currentRow: null, view: false })
-      onUpdateSearch({ ...searchDefaultForm })
+      setParams({ visible: false, currentRow: null, view: false });
+      onUpdateSearch({ ...searchDefaultForm });
     } catch (error) {}
-  }
+  };
 
-  const onEditDictonaryClassOk = async (roleData: SysDictionaryClassType) => {
+  const onEditDictionaryClassOk = async (roleData: SysDictionaryClassType) => {
     try {
-      if (dictonaryParams.currentRow == null) {
+      if (dictionaryParams.currentRow == null) {
         // 新增数据
-        await addDictionary(roleData)
+        await addDictionary(roleData);
       } else {
         // 编辑数据
-        await updateDictionary(roleData)
+        await updateDictionary(roleData);
       }
-      message.success(!params.currentRow ? '添加成功' : '修改成功')
+      message.success(!params.currentRow ? '添加成功' : '修改成功');
       // 操作成功，关闭弹窗，刷新数据
-      setDictonaryParams({ visible: false, currentRow: null, view: false })
-      getDicOptions()
+      setDictionaryParams({ visible: false, currentRow: null, view: false });
+      getDicOptions();
     } catch (error) {}
-  }
+  };
 
   const onUpdateSearch = (info?: SysDictionaryParams | unknown) => {
     const filteredObj = Object.fromEntries(
       Object.entries(info ?? {}).filter(([, value]) => !!value)
-    )
-    let pageInfo = filterKeys(searchDefaultForm, ['page', 'limit'], true)
+    );
+    let pageInfo = filterKeys(searchDefaultForm, ['page', 'limit'], true);
     setSearchDefaultForm({
       ...pageInfo,
       ...filteredObj,
-    })
-  }
+    });
+  };
 
   const onUpdatePagination = (pagination: TablePaginationConfig) => {
     setSearchDefaultForm({
       ...searchDefaultForm,
       page: pagination.current as number,
       limit: pagination.pageSize as number,
-    })
-  }
+    });
+  };
 
   const treeClick = (e: Key[]) => {
-    setSearchDefaultForm({ ...searchDefaultForm, dictId: e[0] as string })
-  }
+    setSearchDefaultForm({ ...searchDefaultForm, dictId: e[0] as string });
+  };
 
   const deleteDictionaryClass = () => {
     modal.confirm({
@@ -253,11 +252,11 @@ const Dictionary: React.FC = () => {
       onOk() {
         deleteDictionary(searchDefaultForm.dictId as string).then(() => {
           // 刷新表格数据
-          getDicOptions()
-        })
+          getDicOptions();
+        });
       },
-    })
-  }
+    });
+  };
 
   return (
     <>
@@ -275,7 +274,7 @@ const Dictionary: React.FC = () => {
                 <Button
                   type="primary"
                   onClick={() =>
-                    setDictonaryParams({
+                    setDictionaryParams({
                       visible: true,
                       currentRow: null,
                       view: false,
@@ -288,7 +287,7 @@ const Dictionary: React.FC = () => {
                   color="orange"
                   variant="solid"
                   onClick={() =>
-                    setDictonaryParams({
+                    setDictionaryParams({
                       visible: true,
                       currentRow: dictionaryClass.find(
                         (item: { key: string }) =>
@@ -387,24 +386,24 @@ const Dictionary: React.FC = () => {
           </div>
         </Card>
       </ConfigProvider>
-      <DictonaryClassModal
-        params={dictonaryParams}
-        onOk={onEditDictonaryClassOk}
+      <DictionaryClassModal
+        params={dictionaryParams}
+        onOk={onEditDictionaryClassOk}
         onCancel={() =>
-          setDictonaryParams({ visible: false, currentRow: null, view: false })
+          setDictionaryParams({ visible: false, currentRow: null, view: false })
         }
       />
-      <DictonaryModal
+      <DictionaryModal
         params={params}
         onOk={onEditOk}
         dictionaryClass={dictionaryClass}
-        defaultdictId={searchDefaultForm.dictId as string}
+        defaultDictId={searchDefaultForm.dictId as string}
         onCancel={() =>
           setParams({ visible: false, currentRow: null, view: false })
         }
       />
     </>
-  )
-}
+  );
+};
 
-export default Dictionary
+export default Dictionary;

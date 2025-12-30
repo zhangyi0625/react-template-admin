@@ -51,7 +51,7 @@ const HplQQCabinPlanSchedule: React.FC<HplQQCabinPlanScheduleType> = ({
       filter: undefined,
     });
 
-  const [seleted, setSelected] = useState<string[]>([]);
+  const [selected, setSelected] = useState<string[]>([]);
 
   useEffect(() => {
     if (!visible) return;
@@ -240,12 +240,12 @@ const HplQQCabinPlanSchedule: React.FC<HplQQCabinPlanScheduleType> = ({
   };
 
   const handleOk = () => {
-    if (!seleted.length) {
+    if (!selected.length) {
       message.error('至少选择一条船期！');
       return;
     }
     onOk({
-      vesselIds: seleted,
+      vesselIds: selected,
       type: 'VESSEL',
     });
   };

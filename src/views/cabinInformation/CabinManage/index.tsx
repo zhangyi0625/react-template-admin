@@ -258,7 +258,7 @@ const CabinManage: React.FC = () => {
     }
   };
 
-  const bactchDeleteCabinmanage = async () => {
+  const batchDeleteCabinManage = async () => {
     if (!selected.length) {
       message.error('请选择要批量下线的舱位');
       return;
@@ -303,7 +303,7 @@ const CabinManage: React.FC = () => {
         ref={parentRef}
       >
         <Space size={8}>
-          <Button color="red" variant="solid" onClick={bactchDeleteCabinmanage}>
+          <Button color="red" variant="solid" onClick={batchDeleteCabinManage}>
             批量下线
           </Button>
           <Button

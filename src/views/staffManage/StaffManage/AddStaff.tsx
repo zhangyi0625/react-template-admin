@@ -124,7 +124,7 @@ const AddUser: React.FC<AddUserProps> = ({ open, onOk, onCancel }) => {
                     showSearch
                     options={item.name === 'valid' ? item.options : role}
                     fieldNames={
-                      item.selectFileldName || {
+                      item.selectFieldName || {
                         label: 'label',
                         value: 'value',
                       }

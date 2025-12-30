@@ -8,7 +8,7 @@ export const SubscriptionManageSearchColumns: CustomColumn[] = [
     name: 'customerId',
     formType: 'focusSelect',
     options: [],
-    selectFileldName: {
+    selectFieldName: {
       label: 'name',
       value: 'id',
     },
@@ -32,7 +32,7 @@ export const SubscriptionManageSearchColumns: CustomColumn[] = [
     formType: 'normalSelect',
     options: [],
     api: getSystemOrderCarrier,
-    selectFileldName: {
+    selectFieldName: {
       label: 'carrierCode',
       value: 'carrierCode',
     },
@@ -46,7 +46,7 @@ export const SubscriptionManageSearchColumns: CustomColumn[] = [
     name: 'porId',
     formType: 'focusSelect',
     options: [],
-    selectFileldName: {
+    selectFieldName: {
       label: 'localName',
       value: 'unlocode',
     },
@@ -70,7 +70,7 @@ export const SubscriptionManageSearchColumns: CustomColumn[] = [
     name: 'fndId',
     formType: 'focusSelect',
     options: [],
-    selectFileldName: {
+    selectFieldName: {
       label: 'localName',
       value: 'unlocode',
     },
@@ -103,7 +103,7 @@ export const SubscriptionManageSearchColumns: CustomColumn[] = [
     name: 'affiliateId',
     formType: 'focusSelect',
     options: [],
-    selectFileldName: {
+    selectFieldName: {
       label: 'name',
       value: 'id',
     },

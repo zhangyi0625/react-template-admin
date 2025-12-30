@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Col, Form, Input, Row, Space } from 'antd';
 import DragModal from '@/components/modal/DragModal';
-import type { ShipownerEncyclopediaType } from '@/services/websiteInfo/wesiteInfoModel';
+import type { ShipownerEncyclopediaType } from '@/services/websiteInfo/websiteInfoModel';
 import {
   ShipownerEncyclopediaForm,
   ShipownerEncyclopediaOfficesForm,

@@ -172,7 +172,7 @@ interface TabbarPreferences {
   /** 标签页风格 */
   styleType: TabsStyleType;
   /** 是否开启鼠标滚轮响应 */
-  wheelable: boolean;
+  enableWheel: boolean;
 }
 
 /**
@@ -298,7 +298,7 @@ export interface sysSettingPreferences {
  * 基础数据维护
  */
 
-export interface essentailPreferences {
+export interface essentialPreferences {
   /** 细分航线缓存 */
   routeData: SystemAreaOptionsType[] | undefined;
   /** 起运港缓存 */

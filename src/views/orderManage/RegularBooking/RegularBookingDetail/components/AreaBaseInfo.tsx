@@ -21,7 +21,7 @@ type ProductInfoType = {
   [key: string]: string | any;
 };
 
-type OrderInfoParmas = {
+type OrderInfoParams = {
   items: CtnType[];
   bookingInfo: ProductInfoType;
   carrierInfo: any;
@@ -34,7 +34,7 @@ type OrderInfoParmas = {
 
 export type AreaBaseInfoProps = {
   type: string;
-  orderInfo: OrderInfoParmas;
+  orderInfo: OrderInfoParams;
 };
 
 const OtherRemarkInfo = [

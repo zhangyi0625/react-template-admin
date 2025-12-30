@@ -1,5 +1,5 @@
 import {
-  CargoReuirementOptionsType,
+  CargoRequirementOptionsType,
   RegularBookingFailReasonType,
 } from '../../type';
 
@@ -24,7 +24,7 @@ export const BookingFailReason: RegularBookingFailReasonType[] = [
   },
 ];
 
-export const RegularBookingCargoReuirementOptions: CargoReuirementOptionsType[] =
+export const RegularBookingCargoRequirementOptions: CargoRequirementOptionsType[] =
   [
     {
       label: '货物品名',
@@ -114,27 +114,28 @@ export const RegularBookingCargoReuirementOptions: CargoReuirementOptionsType[] 
     },
   ];
 
-export const FastBookingCargoReuirementOptions: CargoReuirementOptionsType[] = [
-  {
-    label: '额外免箱天数',
-    includeCarrier: 'MSKQ',
-    key: 'freeDemurrage',
-  },
-  {
-    label: '是否接受Rollable',
-    includeCarrier: 'MSK',
-    key: 'rollable',
-    replaceFn: (value: string) => (value ? '是' : '否'),
-  },
-  {
-    label: '是否购买保值服务',
-    includeCarrier: 'COSCO,OOCL',
-    key: 'insurance',
-    replaceFn: (value: string) => (value ? '是' : '否'),
-  },
-  {
-    label: '客户参考号',
-    includeCarrier: 'HPL',
-    key: 'customerRefNo',
-  },
-];
+export const FastBookingCargoRequirementOptions: CargoRequirementOptionsType[] =
+  [
+    {
+      label: '额外免箱天数',
+      includeCarrier: 'MSK',
+      key: 'freeDemurrage',
+    },
+    {
+      label: '是否接受Rollable',
+      includeCarrier: 'MSK',
+      key: 'rollable',
+      replaceFn: (value: string) => (value ? '是' : '否'),
+    },
+    {
+      label: '是否购买保值服务',
+      includeCarrier: 'COSCO,OOCL',
+      key: 'insurance',
+      replaceFn: (value: string) => (value ? '是' : '否'),
+    },
+    {
+      label: '客户参考号',
+      includeCarrier: 'HPL',
+      key: 'customerRefNo',
+    },
+  ];

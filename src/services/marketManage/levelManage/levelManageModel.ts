@@ -1,6 +1,6 @@
 import type { DefaultPaging } from '@/types/global';
 
-export interface LevelManageFilterarams {
+export interface LevelManageFilterParams {
   customerId: string;
   affiliateId: string;
   gradeLevel: string;
@@ -9,5 +9,5 @@ export interface LevelManageFilterarams {
 }
 
 export interface LevelManageParams extends DefaultPaging {
-  filter?: LevelManageFilterarams | null;
+  filter?: LevelManageFilterParams | null;
 }

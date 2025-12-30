@@ -20,10 +20,10 @@ const AffiliateDetail: React.FC = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    loadAffilateDetail();
+    loadAffiliateDetail();
   }, []);
 
-  const loadAffilateDetail = async () => {
+  const loadAffiliateDetail = async () => {
     try {
       const id = location.pathname.split('/marketManage/affiliateManage/')[1];
       const resp = await getAffiliateManageDetail(id);
@@ -48,7 +48,7 @@ const AffiliateDetail: React.FC = () => {
           <div className="flex flex-col w-3xl">
             <AffiliateBasicInfo
               detail={affiliateDetail}
-              onLoadBaseDetail={loadAffilateDetail}
+              onLoadBaseDetail={loadAffiliateDetail}
             />
             <AffiliateSearchRecord affiliateId={affiliateDetail.id} />
           </div>

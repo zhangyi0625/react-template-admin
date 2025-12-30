@@ -13,7 +13,7 @@ export type UserSearchRecordProps = {
 };
 
 const UserSearchRecord: React.FC<UserSearchRecordProps> = ({ customerId }) => {
-  const [selectedkey, setSelectedKey] = useState<string>('order');
+  const [selectedKey, setSelectedKey] = useState<string>('order');
 
   const RecordTabsItemRef = useRef<RecordTabsItemRef>(null);
 
@@ -69,7 +69,7 @@ const UserSearchRecord: React.FC<UserSearchRecordProps> = ({ customerId }) => {
     <>
       <div className="px-[20px] py-[12px] bg-white rounded-[6px] w-full mt-[16px]">
         <Tabs
-          activeKey={selectedkey}
+          activeKey={selectedKey}
           items={tabsItems}
           tabBarStyle={{ marginBottom: '20px' }}
           onChange={changeTab}

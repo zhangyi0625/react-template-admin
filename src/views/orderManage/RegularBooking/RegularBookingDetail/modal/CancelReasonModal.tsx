@@ -23,7 +23,7 @@ const CancelReasonModal: React.FC<CancelReasonModalProps> = memo(
       onOk(cancelReason ? cancelReason : form.getFieldValue('cancelType'));
     };
 
-    const [cancelReason, setCancelReson] = useState<string>('');
+    const [cancelReason, setCancelReason] = useState<string>('');
 
     const addText = (text: string) => {
       let cancelReason = form.getFieldValue('cancelReason');
@@ -32,11 +32,11 @@ const CancelReasonModal: React.FC<CancelReasonModalProps> = memo(
       form.setFieldsValue({
         cancelReason: cancelReason,
       });
-      setCancelReson(cancelReason);
+      setCancelReason(cancelReason);
     };
     const handleCancel = () => {
       form.resetFields();
-      setCancelReson('');
+      setCancelReason('');
       onCancel();
     };
     return (

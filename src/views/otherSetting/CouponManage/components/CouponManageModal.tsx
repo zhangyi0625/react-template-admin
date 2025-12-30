@@ -23,7 +23,7 @@ import useCacheData from '@/hooks/useCacheData';
 import { filterKeys, replaceObjectName } from '@/utils/tool';
 import { isArray } from 'lodash-es';
 
-export type CouponManageModalProsp = {
+export type CouponManageModalProps = {
   params: {
     visible: boolean;
     currentRow: CouponManageEditType | null;
@@ -47,7 +47,7 @@ const customerLevel = {
   2: '企业',
 };
 
-const CouponManageModal: React.FC<CouponManageModalProsp> = ({
+const CouponManageModal: React.FC<CouponManageModalProps> = ({
   params,
   routeData,
   onCancel,
@@ -366,7 +366,7 @@ const CouponManageModal: React.FC<CouponManageModalProsp> = ({
                       showSearch
                       options={item.options}
                       fieldNames={
-                        item.selectFileldName ?? {
+                        item.selectFieldName ?? {
                           label: 'label',
                           value: 'value',
                         }

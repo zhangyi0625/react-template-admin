@@ -10,7 +10,6 @@ import type {
   RegularBookingDetailBaseInfoType,
   RegularBookingStatusConditionType,
   RegularBookingStatusOptionsType,
-  RegularBookingStatusType,
 } from './type';
 import { formatTime } from '@/utils/format';
 
@@ -40,7 +39,7 @@ export const RegularBookingSearchColumns: MergeCustomColumn[] = [
     name: 'affiliateId',
     formType: 'focusSelect',
     options: [],
-    selectFileldName: {
+    selectFieldName: {
       label: 'name',
       value: 'id',
     },
@@ -63,7 +62,7 @@ export const RegularBookingSearchColumns: MergeCustomColumn[] = [
     name: 'customerId',
     formType: 'focusSelect',
     options: [],
-    selectFileldName: {
+    selectFieldName: {
       label: 'name',
       value: 'id',
     },
@@ -94,7 +93,7 @@ export const RegularBookingSearchColumns: MergeCustomColumn[] = [
     name: 'porCode',
     formType: 'focusSelect',
     options: [],
-    selectFileldName: {
+    selectFieldName: {
       label: 'localName',
       value: 'unlocode',
     },
@@ -118,7 +117,7 @@ export const RegularBookingSearchColumns: MergeCustomColumn[] = [
     name: 'fndCode',
     formType: 'focusSelect',
     options: [],
-    selectFileldName: {
+    selectFieldName: {
       label: 'localName',
       value: 'unlocode',
     },
@@ -314,7 +313,7 @@ export const RegularBookingDetailBaseInfoOptions: RegularBookingDetailBaseInfoTy
     },
   ];
 
-export const RegularBookingstatusList: RegularBookingStatusConditionType[] = [
+export const RegularBookingStatusList: RegularBookingStatusConditionType[] = [
   {
     valueText: '待支付',
     titleIcon: 'unpaid',

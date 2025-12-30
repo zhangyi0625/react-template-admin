@@ -116,7 +116,7 @@ const AddUser: React.FC<AddUserProps> = ({ params, onCancel, onOk }) => {
                       filterOption
                       options={item.options}
                       fieldNames={
-                        item.selectFileldName ?? {
+                        item.selectFieldName ?? {
                           label: 'label',
                           value: 'value',
                         }

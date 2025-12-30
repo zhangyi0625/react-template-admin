@@ -4,7 +4,7 @@ import type {
   ShippingCompanyZoneParams,
   ShippingCompanyZoneType,
   UserFeedbackParams,
-} from './wesiteInfoModel';
+} from './websiteInfoModel';
 
 /**
  * 枚举官网信息管理相关的api

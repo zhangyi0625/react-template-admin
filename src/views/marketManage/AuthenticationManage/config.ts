@@ -51,7 +51,7 @@ export const AuthenticationManageSearchColumns: CustomColumn[] = [
     selectFetch: false,
     hiddenItem: false,
     defaultValue: 'CREATED',
-    selectFileldName: {
+    selectFieldName: {
       label: 'label',
       value: 'strValue',
     },

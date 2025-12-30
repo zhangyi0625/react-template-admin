@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { App } from 'antd';
 import type { CustomColumn } from 'customer-search-form-table/SearchForm/type';
-import { RootState, setEssentail } from '@/stores/store';
+import { RootState, setEssential } from '@/stores/store';
 import {
   getSystemAreaOptions,
   getSystemCountryOptions,
@@ -56,7 +56,7 @@ export default function useCacheData(params: {
 }) {
   const dispatch = useDispatch();
 
-  const essential = useSelector((state: RootState) => state.essentail);
+  const essential = useSelector((state: RootState) => state.essential);
 
   const { cacheEssentialKeys, promiseFilter, formMap = [] } = params;
 
@@ -89,7 +89,7 @@ export default function useCacheData(params: {
         .then((resp) => {
           cacheEssentialKeys.map(async (_, index: number) => {
             await dispatch(
-              setEssentail({
+              setEssential({
                 value: isArray(resp[index])
                   ? resp[index]
                   : resp[index]?.entries,

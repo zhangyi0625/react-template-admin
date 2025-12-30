@@ -96,7 +96,7 @@ const FinancialDetails: React.FC = () => {
       align: 'center',
       render(value) {
         let fundSource = publicData['fundSource'];
-        return <div>{fundSource[value.fund] ?? value.fundTitile}</div>;
+        return <div>{fundSource[value.fund] ?? value.fundTitle}</div>;
       },
     },
     {

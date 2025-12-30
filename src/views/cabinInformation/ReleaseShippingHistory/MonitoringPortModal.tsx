@@ -148,7 +148,7 @@ const MonitoringPortModal: React.FC<MonitoringPortModalProps> = ({
                 showSearch
                 options={item.options}
                 fieldNames={
-                  item.selectFileldName ?? {
+                  item.selectFieldName ?? {
                     label: 'label',
                     value: 'value',
                   }

@@ -41,7 +41,7 @@ const CurrentCabinDetail: React.FC<CurrentCabinDetailProps> = ({
     }
   };
 
-  const getServiceFeff = useCallback(
+  const getServiceFee = useCallback(
     (key: string, customerType: string) => {
       const item = (serviceFee || []).find(
         (i) =>
@@ -73,28 +73,28 @@ const CurrentCabinDetail: React.FC<CurrentCabinDetailProps> = ({
       title: '服务费(普通用户)',
       align: 'center',
       render(_) {
-        return <div>{getServiceFeff('standard', 'NORMAL')}</div>;
+        return <div>{getServiceFee('standard', 'NORMAL')}</div>;
       },
     },
     {
       title: '服务费(会员)',
       align: 'center',
       render(_) {
-        return <div>{getServiceFeff('standard', 'MEMBER')}</div>;
+        return <div>{getServiceFee('standard', 'MEMBER')}</div>;
       },
     },
     {
       title: '保证金(普通用户)',
       align: 'center',
       render(_) {
-        return <div>{getServiceFeff('bond', 'MEMBER')}</div>;
+        return <div>{getServiceFee('bond', 'MEMBER')}</div>;
       },
     },
     {
       title: '保证金(会员)',
       align: 'center',
       render(_) {
-        return <div>{getServiceFeff('bond', 'MEMBER')}</div>;
+        return <div>{getServiceFee('bond', 'MEMBER')}</div>;
       },
     },
   ];

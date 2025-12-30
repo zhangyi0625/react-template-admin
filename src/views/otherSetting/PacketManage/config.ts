@@ -1,6 +1,6 @@
 import type { TableProps } from 'antd';
 
-export const PacketRecordColumms: TableProps['columns'] = [
+export const PacketRecordColumns: TableProps['columns'] = [
   {
     title: '用户名称',
     key: 'name',

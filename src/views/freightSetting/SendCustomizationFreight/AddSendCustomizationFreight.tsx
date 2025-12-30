@@ -29,7 +29,7 @@ type PortType = {
   [key: string]: SelectProps['options'];
 };
 
-type SendCustomizationFreighOptionsType = {
+type SendCustomizationFreightOptionsType = {
   porCode: string | undefined;
   fndCode: string | undefined;
   carrier: string | undefined;
@@ -46,7 +46,7 @@ const AddSendCustomizationFreight: React.FC<
 
   const [loading, setLoading] = useState<boolean>(false);
 
-  const [formMaps, setFormMaps] = useState(SendCustomizationFreightForms);
+  const [formMaps] = useState(SendCustomizationFreightForms);
 
   const [data, setData] = useState<{ customerId: SelectProps['options'] }>({
     customerId: [],
@@ -63,14 +63,14 @@ const AddSendCustomizationFreight: React.FC<
     },
   });
 
-  const [defalueOptions, setDefaultOptions] = useState<PortType>({
+  const [defaultOptions, setDefaultOptions] = useState<PortType>({
     POR: [],
     FND: [],
   });
 
   const [freightOptions, setFreightOptions] = useState<
     SendCustomizationFreightType['freights'] &
-      SendCustomizationFreighOptionsType[]
+      SendCustomizationFreightOptionsType[]
   >([]);
 
   useEffect(() => {
@@ -83,7 +83,7 @@ const AddSendCustomizationFreight: React.FC<
 
   const init = async () => {
     if (currentRow) {
-      const newArr: SendCustomizationFreighOptionsType[] =
+      const newArr: SendCustomizationFreightOptionsType[] =
         currentRow.freights.map((item) => {
           return {
             carrier: item.carrier,
@@ -137,14 +137,14 @@ const AddSendCustomizationFreight: React.FC<
     );
     if (type === 'POR' || type === 'FND') {
       freightOptions[index as number][type === 'POR' ? 'porList' : 'fndList'] =
-        defalueOptions[type] as SystemPortOptionsType[];
+        defaultOptions[type] as SystemPortOptionsType[];
       setFreightOptions([...freightOptions]);
     }
   };
 
   const getPortSelect = (
     type: string,
-    _: Partial<SendCustomizationFreighOptionsType>,
+    _: Partial<SendCustomizationFreightOptionsType>,
     key: keyof { porCode: string; fndCode: string },
     index: number
   ) => {
@@ -187,7 +187,7 @@ const AddSendCustomizationFreight: React.FC<
     setFreightOptions([...freightOptions]);
   };
 
-  const deletefreightOptions = (index: number) => {
+  const deleteFreightOptions = (index: number) => {
     freightOptions.splice(index, 1);
     setFreightOptions([...freightOptions]);
   };
@@ -327,7 +327,7 @@ const AddSendCustomizationFreight: React.FC<
                   {getPortSelect('FND', _, 'fndCode', index)}
                 </Form.Item>
                 <img
-                  onClick={() => deletefreightOptions(index)}
+                  onClick={() => deleteFreightOptions(index)}
                   src={DeleteIcon}
                   alt="delete"
                   className={`${

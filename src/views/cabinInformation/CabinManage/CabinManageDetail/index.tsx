@@ -5,7 +5,7 @@ import { getCabinManageDetail } from '@/services/cabinInformation/cabinManage/ca
 import type { CabinManageType } from '@/services/cabinInformation/cabinManage/cabinManageModel';
 import type { LocationItem } from '@/services/orderManage/regularBooking/regularBookingModel';
 import CurrentCabinDetail from './CurrentCabinDetail';
-import PortDues from './PorttDues';
+import PortDues from './PortDues';
 import { formatTime } from '@/utils/format';
 
 const CabinManageDetail: React.FC = () => {

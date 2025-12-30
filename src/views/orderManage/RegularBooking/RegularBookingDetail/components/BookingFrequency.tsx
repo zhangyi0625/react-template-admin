@@ -32,7 +32,7 @@ type Params = {
   hourRange: string;
 };
 
-const cheboxOptions = [
+const checkboxOptions = [
   '08',
   '09',
   '10',
@@ -89,7 +89,7 @@ const BookingFrequency: React.FC<BookingFrequencyProps> = memo(({ id }) => {
     {
       label: '设置时间段',
       type: 'checkbox',
-      options: cheboxOptions,
+      options: checkboxOptions,
       defaultValue: ['08'],
     },
     {

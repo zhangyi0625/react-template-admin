@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { App, Form, Input, Select } from 'antd';
+import { Form, Input, Select } from 'antd';
 import DragModal from '@/components/modal/DragModal';
 import type { AffiliateManageType } from '@/services/marketManage/affiliateManage/affiliateManageModel';
 import { AffiliateManageForm } from './config';
@@ -108,8 +108,8 @@ const AddAffiliate: React.FC<AddAffiliateProps> = ({
                 filterOption
                 options={item.options}
                 fieldNames={
-                  item.selectFileldName ?? {
-                    label: 'labal',
+                  item.selectFieldName ?? {
+                    label: 'label',
                     value: 'value',
                   }
                 }

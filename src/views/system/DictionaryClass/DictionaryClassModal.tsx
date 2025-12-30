@@ -1,31 +1,27 @@
 import React, { useEffect, useRef } from 'react';
-import { Form, Input, InputNumber, Select, type InputRef } from 'antd';
-import { SelectProps } from 'antd/lib';
+import { Form, Input, InputNumber, type InputRef } from 'antd';
 import DragModal from '@/components/modal/DragModal';
-import type { SysDictionaryType } from '@/services/system/dictionary/dictionaryModel';
+import { SysDictionaryClassType } from '@/services/system/dictionary/dictionaryModel';
 
-export type DictonaryModalProps = {
+export interface DictionaryClassModalProps {
   params: {
     // 弹窗可见性
     visible: boolean;
     // 弹窗需要的数据
-    currentRow: SysDictionaryType | null;
+    currentRow: SysDictionaryClassType | null;
     view: boolean;
   };
-  dictionaryClass: { id: string; name: string }[];
-  defaultdictId: string | null;
+
   // 点击确定的回调
-  onOk: (params: SysDictionaryType) => void;
+  onOk: (params: SysDictionaryClassType) => void;
   // 点击取消的回调
   onCancel: (e: React.MouseEvent<HTMLButtonElement>) => void;
-};
+}
 
-const DictonaryModal: React.FC<DictonaryModalProps> = ({
+const DictionaryClassModal: React.FC<DictionaryClassModalProps> = ({
   params,
-  dictionaryClass,
-  defaultdictId,
-  onCancel,
   onOk,
+  onCancel,
 }) => {
   const { visible, currentRow, view } = params;
 
@@ -41,7 +37,6 @@ const DictonaryModal: React.FC<DictonaryModalProps> = ({
     } else {
       // 清空表单数据，表示新增
       form.resetFields();
-      defaultdictId && form.setFieldsValue({ dictId: defaultdictId });
     }
   }, [currentRow, visible]);
 
@@ -81,41 +76,28 @@ const DictonaryModal: React.FC<DictonaryModalProps> = ({
       afterOpenChange={onAfterOpenChange}
     >
       <Form form={form} labelCol={{ span: 4 }}>
-        <Form.Item name="id" hidden>
+        <Form.Item name="dictId" hidden>
           <Input disabled />
         </Form.Item>
         <Form.Item
-          name="dictId"
-          label="字典分类"
-          rules={[{ required: true, message: '请选择字典分类' }]}
-        >
-          <Select
-            placeholder="请选择字典分类"
-            showSearch
-            allowClear
-            options={dictionaryClass as unknown as SelectProps['options']}
-            fieldNames={{ value: 'id', label: 'name' }}
-          />
-        </Form.Item>
-        <Form.Item
-          name="dictDataName"
-          label="字典项名称"
-          rules={[{ required: true, message: '请输入字典项名称' }]}
+          name="dictName"
+          label="字典名称"
+          rules={[{ required: true, message: '请输入字典名称' }]}
         >
           <Input
             ref={dictNameRef}
-            placeholder="请输入字典项名称"
+            placeholder="请输入字典名称"
             autoComplete="off"
           />
         </Form.Item>
         <Form.Item
-          name="dictDataCode"
-          label="字典项标识"
-          rules={[{ required: true, message: '请输入字典项标识' }]}
+          name="dictCode"
+          label="字典标识"
+          rules={[{ required: true, message: '请输入字典标识' }]}
         >
           <Input
             ref={dictNameRef}
-            placeholder="请输入字典项标识"
+            placeholder="请输入字典名称"
             autoComplete="off"
           />
         </Form.Item>
@@ -126,12 +108,12 @@ const DictonaryModal: React.FC<DictonaryModalProps> = ({
         >
           <InputNumber style={{ width: '100%' }} />
         </Form.Item>
-        <Form.Item name="comments" label="备注">
-          <Input.TextArea placeholder="请输入备注" />
+        <Form.Item name="comments" label="字典备注">
+          <Input.TextArea placeholder="请输入字典备注" />
         </Form.Item>
       </Form>
     </DragModal>
   );
 };
 
-export default DictonaryModal;
+export default DictionaryClassModal;

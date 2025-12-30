@@ -1,10 +1,10 @@
 import React, { useEffect, useRef } from 'react';
 import { Form, Input, type InputRef } from 'antd';
 import DragModal from '@/components/modal/DragModal';
-import type { ShippingCompanyZoneType } from '@/services/websiteInfo/wesiteInfoModel';
+import type { ShippingCompanyZoneType } from '@/services/websiteInfo/websiteInfoModel';
 import { ShippingCompanyZoneForm } from './config';
 
-export type AddShippingCompanyZoneProsp = {
+export type AddShippingCompanyZoneProps = {
   params: {
     visible: boolean;
     currentRow: ShippingCompanyZoneType | null;
@@ -13,7 +13,7 @@ export type AddShippingCompanyZoneProsp = {
   onCancel: () => void;
 };
 
-const AddShippingCompanyZone: React.FC<AddShippingCompanyZoneProsp> = ({
+const AddShippingCompanyZone: React.FC<AddShippingCompanyZoneProps> = ({
   params,
   onOk,
   onCancel,

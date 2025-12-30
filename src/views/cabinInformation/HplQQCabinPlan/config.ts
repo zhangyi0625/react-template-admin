@@ -13,7 +13,7 @@ export const HplQQCabinPlanSearchColumns: CustomColumn[] = [
     name: 'customerId',
     formType: 'focusSelect',
     options: [],
-    selectFileldName: {
+    selectFieldName: {
       label: 'name',
       value: 'id',
     },
@@ -36,7 +36,7 @@ export const HplQQCabinPlanSearchColumns: CustomColumn[] = [
     name: 'affiliateId',
     formType: 'focusSelect',
     options: [],
-    selectFileldName: {
+    selectFieldName: {
       label: 'name',
       value: 'id',
     },
@@ -59,7 +59,7 @@ export const HplQQCabinPlanSearchColumns: CustomColumn[] = [
     name: 'porCode',
     formType: 'focusSelect',
     options: [],
-    selectFileldName: {
+    selectFieldName: {
       label: 'localName',
       value: 'unlocode',
     },
@@ -83,7 +83,7 @@ export const HplQQCabinPlanSearchColumns: CustomColumn[] = [
     name: 'fndCode',
     formType: 'focusSelect',
     options: [],
-    selectFileldName: {
+    selectFieldName: {
       label: 'localName',
       value: 'unlocode',
     },

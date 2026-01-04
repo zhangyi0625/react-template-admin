@@ -87,7 +87,7 @@ const AddSearchByAffilate: React.FC<AddSearchByAffilateProps> = ({
                     filterOption
                     options={item.options}
                     fieldNames={
-                      item.selectFileldName ?? {
+                      item.selectFieldName ?? {
                         label: 'labal',
                         value: 'value',
                       }

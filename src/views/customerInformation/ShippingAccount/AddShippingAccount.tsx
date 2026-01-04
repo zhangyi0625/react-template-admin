@@ -1,27 +1,27 @@
-import React, { useEffect, useState } from 'react'
-import { Form, Input, Radio, Select, SelectProps } from 'antd'
-import { CheckboxGroupProps } from 'antd/es/checkbox'
-import DragModal from '@/components/modal/DragModal'
-import type { ShippingAccounType } from '@/services/customerInformation/shippingAccount/shippingAccountModel'
-import { ShippingAccountForm } from './config'
-import { filterKeys } from '@/utils/tool'
+import React, { useEffect, useState } from 'react';
+import { Form, Input, Radio, Select, SelectProps } from 'antd';
+import { CheckboxGroupProps } from 'antd/es/checkbox';
+import DragModal from '@/components/modal/DragModal';
+import type { ShippingAccounType } from '@/services/customerInformation/shippingAccount/shippingAccountModel';
+import { ShippingAccountForm } from './config';
+import { filterKeys } from '@/utils/tool';
 import {
   putShippingAccountLoginPassword,
   putShippingAccountPayPassword,
-} from '@/services/customerInformation/shippingAccount/shippingAccountApi'
+} from '@/services/customerInformation/shippingAccount/shippingAccountApi';
 
 export type AddShippingAccountProps = {
   params: {
-    visible: boolean
-    currentRow: ShippingAccounType | null
-    view: boolean
-    type?: string | null
-  }
-  carrierOptions: SelectProps['options']
-  customerOptions: SelectProps['options']
-  onOk: (params: ShippingAccounType) => void
-  onCancel: (e: React.MouseEvent<HTMLButtonElement>) => void
-}
+    visible: boolean;
+    currentRow: ShippingAccounType | null;
+    view: boolean;
+    type?: string | null;
+  };
+  carrierOptions: SelectProps['options'];
+  customerOptions: SelectProps['options'];
+  onOk: (params: ShippingAccounType) => void;
+  onCancel: (e: React.MouseEvent<HTMLButtonElement>) => void;
+};
 
 const AddShippingAccount: React.FC<AddShippingAccountProps> = ({
   params,
@@ -30,11 +30,11 @@ const AddShippingAccount: React.FC<AddShippingAccountProps> = ({
   onOk,
   onCancel,
 }) => {
-  const { visible, currentRow, view, type } = params
+  const { visible, currentRow, view, type } = params;
 
-  const [form] = Form.useForm()
+  const [form] = Form.useForm();
 
-  const [initialValues, setInitialValues] = useState({})
+  const [initialValues, setInitialValues] = useState({});
 
   const [passwordInfo, setPasswordInfo] = useState<Pick<
     ShippingAccounType,
@@ -42,25 +42,25 @@ const AddShippingAccount: React.FC<AddShippingAccountProps> = ({
   > | null>({
     payPassword: '',
     loginPassword: '',
-  })
+  });
 
   useEffect(() => {
-    if (!visible) return
+    if (!visible) return;
     if (currentRow) {
       form.setFieldsValue({
         ...currentRow,
         type: type,
         isValid: currentRow.isValid ? 1 : 0,
-      })
+      });
       // 修改船司账号拷贝密码
-      let pwd = filterKeys(currentRow, ['payPassword', 'loginPassword'], true)
-      setPasswordInfo(pwd)
+      let pwd = filterKeys(currentRow, ['payPassword', 'loginPassword'], true);
+      setPasswordInfo(pwd);
     } else {
-      form.resetFields()
-      setInitialValues({ type: type })
-      form.setFieldsValue({ type: type, isValid: 1 })
+      form.resetFields();
+      setInitialValues({ type: type });
+      form.setFieldsValue({ type: type, isValid: 1 });
     }
-  }, [visible, view])
+  }, [visible, view]);
 
   const handleOk = () => {
     form
@@ -71,7 +71,7 @@ const AddShippingAccount: React.FC<AddShippingAccountProps> = ({
           isOrder: type === 'ORDER' ? true : null,
           isQuery: type === 'QUERY' ? true : null,
           isValid: Boolean(form.getFieldValue('isValid')),
-        }
+        };
         if (currentRow) {
           if (
             form.getFieldValue('loginPassword') !== passwordInfo?.loginPassword
@@ -79,23 +79,23 @@ const AddShippingAccount: React.FC<AddShippingAccountProps> = ({
             await putShippingAccountLoginPassword({
               id: params.id,
               loginPassword: params.loginPassword,
-            })
+            });
           } else
             await putShippingAccountPayPassword({
               id: params.id,
               payPassword: params.payPassword,
-            })
-          onOk(filterKeys(params, ['loginPassword', 'payPassword'], false))
+            });
+          onOk(filterKeys(params, ['loginPassword', 'payPassword'], false));
         } else {
-          onOk(params)
+          onOk(params);
         }
       })
       .catch((errorInfo) => {
         // 滚动并聚焦到第一个错误字段
-        form.scrollToField(errorInfo.errorFields[0].name)
-        form.focusField(errorInfo.errorFields[0].name)
-      })
-  }
+        form.scrollToField(errorInfo.errorFields[0].name);
+        form.focusField(errorInfo.errorFields[0].name);
+      });
+  };
 
   return (
     <DragModal
@@ -135,7 +135,7 @@ const AddShippingAccount: React.FC<AddShippingAccountProps> = ({
                   item.name === 'carrier' ? carrierOptions : customerOptions
                 }
                 fieldNames={
-                  item.selectFileldName ?? {
+                  item.selectFieldName ?? {
                     label: 'labal',
                     value: 'value',
                   }
@@ -151,7 +151,7 @@ const AddShippingAccount: React.FC<AddShippingAccountProps> = ({
         ))}
       </Form>
     </DragModal>
-  )
-}
+  );
+};
 
-export default AddShippingAccount
+export default AddShippingAccount;

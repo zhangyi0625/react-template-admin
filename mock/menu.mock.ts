@@ -1,4 +1,4 @@
-import { defineMock } from 'rspack-plugin-mock/helper'
+import { defineMock } from 'rspack-plugin-mock/helper';
 
 // 模拟数据
 export default defineMock([
@@ -7,14 +7,14 @@ export default defineMock([
     enabled: true,
     method: 'GET',
     body(request) {
-      const query = request.query
-      const { roleId = 'admin' } = query
+      const query = request.query;
+      const { roleId = 'admin' } = query;
       if (roleId !== 'admin') {
         return {
           code: 200,
           message: 'success',
           data: [],
-        }
+        };
       }
       return {
         code: 200,
@@ -695,7 +695,7 @@ export default defineMock([
           //   ],
           // },
         ],
-      }
+      };
     },
   },
   {
@@ -1382,11 +1382,11 @@ export default defineMock([
           //   ],
           // },
         ],
-      }
+      };
     },
   },
   {
-    url: '/api/system/role-menu/1',
+    url: '/api/system/role-menu',
     method: 'GET',
     enabled: true,
     body(request) {
@@ -2194,7 +2194,7 @@ export default defineMock([
             checked: null,
           },
         ],
-      }
+      };
     },
   },
-])
+]);

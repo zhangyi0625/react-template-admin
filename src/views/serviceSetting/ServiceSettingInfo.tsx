@@ -99,7 +99,7 @@ const ServiceSettingInfo: React.FC<ServiceSettingInfoProps> = ({
                     options={item.options}
                     filterOption
                     fieldNames={
-                      item.selectFileldName ?? {
+                      item.selectFieldName ?? {
                         label: 'label',
                         value: 'value',
                       }

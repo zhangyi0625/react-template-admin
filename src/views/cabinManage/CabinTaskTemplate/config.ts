@@ -44,7 +44,7 @@ export const SelectCabinTaskTemplateOptions: CustomColumn[] = [
     label: '客户名称',
     name: 'customerId',
     formType: 'normalSelect',
-    selectFileldName: {
+    selectFieldName: {
       label: 'name',
       value: 'id',
     },

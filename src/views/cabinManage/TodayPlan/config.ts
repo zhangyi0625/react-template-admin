@@ -6,7 +6,7 @@ export const SelectScheduleAccountOptions: CustomColumn[] = [
     name: 'carrier',
     formType: 'normalSelect',
     options: [],
-    selectFileldName: {
+    selectFieldName: {
       label: 'code',
       value: 'code',
     },
@@ -37,7 +37,7 @@ export const SelectScheduleAccountOptions: CustomColumn[] = [
     name: 'router',
     formType: 'normalSelect',
     options: [],
-    selectFileldName: {
+    selectFieldName: {
       label: 'routeName',
       value: 'id',
     },
@@ -50,7 +50,7 @@ export const SelectScheduleAccountOptions: CustomColumn[] = [
     name: 'customerId',
     formType: 'normalSelect',
     options: [],
-    selectFileldName: {
+    selectFieldName: {
       label: 'name',
       value: 'id',
     },
@@ -67,7 +67,7 @@ export const AddSearchForm: Omit<CustomColumn, 'hiddenItem' | 'selectFetch'>[] =
       name: 'carrier',
       formType: 'select',
       options: [],
-      selectFileldName: {
+      selectFieldName: {
         label: 'code',
         value: 'code',
       },
@@ -79,7 +79,7 @@ export const AddSearchForm: Omit<CustomColumn, 'hiddenItem' | 'selectFetch'>[] =
       name: 'customerId',
       formType: 'select',
       options: [],
-      selectFileldName: {
+      selectFieldName: {
         label: 'name',
         value: 'id',
       },

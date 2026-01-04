@@ -1,49 +1,49 @@
-import DragModal from '@/components/modal/DragModal'
-import { CustomerManageType } from '@/services/essential/customerManage/customerManageModel'
-import { Form, Input } from 'antd'
-import React, { useEffect } from 'react'
-import { CustomerManageForm } from './config'
+import DragModal from '@/components/modal/DragModal';
+import { CustomerManageType } from '@/services/essential/customerManage/customerManageModel';
+import { Form, Input } from 'antd';
+import React, { useEffect } from 'react';
+import { CustomerManageForm } from './config';
 
 export type AddCustomerManageProps = {
   params: {
-    visible: boolean
-    currentRow: CustomerManageType
-    view: boolean
-  }
-  onOk: (params: CustomerManageType) => void
-  onCancel: (e: React.MouseEvent<HTMLButtonElement>) => void
-}
+    visible: boolean;
+    currentRow: CustomerManageType;
+    view: boolean;
+  };
+  onOk: (params: CustomerManageType) => void;
+  onCancel: (e: React.MouseEvent<HTMLButtonElement>) => void;
+};
 
 const AddCustomerManage: React.FC<AddCustomerManageProps> = ({
   params,
   onOk,
   onCancel,
 }) => {
-  const { visible, currentRow, view } = params
+  const { visible, currentRow, view } = params;
 
-  const [form] = Form.useForm()
+  const [form] = Form.useForm();
 
   useEffect(() => {
-    if (!visible) return
+    if (!visible) return;
     if (currentRow) {
-      form.setFieldsValue(currentRow)
+      form.setFieldsValue(currentRow);
     } else {
-      form.resetFields()
+      form.resetFields();
     }
-  }, [visible, view])
+  }, [visible, view]);
 
   const handleOk = () => {
     form
       .validateFields()
       .then(() => {
-        onOk(form.getFieldsValue())
+        onOk(form.getFieldsValue());
       })
       .catch((errorInfo) => {
         // 滚动并聚焦到第一个错误字段
-        form.scrollToField(errorInfo.errorFields[0].name)
-        form.focusField(errorInfo.errorFields[0].name)
-      })
-  }
+        form.scrollToField(errorInfo.errorFields[0].name);
+        form.focusField(errorInfo.errorFields[0].name);
+      });
+  };
 
   return (
     <DragModal
@@ -79,7 +79,7 @@ const AddCustomerManage: React.FC<AddCustomerManageProps> = ({
         ))}
       </Form>
     </DragModal>
-  )
-}
+  );
+};
 
-export default AddCustomerManage
+export default AddCustomerManage;

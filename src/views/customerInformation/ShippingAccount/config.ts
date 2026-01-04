@@ -1,10 +1,10 @@
-import type { CustomColumn } from 'customer-search-form-table/SearchForm/type'
+import type { CustomColumn } from 'customer-search-form-table/SearchForm/type';
 import {
   putShippingAccountCancelSearch,
   putShippingAccountClose,
   putShippingAccountOpen,
   putShippingAccountSearch,
-} from '@/services/customerInformation/shippingAccount/shippingAccountApi'
+} from '@/services/customerInformation/shippingAccount/shippingAccountApi';
 
 export const SelectShippingAccountOptions: CustomColumn[] = [
   {
@@ -12,7 +12,7 @@ export const SelectShippingAccountOptions: CustomColumn[] = [
     name: 'carrier',
     formType: 'normalSelect',
     options: [],
-    selectFileldName: {
+    selectFieldName: {
       label: 'code',
       value: 'code',
     },
@@ -25,7 +25,7 @@ export const SelectShippingAccountOptions: CustomColumn[] = [
     name: 'customerId',
     formType: 'normalSelect',
     options: [],
-    selectFileldName: {
+    selectFieldName: {
       label: 'name',
       value: 'id',
     },
@@ -86,7 +86,7 @@ export const SelectShippingAccountOptions: CustomColumn[] = [
     ],
     span: 6,
   },
-]
+];
 
 export const ShippingAccountForm: Omit<
   CustomColumn,
@@ -110,7 +110,7 @@ export const ShippingAccountForm: Omit<
     name: 'carrier',
     formType: 'select',
     span: 12,
-    selectFileldName: {
+    selectFieldName: {
       label: 'code',
       value: 'code',
     },
@@ -121,7 +121,7 @@ export const ShippingAccountForm: Omit<
     name: 'customerId',
     formType: 'select',
     span: 12,
-    selectFileldName: {
+    selectFieldName: {
       label: 'name',
       value: 'id',
     },
@@ -167,11 +167,11 @@ export const ShippingAccountForm: Omit<
       },
     ],
   },
-]
+];
 
 export const ShippingAccountOperationBtn = {
   search: putShippingAccountSearch,
   cancelSearch: putShippingAccountCancelSearch,
   open: putShippingAccountOpen,
   close: putShippingAccountClose,
-}
+};

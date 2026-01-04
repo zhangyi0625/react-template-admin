@@ -14,7 +14,7 @@ export const SelectCabinResultOptions: CustomColumn[] = [
     name: 'customerId',
     formType: 'normalSelect',
     options: [],
-    selectFileldName: {
+    selectFieldName: {
       label: 'name',
       value: 'id',
     },
@@ -45,7 +45,7 @@ export const SelectCabinResultOptions: CustomColumn[] = [
     name: 'carrier',
     formType: 'normalSelect',
     options: [],
-    selectFileldName: {
+    selectFieldName: {
       label: 'code',
       value: 'code',
     },

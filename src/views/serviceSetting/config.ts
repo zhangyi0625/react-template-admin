@@ -1,4 +1,4 @@
-import type { CustomColumn } from 'customer-search-form-table/SearchForm/type'
+import type { CustomColumn } from 'customer-search-form-table/SearchForm/type';
 
 export const ServiceSettingForm: Omit<
   CustomColumn,
@@ -10,7 +10,7 @@ export const ServiceSettingForm: Omit<
     formType: 'normalSelect',
     options: [],
     span: 12,
-    selectFileldName: {
+    selectFieldName: {
       label: 'code',
       value: 'code',
     },
@@ -98,10 +98,10 @@ export const ServiceSettingForm: Omit<
     name: 'routeFndIds',
     formType: 'normalSelect',
     options: [],
-    selectFileldName: {
+    selectFieldName: {
       label: 'routeName',
       value: 'id',
     },
     span: 12,
   },
-]
+];

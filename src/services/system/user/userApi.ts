@@ -44,6 +44,21 @@ export const getUserListByPage = (params: SysUserParams) => {
 };
 
 /**
+ * 查询用户详细信息
+ * @returns 用户列表
+ */
+export const getUserDetail = (id: string) => {
+  return HttpRequest.get(
+    {
+      url: UserApi.userManage + '/' + id,
+    },
+    {
+      successMessageMode: 'none',
+    }
+  );
+};
+
+/**
  * 新增用户
  * @param params 用户参数
  * @returns 结果

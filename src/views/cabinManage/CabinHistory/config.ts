@@ -24,7 +24,7 @@ export const SelectCabinHistoryOptions: CustomColumn[] = [
     name: 'router',
     formType: 'normalSelect',
     options: [],
-    selectFileldName: {
+    selectFieldName: {
       label: 'routeName',
       value: 'id',
     },

@@ -1,5 +1,5 @@
 import Block from '../Block';
-import Buitin from './Buitin';
+import Builtin from './Builtin';
 import ColorMode from './ColorMode';
 import MyTheme from './MyTheme';
 import Radius from './Radius';
@@ -17,7 +17,7 @@ const Theme: React.FC = () => {
       </Block>
       {/* 内置主题 */}
       <Block title="内置主题">
-        <Buitin />
+        <Builtin />
       </Block>
       {/* 圆角 */}
       <Block title="圆角">

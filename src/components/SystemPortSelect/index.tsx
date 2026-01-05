@@ -33,7 +33,7 @@ const SystemPortSelect = React.forwardRef<
     isMultiple = false,
     onSystemPortSelect,
   } = props;
-  const [defalueOptions, setDefaultOptions] = useState<
+  const [defaultOptions, setDefaultOptions] = useState<
     Record<SystemPortSelectPropsType['type'], LocationItem[]>
   >({
     POR: [],
@@ -60,10 +60,10 @@ const SystemPortSelect = React.forwardRef<
   useEffect(() => {
     if (isSearch)
       setPortDefaultValue({
-        porCode: defalueOptions['POR']?.[0]?.[valueKey] as string,
-        fndCode: defalueOptions['FND']?.[0]?.[valueKey] as string,
+        porCode: defaultOptions['POR']?.[0]?.[valueKey] as string,
+        fndCode: defaultOptions['FND']?.[0]?.[valueKey] as string,
       });
-  }, [defalueOptions, isSearch]);
+  }, [defaultOptions, isSearch]);
 
   const initPort = async () => {
     if (portInfo && (portInfo['fndInfo'] || portInfo['fndInfo'])) {
@@ -138,7 +138,7 @@ const SystemPortSelect = React.forwardRef<
         loading={true}
         onClear={() => handleSelect(undefined, `${type.toLowerCase()}Code`)}
         mode={isMultiple ? 'multiple' : undefined}
-        options={(defalueOptions[type] || []).map((d) => ({
+        options={(defaultOptions[type] || []).map((d) => ({
           label: (
             <div className={styles['system-port-select-item']}>
               <p>

@@ -7,7 +7,7 @@ import { UserAddOutlined } from '@ant-design/icons';
  * 内置主题
  * @returns
  */
-const Buitin: React.FC = () => {
+const Builtin: React.FC = () => {
   return (
     <div
       style={{
@@ -90,4 +90,4 @@ const Buitin: React.FC = () => {
     </div>
   );
 };
-export default Buitin;
+export default Builtin;

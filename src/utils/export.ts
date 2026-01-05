@@ -116,14 +116,14 @@ export function ExportTableDataByXLSX(
   ws['!cols'] = itemWidth;
   ws['!rows'] = itemHeight;
   XLSX.utils.book_append_sheet(wb, ws, sheetName);
-  const wbout = XLSXJSStyle.write(wb, {
+  const workbookOutput = XLSXJSStyle.write(wb, {
     bookType: 'xlsx',
     bookSST: true,
     type: 'array',
   });
   try {
     FileSaver.saveAs(
-      new Blob([wbout], { type: 'application/octet-stream' }),
+      new Blob([workbookOutput], { type: 'application/octet-stream' }),
       `${fileName}.xlsx`
     );
   } catch (error) {

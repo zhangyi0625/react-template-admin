@@ -1,12 +1,12 @@
 import type { SelectProps } from 'antd';
 import type { LocationItem } from '@/services/orderManage/regularBooking/regularBookingModel';
 
-type PortSelectOpionsType = SelectProps['options'] & LocationItem[];
+type PortSelectOptionsType = SelectProps['options'] & LocationItem[];
 
 export type PortType = {
-  POR: PortSelectOpionsType;
-  FND: PortSelectOpionsType;
-  [key: string]: PortSelectOpionsType;
+  POR: PortSelectOptionsType;
+  FND: PortSelectOptionsType;
+  [key: string]: PortSelectOptionsType;
 };
 
 export type PortInfoType = {

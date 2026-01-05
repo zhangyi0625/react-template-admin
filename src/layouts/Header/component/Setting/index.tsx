@@ -41,7 +41,7 @@ const Setting: React.FC<SettingProps> = memo(({ open, setOpen }) => {
   const dispatch = useDispatch();
   const { colorPrimary } = theme;
   const [value, setValue] = useState<ColorPickerProps['value']>(colorPrimary);
-  const [selectedkey, setSelectedKey] = useState<string>('theme');
+  const [selectedKey, setSelectedKey] = useState<string>('theme');
   const { modal, message } = App.useApp();
 
   // 分段器的值
@@ -178,12 +178,12 @@ const Setting: React.FC<SettingProps> = memo(({ open, setOpen }) => {
             onChange={(key: string) => {
               setSelectedKey(key);
             }}
-            value={selectedkey}
+            value={selectedKey}
           />
         </ConfigProvider>
         {/* Tabs */}
         <Tabs
-          activeKey={selectedkey}
+          activeKey={selectedKey}
           items={tabsItems}
           tabBarStyle={{ marginBottom: '8px' }}
         />

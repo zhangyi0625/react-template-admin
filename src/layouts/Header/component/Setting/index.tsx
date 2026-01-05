@@ -3,7 +3,6 @@ import { memo, useState } from 'react';
 import {
   App,
   Button,
-  type ColorPickerProps,
   ConfigProvider,
   Drawer,
   Segmented,
@@ -40,7 +39,7 @@ const Setting: React.FC<SettingProps> = memo(({ open, setOpen }) => {
   const { theme } = useSelector((state: RootState) => state.preferences);
   const dispatch = useDispatch();
   const { colorPrimary } = theme;
-  const [value, setValue] = useState<ColorPickerProps['value']>(colorPrimary);
+  const [value, setValue] = useState<string>(colorPrimary);
   const [selectedKey, setSelectedKey] = useState<string>('theme');
   const { modal, message } = App.useApp();
 

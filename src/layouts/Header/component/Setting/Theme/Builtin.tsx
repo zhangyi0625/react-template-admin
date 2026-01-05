@@ -1,6 +1,6 @@
 import { BUILTIN_THEME_PRESETS } from '@/enums/constants';
 import './theme.scss';
-import { ColorPicker } from 'antd';
+import { ColorPicker, Popover } from 'antd';
 import { UserAddOutlined } from '@ant-design/icons';
 
 /**
@@ -56,9 +56,9 @@ const Builtin: React.FC = () => {
                       borderRadius: '6px',
                     }}
                   >
-                    <ColorPicker>
+                    <Popover content={<ColorPicker />} trigger="click">
                       <UserAddOutlined style={{ fontSize: '1.25rem' }} />
-                    </ColorPicker>
+                    </Popover>
                   </div>
                 </div>
               ) : (

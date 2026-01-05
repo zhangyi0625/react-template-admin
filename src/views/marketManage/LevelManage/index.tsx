@@ -147,7 +147,7 @@ const LevelManage: React.FC = () => {
           pageIndexKey="pageIndex"
           pageSizeKey="pageSize"
           scroll={{ x: 'max-content', y: height - 128 }}
-          rowKey={(record) => record.customerId + Math.random()}
+          rowKey={(_) => Math.random().toString()}
           totalKey="total"
           fetchResultKey="entries"
           isPagination={true}

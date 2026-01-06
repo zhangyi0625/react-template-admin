@@ -78,7 +78,7 @@ export const SubscriptionManageSearchColumns: CustomColumn[] = [
     apiByUrlMethod: 'get',
     setSearchKey: 'keyword',
     apiByUrlParams: {
-      tag: 'POR',
+      tag: 'FND',
       keyword: null,
     },
     apiByUrlHeaders: {

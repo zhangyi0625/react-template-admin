@@ -275,6 +275,21 @@ export default defineMock([
                   internal: false,
                 },
               },
+              {
+                id: Math.random().toString(),
+                name: 'order-manage',
+                path: '/orderManage/quickEnquiryOrder/:id',
+                component:
+                  'orderManage/QuickEnquiryOrder/QuickEnquiryOrderDetail',
+                route: '1',
+                meta: {
+                  keepAlive: false,
+                  icon: '',
+                  title: '找舱详细信息',
+                  internal: false,
+                  menuType: 2,
+                },
+              },
             ],
           },
           {

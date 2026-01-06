@@ -1,8 +1,22 @@
+import type { SelectProps } from 'antd';
 import type { CustomColumn } from 'customer-search-form-table/SearchForm/type';
-import { getSystemOrderCarrier } from '@/services/system/basicData/basicDataApi';
-import { changeSelectOptionsByLabel } from '@/utils/options';
 
-export const CabinResultSearchColumns: CustomColumn[] = [
+export const QuickEnquiryOrderStatusOptions: SelectProps['options'] = [
+  {
+    value: 'UNDERWAY',
+    label: '找舱中',
+  },
+  {
+    value: 'DONE',
+    label: '已结束',
+  },
+  {
+    value: 'CANCELLED',
+    label: '已取消',
+  },
+];
+
+export const QuickEnquiryOrderSearchColumns: CustomColumn[] = [
   {
     label: '公司名称',
     name: 'affiliateId',
@@ -27,23 +41,31 @@ export const CabinResultSearchColumns: CustomColumn[] = [
     hiddenItem: false,
   },
   {
-    label: '船公司',
-    name: 'carrier',
-    formType: 'normalSelect',
+    label: '用户名',
+    name: 'customerId',
+    formType: 'focusSelect',
     options: [],
-    api: getSystemOrderCarrier,
     selectFieldName: {
-      label: 'carrierCode',
-      value: 'carrierCode',
+      label: 'name',
+      value: 'id',
     },
-    selectResultKey: null,
+    apiByUrl: '/api/staff/customer/list',
+    apiByUrlMethod: 'get',
+    setSearchKey: 'keyword',
+    apiByUrlParams: {
+      keyword: null,
+    },
+    apiByUrlHeaders: {
+      authorization: 'Bearer ' + sessionStorage.getItem('token'),
+      'Content-Type': 'application/json',
+    },
     span: 6,
     selectFetch: true,
     hiddenItem: false,
   },
   {
     label: '起运港',
-    name: 'porId',
+    name: 'porCode',
     formType: 'focusSelect',
     options: [],
     selectFieldName: {
@@ -66,28 +88,8 @@ export const CabinResultSearchColumns: CustomColumn[] = [
     hiddenItem: false,
   },
   {
-    label: '目的港名称',
-    name: 'fnd',
-    formType: 'input',
-    span: 6,
-    selectFetch: false,
-    hiddenItem: false,
-  },
-  {
-    label: '状态',
-    name: 'status',
-    formType: 'normalSelect',
-    span: 6,
-    options: changeSelectOptionsByLabel(['已关联', '未关联']),
-    selectFetch: false,
-    hiddenItem: false,
-  },
-];
-
-export const RelevanceOrderOptions: CustomColumn[] = [
-  {
     label: '目的港',
-    name: 'fndId',
+    name: 'fndCode',
     formType: 'focusSelect',
     options: [],
     selectFieldName: {
@@ -105,8 +107,25 @@ export const RelevanceOrderOptions: CustomColumn[] = [
       authorization: 'Bearer ' + sessionStorage.getItem('token'),
       'Content-Type': 'application/json',
     },
-    span: 12,
+    span: 6,
     selectFetch: true,
+    hiddenItem: false,
+  },
+  {
+    label: '找舱编号',
+    name: 'no',
+    formType: 'input',
+    span: 6,
+    selectFetch: false,
+    hiddenItem: false,
+  },
+  {
+    label: '状态',
+    name: 'status',
+    formType: 'normalSelect',
+    options: QuickEnquiryOrderStatusOptions,
+    span: 6,
+    selectFetch: false,
     hiddenItem: false,
   },
 ];

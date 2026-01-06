@@ -125,7 +125,7 @@ export const RegularBookingSearchColumns: MergeCustomColumn[] = [
     apiByUrlMethod: 'get',
     setSearchKey: 'keyword',
     apiByUrlParams: {
-      tag: 'POR',
+      tag: 'FND',
       keyword: null,
     },
     apiByUrlHeaders: {

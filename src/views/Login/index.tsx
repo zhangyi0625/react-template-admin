@@ -115,7 +115,7 @@ const Login: React.FC = () => {
             navigate(homePath);
             antdUtils.notification?.success({
               message: '登录成功',
-              description: '欢迎来到在舱VIP管理平台!',
+              description: '欢迎来到刷箱后台管理系统!',
             });
           }
           break;
@@ -185,7 +185,7 @@ const Login: React.FC = () => {
                     color: '#999999',
                   }}
                 >
-                  在舱VIP管理平台
+                  刷箱后台管理系统
                 </span>
               </p>
             </div>

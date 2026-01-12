@@ -36,7 +36,7 @@ export default defineConfig({
   // 配置html模板
   html: {
     favicon: path.resolve(__dirname, './src/assets/images/favicon.ico'),
-    title: '在舱VIP管理平台',
+    title: '刷箱后台管理系统',
     tags: [
       {
         tag: 'html',

@@ -117,7 +117,7 @@ const LeftMenu: React.FC = memo(() => {
     const route = searchRoute(pathname, menus);
     if (route && Object.keys(route).length) {
       const title = route.title;
-      if (title) document.title = `${title} - 在舱VIP管理平台`;
+      if (title) document.title = `${title} - 刷箱后台管理系统`;
       if (!collapsed) setOpenKeys(openKey);
     }
   }, [pathname, collapsed, menus, mode]);
@@ -167,7 +167,7 @@ const LeftMenu: React.FC = memo(() => {
                   color: titleColor,
                 }}
               >
-                在舱VIP管理平台
+                刷箱后台管理系统
               </p>
             )}
           </div>

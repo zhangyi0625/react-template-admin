@@ -6,6 +6,8 @@ on:
       - master
       - dev
       - zc-ls-cabin
+      - zc-manager
+      - zc-brushBox-manager
   workflow_dispatch:
 
 permissions:

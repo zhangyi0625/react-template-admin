@@ -9,9 +9,9 @@ import { filterKeys } from '@/utils/tool';
  * 枚举广告相关的api
  */
 export enum AdvertisingManageApi {
-  AdvertisingManage = '/system/advertising',
-  AdvertisingManageByPage = '/system/advertising/page',
-  batchAdvertisingManage = '/system/advertising/batch',
+  AdvertisingManage = '/business/advertisement',
+  AdvertisingManageByPage = '/business/advertisement/page',
+  batchAdvertisingManage = '/business/advertisement/batch',
 }
 
 /**

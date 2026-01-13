@@ -25,6 +25,7 @@ import type {
 } from '@/services/system/advertising/advertisingModel';
 import AdvertisingModal from './AdvertisingModal';
 import { filterKeys } from '@/utils/tool';
+import { formatTime } from '@/utils/format';
 
 const AdvertisingManage: React.FC = () => {
   const { message, modal } = App.useApp();
@@ -50,38 +51,36 @@ const AdvertisingManage: React.FC = () => {
 
   const tableColumns: TableProps['columns'] = [
     {
-      title: '公告标题',
+      title: '广告标题',
       dataIndex: 'title',
       width: 120,
       align: 'left',
     },
     {
-      title: '公告内容',
-      dataIndex: 'content',
-      width: 120,
-      align: 'left',
-    },
-    {
       title: '起效日期',
-      dataIndex: 'validFrom',
       width: 120,
       align: 'left',
+      render(value) {
+        return <div>{formatTime(value.startDate, 'Y-M-D')}</div>;
+      },
     },
     {
       title: '失效日期',
-      dataIndex: 'validTo',
       width: 120,
       align: 'left',
+      render(value) {
+        return <div>{formatTime(value.endDate, 'Y-M-D')}</div>;
+      },
     },
     {
-      title: '状态',
-      dataIndex: 'status',
+      title: '显示顺序',
+      dataIndex: 'sort',
       width: 120,
       align: 'left',
     },
     {
       title: '更新时间',
-      dataIndex: 'modifyTime',
+      dataIndex: 'updateTime',
       width: 120,
       align: 'left',
     },
@@ -142,7 +141,7 @@ const AdvertisingManage: React.FC = () => {
         await editAdvertisingManage(currentRow);
       }
       // 操作成功，关闭弹窗，刷新数据
-      message.success(!currentRow.id ? '添加成功' : '修改成功');
+      // message.success(!currentRow.id ? '添加成功' : '修改成功');
       setParams({ visible: false, currentRow: null });
       onUpdateSearch();
     } catch (error) {}
@@ -202,12 +201,11 @@ const AdvertisingManage: React.FC = () => {
           fetchResultKey={'list'}
           isPagination={true}
           columns={tableColumns}
-          // rowKey={(_) => Math.random()}
           rowKey={'id'}
           scroll={{ x: 'max-content', y: height - 298 }}
           fetchData={getAdvertisingManageByPage}
           searchFilter={searchDefaultForm}
-          isSelection={true}
+          isSelection={false}
           onUpdatePagination={onUpdatePagination}
           onUpdateSelection={() => {}}
         />

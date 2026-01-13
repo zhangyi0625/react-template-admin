@@ -6,10 +6,9 @@ import { filterKeys } from '@/utils/tool';
  * 枚举用户相关的api
  */
 export enum NoticeManageApi {
-  NoticeManage = '/system/user',
-  NoticeManageByPage = '/system/user/page',
-  batchNoticeManage = '/system/user/batch',
-  resetUserPassword = '/system/user/password',
+  NoticeManage = '/business/announcement',
+  NoticeManageByPage = '/business/announcement/page',
+  batchNoticeManage = '/business/announcement/batch',
 }
 
 /**

@@ -16,6 +16,8 @@ import type { AdvertisingManageType } from '@/services/system/advertising/advert
 import { AdvertisingManageForms } from './config';
 import { filterKeys } from '@/utils/tool';
 import { formatTime } from '@/utils/format';
+import { postUploadFile } from '@/services/upload';
+import dayjs from 'dayjs';
 
 export type AdvertisingModalProps = {
   params: {
@@ -54,7 +56,10 @@ const AdvertisingModal: React.FC<AdvertisingModalProps> = ({
       form.resetFields();
       setFileList([]);
     } else {
-      form.setFieldsValue(currentRow);
+      form.setFieldsValue({
+        ...currentRow,
+        create: [dayjs(currentRow.startDate), dayjs(currentRow.endDate)],
+      });
     }
     setLoading(false);
   };
@@ -74,13 +79,13 @@ const AdvertisingModal: React.FC<AdvertisingModalProps> = ({
       if (info.fileList.length) {
         const formdata = new FormData();
         formdata.append('file', info.file as FileType); //将每一个文件图片都加进formdata
-        // postUploadFile(formdata).then((resp) => {
-        //   form.setFieldsValue({
-        //     ...form.getFieldsValue(),
-        //     logo: resp.data.id,
-        //     logoName: resp.data.name,
-        //   })
-        // })
+        postUploadFile(formdata).then((resp) => {
+          form.setFieldsValue({
+            ...form.getFieldsValue(),
+            imageId: resp.data.id,
+            // logoName: resp.data.name,
+          });
+        });
       }
     },
     fileList,
@@ -92,10 +97,9 @@ const AdvertisingModal: React.FC<AdvertisingModalProps> = ({
       .then(() => {
         onOk({
           ...filterKeys(form.getFieldsValue(), ['create', 'fileList'], false),
-          validForm: formatTime(form.getFieldValue('create')[0], 'Y-M-D'),
-          validTo: formatTime(form.getFieldValue('create')[1], 'Y-M-D'),
+          startDate: formatTime(form.getFieldValue('create')[0], 'Y-M-D'),
+          endDate: formatTime(form.getFieldValue('create')[1], 'Y-M-D'),
         });
-        console.log(form.getFieldsValue());
       })
       .catch((errorInfo) => {
         // 滚动并聚焦到第一个错误字段
@@ -114,6 +118,9 @@ const AdvertisingModal: React.FC<AdvertisingModalProps> = ({
     >
       <Form form={form} labelCol={{ span: 6 }}>
         <Form.Item name="id" hidden>
+          <Input disabled />
+        </Form.Item>
+        <Form.Item name="imageId" hidden>
           <Input disabled />
         </Form.Item>
         {AdvertisingManageForms.map((item) => (

@@ -1,11 +1,11 @@
-import { HttpRequest } from '@/utils/request'
-import type { Response } from '@/types/global'
+import { HttpRequest } from '@/utils/request';
+import type { Response } from '@/types/global';
 
 /**
  * 枚举系统配置需要的接口地址
  */
 export enum UploadApi {
-  uploadFile = '/api/file/upload',
+  uploadFile = '/system/file/upload',
 }
 
 /**
@@ -18,5 +18,5 @@ export const postUploadFile = (params: FormData) => {
       params,
     },
     { isTransformResponse: false }
-  )
-}
+  );
+};

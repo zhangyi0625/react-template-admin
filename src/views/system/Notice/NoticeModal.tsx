@@ -5,6 +5,7 @@ import React, { useEffect, useState } from 'react';
 import { NoticeForms } from './config';
 import { filterKeys } from '@/utils/tool';
 import { formatTime } from '@/utils/format';
+import dayjs from 'dayjs';
 
 export type NoticeModalProps = {
   params: {
@@ -34,7 +35,10 @@ const NoticeModal: React.FC<NoticeModalProps> = ({
     if (!currentRow) {
       form.resetFields();
     } else {
-      form.setFieldsValue({ ...currentRow });
+      form.setFieldsValue({
+        ...currentRow,
+        create: [dayjs(currentRow.startDate), dayjs(currentRow.endDate)],
+      });
     }
     setLoading(false);
   }, [visible]);
@@ -45,8 +49,8 @@ const NoticeModal: React.FC<NoticeModalProps> = ({
       .then(() => {
         onOk({
           ...filterKeys(form.getFieldsValue(), ['create'], false),
-          validForm: formatTime(form.getFieldValue('create')[0], 'Y-M-D'),
-          validTo: formatTime(form.getFieldValue('create')[1], 'Y-M-D'),
+          startDate: formatTime(form.getFieldValue('create')[0], 'Y-M-D'),
+          endDate: formatTime(form.getFieldValue('create')[1], 'Y-M-D'),
         });
         console.log(form.getFieldsValue());
       })

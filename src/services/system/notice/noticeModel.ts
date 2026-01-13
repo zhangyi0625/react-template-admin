@@ -12,7 +12,7 @@ export interface NoticeManageType {
   content: string;
   status: boolean;
   createTime: string;
-  validTo: string;
-  validForm: string;
+  startDate: string;
+  endDate: string;
   modifyTime: string;
 }

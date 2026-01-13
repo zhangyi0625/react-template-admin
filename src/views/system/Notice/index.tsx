@@ -17,11 +17,14 @@ import type {
 } from '@/services/system/notice/noticeModel';
 import {
   addNoticeManage,
+  deleteNoticeManage,
   editNoticeManage,
   getNoticeManageByPage,
 } from '@/services/system/notice/noticeApi';
 import NoticeModal from './NoticeModal';
 import { filterKeys } from '@/utils/tool';
+import { ExclamationCircleFilled } from '@ant-design/icons';
+import { formatTime } from '@/utils/format';
 
 const NoticeManage: React.FC = () => {
   const { message, modal } = App.useApp();
@@ -55,30 +58,34 @@ const NoticeManage: React.FC = () => {
     {
       title: '公告内容',
       dataIndex: 'content',
-      width: 120,
+      width: 250,
       align: 'left',
     },
     {
       title: '起效日期',
-      dataIndex: 'validFrom',
       width: 120,
       align: 'left',
+      render(value) {
+        return <div>{formatTime(value.startDate, 'Y-M-D')}</div>;
+      },
     },
     {
       title: '失效日期',
-      dataIndex: 'validTo',
       width: 120,
       align: 'left',
+      render(value) {
+        return <div>{formatTime(value.endDate, 'Y-M-D')}</div>;
+      },
     },
-    {
-      title: '状态',
-      dataIndex: 'status',
-      width: 120,
-      align: 'left',
-    },
+    // {
+    //   title: '状态',
+    //   dataIndex: 'status',
+    //   width: 120,
+    //   align: 'left',
+    // },
     {
       title: '更新时间',
-      dataIndex: 'modifyTime',
+      dataIndex: 'updateTime',
       width: 120,
       align: 'left',
     },
@@ -97,7 +104,7 @@ const NoticeManage: React.FC = () => {
             </Button>
             <Button
               variant="link"
-              onClick={() => setParams({ visible: true, currentRow: _ })}
+              onClick={() => deleteItem(_.id)}
               color="danger"
             >
               删除
@@ -139,10 +146,24 @@ const NoticeManage: React.FC = () => {
         await editNoticeManage(currentRow);
       }
       // 操作成功，关闭弹窗，刷新数据
-      message.success(!currentRow.id ? '添加成功' : '修改成功');
+      // message.success(!currentRow.id ? '添加成功' : '修改成功');
       setParams({ visible: false, currentRow: null });
       onUpdateSearch();
     } catch (error) {}
+  };
+
+  const deleteItem = async (id: string | string[], type?: string) => {
+    modal.confirm({
+      title: `${type ? '批量' : ''}删除广告`,
+      icon: <ExclamationCircleFilled />,
+      content: `确定${type ? '批量' : ''}删除广告吗？数据删除后将无法恢复！`,
+      onOk() {
+        // 调用删除接口，删除成功后刷新页面数据
+        deleteNoticeManage(id as string).then(() => {
+          onUpdateSearch();
+        });
+      },
+    });
   };
 
   return (
@@ -169,7 +190,7 @@ const NoticeManage: React.FC = () => {
         <Space>
           <Button
             type="primary"
-            onClick={() => setParams({ ...params, visible: true })}
+            onClick={() => setParams({ currentRow: null, visible: true })}
           >
             新增
           </Button>
@@ -183,12 +204,11 @@ const NoticeManage: React.FC = () => {
           fetchResultKey={'list'}
           isPagination={true}
           columns={tableColumns}
-          // rowKey={(_) => Math.random()}
           rowKey={'id'}
           scroll={{ x: 'max-content', y: height - 298 }}
           fetchData={getNoticeManageByPage}
           searchFilter={searchDefaultForm}
-          isSelection={true}
+          isSelection={false}
           onUpdatePagination={onUpdatePagination}
           onUpdateSelection={() => {}}
         />

@@ -4,7 +4,7 @@ import { defineMock } from 'rspack-plugin-mock/helper';
 
 export default defineMock([
   {
-    url: '/api/brashbox/page',
+    url: '/api/brash-box/page',
     enabled: true,
     method: 'GET',
     body(request) {
@@ -42,7 +42,7 @@ export default defineMock([
     },
   },
   {
-    url: '/api/brashbox/accout/page',
+    url: '/api/brash-box/account/page',
     enabled: true,
     method: 'GET',
     body(request) {

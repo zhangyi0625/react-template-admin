@@ -12,16 +12,16 @@ import { ExclamationCircleFilled } from '@ant-design/icons';
 import { SearchForm, SearchTable } from 'customer-search-form-table';
 import { BrashBoxAccountSearchColumns } from '../config';
 import type {
-  BrashBoxSearchParams,
-  BrashBoxType,
-} from '@/services/brashBoxManage/brashBoxList/brashBoxListModel';
+  BrashBoxAccountSearchParams,
+  BrashBoxAccountType,
+} from '@/services/brashBoxManage/brashBoxAccount/brashBoxAccountModel';
 import BrashBoxAccountModal from './BrashBoxAccountModal';
 import {
   addBrashBoxAccount,
   deleteBrashBoxAccount,
   editBrashBoxAccount,
   getBrashBoxAccountPage,
-} from '@/services/brashBoxManage/brashBoxList/brashBoxListApi';
+} from '@/services/brashBoxManage/brashBoxAccount/brashBoxAccountApi';
 import useParentSize from '@/hooks/useParentSize';
 import { filterKeys } from '@/utils/tool';
 import { formatTime } from '@/utils/format';
@@ -31,14 +31,14 @@ const BrashBoxAccount: React.FC = () => {
   const { parentRef, height } = useParentSize();
 
   const [searchDefaultForm, setSearchDefaultForm] =
-    useState<BrashBoxSearchParams>({
+    useState<BrashBoxAccountSearchParams>({
       page: 1,
       limit: 10,
     });
 
   const [params, setParams] = useState<{
     visible: boolean;
-    currentRow: BrashBoxType | null;
+    currentRow: BrashBoxAccountType | null;
   }>({
     visible: false,
     currentRow: null,
@@ -108,7 +108,9 @@ const BrashBoxAccount: React.FC = () => {
     },
   ];
 
-  const onUpdateSearch = (info?: BrashBoxSearchParams['filter'] | unknown) => {
+  const onUpdateSearch = (
+    info?: BrashBoxAccountSearchParams['filter'] | unknown
+  ) => {
     const filteredObj = Object.fromEntries(
       Object.entries(info ?? {}).filter(([, value]) => !!value)
     );
@@ -141,7 +143,7 @@ const BrashBoxAccount: React.FC = () => {
     });
   };
 
-  const onEditOk = async (currentRow: BrashBoxType) => {
+  const onEditOk = async (currentRow: BrashBoxAccountType) => {
     try {
       if (!currentRow.id) {
         // 新增数据

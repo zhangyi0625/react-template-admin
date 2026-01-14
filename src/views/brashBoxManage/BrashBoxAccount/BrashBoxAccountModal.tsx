@@ -1,15 +1,16 @@
 import React, { useEffect } from 'react';
 import { Col, Form, Input, Radio, Row } from 'antd';
+import { CheckboxGroupProps } from 'antd/es/checkbox';
+import type { BrashBoxAccountType } from '@/services/brashBoxManage/brashBoxAccount/brashBoxAccountModel';
 import DragModal from '@/components/modal/DragModal';
 import { BrashBoxAccountForms } from '../config';
-import { CheckboxGroupProps } from 'antd/es/checkbox';
 
 export type BrashBoxAccountModalProps = {
   params: {
     visible: boolean;
-    currentRow?: any;
+    currentRow: BrashBoxAccountType | null;
   };
-  onOk: (values: any) => void;
+  onOk: (values: BrashBoxAccountType) => void;
   onCancel: () => void;
 };
 

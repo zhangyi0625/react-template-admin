@@ -64,7 +64,7 @@ const StaffManage: React.FC = () => {
     {
       title: '所在公司',
       dataIndex: 'companyName',
-      width: 150,
+      width: 180,
       align: 'left',
     },
     {

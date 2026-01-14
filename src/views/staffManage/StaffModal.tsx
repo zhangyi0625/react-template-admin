@@ -1,12 +1,9 @@
+import React, { useEffect, useState } from 'react';
+import { Form, Input, Radio } from 'antd';
+import { CheckboxGroupProps } from 'antd/es/checkbox';
 import DragModal from '@/components/modal/DragModal';
 import { StaffManageType } from '@/services/staffManage/staffManageModel';
-import { DatePicker, Form, Input, Radio } from 'antd';
-import React, { useEffect, useState } from 'react';
 import { StaffManageForms } from './config';
-import { filterKeys } from '@/utils/tool';
-import { formatTime } from '@/utils/format';
-import dayjs from 'dayjs';
-import { CheckboxGroupProps } from 'antd/es/checkbox';
 
 export type StaffModalProps = {
   params: {
@@ -23,8 +20,6 @@ const StaffModal: React.FC<StaffModalProps> = ({ params, onCancel, onOk }) => {
   const [form] = Form.useForm();
 
   const [loading, setLoading] = useState(false);
-
-  const { RangePicker } = DatePicker;
 
   useEffect(() => {
     if (!visible) return;
@@ -106,9 +101,6 @@ const StaffModal: React.FC<StaffModalProps> = ({ params, onCancel, onOk }) => {
               <Radio.Group
                 options={item.options as CheckboxGroupProps<string>['options']}
               />
-            )}
-            {item.formType === 'range-picker' && (
-              <RangePicker format="YYYY-MM-DD" style={{ width: '100%' }} />
             )}
           </Form.Item>
         ))}

@@ -1,7 +1,8 @@
-import DragModal from '@/components/modal/DragModal';
-import { Col, Form, Input, Row } from 'antd';
 import React, { useEffect } from 'react';
+import { Col, Form, Input, Radio, Row } from 'antd';
+import DragModal from '@/components/modal/DragModal';
 import { BrashBoxAccountForms } from '../config';
+import { CheckboxGroupProps } from 'antd/es/checkbox';
 
 export type BrashBoxAccountModalProps = {
   params: {
@@ -25,17 +26,22 @@ const BrashBoxAccountModal: React.FC<BrashBoxAccountModalProps> = ({
     if (!visible) return;
     if (!currentRow) {
       form.resetFields();
+      form.setFieldsValue({
+        status: 1,
+      });
     } else {
-      form.setFieldsValue({ ...currentRow });
+      form.setFieldsValue({
+        ...currentRow,
+        status: Number(currentRow.status),
+      });
     }
-    console.log(currentRow, 'currentrow');
   }, [visible]);
 
   const handleOk = () => {
     form
       .validateFields()
       .then(() => {
-        // onOk(form.getFieldsValue());
+        onOk(form.getFieldsValue());
       })
       .catch((errorInfo) => {
         // 滚动并聚焦到第一个错误字段
@@ -79,6 +85,20 @@ const BrashBoxAccountModal: React.FC<BrashBoxAccountModalProps> = ({
                   <Input
                     placeholder={`请输入${item.label}`}
                     autoComplete="off"
+                  />
+                )}
+                {item.formType === 'textarea' && (
+                  <Input.TextArea
+                    placeholder={`请输入${item.label}`}
+                    autoComplete="off"
+                    style={{ height: '100px' }}
+                  />
+                )}
+                {item.formType === 'radio' && (
+                  <Radio.Group
+                    options={
+                      item.options as CheckboxGroupProps<string>['options']
+                    }
                   />
                 )}
               </Form.Item>

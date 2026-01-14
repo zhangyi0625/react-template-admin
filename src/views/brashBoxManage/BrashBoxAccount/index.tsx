@@ -1,74 +1,90 @@
-import useParentSize from '@/hooks/useParentSize';
-import { CabinResultParams } from '@/services/cabinManage/cabinManageModel';
-import { filterKeys } from '@/utils/tool';
+import { useState } from 'react';
 import {
-  TableProps,
+  type TableProps,
   Space,
   Button,
-  TablePaginationConfig,
+  type TablePaginationConfig,
   ConfigProvider,
   Card,
+  App,
 } from 'antd';
+import { ExclamationCircleFilled } from '@ant-design/icons';
 import { SearchForm, SearchTable } from 'customer-search-form-table';
-import { useState } from 'react';
 import { BrashBoxAccountSearchColumns } from '../config';
-import { getAffilateAccountList } from '@/services/todayPlan/todayPlanApi';
+import type {
+  BrashBoxSearchParams,
+  BrashBoxType,
+} from '@/services/brashBoxManage/brashBoxList/brashBoxListModel';
 import BrashBoxAccountModal from './BrashBoxAccountModal';
-import { getBrashBoxAccountPage } from '@/services/brashBoxManage/brashBoxList/brashBoxListApi';
+import {
+  addBrashBoxAccount,
+  deleteBrashBoxAccount,
+  editBrashBoxAccount,
+  getBrashBoxAccountPage,
+} from '@/services/brashBoxManage/brashBoxList/brashBoxListApi';
+import useParentSize from '@/hooks/useParentSize';
+import { filterKeys } from '@/utils/tool';
+import { formatTime } from '@/utils/format';
 
 const BrashBoxAccount: React.FC = () => {
+  const { message, modal } = App.useApp();
   const { parentRef, height } = useParentSize();
 
-  const [searchDefaultForm, setSearchDefaultForm] = useState<any>({
-    page: 1,
-    limit: 10,
-  });
+  const [searchDefaultForm, setSearchDefaultForm] =
+    useState<BrashBoxSearchParams>({
+      page: 1,
+      limit: 10,
+    });
 
-  const [params, setParams] = useState<any>({
+  const [params, setParams] = useState<{
+    visible: boolean;
+    currentRow: BrashBoxType | null;
+  }>({
     visible: false,
     currentRow: null,
   });
 
   const tableColumns: TableProps['columns'] = [
     {
-      title: '船公司',
-      key: 'carrier',
-      dataIndex: 'carrier',
-      align: 'center',
-      width: 80,
-    },
-    {
-      title: '货代',
-      key: 'name',
-      dataIndex: 'name',
-      align: 'center',
-      width: 80,
-    },
-    {
-      title: '用户名',
+      title: '账号',
       key: 'account',
       dataIndex: 'account',
-      align: 'center',
-      width: 80,
+      align: 'left',
+      width: 120,
     },
     {
       title: '密码',
       key: 'password',
       dataIndex: 'password',
-      align: 'center',
-      width: 80,
+      align: 'left',
+      width: 120,
     },
     {
-      title: '维护时间',
-      align: 'center',
+      title: '是否有效',
+      align: 'left',
       width: 80,
       render(value) {
-        return <div>{value.modifyTime}</div>;
+        return <div>{value.status ? '有效' : '无效'}</div>;
+      },
+    },
+    {
+      title: '备注',
+      key: 'remark',
+      dataIndex: 'remark',
+      align: 'left',
+      width: 150,
+    },
+    {
+      title: '更新时间',
+      align: 'left',
+      width: 120,
+      render(value) {
+        return <div>{formatTime(value.updateTime, 'Y-M-D h:m')}</div>;
       },
     },
     {
       title: '操作',
-      align: 'center',
+      align: 'left',
       width: 100,
       render(_) {
         return (
@@ -80,8 +96,8 @@ const BrashBoxAccount: React.FC = () => {
               编辑
             </Button>
             <Button
-              type="link"
-              onClick={() => setParams({ visible: true, currentRow: _ })}
+              variant="link"
+              onClick={() => deleteItem(_.id)}
               color="danger"
             >
               删除
@@ -92,7 +108,7 @@ const BrashBoxAccount: React.FC = () => {
     },
   ];
 
-  const onUpdateSearch = (info?: CabinResultParams | unknown) => {
+  const onUpdateSearch = (info?: BrashBoxSearchParams['filter'] | unknown) => {
     const filteredObj = Object.fromEntries(
       Object.entries(info ?? {}).filter(([, value]) => !!value)
     );
@@ -111,18 +127,45 @@ const BrashBoxAccount: React.FC = () => {
     });
   };
 
-  const onEditOk = () => {};
+  const deleteItem = async (id: string) => {
+    modal.confirm({
+      title: `删除亿通账号`,
+      icon: <ExclamationCircleFilled />,
+      content: `确定删除亿通账号吗？数据删除后将无法恢复！`,
+      onOk() {
+        deleteBrashBoxAccount(id as string).then(() => {
+          message.success('删除成功');
+          onUpdateSearch();
+        });
+      },
+    });
+  };
+
+  const onEditOk = async (currentRow: BrashBoxType) => {
+    try {
+      if (!currentRow.id) {
+        // 新增数据
+        await addBrashBoxAccount(currentRow);
+      } else {
+        // 编辑数据
+        await editBrashBoxAccount(currentRow);
+      }
+      // 操作成功，关闭弹窗，刷新数据
+      // message.success(!currentRow.id ? '添加成功' : '修改成功');
+      setParams({ visible: false, currentRow: null });
+      onUpdateSearch();
+    } catch (error) {}
+  };
 
   return (
     <>
-      {/* 菜单检索条件栏 */}
       <ConfigProvider>
         <Card>
           <SearchForm
             columns={BrashBoxAccountSearchColumns}
             gutterWidth={24}
             labelPosition="left"
-            iconHidden={true}
+            iconHidden={false}
             btnSeparate={false}
             isShowReset={true}
             isShowExpend={false}
@@ -138,7 +181,7 @@ const BrashBoxAccount: React.FC = () => {
         <Space>
           <Button
             type="primary"
-            onClick={() => setParams({ ...params, visible: true })}
+            onClick={() => setParams({ currentRow: null, visible: true })}
           >
             新增
           </Button>
@@ -152,7 +195,6 @@ const BrashBoxAccount: React.FC = () => {
           fetchResultKey={'list'}
           isPagination={true}
           columns={tableColumns}
-          bordered
           rowKey={'id'}
           scroll={{ x: 'max-content', y: height - 298 }}
           fetchData={getBrashBoxAccountPage}

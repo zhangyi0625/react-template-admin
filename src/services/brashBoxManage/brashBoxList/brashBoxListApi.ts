@@ -1,20 +1,20 @@
 import { HttpRequest } from '@/utils/request';
-import { BrashBoxSearchParams } from './brashBoxListModel';
+import type { BrashBoxSearchParams, BrashBoxType } from './brashBoxListModel';
 
 export enum BrashBoxManageApi {
-  BrashBoxManagePage = '/brashbox/page',
-  BrashBoxAccountPage = '/brashbox/accout/page',
+  BrashBoxAccount = '/business/account',
+  BrashBoxAccountPage = '/business/account/page',
 }
 
 /**
- * 分页获取订舱管理列表
+ * 获取刷箱账号列表
  * @param params 订舱管理参数
- * @returns 订舱管理列表
+ * @returns 刷箱账号列表
  */
 export const getBrashBoxManagePage = (params: BrashBoxSearchParams) => {
   return HttpRequest.get(
     {
-      url: BrashBoxManageApi.BrashBoxManagePage,
+      url: BrashBoxManageApi.BrashBoxAccount,
       params: params,
     },
     {
@@ -23,11 +23,55 @@ export const getBrashBoxManagePage = (params: BrashBoxSearchParams) => {
   );
 };
 
+/**
+ * 分页获取刷箱账号列表
+ * @param params 订舱管理参数
+ * @returns 刷箱账号列表
+ */
 export const getBrashBoxAccountPage = (params: BrashBoxSearchParams) => {
   return HttpRequest.get(
     {
       url: BrashBoxManageApi.BrashBoxAccountPage,
       params: params,
+    },
+    {
+      successMessageMode: 'none',
+    }
+  );
+};
+
+/**
+ * 新增刷箱账号
+ * @param params 刷箱管理参数
+ * @returns 结果
+ */
+export const addBrashBoxAccount = (params: BrashBoxType) => {
+  return HttpRequest.post({
+    url: BrashBoxManageApi.BrashBoxAccount,
+    data: params,
+  });
+};
+
+/**
+ * 编辑刷箱账号
+ * @param params 广告参数
+ * @returns 结果
+ */
+export const editBrashBoxAccount = (params: BrashBoxType) => {
+  return HttpRequest.put({
+    url: BrashBoxManageApi.BrashBoxAccount,
+    data: params,
+  });
+};
+
+/**
+ * 删除刷箱账号
+ * @returns 结果
+ */
+export const deleteBrashBoxAccount = (id: string) => {
+  return HttpRequest.delete(
+    {
+      url: BrashBoxManageApi.BrashBoxAccount + '/' + id,
     },
     {
       successMessageMode: 'none',

@@ -39,6 +39,7 @@ const AdvertisingManage: React.FC = () => {
       filter: {
         status: true,
       },
+      sort: 'sort',
     });
 
   const [params, setParams] = useState<{
@@ -116,7 +117,11 @@ const AdvertisingManage: React.FC = () => {
     const filteredObj = Object.fromEntries(
       Object.entries(info ?? {}).filter(([, value]) => !!value)
     );
-    let pageInfo = filterKeys(searchDefaultForm, ['page', 'limit'], true);
+    let pageInfo = filterKeys(
+      searchDefaultForm,
+      ['page', 'limit', 'sort'],
+      true
+    );
     setSearchDefaultForm({
       ...pageInfo,
       ...filteredObj,
@@ -158,6 +163,7 @@ const AdvertisingManage: React.FC = () => {
           ? deleteBatchAdvertisingManage({ ids: id as string[] })
           : deleteAdvertisingManage(id as string)
         ).then(() => {
+          message.success(`${type ? '批量' : ''}删除成功`);
           onUpdateSearch();
         });
       },

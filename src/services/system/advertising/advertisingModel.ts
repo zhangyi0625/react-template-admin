@@ -4,6 +4,7 @@ export interface AdvertisingManageSearchParams extends DefaultPaging {
   filter?: {
     status: boolean | string;
   } | null;
+  sort?: string;
 }
 
 export interface AdvertisingManageType {

@@ -54,48 +54,51 @@ const BrashBoxList: React.FC = () => {
       label: '刷箱失败',
       key: '4',
     },
-    {
-      label: '已删除',
-      key: '5',
-    },
   ];
 
   const [defaultActiveKey, setDefaultActiveKey] = useState<string>('1');
 
   const tableColumns: TableProps['columns'] = [
     {
+      title: '用户手机号',
+      key: 'phone',
+      dataIndex: 'phone',
+      align: 'left',
+      width: 80,
+    },
+    {
       title: '提单号',
       key: 'no',
       dataIndex: 'no',
-      align: 'center',
+      align: 'left',
       width: 80,
     },
     {
       title: '船名',
       key: 'vesselName',
       dataIndex: 'vesselName',
-      align: 'center',
+      align: 'left',
       width: 80,
     },
     {
       title: '航次',
       key: 'voyNo',
       dataIndex: 'voyNo',
-      align: 'center',
+      align: 'left',
       width: 80,
     },
     {
       title: '船公司',
       key: 'carrier',
       dataIndex: 'carrier',
-      align: 'center',
+      align: 'left',
       width: 80,
     },
     {
       title: '方式',
       key: 'carrier',
       dataIndex: 'carrier',
-      align: 'center',
+      align: 'left',
       hidden: defaultActiveKey !== '2',
       width: 80,
     },
@@ -103,13 +106,13 @@ const BrashBoxList: React.FC = () => {
       title: '状态',
       key: 'carrier',
       dataIndex: 'carrier',
-      align: 'center',
+      align: 'left',
       hidden: defaultActiveKey !== '2',
       width: 80,
     },
     {
       title: '箱型数量',
-      align: 'center',
+      align: 'left',
       width: 80,
       render(value) {
         return <div>{'40GP * 2'}</div>;
@@ -117,7 +120,7 @@ const BrashBoxList: React.FC = () => {
     },
     {
       title: '下次自动刷取时间',
-      align: 'center',
+      align: 'left',
       width: 80,
       hidden: defaultActiveKey !== '2',
       render(value) {
@@ -126,7 +129,7 @@ const BrashBoxList: React.FC = () => {
     },
     {
       title: '上次执行时间',
-      align: 'center',
+      align: 'left',
       width: 80,
       hidden: defaultActiveKey !== '2',
       render(value) {
@@ -137,12 +140,12 @@ const BrashBoxList: React.FC = () => {
       title: '货代一代',
       key: 'name',
       dataIndex: 'name',
-      align: 'center',
+      align: 'left',
       width: 80,
     },
     {
       title: '操作次数',
-      align: 'center',
+      align: 'left',
       width: 80,
       hidden: defaultActiveKey !== '2',
       render(value) {
@@ -151,7 +154,7 @@ const BrashBoxList: React.FC = () => {
     },
     {
       title: '剩余次数',
-      align: 'center',
+      align: 'left',
       hidden: defaultActiveKey !== '2',
       width: 80,
       render(value) {
@@ -160,7 +163,7 @@ const BrashBoxList: React.FC = () => {
     },
     {
       title: '操作账号',
-      align: 'center',
+      align: 'left',
       width: 80,
       render(value) {
         return <div>{'vavranu@kihpuse.tm'}</div>;
@@ -169,7 +172,7 @@ const BrashBoxList: React.FC = () => {
     {
       title: '操作',
       key: 'customer',
-      align: 'center',
+      align: 'left',
       width: 100,
       render(_) {
         return (
@@ -233,7 +236,7 @@ const BrashBoxList: React.FC = () => {
             columns={BrashBoxListSearchColumns}
             gutterWidth={24}
             labelPosition="left"
-            iconHidden={true}
+            iconHidden={false}
             btnSeparate={false}
             isShowReset={true}
             isShowExpend={false}

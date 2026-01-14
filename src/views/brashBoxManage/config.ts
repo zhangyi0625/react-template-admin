@@ -53,14 +53,11 @@ export const BrashBoxListSearchColumns: CustomColumn[] = [
 
 export const BrashBoxAccountSearchColumns: CustomColumn[] = [
   {
-    label: '船公司',
-    name: 'carrier',
-    formType: 'normalSelect',
+    label: '账号名',
+    name: 'account',
+    formType: 'input',
     options: [],
-    selectFieldName: {
-      label: 'code',
-      value: 'code',
-    },
+    customPlaceholder: '请输入账号名',
     span: 6,
     selectFetch: false,
     hiddenItem: false,
@@ -155,21 +152,6 @@ export const BrashBoxAccountForms: Omit<
   'selectFetch' | 'hiddenItem'
 >[] = [
   {
-    label: '船公司',
-    name: 'carrier',
-    formType: 'input',
-    options: [],
-    span: 24,
-    isRules: true,
-  },
-  {
-    label: '货代',
-    name: 'name',
-    formType: 'input',
-    options: [],
-    span: 24,
-  },
-  {
     label: '账号',
     name: 'account',
     formType: 'input',
@@ -184,5 +166,28 @@ export const BrashBoxAccountForms: Omit<
     options: [],
     span: 24,
     isRules: true,
+  },
+  {
+    label: '状态',
+    name: 'status',
+    formType: 'radio',
+    options: [
+      {
+        label: '有效',
+        value: 1,
+      },
+      {
+        label: '无效',
+        value: 0,
+      },
+    ],
+    span: 24,
+  },
+  {
+    label: '备注',
+    name: 'remark',
+    formType: 'textarea',
+    options: [],
+    span: 24,
   },
 ];

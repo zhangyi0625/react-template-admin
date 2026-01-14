@@ -38,6 +38,7 @@ const NoticeManage: React.FC = () => {
       filter: {
         status: true,
       },
+      // sort: 'sort',
     });
 
   const [params, setParams] = useState<{
@@ -77,12 +78,6 @@ const NoticeManage: React.FC = () => {
         return <div>{formatTime(value.endDate, 'Y-M-D')}</div>;
       },
     },
-    // {
-    //   title: '状态',
-    //   dataIndex: 'status',
-    //   width: 120,
-    //   align: 'left',
-    // },
     {
       title: '更新时间',
       dataIndex: 'updateTime',
@@ -121,7 +116,11 @@ const NoticeManage: React.FC = () => {
     const filteredObj = Object.fromEntries(
       Object.entries(info ?? {}).filter(([, value]) => !!value)
     );
-    let pageInfo = filterKeys(searchDefaultForm, ['page', 'limit'], true);
+    let pageInfo = filterKeys(
+      searchDefaultForm,
+      ['page', 'limit', 'sort'],
+      true
+    );
     setSearchDefaultForm({
       ...pageInfo,
       ...filteredObj,
@@ -160,6 +159,7 @@ const NoticeManage: React.FC = () => {
       onOk() {
         // 调用删除接口，删除成功后刷新页面数据
         deleteNoticeManage(id as string).then(() => {
+          message.success(`${type ? '批量' : ''}删除成功`);
           onUpdateSearch();
         });
       },

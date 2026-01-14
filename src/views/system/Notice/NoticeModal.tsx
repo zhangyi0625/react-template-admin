@@ -1,7 +1,7 @@
+import React, { useEffect, useState } from 'react';
+import { DatePicker, Form, Input } from 'antd';
 import DragModal from '@/components/modal/DragModal';
 import type { NoticeManageType } from '@/services/system/notice/noticeModel';
-import { DatePicker, Form, Input } from 'antd';
-import React, { useEffect, useState } from 'react';
 import { NoticeForms } from './config';
 import { filterKeys } from '@/utils/tool';
 import { formatTime } from '@/utils/format';

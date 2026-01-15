@@ -5,7 +5,7 @@ import { BillManageSearchColumns } from './config';
 import useParentSize from '@/hooks/useParentSize';
 import { CabinResultParams } from '@/services/cabinManage/cabinManageModel';
 import { filterKeys } from '@/utils/tool';
-import { getBrashBoxAccountPage } from '@/services/brashBoxManage/brashBoxList/brashBoxListApi';
+// import { getBrashBoxAccountPage } from '@/services/brashBoxManage/brashBoxList/brashBoxListApi';
 
 const billManage: React.FC = () => {
   const { parentRef, height } = useParentSize();

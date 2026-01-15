@@ -105,7 +105,7 @@ export const deleteNoticeManage = (id: string) => {
  * 批量删除用户信息
  * @returns 公告管理
  */
-export const deletebatchUserList = (ids: string[]) => {
+export const deleteBatchNoticeManage = (ids: string[]) => {
   return HttpRequest.delete(
     {
       url: NoticeManageApi.batchNoticeManage,

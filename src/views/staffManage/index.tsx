@@ -80,6 +80,15 @@ const StaffManage: React.FC = () => {
       },
     },
     {
+      title: '绑定微信',
+      width: 100,
+      align: 'left',
+      render(value) {
+        return <div>{value.wxOpenid ? '已绑定' : '未绑定'}</div>;
+      },
+    },
+
+    {
       title: '创建日期',
       width: 120,
       align: 'left',

@@ -2117,7 +2117,7 @@ export default defineMock([
             menuType: 1,
             sortNumber: 52,
             authority: null,
-            icon: 'UsergroupDeleteOutlined',
+            icon: 'UserGroupDeleteOutlined',
             hide: 0,
             meta: null,
             createTime: '2020-03-13 13:29:08',

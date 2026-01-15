@@ -1,9 +1,12 @@
 import { HttpRequest } from '@/utils/request';
-import type { BrashBoxSearchParams, BrashBoxType } from './brashBoxListModel';
+import type {
+  BrashBoxListSearchParams,
+  BrashBoxListType,
+} from './brashBoxListModel';
 
 export enum BrashBoxManageApi {
-  BrashBoxAccount = '/business/account',
-  BrashBoxAccountPage = '/business/account/page',
+  BrashBoxList = '/business/container-task',
+  BrashBoxListPage = '/business/container-task/page',
 }
 
 /**
@@ -11,10 +14,10 @@ export enum BrashBoxManageApi {
  * @param params 订舱管理参数
  * @returns 刷箱账号列表
  */
-export const getBrashBoxManagePage = (params: BrashBoxSearchParams) => {
+export const getBrashBoxManagePage = (params: BrashBoxListSearchParams) => {
   return HttpRequest.get(
     {
-      url: BrashBoxManageApi.BrashBoxAccount,
+      url: BrashBoxManageApi.BrashBoxList,
       params: params,
     },
     {
@@ -28,10 +31,10 @@ export const getBrashBoxManagePage = (params: BrashBoxSearchParams) => {
  * @param params 订舱管理参数
  * @returns 刷箱账号列表
  */
-export const getBrashBoxAccountPage = (params: BrashBoxSearchParams) => {
+export const getBrashBoxListPage = (params: BrashBoxListSearchParams) => {
   return HttpRequest.get(
     {
-      url: BrashBoxManageApi.BrashBoxAccountPage,
+      url: BrashBoxManageApi.BrashBoxListPage,
       params: params,
     },
     {
@@ -45,9 +48,9 @@ export const getBrashBoxAccountPage = (params: BrashBoxSearchParams) => {
  * @param params 刷箱管理参数
  * @returns 结果
  */
-export const addBrashBoxAccount = (params: BrashBoxType) => {
+export const addBrashBoxList = (params: BrashBoxListType) => {
   return HttpRequest.post({
-    url: BrashBoxManageApi.BrashBoxAccount,
+    url: BrashBoxManageApi.BrashBoxList,
     data: params,
   });
 };
@@ -57,9 +60,9 @@ export const addBrashBoxAccount = (params: BrashBoxType) => {
  * @param params 广告参数
  * @returns 结果
  */
-export const editBrashBoxAccount = (params: BrashBoxType) => {
+export const editBrashBoxList = (params: BrashBoxListType) => {
   return HttpRequest.put({
-    url: BrashBoxManageApi.BrashBoxAccount,
+    url: BrashBoxManageApi.BrashBoxList,
     data: params,
   });
 };
@@ -68,10 +71,10 @@ export const editBrashBoxAccount = (params: BrashBoxType) => {
  * 删除刷箱账号
  * @returns 结果
  */
-export const deleteBrashBoxAccount = (id: string) => {
+export const deleteBrashBoxList = (id: string) => {
   return HttpRequest.delete(
     {
-      url: BrashBoxManageApi.BrashBoxAccount + '/' + id,
+      url: BrashBoxManageApi.BrashBoxList + '/' + id,
     },
     {
       successMessageMode: 'none',

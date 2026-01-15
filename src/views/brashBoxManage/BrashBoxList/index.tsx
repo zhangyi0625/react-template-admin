@@ -1,4 +1,4 @@
-import useParentSize from '@/hooks/useParentSize';
+import { useState } from 'react';
 import {
   Button,
   Card,
@@ -11,25 +11,29 @@ import {
 } from 'antd';
 import { SearchForm, SearchTable } from 'customer-search-form-table';
 import { BrashBoxListSearchColumns } from '../config';
-import { useState } from 'react';
-import { filterKeys } from '@/utils/tool';
-import { CabinResultParams } from '@/services/cabinManage/cabinManageModel';
-import { getAffilateAccountList } from '@/services/todayPlan/todayPlanApi';
+import useParentSize from '@/hooks/useParentSize';
 import BrashBoxModal from './BrashBoxModal';
 import BrashBoxSetTime from './BrashBoxSetTime';
-import { getBrashBoxManagePage } from '@/services/brashBoxManage/brashBoxList/brashBoxListApi';
+import { getBrashBoxListPage } from '@/services/brashBoxManage/brashBoxList/brashBoxListApi';
+import type {
+  BrashBoxListSearchParams,
+  BrashBoxListType,
+} from '@/services/brashBoxManage/brashBoxList/brashBoxListModel';
+import { filterKeys } from '@/utils/tool';
+import { formatTime } from '@/utils/format';
 
 const BrashBoxList: React.FC = () => {
   const { parentRef, height } = useParentSize();
 
-  const [searchDefaultForm, setSearchDefaultForm] = useState<any>({
-    page: 1,
-    limit: 10,
-  });
+  const [searchDefaultForm, setSearchDefaultForm] =
+    useState<BrashBoxListSearchParams>({
+      page: 1,
+      limit: 10,
+    });
 
   const [params, setParams] = useState<{
     visible: boolean;
-    currentRow: CabinResultParams | null;
+    currentRow: BrashBoxListType | null;
     type: 'edit' | 'setTime';
   }>({
     visible: false,
@@ -61,29 +65,42 @@ const BrashBoxList: React.FC = () => {
   const tableColumns: TableProps['columns'] = [
     {
       title: '用户手机号',
-      key: 'phone',
-      dataIndex: 'phone',
+      key: 'customerPhone',
+      dataIndex: 'customerPhone',
       align: 'left',
-      width: 80,
+      width: 120,
+    },
+    {
+      title: '客户名称',
+      key: 'customerName',
+      dataIndex: 'customerName',
+      align: 'left',
+      width: 120,
     },
     {
       title: '提单号',
-      key: 'no',
-      dataIndex: 'no',
+      key: 'billNo',
+      dataIndex: 'billNo',
       align: 'left',
-      width: 80,
+      width: 120,
     },
     {
-      title: '船名',
-      key: 'vesselName',
-      dataIndex: 'vesselName',
+      title: '箱型数量',
       align: 'left',
-      width: 80,
+      width: 120,
+      render(value) {
+        return (
+          <div>
+            {value.ctnType} * {value.ctnNumber}
+          </div>
+        );
+      },
     },
     {
-      title: '航次',
+      title: '成功数量',
       key: 'voyNo',
       dataIndex: 'voyNo',
+      hidden: defaultActiveKey !== '3',
       align: 'left',
       width: 80,
     },
@@ -91,82 +108,58 @@ const BrashBoxList: React.FC = () => {
       title: '船公司',
       key: 'carrier',
       dataIndex: 'carrier',
+      hidden: defaultActiveKey !== '3',
       align: 'left',
       width: 80,
     },
     {
-      title: '方式',
-      key: 'carrier',
-      dataIndex: 'carrier',
+      title: '船名航次',
       align: 'left',
-      hidden: defaultActiveKey !== '2',
-      width: 80,
-    },
-    {
-      title: '状态',
-      key: 'carrier',
-      dataIndex: 'carrier',
-      align: 'left',
-      hidden: defaultActiveKey !== '2',
-      width: 80,
-    },
-    {
-      title: '箱型数量',
-      align: 'left',
-      width: 80,
+      width: 180,
+      hidden: defaultActiveKey !== '3',
       render(value) {
-        return <div>{'40GP * 2'}</div>;
+        return <div></div>;
       },
     },
     {
-      title: '下次自动刷取时间',
+      title: '起运港',
+      key: 'carrier',
+      dataIndex: 'carrier',
       align: 'left',
+      hidden: defaultActiveKey !== '3',
       width: 80,
-      hidden: defaultActiveKey !== '2',
-      render(value) {
-        return <div>{'2025-12-38 12:00:00'}</div>;
-      },
+    },
+    {
+      title: '目的港',
+      key: 'carrier',
+      dataIndex: 'carrier',
+      align: 'left',
+      hidden: defaultActiveKey !== '3',
+      width: 80,
+    },
+    {
+      title: '中转港',
+      key: 'carrier',
+      dataIndex: 'carrier',
+      align: 'left',
+      hidden: defaultActiveKey !== '3',
+      width: 80,
     },
     {
       title: '上次执行时间',
       align: 'left',
-      width: 80,
-      hidden: defaultActiveKey !== '2',
+      width: 150,
+      hidden: defaultActiveKey === '1',
       render(value) {
-        return <div>{'2025-12-38 11:00:00'}</div>;
+        return <div>{formatTime(value.updateTime, 'Y-M-D h:m')}</div>;
       },
     },
     {
-      title: '货代一代',
-      key: 'name',
-      dataIndex: 'name',
+      title: '创建时间',
       align: 'left',
-      width: 80,
-    },
-    {
-      title: '操作次数',
-      align: 'left',
-      width: 80,
-      hidden: defaultActiveKey !== '2',
+      width: 150,
       render(value) {
-        return <div>{'vavranu@kihpuse.tm'}</div>;
-      },
-    },
-    {
-      title: '剩余次数',
-      align: 'left',
-      hidden: defaultActiveKey !== '2',
-      width: 80,
-      render(value) {
-        return <div>{'vavranu@kihpuse.tm'}</div>;
-      },
-    },
-    {
-      title: '操作账号',
-      align: 'left',
-      width: 80,
-      render(value) {
-        return <div>{'vavranu@kihpuse.tm'}</div>;
+        return <div>{formatTime(value.createTime, 'Y-M-D h:m')}</div>;
       },
     },
     {
@@ -182,11 +175,11 @@ const BrashBoxList: React.FC = () => {
               onClick={() =>
                 setParams({ visible: true, currentRow: _, type: 'edit' })
               }
-              hidden={defaultActiveKey !== '1'}
+              hidden={defaultActiveKey !== '3'}
             >
-              编辑
+              有效条形码
             </Button>
-            <Button
+            {/* <Button
               type="link"
               onClick={() =>
                 setParams({ visible: true, currentRow: _, type: 'setTime' })
@@ -194,7 +187,7 @@ const BrashBoxList: React.FC = () => {
               hidden={defaultActiveKey !== '5'}
             >
               编辑并恢复
-            </Button>
+            </Button> */}
           </Space>
         );
       },
@@ -208,7 +201,7 @@ const BrashBoxList: React.FC = () => {
     });
   };
 
-  const onUpdateSearch = (info?: CabinResultParams | unknown) => {
+  const onUpdateSearch = (info?: BrashBoxListSearchParams | unknown) => {
     const filteredObj = Object.fromEntries(
       Object.entries(info ?? {}).filter(([, value]) => !!value)
     );
@@ -254,7 +247,7 @@ const BrashBoxList: React.FC = () => {
           items={components}
           onChange={onChange}
         />
-        <Space className="">
+        {/* <Space className="">
           {defaultActiveKey === '1' && (
             <Button
               type="primary"
@@ -310,7 +303,7 @@ const BrashBoxList: React.FC = () => {
               导出
             </Button>
           )}
-        </Space>
+        </Space> */}
         <SearchTable
           style={{ marginTop: '10px' }}
           size="middle"
@@ -321,10 +314,10 @@ const BrashBoxList: React.FC = () => {
           isPagination={true}
           columns={tableColumns}
           rowKey={(record) => record.id}
-          scroll={{ x: 'max-content', y: height - 298 }}
-          fetchData={getBrashBoxManagePage}
+          scroll={{ x: 'max-content', y: height - 198 }}
+          fetchData={getBrashBoxListPage}
           searchFilter={searchDefaultForm}
-          isSelection={true}
+          isSelection={false}
           onUpdatePagination={onUpdatePagination}
           onUpdateSelection={() => {}}
         />

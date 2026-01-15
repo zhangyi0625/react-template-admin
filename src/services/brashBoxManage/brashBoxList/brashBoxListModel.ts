@@ -1,12 +1,14 @@
 import type { DefaultPaging } from '@/types/global';
 
-export interface BrashBoxSearchParams extends DefaultPaging {
-  filter?: {
-    keyword: string;
-  } | null;
+export interface BrashBoxListSearchParams extends DefaultPaging {
+  createTimeStart?: string;
+  createTimeEnd?: string;
+  billNo?: string;
+  customerName?: string;
+  customerPhone?: string;
 }
 
-export interface BrashBoxType {
+export interface BrashBoxListType {
   id: string | null;
   account: string;
   password: string;

@@ -12,8 +12,9 @@ import {
 import { SearchForm, SearchTable } from 'customer-search-form-table';
 import { BrashBoxListSearchColumns } from '../config';
 import useParentSize from '@/hooks/useParentSize';
-import BrashBoxModal from './BrashBoxModal';
+// import BrashBoxModal from './BrashBoxModal';
 import BrashBoxSetTime from './BrashBoxSetTime';
+import BrashBoxShapeCode from './BrashBoxShapeCode';
 import { getBrashBoxListPage } from '@/services/brashBoxManage/brashBoxList/brashBoxListApi';
 import type {
   BrashBoxListSearchParams,
@@ -33,7 +34,7 @@ const BrashBoxList: React.FC = () => {
 
   const [params, setParams] = useState<{
     visible: boolean;
-    currentRow: BrashBoxListType | null;
+    currentRow: BrashBoxListType['task'] | null;
     type: 'edit' | 'setTime';
   }>({
     visible: false,
@@ -98,8 +99,8 @@ const BrashBoxList: React.FC = () => {
     },
     {
       title: '成功数量',
-      key: 'voyNo',
-      dataIndex: 'voyNo',
+      key: 'successCount',
+      dataIndex: 'successCount',
       hidden: defaultActiveKey !== '3',
       align: 'left',
       width: 80,
@@ -118,32 +119,49 @@ const BrashBoxList: React.FC = () => {
       width: 180,
       hidden: defaultActiveKey !== '3',
       render(value) {
-        return <div></div>;
+        return (
+          <div>
+            {value.vesselName} / {value.voyNo}
+          </div>
+        );
       },
     },
     {
       title: '起运港',
-      key: 'carrier',
-      dataIndex: 'carrier',
       align: 'left',
       hidden: defaultActiveKey !== '3',
-      width: 80,
+      width: 180,
+      render(value) {
+        return value.por ? (
+          <div>
+            {value.por?.enName ?? ''},{value.por?.countryCode ?? ''}
+          </div>
+        ) : (
+          '-'
+        );
+      },
     },
     {
       title: '目的港',
-      key: 'carrier',
-      dataIndex: 'carrier',
       align: 'left',
       hidden: defaultActiveKey !== '3',
-      width: 80,
+      width: 180,
+      render(value) {
+        return value.fnd ? (
+          <div>
+            {value.fnd?.enName ?? ''},{value.fnd?.countryCode ?? ''}
+          </div>
+        ) : (
+          '-'
+        );
+      },
     },
     {
       title: '中转港',
-      key: 'carrier',
-      dataIndex: 'carrier',
+      dataIndex: 'transit',
       align: 'left',
       hidden: defaultActiveKey !== '3',
-      width: 80,
+      width: 120,
     },
     {
       title: '上次执行时间',
@@ -151,7 +169,7 @@ const BrashBoxList: React.FC = () => {
       width: 150,
       hidden: defaultActiveKey === '1',
       render(value) {
-        return <div>{formatTime(value.updateTime, 'Y-M-D h:m')}</div>;
+        return <div>{formatTime(value.execTime, 'Y-M-D h:m')}</div>;
       },
     },
     {
@@ -165,8 +183,9 @@ const BrashBoxList: React.FC = () => {
     {
       title: '操作',
       key: 'customer',
-      align: 'left',
+      align: 'center',
       width: 100,
+      hidden: defaultActiveKey !== '3',
       render(_) {
         return (
           <Space>
@@ -175,19 +194,9 @@ const BrashBoxList: React.FC = () => {
               onClick={() =>
                 setParams({ visible: true, currentRow: _, type: 'edit' })
               }
-              hidden={defaultActiveKey !== '3'}
             >
               有效条形码
             </Button>
-            {/* <Button
-              type="link"
-              onClick={() =>
-                setParams({ visible: true, currentRow: _, type: 'setTime' })
-              }
-              hidden={defaultActiveKey !== '5'}
-            >
-              编辑并恢复
-            </Button> */}
           </Space>
         );
       },
@@ -323,10 +332,14 @@ const BrashBoxList: React.FC = () => {
         />
       </Card>
       {params.type === 'edit' ? (
-        <BrashBoxModal
+        // <BrashBoxModal
+        //   params={params}
+        //   onCancel={() => setParams({ ...params, visible: false })}
+        //   onOk={onEditOk}
+        // />
+        <BrashBoxShapeCode
           params={params}
           onCancel={() => setParams({ ...params, visible: false })}
-          onOk={onEditOk}
         />
       ) : (
         <BrashBoxSetTime

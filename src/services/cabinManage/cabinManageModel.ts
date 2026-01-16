@@ -56,3 +56,13 @@ export interface TodayPlanParams extends Partial<PortCodeInfo>, DefaultPaging {
   carrier?: string | null;
   routeFndId?: null | string;
 }
+
+export interface LocationItem {
+  countryCode: string;
+  countryLocalName: string;
+  countryName: string;
+  id: string;
+  localName: string;
+  name: string;
+  unlocode: string;
+}

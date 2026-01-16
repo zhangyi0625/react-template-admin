@@ -7,12 +7,14 @@ import type {
 export enum BrashBoxManageApi {
   BrashBoxList = '/business/container-task',
   BrashBoxListPage = '/business/container-task/page',
+  BrashBoxListStart = '/business/container-task/start/',
+  BrashBoxListStop = '/business/container-task/pause/',
 }
 
 /**
- * 获取刷箱账号列表
+ * 获取刷箱记录列表
  * @param params 订舱管理参数
- * @returns 刷箱账号列表
+ * @returns 刷箱记录列表
  */
 export const getBrashBoxManagePage = (params: BrashBoxListSearchParams) => {
   return HttpRequest.get(
@@ -27,9 +29,9 @@ export const getBrashBoxManagePage = (params: BrashBoxListSearchParams) => {
 };
 
 /**
- * 分页获取刷箱账号列表
+ * 分页获取刷箱记录列表
  * @param params 订舱管理参数
- * @returns 刷箱账号列表
+ * @returns 刷箱记录列表
  */
 export const getBrashBoxListPage = (params: BrashBoxListSearchParams) => {
   return HttpRequest.get(
@@ -44,7 +46,23 @@ export const getBrashBoxListPage = (params: BrashBoxListSearchParams) => {
 };
 
 /**
- * 新增刷箱账号
+ * 获取刷箱记录详情
+ * @param id 刷箱记录id
+ * @returns 刷箱记录详情
+ */
+export const getBrashBoxManageDetail = (id: string) => {
+  return HttpRequest.get(
+    {
+      url: BrashBoxManageApi.BrashBoxList + '/' + id,
+    },
+    {
+      successMessageMode: 'none',
+    }
+  );
+};
+
+/**
+ * 新增刷箱任务
  * @param params 刷箱管理参数
  * @returns 结果
  */
@@ -56,8 +74,8 @@ export const addBrashBoxList = (params: BrashBoxListType) => {
 };
 
 /**
- * 编辑刷箱账号
- * @param params 广告参数
+ * 编辑刷箱任务
+ * @param params 刷箱管理参数
  * @returns 结果
  */
 export const editBrashBoxList = (params: BrashBoxListType) => {
@@ -68,13 +86,46 @@ export const editBrashBoxList = (params: BrashBoxListType) => {
 };
 
 /**
- * 删除刷箱账号
+ * 删除刷箱任务
+ * @param id 刷箱任务id
  * @returns 结果
  */
 export const deleteBrashBoxList = (id: string) => {
   return HttpRequest.delete(
     {
       url: BrashBoxManageApi.BrashBoxList + '/' + id,
+    },
+    {
+      successMessageMode: 'none',
+    }
+  );
+};
+
+/**
+ * 启动刷箱任务
+ * @param id 刷箱任务id
+ * @returns 结果
+ */
+export const postBrashBoxStart = (id: string) => {
+  return HttpRequest.post(
+    {
+      url: BrashBoxManageApi.BrashBoxListStart + '/' + id,
+    },
+    {
+      successMessageMode: 'none',
+    }
+  );
+};
+
+/**
+ * 停止刷箱任务
+ * @param id 刷箱任务id
+ * @returns 结果
+ */
+export const postBrashBoxStop = (id: string) => {
+  return HttpRequest.post(
+    {
+      url: BrashBoxManageApi.BrashBoxListStop + '/' + id,
     },
     {
       successMessageMode: 'none',

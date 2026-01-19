@@ -8,6 +8,7 @@ import {
   type SelectProps,
   Space,
 } from 'antd';
+import clsx from 'clsx';
 import { CloseOutlined } from '@ant-design/icons';
 import {
   getSearchAffiliate,
@@ -59,7 +60,7 @@ const CouponProviderDrawer: React.FC<CouponProviderDrawerProps> = ({
       newValue,
       name === 'customerIds' ? 'customerId' : 'affiliateId',
       name === 'customerIds' ? setCustomerData : setAffiliateData,
-      name === 'customerIds' ? getSearchCustomer : getSearchAffiliate
+      name === 'customerIds' ? getSearchCustomer : getSearchAffiliate,
     );
   };
 
@@ -84,7 +85,7 @@ const CouponProviderDrawer: React.FC<CouponProviderDrawerProps> = ({
       closeIcon={false}
       extra={<Button type="text" icon={<CloseOutlined />} onClick={onCancel} />}
       onClose={onCancel}
-      classNames={{ footer: 'text-right' }}
+      className={clsx('drawer-footer', 'text-right')}
       footer={
         <Space>
           <Button onClick={onCancel}>取消</Button>

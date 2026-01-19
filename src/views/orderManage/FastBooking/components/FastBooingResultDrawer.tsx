@@ -8,6 +8,7 @@ import {
   Tabs,
   TabsProps,
 } from 'antd';
+import clsx from 'clsx';
 import { CloseOutlined } from '@ant-design/icons';
 import { SearchForm, SearchTable } from 'customer-search-form-table';
 import { getCabinResultByPage } from '@/services/orderManage/cabinResult/cabinResultApi';
@@ -176,10 +177,10 @@ const FastBooingResultDrawer: React.FC<FastBooingResultDrawerProps> = ({
   };
 
   const onUpdateSearch = (
-    info?: Pick<FastBookingOrderSearchParams, 'filter'> | unknown
+    info?: Pick<FastBookingOrderSearchParams, 'filter'> | unknown,
   ) => {
     const filteredObj = Object.fromEntries(
-      Object.entries(info ?? {}).filter(([, value]) => !!value)
+      Object.entries(info ?? {}).filter(([, value]) => !!value),
     );
     setSearchDefaultForm({
       ...searchDefaultForm,
@@ -211,7 +212,7 @@ const FastBooingResultDrawer: React.FC<FastBooingResultDrawerProps> = ({
           <Button type="text" icon={<CloseOutlined />} onClick={onCancel} />
         }
         onClose={onCancel}
-        classNames={{ footer: 'text-right' }}
+        className={clsx('drawer-footer', 'text-right')}
         footer={
           <Space>
             <Button onClick={onCancel}>取消</Button>

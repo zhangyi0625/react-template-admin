@@ -6,6 +6,7 @@ import {
   type TablePaginationConfig,
   type TableProps,
 } from 'antd';
+import clsx from 'clsx';
 import { CloseOutlined } from '@ant-design/icons';
 import type { RegularBookingSearchParams } from '@/services/orderManage/regularBooking/regularBookingModel';
 import { SearchForm, SearchTable } from 'customer-search-form-table';
@@ -150,10 +151,10 @@ const RelevanceOrderDrawer: React.FC<RelevanceOrderDrawerType> = memo(
     };
 
     const onUpdateSearch = (
-      info?: Pick<RegularBookingSearchParams, 'filter'> | unknown
+      info?: Pick<RegularBookingSearchParams, 'filter'> | unknown,
     ) => {
       const filteredObj = Object.fromEntries(
-        Object.entries(info ?? {}).filter(([, value]) => !!value)
+        Object.entries(info ?? {}).filter(([, value]) => !!value),
       );
       setSearchDefaultForm({
         ...searchDefaultForm,
@@ -174,7 +175,7 @@ const RelevanceOrderDrawer: React.FC<RelevanceOrderDrawerType> = memo(
           <Button type="text" icon={<CloseOutlined />} onClick={onCancel} />
         }
         onClose={onCancel}
-        classNames={{ footer: 'text-right' }}
+        className={clsx('drawer-footer', 'text-right')}
         footer={
           <Space>
             <Button onClick={onCancel}>取消</Button>
@@ -213,7 +214,7 @@ const RelevanceOrderDrawer: React.FC<RelevanceOrderDrawerType> = memo(
         />
       </Drawer>
     );
-  }
+  },
 );
 
 export default RelevanceOrderDrawer;

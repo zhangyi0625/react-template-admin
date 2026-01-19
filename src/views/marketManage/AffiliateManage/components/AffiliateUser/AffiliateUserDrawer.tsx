@@ -6,6 +6,7 @@ import {
   type TablePaginationConfig,
   type TableProps,
 } from 'antd';
+import clsx from 'clsx';
 import type {
   StaffJoinAffiliateType,
   StaffManageParams,
@@ -39,7 +40,7 @@ const AffiliateUserDrawer = React.forwardRef<
       pageSize: 20,
       filter: {},
       projection: 'SMALL',
-    }
+    },
   );
 
   const [selected, setSelected] = useState<string[]>([]);
@@ -82,13 +83,13 @@ const AffiliateUserDrawer = React.forwardRef<
   const onUpdateSearch = (info?: StaffManageParams['filter'] | unknown) => {
     const filteredObj = Object.fromEntries(
       Object.entries(info ?? {}).filter(
-        ([, value]) => !!value && value !== undefined
-      )
+        ([, value]) => !!value && value !== undefined,
+      ),
     );
     let pageInfo = filterKeys(
       searchDefaultForm,
       ['pageIndex', 'pageSize', 'projection'],
-      true
+      true,
     );
     setSearchDefaultForm({
       ...pageInfo,
@@ -107,7 +108,7 @@ const AffiliateUserDrawer = React.forwardRef<
           <Button type="text" icon={<CloseOutlined />} onClick={onClose} />
         }
         onClose={onClose}
-        classNames={{ footer: 'text-right' }}
+        className={clsx('drawer-footer', 'text-right')}
         footer={
           <Space>
             <Button onClick={onClose}>取消</Button>

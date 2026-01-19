@@ -1,7 +1,7 @@
 import type { BasicOptions } from '@/types/global';
 import { Select } from 'antd';
-import classNames from 'classnames';
-import "./switchItem.scss";
+import clsx from 'clsx';
+import './switchItem.scss';
 
 /**
  * 选择项
@@ -12,7 +12,7 @@ const SelectItem: React.FC<SelectItemProps> = (props) => {
 
   return (
     <div
-      className={classNames('select-item', {
+      className={clsx('select-item', {
         'pointer-events-none opacity-50': disabled,
       })}
     >
@@ -27,7 +27,12 @@ const SelectItem: React.FC<SelectItemProps> = (props) => {
         {title}
       </span>
       {/* Select组件 */}
-      <Select options={items} disabled={disabled} placeholder={placeholder} style={{width: '165px'}}/>
+      <Select
+        options={items}
+        disabled={disabled}
+        placeholder={placeholder}
+        style={{ width: '165px' }}
+      />
     </div>
   );
 };

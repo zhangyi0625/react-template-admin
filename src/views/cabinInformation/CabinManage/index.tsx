@@ -216,13 +216,13 @@ const CabinManage: React.FC = () => {
   const onUpdateSearch = (info?: CabinManageSearchFilterParams | unknown) => {
     const filteredObj = Object.fromEntries(
       Object.entries(info ?? {}).filter(
-        ([, value]) => !!value && value !== undefined
-      )
+        ([, value]) => !!value && value !== undefined,
+      ),
     );
     let pageInfo = filterKeys(
       searchDefaultForm,
       ['pageIndex', 'pageSize'],
-      true
+      true,
     );
     setSearchDefaultForm({
       ...pageInfo,
@@ -249,7 +249,7 @@ const CabinManage: React.FC = () => {
       ExportTableDataByXLSX(
         resp.entries,
         columns.splice(0, columns.length - 1),
-        '舱位管理导出列表'
+        '舱位管理导出列表',
       );
       setDownLoading(false);
     } catch {

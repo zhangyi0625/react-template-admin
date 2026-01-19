@@ -80,8 +80,8 @@ export default function useCacheData(params: {
       if (cachePromiseList[key])
         promiseList.push(
           cachePromiseList[key](
-            promiseFilter ? promiseFilter[key] : {}
-          ) as unknown as Promise<any>
+            promiseFilter ? promiseFilter[key] : {},
+          ) as unknown as Promise<any>,
         );
     });
     promiseList.length &&
@@ -94,7 +94,7 @@ export default function useCacheData(params: {
                   ? resp[index]
                   : resp[index]?.entries,
                 key: cacheEssentialKeys[index],
-              })
+              }),
             );
           });
         })

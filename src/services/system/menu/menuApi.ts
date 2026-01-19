@@ -4,7 +4,7 @@ import { MenuParams } from './menuModel';
 /**
  * 枚举菜单相关的请求API
  */
-export enum Api {
+export enum MenuApi {
   // 根据token获取菜单（多用于框架上根据角色获取菜单那种）
   // getMenuList = '/system/getMenusByRole',
   getMenuList = '/system/menu',
@@ -31,9 +31,9 @@ export enum Api {
 export const getMenuListByRoleId = (roleId: string) => {
   return HttpRequest.get(
     {
-      url: Api.getMenuList + roleId,
+      url: MenuApi.getMenuList + roleId,
     },
-    { successMessageMode: 'none' }
+    { successMessageMode: 'none' },
   );
 };
 
@@ -44,12 +44,12 @@ export const getMenuListByRoleId = (roleId: string) => {
 export const getMenusList = (params?: MenuParams) => {
   return HttpRequest.get(
     {
-      url: Api.getMenuList,
+      url: MenuApi.getMenuList,
       params,
     },
     {
       successMessageMode: 'none',
-    }
+    },
   );
 };
 
@@ -60,12 +60,12 @@ export const getMenusList = (params?: MenuParams) => {
 export const getMenusByPage = (params: MenuParams) => {
   return HttpRequest.get(
     {
-      url: Api.getMenuListByPage,
+      url: MenuApi.getMenuListByPage,
       params: params,
     },
     {
       successMessageMode: 'none',
-    }
+    },
   );
 };
 
@@ -75,8 +75,8 @@ export const getMenusByPage = (params: MenuParams) => {
  */
 export const getDirectory = () => {
   return HttpRequest.get(
-    { url: Api.getDirectory },
-    { successMessageMode: 'none' }
+    { url: MenuApi.getDirectory },
+    { successMessageMode: 'none' },
   );
 };
 
@@ -87,7 +87,7 @@ export const getDirectory = () => {
  */
 export const addMenu = (params: Record<string, any>) => {
   return HttpRequest.post({
-    url: Api.getMenuList,
+    url: MenuApi.getMenuList,
     data: params,
   });
 };
@@ -99,7 +99,7 @@ export const addMenu = (params: Record<string, any>) => {
  */
 export const updateMenu = (params: Record<string, any>) => {
   return HttpRequest.put({
-    url: Api.getMenuList,
+    url: MenuApi.getMenuList,
     data: params,
   });
 };
@@ -111,7 +111,7 @@ export const updateMenu = (params: Record<string, any>) => {
  */
 export const deleteMenu = (menuId: string) => {
   return HttpRequest.delete({
-    url: Api.getMenuList + '/' + menuId,
+    url: MenuApi.getMenuList + '/' + menuId,
   });
 };
 
@@ -122,7 +122,7 @@ export const deleteMenu = (menuId: string) => {
  */
 export const deleteMenuBatch = (menuIds: string[]) => {
   return HttpRequest.delete({
-    url: Api.deleteMenuBatch,
+    url: MenuApi.deleteMenuBatch,
     data: menuIds,
   });
 };
@@ -134,7 +134,7 @@ export const deleteMenuBatch = (menuIds: string[]) => {
  */
 export const exportMenu = (menus: any) => {
   return HttpRequest.post({
-    url: Api.exportMenus,
+    url: MenuApi.exportMenus,
     data: menus,
   });
 };
@@ -146,7 +146,7 @@ export const exportMenu = (menus: any) => {
  */
 export const importMenu = (file: any) => {
   return HttpRequest.post({
-    url: Api.importMenus,
+    url: MenuApi.importMenus,
     data: file,
   });
 };
@@ -158,7 +158,7 @@ export const importMenu = (file: any) => {
  */
 export const checkPermission = (params: any) => {
   return HttpRequest.post({
-    url: Api.checkPermission,
+    url: MenuApi.checkPermission,
     data: params,
   });
 };

@@ -33,11 +33,11 @@ const AddAffiliate: React.FC<AddAffiliateProps> = ({
     form.resetFields();
     formMaps.map((item) => {
       if (item.name === 'type') {
-        const keys = Object.keys(setting.publicSetting.customerAffiliateType);
+        const keys = Object.keys(setting.publicData.customerAffiliateType);
         let newArr = keys.map((item) => {
           return {
             label: item,
-            value: setting.publicSetting.customerAffiliateType[item],
+            value: setting.publicData.customerAffiliateType[item],
           };
         });
         item.options = newArr;

@@ -56,7 +56,9 @@ export default defineConfig({
     lazyCompilation: true,
   },
   // 构建产物相关配置
-  output: {},
+  output: {
+    assetPrefix: '/manager/',
+  },
   // 构建优化相关
   performance: {
     chunkSplit: {

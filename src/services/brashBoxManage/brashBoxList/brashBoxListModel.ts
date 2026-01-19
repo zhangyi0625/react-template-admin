@@ -29,8 +29,10 @@ export interface BrashBoxListDetailType {
   voyNo: string | null;
 }
 
-export interface BrashBoxListTaskType
-  extends Omit<BrashBoxListDetailType, 'barcodes'> {
+export interface BrashBoxListTaskType extends Omit<
+  BrashBoxListDetailType,
+  'barcodes'
+> {
   por: LocationItem;
   fnd: LocationItem;
 }

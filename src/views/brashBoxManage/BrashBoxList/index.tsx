@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import {
+  App,
   Button,
   Card,
   ConfigProvider,
@@ -9,13 +10,17 @@ import {
   Tabs,
   TabsProps,
 } from 'antd';
+import { ExclamationCircleFilled } from '@ant-design/icons';
 import { SearchForm, SearchTable } from 'customer-search-form-table';
 import { BrashBoxListSearchColumns } from '../config';
 import useParentSize from '@/hooks/useParentSize';
 // import BrashBoxModal from './BrashBoxModal';
 import BrashBoxSetTime from './BrashBoxSetTime';
 import BrashBoxShapeCode from './BrashBoxShapeCode';
-import { getBrashBoxListPage } from '@/services/brashBoxManage/brashBoxList/brashBoxListApi';
+import {
+  getBrashBoxListPage,
+  cancelBrashBoxList,
+} from '@/services/brashBoxManage/brashBoxList/brashBoxListApi';
 import type {
   BrashBoxListSearchParams,
   BrashBoxListType,
@@ -24,6 +29,8 @@ import { filterKeys } from '@/utils/tool';
 import { formatTime } from '@/utils/format';
 
 const BrashBoxList: React.FC = () => {
+  const { message, modal } = App.useApp();
+
   const { parentRef, height } = useParentSize();
 
   const [searchDefaultForm, setSearchDefaultForm] =
@@ -32,7 +39,7 @@ const BrashBoxList: React.FC = () => {
       limit: 10,
       sort: 'update_time',
       order: 'desc',
-      type: '1',
+      status: 'PENDING',
     });
 
   const [params, setParams] = useState<{
@@ -48,23 +55,23 @@ const BrashBoxList: React.FC = () => {
   const components: TabsProps['items'] = [
     {
       label: '未刷箱',
-      key: '1',
+      key: 'PENDING',
     },
     {
       label: '刷箱中',
-      key: '2',
+      key: 'RUNNING',
     },
     {
       label: '刷箱成功',
-      key: '3',
+      key: 'SUCCESS',
     },
     {
       label: '刷箱失败',
-      key: '4',
+      key: 'FAILED',
     },
   ];
 
-  const [defaultActiveKey, setDefaultActiveKey] = useState<string>('1');
+  const [defaultActiveKey, setDefaultActiveKey] = useState<string>('PENDING');
 
   const tableColumns: TableProps['columns'] = [
     {
@@ -104,7 +111,7 @@ const BrashBoxList: React.FC = () => {
       title: '成功数量',
       key: 'successCount',
       dataIndex: 'successCount',
-      hidden: defaultActiveKey !== '3',
+      hidden: defaultActiveKey !== 'SUCCESS',
       align: 'left',
       width: 80,
     },
@@ -112,7 +119,7 @@ const BrashBoxList: React.FC = () => {
       title: '船公司',
       key: 'carrier',
       dataIndex: 'carrier',
-      hidden: defaultActiveKey !== '3',
+      hidden: defaultActiveKey !== 'SUCCESS',
       align: 'left',
       width: 80,
     },
@@ -120,7 +127,7 @@ const BrashBoxList: React.FC = () => {
       title: '船名航次',
       align: 'left',
       width: 180,
-      hidden: defaultActiveKey !== '3',
+      hidden: defaultActiveKey !== 'SUCCESS',
       render(value) {
         return (
           <div>
@@ -132,7 +139,7 @@ const BrashBoxList: React.FC = () => {
     {
       title: '起运港',
       align: 'left',
-      hidden: defaultActiveKey !== '3',
+      hidden: defaultActiveKey !== 'SUCCESS',
       width: 180,
       render(value) {
         return value.por ? (
@@ -147,7 +154,7 @@ const BrashBoxList: React.FC = () => {
     {
       title: '目的港',
       align: 'left',
-      hidden: defaultActiveKey !== '3',
+      hidden: defaultActiveKey !== 'SUCCESS',
       width: 180,
       render(value) {
         return value.fnd ? (
@@ -163,21 +170,21 @@ const BrashBoxList: React.FC = () => {
       title: '中转港',
       dataIndex: 'transit',
       align: 'left',
-      hidden: defaultActiveKey !== '3',
+      hidden: defaultActiveKey !== 'SUCCESS',
       width: 120,
     },
     {
       title: '失败原因',
       dataIndex: 'remark',
       align: 'left',
-      hidden: defaultActiveKey !== '4',
+      hidden: defaultActiveKey !== 'FAILED',
       width: 120,
     },
     {
       title: '上次执行时间',
       align: 'left',
       width: 150,
-      hidden: defaultActiveKey === '1',
+      hidden: defaultActiveKey === 'PENDING',
       render(value) {
         return <div>{formatTime(value.execTime, 'Y-M-D h:m')}</div>;
       },
@@ -196,17 +203,26 @@ const BrashBoxList: React.FC = () => {
       align: 'center',
       width: 100,
       fixed: 'right',
-      hidden: defaultActiveKey !== '3',
+      hidden: defaultActiveKey !== 'SUCCESS' && defaultActiveKey !== 'RUNNING',
       render(_) {
         return (
           <Space>
             <Button
               type="link"
+              hidden={defaultActiveKey !== 'SUCCESS'}
               onClick={() =>
                 setParams({ visible: true, currentRow: _, type: 'edit' })
               }
             >
               有效条形码
+            </Button>
+            <Button
+              variant="link"
+              color="danger"
+              hidden={defaultActiveKey !== 'RUNNING'}
+              onClick={() => cancelItem(_.id)}
+            >
+              取消
             </Button>
           </Space>
         );
@@ -218,7 +234,7 @@ const BrashBoxList: React.FC = () => {
     setDefaultActiveKey(type);
     setSearchDefaultForm({
       ...searchDefaultForm,
-      type: type,
+      status: type,
     });
   };
 
@@ -228,7 +244,7 @@ const BrashBoxList: React.FC = () => {
     );
     let pageInfo = filterKeys(
       searchDefaultForm,
-      ['page', 'limit', 'sort', 'desc'],
+      ['page', 'limit', 'sort', 'desc', 'status'],
       true,
     );
     setSearchDefaultForm({
@@ -247,6 +263,21 @@ const BrashBoxList: React.FC = () => {
   };
 
   const onEditOk = () => {};
+
+  const cancelItem = async (id: string) => {
+    try {
+      modal.confirm({
+        title: `取消刷箱任务`,
+        icon: <ExclamationCircleFilled />,
+        content: `确定取消刷箱任务吗？`,
+        async onOk() {
+          await cancelBrashBoxList(id);
+          message.success('取消成功');
+          setSearchDefaultForm({ ...searchDefaultForm });
+        },
+      });
+    } catch (error) {}
+  };
   return (
     <>
       <ConfigProvider>
@@ -273,6 +304,13 @@ const BrashBoxList: React.FC = () => {
           items={components}
           onChange={onChange}
         />
+        {/* <Space>
+          {defaultActiveKey === '2' && (
+            <Button variant="solid" color="danger" onClick={() => {}}>
+              取消
+            </Button>
+          )}
+        </Space> */}
         {/* <Space className="">
           {defaultActiveKey === '1' && (
             <Button

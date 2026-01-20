@@ -9,6 +9,7 @@ export enum BrashBoxManageApi {
   BrashBoxListPage = '/business/container-task/page',
   BrashBoxListStart = '/business/container-task/start/',
   BrashBoxListStop = '/business/container-task/pause/',
+  BrashBoxListCancel = '/business/container-task/cancel/',
 }
 
 /**
@@ -24,7 +25,7 @@ export const getBrashBoxManagePage = (params: BrashBoxListSearchParams) => {
     },
     {
       successMessageMode: 'none',
-    }
+    },
   );
 };
 
@@ -41,7 +42,7 @@ export const getBrashBoxListPage = (params: BrashBoxListSearchParams) => {
     },
     {
       successMessageMode: 'none',
-    }
+    },
   );
 };
 
@@ -57,7 +58,7 @@ export const getBrashBoxManageDetail = (id: string) => {
     },
     {
       successMessageMode: 'none',
-    }
+    },
   );
 };
 
@@ -97,7 +98,26 @@ export const deleteBrashBoxList = (id: string) => {
     },
     {
       successMessageMode: 'none',
-    }
+    },
+  );
+};
+
+/**
+ * 取消刷箱任务
+ * @param id 刷箱任务id
+ * @returns 结果
+ */
+export const cancelBrashBoxList = (id: string) => {
+  return HttpRequest.post(
+    {
+      url: BrashBoxManageApi.BrashBoxListCancel + id,
+      params: {
+        id: id,
+      },
+    },
+    {
+      successMessageMode: 'none',
+    },
   );
 };
 
@@ -113,7 +133,7 @@ export const postBrashBoxStart = (id: string) => {
     },
     {
       successMessageMode: 'none',
-    }
+    },
   );
 };
 
@@ -129,6 +149,6 @@ export const postBrashBoxStop = (id: string) => {
     },
     {
       successMessageMode: 'none',
-    }
+    },
   );
 };

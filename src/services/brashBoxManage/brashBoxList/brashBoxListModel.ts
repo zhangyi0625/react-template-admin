@@ -10,6 +10,7 @@ export interface BrashBoxListSearchParams extends DefaultPaging {
   sort?: string;
   order?: string;
   type?: string;
+  status?: string;
 }
 
 export interface BrashBoxListType {

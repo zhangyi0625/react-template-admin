@@ -32,6 +32,7 @@ const BrashBoxList: React.FC = () => {
       limit: 10,
       sort: 'update_time',
       order: 'desc',
+      type: '1',
     });
 
   const [params, setParams] = useState<{
@@ -217,6 +218,7 @@ const BrashBoxList: React.FC = () => {
     setDefaultActiveKey(type);
     setSearchDefaultForm({
       ...searchDefaultForm,
+      type: type,
     });
   };
 
@@ -232,6 +234,7 @@ const BrashBoxList: React.FC = () => {
     setSearchDefaultForm({
       ...pageInfo,
       ...filteredObj,
+      type: defaultActiveKey,
     });
   };
 

@@ -93,18 +93,20 @@ const Login: React.FC = () => {
             sessionStorage.setItem('roleId', roleId);
             // 存储登录的用户名
             sessionStorage.setItem('loginUser', data.user?.username);
-            const result = await getRoleMenu(roleId);
-            const menu = result.length ? result : data.user.authorities;
+            // const result = await getRoleMenu(roleId);
+            // const menu = result.length ? result : data.user.authorities;
+            const menu = data.user.authorities;
+            sessionStorage.setItem('menu', JSON.stringify(menu));
             dispatch(
               setMenus(
-                buildTree(menu.length ? menu : data.user.authorities, 'menuId')
-              )
+                buildTree(menu.length ? menu : data.user.authorities, 'menuId'),
+              ),
             );
             // 判断是否配置了默认跳转的首页地址
             if (!homePath) {
               // 获取第一个是路由的地址
               const firstRoute = menu.find(
-                (item: { menuType: number }) => item.menuType === 0
+                (item: { menuType: number }) => item.menuType === 0,
               );
               if (firstRoute) {
                 homePath = firstRoute.path;

@@ -34,9 +34,10 @@ const App: React.FC = () => {
     const userData = await getUserDetail(userId);
     const roleId = userData?.roles[0]?.roleId || userId;
     try {
-      const menu = await getRoleMenu(roleId);
+      // const menu = await getRoleMenu(roleId);
+      const menu = JSON.parse(sessionStorage.getItem('menu') || '[]');
       const treeMenu = menu.filter(
-        (item: RouteItem) => item.menuType !== 2 && !item.hide
+        (item: RouteItem) => item.menuType !== 2 && !item.hide,
       );
       const build = buildTree(treeMenu, 'menuId');
       dispatch(setMenus(build)); // 更新 Redux 状态

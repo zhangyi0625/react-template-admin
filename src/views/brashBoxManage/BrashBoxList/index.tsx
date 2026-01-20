@@ -30,6 +30,8 @@ const BrashBoxList: React.FC = () => {
     useState<BrashBoxListSearchParams>({
       page: 1,
       limit: 10,
+      sort: 'update_time',
+      order: 'desc',
     });
 
   const [params, setParams] = useState<{
@@ -185,6 +187,7 @@ const BrashBoxList: React.FC = () => {
       key: 'customer',
       align: 'center',
       width: 100,
+      fixed: 'right',
       hidden: defaultActiveKey !== '3',
       render(_) {
         return (
@@ -212,9 +215,13 @@ const BrashBoxList: React.FC = () => {
 
   const onUpdateSearch = (info?: BrashBoxListSearchParams | unknown) => {
     const filteredObj = Object.fromEntries(
-      Object.entries(info ?? {}).filter(([, value]) => !!value)
+      Object.entries(info ?? {}).filter(([, value]) => !!value),
     );
-    let pageInfo = filterKeys(searchDefaultForm, ['page', 'limit'], true);
+    let pageInfo = filterKeys(
+      searchDefaultForm,
+      ['page', 'limit', 'sort', 'desc'],
+      true,
+    );
     setSearchDefaultForm({
       ...pageInfo,
       ...filteredObj,

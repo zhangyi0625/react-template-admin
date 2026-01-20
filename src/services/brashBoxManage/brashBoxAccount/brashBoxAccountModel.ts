@@ -4,6 +4,8 @@ export interface BrashBoxAccountSearchParams extends DefaultPaging {
   filter?: {
     keyword: string;
   } | null;
+  sort?: string;
+  order?: string;
 }
 
 export interface BrashBoxAccountType {

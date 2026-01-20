@@ -3,7 +3,7 @@ import type { CustomColumn } from 'customer-search-form-table/SearchForm/type';
 export const StaffManageSearchColumns: CustomColumn[] = [
   {
     label: '手机号',
-    name: 'phone',
+    name: 'keyword',
     formType: 'input',
     customPlaceholder: '请输入用户手机号',
     span: 6,

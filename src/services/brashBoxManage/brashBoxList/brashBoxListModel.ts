@@ -7,6 +7,8 @@ export interface BrashBoxListSearchParams extends DefaultPaging {
   billNo?: string;
   customerName?: string;
   customerPhone?: string;
+  sort?: string;
+  order?: string;
 }
 
 export interface BrashBoxListType {

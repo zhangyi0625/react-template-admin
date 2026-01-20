@@ -39,7 +39,8 @@ const AdvertisingManage: React.FC = () => {
       filter: {
         status: true,
       },
-      sort: 'sort',
+      sort: 'update_time',
+      order: 'desc',
     });
 
   const [params, setParams] = useState<{
@@ -112,15 +113,15 @@ const AdvertisingManage: React.FC = () => {
   ];
 
   const onUpdateSearch = (
-    info?: AdvertisingManageSearchParams['filter'] | unknown
+    info?: AdvertisingManageSearchParams['filter'] | unknown,
   ) => {
     const filteredObj = Object.fromEntries(
-      Object.entries(info ?? {}).filter(([, value]) => !!value)
+      Object.entries(info ?? {}).filter(([, value]) => !!value),
     );
     let pageInfo = filterKeys(
       searchDefaultForm,
-      ['page', 'limit', 'sort'],
-      true
+      ['page', 'limit', 'sort', 'order'],
+      true,
     );
     setSearchDefaultForm({
       ...pageInfo,

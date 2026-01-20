@@ -38,6 +38,8 @@ const StaffManage: React.FC = () => {
       filter: {
         status: true,
       },
+      sort: 'update_time',
+      order: 'desc',
     });
 
   const [params, setParams] = useState<{
@@ -131,12 +133,16 @@ const StaffManage: React.FC = () => {
   ];
 
   const onUpdateSearch = (
-    info?: StaffManageSearchParams['filter'] | unknown
+    info?: StaffManageSearchParams['filter'] | unknown,
   ) => {
     const filteredObj = Object.fromEntries(
-      Object.entries(info ?? {}).filter(([, value]) => !!value)
+      Object.entries(info ?? {}).filter(([, value]) => !!value),
     );
-    let pageInfo = filterKeys(searchDefaultForm, ['page', 'limit'], true);
+    let pageInfo = filterKeys(
+      searchDefaultForm,
+      ['page', 'limit', 'sort', 'order'],
+      true,
+    );
     setSearchDefaultForm({
       ...pageInfo,
       ...filteredObj,

@@ -5,6 +5,7 @@ export interface NoticeManageSearchParams extends DefaultPaging {
     status: boolean | string;
   } | null;
   sort?: string;
+  order?: string;
 }
 
 export interface NoticeManageType {

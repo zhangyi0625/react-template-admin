@@ -34,6 +34,8 @@ const BrashBoxAccount: React.FC = () => {
     useState<BrashBoxAccountSearchParams>({
       page: 1,
       limit: 10,
+      sort: 'update_time',
+      order: 'desc',
     });
 
   const [params, setParams] = useState<{
@@ -109,12 +111,16 @@ const BrashBoxAccount: React.FC = () => {
   ];
 
   const onUpdateSearch = (
-    info?: BrashBoxAccountSearchParams['filter'] | unknown
+    info?: BrashBoxAccountSearchParams['filter'] | unknown,
   ) => {
     const filteredObj = Object.fromEntries(
-      Object.entries(info ?? {}).filter(([, value]) => !!value)
+      Object.entries(info ?? {}).filter(([, value]) => !!value),
     );
-    let pageInfo = filterKeys(searchDefaultForm, ['page', 'limit'], true);
+    let pageInfo = filterKeys(
+      searchDefaultForm,
+      ['page', 'limit', 'sort', 'order'],
+      true,
+    );
     setSearchDefaultForm({
       ...pageInfo,
       ...filteredObj,

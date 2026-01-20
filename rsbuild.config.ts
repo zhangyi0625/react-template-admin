@@ -57,7 +57,7 @@ export default defineConfig({
   },
   // 构建产物相关配置
   output: {
-    assetPrefix: '/manager/',
+    // assetPrefix: '/manager/',
   },
   // 构建优化相关
   performance: {

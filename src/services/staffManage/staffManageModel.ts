@@ -4,6 +4,8 @@ export interface StaffManageSearchParams extends DefaultPaging {
   filter?: {
     status: boolean | string;
   } | null;
+  sort?: string;
+  order?: string;
 }
 
 export interface StaffManageType {

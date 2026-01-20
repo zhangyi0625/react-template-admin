@@ -38,7 +38,7 @@ type MenuItem = Required<MenuProps>['items'][number];
 const LeftMenu: React.FC = memo(() => {
   // 从状态库中获取状态
   const { sidebar, theme, navigation } = useSelector(
-    (state: RootState) => state.preferences
+    (state: RootState) => state.preferences,
   );
   const { menus } = useSelector((state: RootState) => state.menuState);
   const dispatch = useDispatch();
@@ -65,8 +65,8 @@ const LeftMenu: React.FC = memo(() => {
     label: React.ReactNode,
     key?: React.Key | null,
     icon?: React.ReactNode,
-    children?: MenuItem[],
-    type?: 'group'
+    children?: MenuItem[] | null,
+    type?: 'group',
   ): MenuItem => {
     return {
       key,
@@ -84,18 +84,15 @@ const LeftMenu: React.FC = memo(() => {
       if (item.menuType === 2) {
         continue;
       }
-      // 下面判断代码解释 *** !item?.children?.length   ==>   (!item.children || item.children.length === 0)
-      if (!item?.children?.length) {
-        newArr.push(getItem(item.title, item.path, getIcon(item.icon)));
-        continue;
+      // 处理子菜单
+      let processedChildren = null;
+      if (item?.children?.length) {
+        const children = deepLoopFloat(item.children);
+        processedChildren = children.length > 0 ? children : null;
       }
+      // 无论是否有子菜单，都传递children参数（null或实际子菜单）
       newArr.push(
-        getItem(
-          item.title,
-          item.path,
-          getIcon(item.icon),
-          deepLoopFloat(item.children)
-        )
+        getItem(item.title, item.path, getIcon(item.icon), processedChildren),
       );
     }
     return newArr;
@@ -136,6 +133,7 @@ const LeftMenu: React.FC = memo(() => {
     setLoading(true);
     const menu = deepLoopFloat(menus, []);
     setMenuList(menu);
+    console.log(menu, 'menu');
     setLoading(false);
   }, [menus]);
 

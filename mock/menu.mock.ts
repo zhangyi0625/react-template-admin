@@ -3,7 +3,7 @@ import { defineMock } from 'rspack-plugin-mock/helper';
 // 模拟数据
 export default defineMock([
   {
-    url: '/system/role-menu/',
+    url: '/system/role-menu/1',
     enabled: true,
     method: 'GET',
     body(request) {

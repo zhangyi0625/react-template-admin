@@ -64,6 +64,8 @@ export interface RouteMeta {
  * 菜单项
  */
 export interface RouteItem {
+  // 唯一标识
+  id?: string
   // 路径
   path: string
   // 组件

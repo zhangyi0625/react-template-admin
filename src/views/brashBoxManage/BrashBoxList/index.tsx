@@ -166,6 +166,13 @@ const BrashBoxList: React.FC = () => {
       width: 120,
     },
     {
+      title: '失败原因',
+      dataIndex: 'remark',
+      align: 'left',
+      hidden: defaultActiveKey !== '4',
+      width: 120,
+    },
+    {
       title: '上次执行时间',
       align: 'left',
       width: 150,

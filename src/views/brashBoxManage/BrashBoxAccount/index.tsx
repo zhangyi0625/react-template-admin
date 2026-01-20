@@ -56,10 +56,11 @@ const BrashBoxAccount: React.FC = () => {
     },
     {
       title: '密码',
-      key: 'password',
-      dataIndex: 'password',
       align: 'left',
       width: 120,
+      render(value) {
+        return <div>{value ? '********' : '-'}</div>;
+      },
     },
     {
       title: '是否有效',

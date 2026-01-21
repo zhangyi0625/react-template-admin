@@ -14,10 +14,16 @@ import { ExclamationCircleFilled } from '@ant-design/icons';
 import { SearchForm, SearchTable } from 'customer-search-form-table';
 import { BrashBoxListSearchColumns } from '../config';
 import useParentSize from '@/hooks/useParentSize';
-import BrashBoxShapeCode from './BrashBoxShapeCode';
+import BrashBoxModal from '../BrashBoxList/BrashBoxModal';
+import BrashBoxSetTime from '../BrashBoxList/BrashBoxSetTime';
+import BrashBoxShapeCode from '../BrashBoxList/BrashBoxShapeCode';
 import {
-  getBrashBoxListPage,
+  addBrashBoxList,
   cancelBrashBoxList,
+  deleteBrashBoxList,
+  editBrashBoxList,
+  getMyBrashBoxListPage,
+  postBrashBoxStart,
 } from '@/services/brashBoxManage/brashBoxList/brashBoxListApi';
 import type {
   BrashBoxListSearchParams,
@@ -26,7 +32,7 @@ import type {
 import { filterKeys } from '@/utils/tool';
 import { formatTime } from '@/utils/format';
 
-const BrashBoxList: React.FC = () => {
+const MyBrashBoxList: React.FC = () => {
   const { message, modal } = App.useApp();
 
   const { parentRef, height } = useParentSize();
@@ -43,11 +49,11 @@ const BrashBoxList: React.FC = () => {
   const [params, setParams] = useState<{
     visible: boolean;
     currentRow: BrashBoxListType['task'] | null;
-    type: 'add' | 'edit' | 'setTime' | 'shapeCode';
+    type: 'edit' | 'add';
   }>({
     visible: false,
     currentRow: null,
-    type: 'add',
+    type: 'edit',
   });
 
   const components: TabsProps['items'] = [
@@ -72,20 +78,6 @@ const BrashBoxList: React.FC = () => {
   const [defaultActiveKey, setDefaultActiveKey] = useState<string>('PENDING');
 
   const tableColumns: TableProps['columns'] = [
-    {
-      title: '用户手机号',
-      key: 'customerPhone',
-      dataIndex: 'customerPhone',
-      align: 'left',
-      width: 120,
-    },
-    {
-      title: '客户名称',
-      key: 'customerName',
-      dataIndex: 'customerName',
-      align: 'left',
-      width: 120,
-    },
     {
       title: '提单号',
       key: 'billNo',
@@ -201,15 +193,16 @@ const BrashBoxList: React.FC = () => {
       align: 'center',
       width: 100,
       fixed: 'right',
-      hidden: defaultActiveKey !== 'SUCCESS' && defaultActiveKey !== 'RUNNING',
+      hidden: defaultActiveKey === 'FAILED',
       render(_) {
         return (
           <Space>
+            {defaultActiveKey === 'PENDING' && getPendingBrashBoxBtn(_)}
             <Button
               type="link"
               hidden={defaultActiveKey !== 'SUCCESS'}
               onClick={() =>
-                setParams({ visible: true, currentRow: _, type: 'shapeCode' })
+                setParams({ visible: true, currentRow: _, type: 'edit' })
               }
             >
               有效条形码
@@ -227,6 +220,36 @@ const BrashBoxList: React.FC = () => {
       },
     },
   ];
+
+  const getPendingBrashBoxBtn = (row: BrashBoxListType['task']) => {
+    return (
+      <>
+        <Button
+          variant="link"
+          color="primary"
+          onClick={() => changeBrashTask(row.id as string, 'start')}
+        >
+          刷箱
+        </Button>
+        <Button
+          variant="link"
+          color="primary"
+          onClick={() =>
+            setParams({ visible: true, currentRow: row, type: 'add' })
+          }
+        >
+          修改
+        </Button>
+        <Button
+          variant="link"
+          color="danger"
+          onClick={() => changeBrashTask(row.id as string, 'delete')}
+        >
+          删除
+        </Button>
+      </>
+    );
+  };
 
   const onChange = (type: string) => {
     setDefaultActiveKey(type);
@@ -260,6 +283,27 @@ const BrashBoxList: React.FC = () => {
     });
   };
 
+  const onEditOk = async (
+    editRow: Pick<
+      BrashBoxListType['task'],
+      'billNo' | 'id' | 'ctnType' | 'ctnNumber'
+    >,
+  ) => {
+    try {
+      if (!editRow.id) {
+        // 新增数据
+        await addBrashBoxList(editRow);
+      } else {
+        // 编辑数据
+        await editBrashBoxList(editRow);
+      }
+      // 操作成功，关闭弹窗，刷新数据
+      // message.success(!editRow.id ? '添加成功' : '修改成功');
+      setParams({ visible: false, currentRow: null, type: 'edit' });
+      onUpdateSearch();
+    } catch (error) {}
+  };
+
   const cancelItem = async (id: string) => {
     try {
       modal.confirm({
@@ -269,6 +313,23 @@ const BrashBoxList: React.FC = () => {
         async onOk() {
           await cancelBrashBoxList(id);
           message.success('取消成功');
+          setSearchDefaultForm({ ...searchDefaultForm });
+        },
+      });
+    } catch (error) {}
+  };
+
+  const changeBrashTask = async (id: string, type: string) => {
+    try {
+      modal.confirm({
+        title: `${type === 'delete' ? '删除' : '启动'}刷箱任务`,
+        icon: <ExclamationCircleFilled />,
+        content: `确定${type === 'delete' ? '删除' : '启动'}刷箱任务吗？`,
+        async onOk() {
+          type === 'delete'
+            ? await deleteBrashBoxList(id)
+            : await postBrashBoxStart(id);
+          message.success(`${type === 'delete' ? '删除' : '启动'}成功`);
           setSearchDefaultForm({ ...searchDefaultForm });
         },
       });
@@ -300,6 +361,17 @@ const BrashBoxList: React.FC = () => {
           items={components}
           onChange={onChange}
         />
+        <Space>
+          <Button
+            type="primary"
+            onClick={() =>
+              setParams({ visible: true, currentRow: null, type: 'add' })
+            }
+            hidden={defaultActiveKey !== 'PENDING'}
+          >
+            新增任务
+          </Button>
+        </Space>
         <SearchTable
           style={{ marginTop: '10px' }}
           size="middle"
@@ -310,22 +382,34 @@ const BrashBoxList: React.FC = () => {
           isPagination={true}
           columns={tableColumns}
           rowKey={(record) => record.id}
-          scroll={{ x: 'max-content', y: height - 198 }}
-          fetchData={getBrashBoxListPage}
+          scroll={{ x: 'max-content', y: height - 228 }}
+          fetchData={getMyBrashBoxListPage}
           searchFilter={searchDefaultForm}
           isSelection={false}
           onUpdatePagination={onUpdatePagination}
           onUpdateSelection={() => {}}
         />
       </Card>
-      {params.type === 'shapeCode' && (
+      {params.type === 'add' ? (
+        <BrashBoxModal
+          params={params}
+          onCancel={() => setParams({ ...params, visible: false })}
+          onOk={onEditOk}
+        />
+      ) : params.type === 'edit' ? (
         <BrashBoxShapeCode
           params={params}
           onCancel={() => setParams({ ...params, visible: false })}
+        />
+      ) : (
+        <BrashBoxSetTime
+          params={params}
+          onCancel={() => setParams({ ...params, visible: false })}
+          onOk={onEditOk}
         />
       )}
     </>
   );
 };
 
-export default BrashBoxList;
+export default MyBrashBoxList;

@@ -9,7 +9,7 @@ export type BrashBoxSetTimeProps = {
     visible: boolean;
     currentRow: any;
   };
-  onOk: () => void;
+  onOk: (params: any) => void;
   onCancel: () => void;
 };
 

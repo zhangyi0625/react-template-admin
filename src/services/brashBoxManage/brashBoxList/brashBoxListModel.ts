@@ -19,13 +19,13 @@ export interface BrashBoxListType {
 }
 
 export interface BrashBoxListDetailType {
+  id: string | null;
   barcodes: string;
   billNo: string;
   carrier: string;
   ctnNumber: number;
   ctnType: string;
   execTime: string;
-  id: string;
   isSuccess: boolean;
   successCount: number;
   transit: string | null;

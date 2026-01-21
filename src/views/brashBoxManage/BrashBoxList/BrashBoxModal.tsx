@@ -1,36 +1,80 @@
+import { useEffect, useState } from 'react';
+import { App, Col, Form, Input, InputNumber, Row, Select } from 'antd';
+import { ExclamationCircleFilled } from '@ant-design/icons';
 import DragModal from '@/components/modal/DragModal';
-import { Col, Form, Input, Row } from 'antd';
-import { useEffect } from 'react';
 import { BrashBoxListForms } from '../config';
+import type { BrashBoxListType } from '@/services/brashBoxManage/brashBoxList/brashBoxListModel';
+import { getBrashBoxList } from '@/services/brashBoxManage/brashBoxList/brashBoxListApi';
 
 export type BrashBoxModalProps = {
   params: {
     visible: boolean;
-    currentRow: any;
+    currentRow: BrashBoxListType['task'] | null;
   };
   onCancel: () => void;
-  onOk: () => void;
+  onOk: (
+    params: Pick<
+      BrashBoxListType['task'],
+      'billNo' | 'id' | 'ctnType' | 'ctnNumber'
+    >,
+  ) => void;
 };
 
 const BrashBoxModal = ({ params, onCancel, onOk }: BrashBoxModalProps) => {
   const { visible, currentRow } = params;
 
+  const { modal } = App.useApp();
+
   const [form] = Form.useForm();
+
+  const [loading, setLoading] = useState(false);
+
+  const [brashBoxList, setBrashBoxList] = useState<BrashBoxListType['task'][]>(
+    [],
+  );
 
   useEffect(() => {
     if (!visible) return;
-    if (!currentRow) {
-      form.resetFields();
-    } else {
-      form.setFieldsValue(currentRow);
-    }
+    init();
   }, [visible]);
+
+  const init = async () => {
+    try {
+      if (!currentRow) {
+        form.resetFields();
+        form.setFieldsValue({
+          ctnType: '40GP',
+          ctnNumber: 1,
+        });
+      } else {
+        form.setFieldsValue(currentRow);
+      }
+      const resp = await getBrashBoxList();
+      setBrashBoxList(resp || []);
+      setLoading(false);
+    } catch {}
+  };
 
   const handleOk = () => {
     form
       .validateFields()
       .then(() => {
-        // onOk(form.getFieldsValue());
+        if (
+          brashBoxList.find(
+            (item) => item.billNo === form.getFieldValue('billNo'),
+          ) &&
+          !currentRow?.id
+        ) {
+          modal.confirm({
+            title: `提单号已存在`,
+            icon: <ExclamationCircleFilled />,
+            content: `提单号任务已存在，提交后将自动加入该任务，是否继续提交？`,
+            okText: '加入任务',
+            async onOk() {
+              onOk(form.getFieldsValue());
+            },
+          });
+        } else onOk(form.getFieldsValue());
       })
       .catch((errorInfo) => {
         // 滚动并聚焦到第一个错误字段
@@ -41,11 +85,12 @@ const BrashBoxModal = ({ params, onCancel, onOk }: BrashBoxModalProps) => {
 
   return (
     <DragModal
-      width="60%"
+      width="40%"
       open={visible}
       title={currentRow ? '编辑刷箱' : '新增刷箱'}
       onOk={handleOk}
       onCancel={onCancel}
+      loading={loading}
     >
       <Form form={form} labelCol={{ span: 6 }}>
         <Form.Item name="id" hidden>
@@ -74,6 +119,22 @@ const BrashBoxModal = ({ params, onCancel, onOk }: BrashBoxModalProps) => {
                   <Input
                     placeholder={`请输入${item.label}`}
                     autoComplete="off"
+                  />
+                )}
+                {item.formType === 'input-number' && (
+                  <InputNumber
+                    placeholder={`请输入${item.label}`}
+                    autoComplete="off"
+                    style={{ width: '100%' }}
+                    min={1}
+                  />
+                )}
+                {item.formType === 'normalSelect' && (
+                  <Select
+                    placeholder={`请选择${item.label}`}
+                    filterOption
+                    options={item.options}
+                    showSearch
                   />
                 )}
               </Form.Item>

@@ -10,6 +10,7 @@ export enum BrashBoxManageApi {
   BrashBoxListStart = '/business/container-task/start/',
   BrashBoxListStop = '/business/container-task/pause/',
   BrashBoxListCancel = '/business/container-task/cancel/',
+  MyBrashBoxListPage = '/business/container-task/rel/page',
 }
 
 /**
@@ -17,7 +18,7 @@ export enum BrashBoxManageApi {
  * @param params 订舱管理参数
  * @returns 刷箱记录列表
  */
-export const getBrashBoxManagePage = (params: BrashBoxListSearchParams) => {
+export const getBrashBoxList = (params?: BrashBoxListSearchParams) => {
   return HttpRequest.get(
     {
       url: BrashBoxManageApi.BrashBoxList,
@@ -47,6 +48,23 @@ export const getBrashBoxListPage = (params: BrashBoxListSearchParams) => {
 };
 
 /**
+ * 分页获取我的刷箱记录列表
+ * @param params 订舱管理参数
+ * @returns 刷箱记录列表
+ */
+export const getMyBrashBoxListPage = (params: BrashBoxListSearchParams) => {
+  return HttpRequest.get(
+    {
+      url: BrashBoxManageApi.MyBrashBoxListPage,
+      params: params,
+    },
+    {
+      successMessageMode: 'none',
+    },
+  );
+};
+
+/**
  * 获取刷箱记录详情
  * @param id 刷箱记录id
  * @returns 刷箱记录详情
@@ -67,7 +85,12 @@ export const getBrashBoxManageDetail = (id: string) => {
  * @param params 刷箱管理参数
  * @returns 结果
  */
-export const addBrashBoxList = (params: BrashBoxListType) => {
+export const addBrashBoxList = (
+  params?: Pick<
+    BrashBoxListType['task'],
+    'billNo' | 'id' | 'ctnType' | 'ctnNumber'
+  >,
+) => {
   return HttpRequest.post({
     url: BrashBoxManageApi.BrashBoxList,
     data: params,
@@ -79,7 +102,12 @@ export const addBrashBoxList = (params: BrashBoxListType) => {
  * @param params 刷箱管理参数
  * @returns 结果
  */
-export const editBrashBoxList = (params: BrashBoxListType) => {
+export const editBrashBoxList = (
+  params?: Pick<
+    BrashBoxListType['task'],
+    'billNo' | 'id' | 'ctnType' | 'ctnNumber'
+  >,
+) => {
   return HttpRequest.put({
     url: BrashBoxManageApi.BrashBoxList,
     data: params,

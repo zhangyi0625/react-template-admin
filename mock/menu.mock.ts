@@ -278,6 +278,34 @@ export default defineMock([
               {
                 id: Math.random().toString(),
                 name: 'order-manage',
+                path: '/orderManage/freightInsurancePolicy',
+                component: 'orderManage/FreightInsurancePolicy',
+                route: '1',
+                meta: {
+                  keepAlive: false,
+                  icon: '',
+                  title: '货运保险单',
+                  internal: false,
+                },
+              },
+              {
+                id: Math.random().toString(),
+                name: 'order-manage',
+                path: '/orderManage/freightInsurancePolicy/:id',
+                component:
+                  'orderManage/FreightInsurancePolicy/FreightInsurancePolicyDetail',
+                route: '1',
+                meta: {
+                  keepAlive: false,
+                  icon: '',
+                  title: '货运保险单详细信息',
+                  internal: false,
+                  menuType: 2,
+                },
+              },
+              {
+                id: Math.random().toString(),
+                name: 'order-manage',
                 path: '/orderManage/quickEnquiryOrder/:id',
                 component:
                   'orderManage/QuickEnquiryOrder/QuickEnquiryOrderDetail',

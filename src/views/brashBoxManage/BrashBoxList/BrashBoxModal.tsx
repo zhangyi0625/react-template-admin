@@ -5,6 +5,7 @@ import DragModal from '@/components/modal/DragModal';
 import { BrashBoxListForms } from '../config';
 import type { BrashBoxListType } from '@/services/brashBoxManage/brashBoxList/brashBoxListModel';
 import { getBrashBoxList } from '@/services/brashBoxManage/brashBoxList/brashBoxListApi';
+import { getBoxPileManage } from '@/services/essentialData/boxPileManage/boxPileManageApi';
 
 export type BrashBoxModalProps = {
   params: {
@@ -29,6 +30,8 @@ const BrashBoxModal = ({ params, onCancel, onOk }: BrashBoxModalProps) => {
 
   const [loading, setLoading] = useState(false);
 
+  const [formMap, setFormMap] = useState(BrashBoxListForms);
+
   const [brashBoxList, setBrashBoxList] = useState<BrashBoxListType['task'][]>(
     [],
   );
@@ -49,8 +52,15 @@ const BrashBoxModal = ({ params, onCancel, onOk }: BrashBoxModalProps) => {
       } else {
         form.setFieldsValue(currentRow);
       }
-      const resp = await getBrashBoxList();
-      setBrashBoxList(resp || []);
+      Promise.all([getBrashBoxList(), getBoxPileManage()]).then((result) => {
+        setBrashBoxList(result[0] || []);
+        formMap.map((item) => {
+          if (item.name === 'ctnType') {
+            item.options = result[1] || [];
+          }
+        });
+      });
+      setFormMap([...formMap]);
       setLoading(false);
     } catch {}
   };
@@ -133,7 +143,10 @@ const BrashBoxModal = ({ params, onCancel, onOk }: BrashBoxModalProps) => {
                   <Select
                     placeholder={`请选择${item.label}`}
                     filterOption
-                    options={item.options}
+                    options={(item.options || []).map((opt) => ({
+                      label: opt.code,
+                      value: opt.code,
+                    }))}
                     showSearch
                   />
                 )}

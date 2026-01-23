@@ -1,7 +1,9 @@
-import DefaultUserIcon from '@/assets/svg/icon/default-user.svg';
-import AffiliateEdit from '@/assets/svg/icon/edit.svg';
-import AffiliateEmail from '@/assets/svg/icon/email.svg';
-import AffiliateTel from '@/assets/svg/icon/tel.svg';
+import {
+  IconDefaultAvatar,
+  IconEdit,
+  IconEmail,
+  IconPhone,
+} from '@/assets/icon';
 import styles from '@/views/marketManage/AffiliateManage/AffiliateManage.module.scss';
 import React, { memo, useCallback, useEffect, useRef, useState } from 'react';
 import {
@@ -69,7 +71,7 @@ const UserBaseInfo: React.FC<UserBaseInfoProps> = memo(
       (type: string) => {
         return detail.permissions.indexOf(type) !== -1 ? '是' : '否';
       },
-      [detail]
+      [detail],
     );
 
     const getEquityExtraIndexOf = useCallback(
@@ -81,7 +83,7 @@ const UserBaseInfo: React.FC<UserBaseInfoProps> = memo(
           0
         );
       },
-      [equityExtraOptions]
+      [equityExtraOptions],
     );
 
     useEffect(() => {
@@ -234,8 +236,8 @@ const UserBaseInfo: React.FC<UserBaseInfoProps> = memo(
             <span
               className="text-normal-blue font-medium ml-[12px] underline cursor-pointer text-sm font-normal"
               onClick={() => {
-                setShowRemark(true),
-                  AffiliateComboPermissionRemarkRef.current?.onLoadRemark();
+                (setShowRemark(true),
+                  AffiliateComboPermissionRemarkRef.current?.onLoadRemark());
               }}
             >
               点击查看套餐内权限及额外购买费用
@@ -293,7 +295,7 @@ const UserBaseInfo: React.FC<UserBaseInfoProps> = memo(
         } else if (item.formType === 'input' && item.ExtraKey) {
           form.setFieldsValue({
             [item.name]: equityExtraOptions?.find(
-              (equity) => equity.module === item.name
+              (equity) => equity.module === item.name,
             )?.queryLimit,
           });
         } else form.setFieldsValue({ ...detail });
@@ -313,7 +315,7 @@ const UserBaseInfo: React.FC<UserBaseInfoProps> = memo(
                   return item.name;
               }),
             ],
-            true
+            true,
           );
           for (let i in jurisdictionParams) {
             if (jurisdictionParams[i]) newArr.push(i);
@@ -329,9 +331,9 @@ const UserBaseInfo: React.FC<UserBaseInfoProps> = memo(
                       return item.name;
                   }),
                 ],
-                true
-              )
-            )
+                true,
+              ),
+            ),
           );
           for (let i in copyExtraInfo) {
             copyExtraInfo[i] = Boolean(copyExtraInfo[i]);
@@ -345,7 +347,7 @@ const UserBaseInfo: React.FC<UserBaseInfoProps> = memo(
                     return item.name;
                 }),
               ],
-              false
+              false,
             ),
             permissions: newArr.join(','),
             customerBusinessConfig: {
@@ -381,7 +383,7 @@ const UserBaseInfo: React.FC<UserBaseInfoProps> = memo(
             if (item.formType === 'input' && item.ExtraKey) return item.name;
           }),
         ],
-        true
+        true,
       );
       let newArr = ComboPermissionOptions.map((item) => {
         if (
@@ -412,12 +414,7 @@ const UserBaseInfo: React.FC<UserBaseInfoProps> = memo(
             <>
               <div className="flex items-start justify-between">
                 <div className="flex items-center">
-                  <img
-                    src={DefaultUserIcon}
-                    width={96}
-                    height={96}
-                    alt="defaultUser"
-                  />
+                  <IconDefaultAvatar width={96} height={96} />
                   <div className="flex flex-col ml-[12px]">
                     <div className="flex items-center">
                       <p className="ml-[4px] text-3xl font-medium">
@@ -429,36 +426,30 @@ const UserBaseInfo: React.FC<UserBaseInfoProps> = memo(
                       >
                         {publicData['customerLevel'][detail.level]}
                       </div>
-                      <img
-                        src={AffiliateEdit}
+                      <IconEdit
                         width={26}
                         height={26}
                         className="cursor-pointer"
-                        alt="edit"
                         onClick={() => setIsEdit(true)}
                       />
                     </div>
                     <div className="flex items-center mt-[22px]">
                       {detail.phone && (
                         <div className="inline-flex mr-[30px]">
-                          <img
-                            src={AffiliateTel}
+                          <IconPhone
                             width={18}
                             height={18}
                             className="mr-[2px]"
-                            alt="edit"
                           />
                           <span>{detail.phone}</span>
                         </div>
                       )}
                       {detail.email && (
                         <div className="inline-flex">
-                          <img
-                            src={AffiliateEmail}
+                          <IconEmail
                             width={18}
                             height={18}
                             className="mr-[2px]"
-                            alt="edit"
                           />
                           <span>{detail.email}</span>
                         </div>
@@ -567,7 +558,7 @@ const UserBaseInfo: React.FC<UserBaseInfoProps> = memo(
         />
       </>
     );
-  }
+  },
 );
 
 export default UserBaseInfo;

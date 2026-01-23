@@ -1,7 +1,4 @@
-import AffiliateIcon from '@/assets/svg/icon/affiliate.svg';
-import AffiliateEdit from '@/assets/svg/icon/edit.svg';
-import AffiliateEmail from '@/assets/svg/icon/email.svg';
-import AffiliateTel from '@/assets/svg/icon/tel.svg';
+import { IconAffiliate, IconEdit, IconEmail, IconPhone } from '@/assets/icon';
 import React, { memo, useEffect, useRef, useState } from 'react';
 import {
   App,
@@ -149,7 +146,7 @@ const AffiliateBasicInfo: React.FC<AffiliateBasicInfoProps> = memo(
                     currentRow: filterKeys(
                       _,
                       ['limitType', 'module', 'queryLimit'],
-                      true
+                      true,
                     ),
                   })
                 }
@@ -226,8 +223,8 @@ const AffiliateBasicInfo: React.FC<AffiliateBasicInfoProps> = memo(
             <span
               className="text-normal-blue font-meduim ml-[12px] underline cursor-pointer text-sm font-normal"
               onClick={() => {
-                setShowRemark(true),
-                  AffiliateComboPermissionRemarkRef.current?.onLoadRemark();
+                (setShowRemark(true),
+                  AffiliateComboPermissionRemarkRef.current?.onLoadRemark());
               }}
             >
               点击查看套餐内权限及额外购买费用
@@ -280,12 +277,12 @@ const AffiliateBasicInfo: React.FC<AffiliateBasicInfoProps> = memo(
                 if (item.ExtraKey === 'businessConfig') return item.name;
               }),
             ],
-            true
+            true,
           ),
           enableFreightRealApi: Boolean(info.enableFreightRealApi),
           freightRealApiKeyExpire: formatTime(
             info.freightRealApiKeyExpire,
-            'Y-M-D h:m:s'
+            'Y-M-D h:m:s',
           ),
         },
         contact: filterKeys(info, ['tel', 'email'], true),
@@ -303,7 +300,7 @@ const AffiliateBasicInfo: React.FC<AffiliateBasicInfoProps> = memo(
     };
 
     const editComboPermission = async (
-      currentRow: Omit<EquityRightsBaseEditType, 'affiliateId'>
+      currentRow: Omit<EquityRightsBaseEditType, 'affiliateId'>,
     ) => {
       setTableLoading(true);
       try {
@@ -325,19 +322,12 @@ const AffiliateBasicInfo: React.FC<AffiliateBasicInfoProps> = memo(
             <>
               <div className="flex items-center justify-between">
                 <div className="flex items-center">
-                  <img
-                    src={AffiliateIcon}
-                    width={26}
-                    height={26}
-                    alt="affiliate"
-                  />
+                  <IconAffiliate className="w-[26px] h-[26px] mr-[4px]" />
                   <p className="ml-[4px] text-3xl font-medium">{detail.name}</p>
-                  <img
-                    src={AffiliateEdit}
+                  <IconEdit
                     width={18}
                     height={18}
                     className="ml-[12px] cursor-pointer"
-                    alt="edit"
                     onClick={() => setIsEdit(true)}
                   />
                 </div>
@@ -349,25 +339,13 @@ const AffiliateBasicInfo: React.FC<AffiliateBasicInfoProps> = memo(
                 <p>简称：{detail.shortName}</p>
                 {detail.contact.tel && (
                   <div className="inline-flex mx-[30px]">
-                    <img
-                      src={AffiliateTel}
-                      width={18}
-                      height={18}
-                      className="mr-[2px]"
-                      alt="edit"
-                    />
+                    <IconPhone width={18} height={18} className="mr-[2px]" />
                     <span>{detail.contact.tel}</span>
                   </div>
                 )}
                 {detail.contact.email && (
                   <div className="inline-flex">
-                    <img
-                      src={AffiliateEmail}
-                      width={18}
-                      height={18}
-                      className="mr-[2px]"
-                      alt="edit"
-                    />
+                    <IconEmail width={18} height={18} className="mr-[2px]" />
                     <span>{detail.contact.email}</span>
                   </div>
                 )}
@@ -478,7 +456,7 @@ const AffiliateBasicInfo: React.FC<AffiliateBasicInfoProps> = memo(
         />
       </>
     );
-  }
+  },
 );
 
 export default AffiliateBasicInfo;

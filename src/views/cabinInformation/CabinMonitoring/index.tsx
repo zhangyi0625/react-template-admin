@@ -10,7 +10,7 @@ import {
   type TableProps,
 } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
-import ToolTipIcon from '@/assets/svg/icon/tooltip.svg';
+import { IconTooltip } from '@/assets/icon';
 import {
   CabinMonitoringCarrierType,
   CabinMonitoringSearchColumns,
@@ -97,7 +97,7 @@ const CabinMonitoring: React.FC = () => {
             {value.carrier}
             {
               CabinMonitoringCarrierType.find(
-                (item) => item.value === value.carrierType
+                (item) => item.value === value.carrierType,
               )?.label
             }
           </div>
@@ -160,7 +160,7 @@ const CabinMonitoring: React.FC = () => {
                   <div key={index}>{i.por.name + '-' + i.fnd.name}</div>
                 ))}
             </Tooltip>
-            <img src={ToolTipIcon} width={17} height={16} alt="" />
+            <IconTooltip width={17} height={16} />
           </div>
         );
       },
@@ -179,7 +179,7 @@ const CabinMonitoring: React.FC = () => {
             >
               {value.email.slice(0, 3).join('/')}
             </Tooltip>
-            <img src={ToolTipIcon} width={17} height={16} alt="" />
+            <IconTooltip width={17} height={16} />
           </div>
         );
       },
@@ -242,7 +242,7 @@ const CabinMonitoring: React.FC = () => {
       const resp = await postStaffSearchStatistic(id);
       resp.token &&
         window.open(
-          `${API}/customer/index.html#/cabinBooking?token=${resp.token}`
+          `${API}/customer/index.html#/cabinBooking?token=${resp.token}`,
         );
     } catch {
       message.error('登录失败，联系第三方人员客户～');
@@ -250,17 +250,17 @@ const CabinMonitoring: React.FC = () => {
   };
 
   const onUpdateSearch = (
-    info?: CabinMonitoringSearchFilterParams | unknown
+    info?: CabinMonitoringSearchFilterParams | unknown,
   ) => {
     const filteredObj = Object.fromEntries(
       Object.entries(info ?? {}).filter(
-        ([, value]) => !!value && value !== undefined
-      )
+        ([, value]) => !!value && value !== undefined,
+      ),
     );
     let pageInfo = filterKeys(
       searchDefaultForm,
       ['pageIndex', 'pageSize'],
-      true
+      true,
     );
     setSearchDefaultForm({
       ...pageInfo,

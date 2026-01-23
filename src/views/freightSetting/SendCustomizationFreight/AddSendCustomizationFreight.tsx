@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import styles from '../../orderManage/CabinResult/cabinResult.module.scss';
-import DeleteIcon from '@/assets/svg/icon/delete.svg';
-import AddIcon from '@/assets/svg/icon/add.svg';
+import { IconDelete } from '@/assets/icon';
+import { IconAdd } from '@/assets/icon';
 import { Form, Input, Select, Space, TimePicker, type SelectProps } from 'antd';
 import DragModal from '@/components/modal/DragModal';
 import type { SendCustomizationFreightType } from '@/services/freightSetting/sendCustomizationFreight/sendCustomizationFreightModel';
@@ -90,10 +90,10 @@ const AddSendCustomizationFreight: React.FC<
             porCode: item.porCode,
             fndCode: item.fndCode,
             porList: essential['ourCompanyPort'].filter(
-              (port: { unlocode: string }) => port.unlocode === item.porCode
+              (port: { unlocode: string }) => port.unlocode === item.porCode,
             ),
             fndList: essential['ourCompanyPort'].filter(
-              (port: { unlocode: string }) => port.unlocode === item.fndCode
+              (port: { unlocode: string }) => port.unlocode === item.fndCode,
             ),
           };
         });
@@ -104,7 +104,7 @@ const AddSendCustomizationFreight: React.FC<
         execTime: dayjs(
           formatTime(new Date() as unknown as string, 'Y-M-D') +
             '' +
-            currentRow.execTime
+            currentRow.execTime,
         ),
       });
     } else {
@@ -133,7 +133,7 @@ const AddSendCustomizationFreight: React.FC<
       newValue,
       type,
       type === 'customerId' ? setData : setDefaultOptions,
-      type === 'customerId' ? getSearchCustomer : getSystemPort
+      type === 'customerId' ? getSearchCustomer : getSystemPort,
     );
     if (type === 'POR' || type === 'FND') {
       freightOptions[index as number][type === 'POR' ? 'porList' : 'fndList'] =
@@ -146,7 +146,7 @@ const AddSendCustomizationFreight: React.FC<
     type: string,
     _: Partial<SendCustomizationFreightOptionsType>,
     key: keyof { porCode: string; fndCode: string },
-    index: number
+    index: number,
   ) => {
     return (
       <Select
@@ -181,7 +181,7 @@ const AddSendCustomizationFreight: React.FC<
   const selectChange = (
     value: string,
     index: number,
-    type: keyof SendCustomizationFreightType['freights'][number]
+    type: keyof SendCustomizationFreightType['freights'][number],
   ) => {
     freightOptions[index][type] = value;
     setFreightOptions([...freightOptions]);
@@ -200,7 +200,7 @@ const AddSendCustomizationFreight: React.FC<
         fndCode: undefined,
         porList: [],
         fndList: [],
-      })
+      }),
     );
   };
 
@@ -326,10 +326,10 @@ const AddSendCustomizationFreight: React.FC<
                 <Form.Item>
                   {getPortSelect('FND', _, 'fndCode', index)}
                 </Form.Item>
-                <img
+                <IconDelete
                   onClick={() => deleteFreightOptions(index)}
-                  src={DeleteIcon}
-                  alt="delete"
+                  width={14}
+                  height={14}
                   className={`${
                     freightOptions.length <= 1 && 'hidden'
                   } w-[14px] h-[14px] ml-[6px] mb-[25px] cursor-pointer`}
@@ -342,7 +342,7 @@ const AddSendCustomizationFreight: React.FC<
           className="flex items-center cursor-pointer w-fit ml-[120px]"
           onClick={addFndPort}
         >
-          <img src={AddIcon} alt="add" className="w-[14px] h-[14px] mr-[4px]" />
+          <IconAdd className="w-[14px] h-[14px] mr-[4px]" />
           <p className="text-green-500 text-sm">新增港口</p>
         </div>
       </DragModal>

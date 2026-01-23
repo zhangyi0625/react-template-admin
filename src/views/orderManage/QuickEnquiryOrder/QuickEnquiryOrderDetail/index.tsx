@@ -9,7 +9,7 @@ import {
   Tabs,
   type TabsProps,
 } from 'antd';
-import ArrivalIcon from '@/assets/svg/icon/arrival.svg';
+import { IconArrival } from '@/assets/icon';
 import {
   getQuickEnquiryOrderEvents,
   getQuickEnquiryOrderRecords,
@@ -76,7 +76,7 @@ const QuickEnquiryOrderDetail: React.FC<
                 form.validateFields().then(() => {
                   postQuickEnquiryOrderNotifyMsg(
                     form.getFieldsValue(),
-                    detail?.no ?? ''
+                    detail?.no ?? '',
                   ).then(() => {
                     message.success('发送客服消息成功');
                     form.resetFields();
@@ -230,7 +230,7 @@ const QuickEnquiryOrderDetail: React.FC<
   const init = async () => {
     try {
       const info = safeJsonParse(
-        sessionStorage.getItem('quickEnquiryOrderDetail') as string
+        sessionStorage.getItem('quickEnquiryOrderDetail') as string,
       );
       setDetail(info);
       refreshRecords(info.no);
@@ -277,7 +277,7 @@ const QuickEnquiryOrderDetail: React.FC<
                 <p>
                   {detail?.por?.localName ?? ''} - {detail?.por?.name ?? ''}
                 </p>
-                <img src={ArrivalIcon} alt="arrival" width={100} />
+                <IconArrival className="w-[100px] h-[100px] mr-[10px]" />
                 <p>
                   {detail?.fnd?.localName ?? ''} - {detail?.fnd?.name ?? ''}
                 </p>
@@ -321,7 +321,7 @@ const QuickEnquiryOrderDetail: React.FC<
               <img
                 src={
                   getIcon(
-                    detail?.status === 'UNDERWAY' ? 'prepareBooking' : 'cancel'
+                    detail?.status === 'UNDERWAY' ? 'prepareBooking' : 'cancel',
                   ) + '-op.png'
                 }
                 className="w-[58px] h-[58px] m-auto"
@@ -330,7 +330,7 @@ const QuickEnquiryOrderDetail: React.FC<
               <p className="text-[28px] text-center font-bold text-orange-400 mt-[16px]">
                 {
                   (QuickEnquiryOrderStatusOptions || []).find(
-                    (item) => item.value === detail?.status
+                    (item) => item.value === detail?.status,
                   )?.label
                 }
               </p>

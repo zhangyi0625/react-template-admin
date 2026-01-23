@@ -5,6 +5,7 @@ import { pluginSass } from '@rsbuild/plugin-sass';
 import { pluginMockServer } from 'rspack-plugin-mock/rsbuild';
 import { pluginImageCompress } from '@rsbuild/plugin-image-compress';
 import { pluginHtmlMinifierTerser } from 'rsbuild-plugin-html-minifier-terser';
+import { pluginSvgr } from '@rsbuild/plugin-svgr';
 
 const { publicVars } = loadEnv({ prefixes: ['RS_'] });
 
@@ -32,6 +33,12 @@ export default defineConfig({
     pluginImageCompress(),
     // 启动html压缩
     pluginHtmlMinifierTerser(),
+    // 启动svg插件
+    pluginSvgr({
+      svgrOptions: {
+        exportType: 'default',
+      },
+    }),
   ],
   // 配置html模板
   html: {

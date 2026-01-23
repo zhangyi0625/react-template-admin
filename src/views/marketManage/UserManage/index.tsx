@@ -9,8 +9,8 @@ import {
   type TablePaginationConfig,
 } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
-import CardUserIcon from '@/assets/svg/icon/card-user.svg';
-import MemberUserIcon from '@/assets/svg/icon/member-user.svg';
+import { IconCardUser, IconMemberUser } from '@/assets/icon';
+
 import { SearchForm, SearchTable } from 'customer-search-form-table';
 import type {
   StaffManageParams,
@@ -45,7 +45,7 @@ const UserManage: React.FC = () => {
       pageSize: 10,
       filter: {},
       sort: { id: -1 },
-    }
+    },
   );
 
   const [params, setParams] = useState<{
@@ -77,19 +77,12 @@ const UserManage: React.FC = () => {
       render(value) {
         return (
           <div className="flex items-center justify-center">
-            {value.level >= 5 && (
-              <img
-                src={
-                  value.level === 5 || value.level === 7
-                    ? CardUserIcon
-                    : MemberUserIcon
-                }
-                className="mr-[6px]"
-                width={14}
-                height={14}
-                alt=""
-              />
-            )}
+            {value.level >= 5 &&
+              (value.level === 5 || value.level === 7 ? (
+                <IconCardUser width={14} height={14} className="mr-[6px]" />
+              ) : (
+                <IconMemberUser width={14} height={14} className="mr-[6px]" />
+              ))}
             {
               UserLevelOptions?.find((item) => item.value === value.level)
                 ?.label
@@ -161,7 +154,7 @@ const UserManage: React.FC = () => {
               color="blue"
               variant="outlined"
               onClick={() => {
-                setUserId(_.id), setFollowUpModalVisible(true);
+                (setUserId(_.id), setFollowUpModalVisible(true));
               }}
             >
               跟进
@@ -185,7 +178,7 @@ const UserManage: React.FC = () => {
       const resp = await postStaffSearchStatistic(id);
       resp.token &&
         window.open(
-          `${API}/customer/index.html#/cabinBooking?token=${resp.token}`
+          `${API}/customer/index.html#/cabinBooking?token=${resp.token}`,
         );
     } catch {
       message.error('登录失败，联系第三方人员客户～');
@@ -195,13 +188,13 @@ const UserManage: React.FC = () => {
   const onUpdateSearch = (info?: StaffManageParams | unknown) => {
     const filteredObj = Object.fromEntries(
       Object.entries(info ?? {}).filter(
-        ([, value]) => !!value && value !== undefined
-      )
+        ([, value]) => !!value && value !== undefined,
+      ),
     );
     let pageInfo = filterKeys(
       searchDefaultForm,
       ['pageIndex', 'pageSize', 'sort'],
-      true
+      true,
     );
     setSearchDefaultForm({
       ...pageInfo,

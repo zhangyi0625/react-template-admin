@@ -10,7 +10,7 @@ import {
 } from 'antd';
 import { ExclamationCircleFilled } from '@ant-design/icons';
 import styles from '@/views/marketManage/AffiliateManage/AffiliateManage.module.scss';
-import LinkIcon from '@/assets/svg/icon/link.svg';
+import { IconLink } from '@/assets/icon';
 import {
   deleteInvoiceApplyFile,
   getInvoiceApplyFile,
@@ -75,7 +75,7 @@ const InvoiceApplyFile = React.forwardRef<
           () => {
             message.success('上传成功');
             onRefresh('invoiceApplyFile');
-          }
+          },
         );
       }
     },
@@ -122,7 +122,7 @@ const InvoiceApplyFile = React.forwardRef<
             key={item.id}
           >
             <>
-              <img src={LinkIcon} className="w-[16px] h-[16px]" alt="" />
+              <IconLink className="w-[16px] h-[16px]" />
               <p className="ml-[10px]">{item.name}</p>
             </>
             <div>

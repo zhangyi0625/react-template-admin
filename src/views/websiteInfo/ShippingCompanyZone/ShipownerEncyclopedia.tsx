@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Col, Form, Input, Row, Space } from 'antd';
+import { IconDelete } from '@/assets/icon';
+import { IconAdd } from '@/assets/icon';
 import DragModal from '@/components/modal/DragModal';
 import type { ShipownerEncyclopediaType } from '@/services/websiteInfo/websiteInfoModel';
 import {
@@ -7,8 +9,6 @@ import {
   ShipownerEncyclopediaOfficesForm,
 } from './config';
 import { filterKeys } from '@/utils/tool';
-import DeleteIcon from '@/assets/svg/icon/delete.svg';
-import AddIcon from '@/assets/svg/icon/add.svg';
 
 export type ShipownerEncyclopediaProps = {
   params: {
@@ -72,7 +72,7 @@ const ShipownerEncyclopedia: React.FC<ShipownerEncyclopediaProps> = ({
           scope: '',
           tel: '',
         },
-      ])
+      ]),
     );
   };
   const deleteContactInfo = (index: number) => {
@@ -82,7 +82,7 @@ const ShipownerEncyclopedia: React.FC<ShipownerEncyclopediaProps> = ({
   const inputChange = (
     value: React.ChangeEvent<HTMLInputElement>,
     key: string,
-    index: number
+    index: number,
   ) => {
     contactInfo[index][key] = value.target.value;
     setContactInfo([...contactInfo]);
@@ -96,7 +96,7 @@ const ShipownerEncyclopedia: React.FC<ShipownerEncyclopediaProps> = ({
           ...filterKeys(
             form.getFieldsValue(),
             ['websiteUrl', 'addressUrl'],
-            false
+            false,
           ),
           websites: [
             {
@@ -189,12 +189,12 @@ const ShipownerEncyclopedia: React.FC<ShipownerEncyclopediaProps> = ({
                           }
                         />
                       </Form.Item>
-                    )
+                    ),
                   )}
-                  <img
+                  <IconDelete
                     onClick={() => deleteContactInfo(index)}
-                    src={DeleteIcon}
-                    alt="delete"
+                    width={14}
+                    height={14}
                     className={`${
                       contactInfo.length <= 1 && 'hidden'
                     } w-[14px] h-[14px] ml-[12px] cursor-pointer`}
@@ -205,11 +205,7 @@ const ShipownerEncyclopedia: React.FC<ShipownerEncyclopediaProps> = ({
                 className="flex items-center cursor-pointer w-fit"
                 onClick={addContactInfo}
               >
-                <img
-                  src={AddIcon}
-                  alt="add"
-                  className="w-[14px] h-[14px] mr-[4px]"
-                />
+                <IconAdd className="w-[14px] h-[14px] mr-[4px]" />
                 <p className="text-green-500 text-sm">新增联系方式</p>
               </div>
             </Form.Item>

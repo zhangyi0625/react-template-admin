@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { App, Button, Divider, Space, Spin, TableProps, Tag } from 'antd';
 import { ExclamationCircleFilled, PlusOutlined } from '@ant-design/icons';
-import AffiliateEdit from '@/assets/svg/icon/edit.svg';
+import { IconEdit } from '@/assets/icon';
 import { useLocation } from 'react-router-dom';
 import { SearchTable } from 'customer-search-form-table';
 import {
@@ -60,7 +60,7 @@ export const OpenInterfaceDetail: React.FC = () => {
     (key: string) => {
       return openInterfaceInfo ? openInterfaceInfo[key] : '';
     },
-    [openInterfaceInfo]
+    [openInterfaceInfo],
   );
 
   const detailOption = [
@@ -275,12 +275,10 @@ export const OpenInterfaceDetail: React.FC = () => {
                 <p className="text-3xl font-medium">
                   {openInterfaceInfo?.name}
                 </p>
-                <img
-                  src={AffiliateEdit}
+                <IconEdit
                   width={18}
                   height={18}
                   className="ml-[12px] cursor-pointer"
-                  alt="edit"
                   onClick={() => setEdit(true)}
                 />
               </div>

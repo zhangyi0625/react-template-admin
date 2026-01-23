@@ -5,7 +5,7 @@ type Icon = React.FC<React.SVGProps<SVGSVGElement>> | string;
 import { default as IconAddHelper } from './svg/icon/add.svg';
 import { default as IconAffiliateHelper } from './svg/icon/affiliate.svg';
 import { default as IconArrivalHelper } from './svg/icon/arrival.svg';
-import { default as IconCardUserHelper } from './svg/icon/user-card.svg';
+import { default as IconCardUserHelper } from './svg/icon/card-user.svg';
 import { default as IconDefaultAvatarHelper } from './svg/icon/default-avatar.svg';
 import { default as IconDeleteHelper } from './svg/icon/delete.svg';
 import { default as IconEditHelper } from './svg/icon/edit.svg';

@@ -138,14 +138,34 @@ export const addEmployeeToCompany = (params: {
 };
 
 /**
+ * 修改会员单位管理员工
+ * @param params 会员单位管理员工参数
+ */
+
+export const editEmployeeToCompany = (params: {
+  companyId: string;
+  customerIds: string[];
+}) => {
+  return HttpRequest.post(
+    {
+      url: MemberUnitManageApi.AddEmployeeToCompany,
+      data: params,
+    },
+    {
+      successMessageMode: 'none',
+    },
+  );
+};
+
+/**
  * 分配会员单位负责人
  * @param params 会员单位负责人参数
  */
-export const assignCompanyMaster = (params: { companyId: string }) => {
+export const assignCompanyMaster = (companyId: string) => {
   return HttpRequest.post(
     {
-      url: MemberUnitManageApi.AssignCompanyMaster + params.companyId,
-      data: params,
+      url: MemberUnitManageApi.AssignCompanyMaster + companyId,
+      data: {},
     },
     {
       successMessageMode: 'none',

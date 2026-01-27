@@ -1,12 +1,12 @@
-import { HttpRequest } from '@/utils/request'
-import type { RouteMangeParams, RouteMangeType } from './routeManageModel'
+import { HttpRequest } from '@/utils/request';
+import type { RouteMangeParams, RouteMangeType } from './routeManageModel';
 
 /**
  * 枚举航线管理相关的api
  */
 export enum RouteManageApi {
-  routeManage = '/core/business/route-fnd',
-  routeManageByPage = '/core/business/route-fnd/page',
+  routeManage = '/core/business/route',
+  routeManageByPage = '/core/business/route/page',
 }
 
 /**
@@ -22,9 +22,9 @@ export const getRouteManageListByPage = (params?: RouteMangeParams) => {
     },
     {
       successMessageMode: 'none',
-    }
-  )
-}
+    },
+  );
+};
 
 /**
  * 航线管理列表
@@ -39,9 +39,9 @@ export const getRouteManageList = (params?: RouteMangeParams) => {
     },
     {
       successMessageMode: 'none',
-    }
-  )
-}
+    },
+  );
+};
 /**
  * 新增航线管理
  * @param params 航线管理参数
@@ -54,9 +54,9 @@ export const addRouteManage = (params: RouteMangeType) => {
     },
     {
       successMessageMode: 'none',
-    }
-  )
-}
+    },
+  );
+};
 
 /**
  * 修改航线管理
@@ -70,9 +70,9 @@ export const updateRouteManage = (params: RouteMangeType) => {
     },
     {
       successMessageMode: 'none',
-    }
-  )
-}
+    },
+  );
+};
 
 /**
  * 删除航线管理
@@ -85,6 +85,6 @@ export const deleteRouteManage = (id: string) => {
     },
     {
       successMessageMode: 'none',
-    }
-  )
-}
+    },
+  );
+};

@@ -1,4 +1,4 @@
-import React from 'react'
+import React from 'react';
 
 /**
  * 路由懒加载
@@ -12,26 +12,26 @@ export const LazyLoad = (moduleName: string) => {
     recursive: true,
     // 匹配文件
     regExp: /\.tsx$/,
-  })
+  });
   //页面地址
-  let URL = ''
+  let URL = '';
   if (moduleName.endsWith('.tsx')) {
-    URL = `./${moduleName}`
+    URL = `./${moduleName}`;
   } else {
-    URL = `./${moduleName}/index.tsx`
+    URL = `./${moduleName}/index.tsx`;
   }
-  let Module: any
+  let Module: any;
   try {
     // 检查模块是否存在并动态加载
     if (viewModule.keys().includes(URL)) {
-      Module = (viewModule(`${URL}`) as any).default
+      Module = (viewModule(`${URL}`) as any).default;
     } else {
-      Module = React.lazy(() => import('@/views/error/404'))
+      Module = React.lazy(() => import('@/views/error/404'));
     }
   } catch (error) {
-    void error
+    void error;
     // 如果动态加载错误就是认定为模块不存在
-    Module = React.lazy(() => import('@/views/error/404'))
+    Module = React.lazy(() => import('@/views/error/404'));
   }
-  return <Module />
-}
+  return <Module />;
+};

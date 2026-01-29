@@ -1,10 +1,10 @@
-import { HttpRequest } from '@/utils/request'
+import { HttpRequest } from '@/utils/request';
 import type {
   SysRoleParams,
   SysRoleType,
   SysUserParams,
   SysUserType,
-} from './roleModel'
+} from './roleModel';
 
 /**
  * 枚举角色相关的api
@@ -85,9 +85,9 @@ export const getRoleList = () => {
     },
     {
       successMessageMode: 'none',
-    }
-  )
-}
+    },
+  );
+};
 
 /**
  * 分页查询角色列表
@@ -102,9 +102,9 @@ export const getRoleListByPage = (params: SysRoleParams) => {
     },
     {
       successMessageMode: 'none',
-    }
-  )
-}
+    },
+  );
+};
 
 /**
  * 新增角色
@@ -115,8 +115,8 @@ export const addRole = (params: SysRoleType) => {
   return HttpRequest.post({
     url: RoleApi.getRoleList,
     data: params,
-  })
-}
+  });
+};
 
 /**
  * 编辑角色信息
@@ -127,8 +127,8 @@ export const editRole = (params: SysRoleType) => {
   return HttpRequest.put({
     url: RoleApi.getRoleList,
     data: params,
-  })
-}
+  });
+};
 
 /**
  * 更新角色状态
@@ -139,8 +139,8 @@ export const changStatus = (params: SysUserType) => {
   return HttpRequest.put({
     url: RoleApi.updateRoleUserStatus,
     data: params,
-  })
-}
+  });
+};
 
 /**
  * 删除角色
@@ -150,8 +150,8 @@ export const changStatus = (params: SysUserType) => {
 export const deleteRole = (id: string) => {
   return HttpRequest.delete({
     url: RoleApi.getRoleList + '/' + id,
-  })
-}
+  });
+};
 
 /**
  * 批量删除角色
@@ -162,8 +162,8 @@ export const deleteBatchRole = (params: { ids: string[] }) => {
   return HttpRequest.delete({
     url: RoleApi.batchDeleteRole,
     data: params.ids,
-  })
-}
+  });
+};
 
 /**
  * 获取角色菜单权限
@@ -177,9 +177,9 @@ export const getRoleMenu = (roleId: string) => {
     },
     {
       successMessageMode: 'none',
-    }
-  )
-}
+    },
+  );
+};
 
 /**
  * 分配角色菜单权限
@@ -187,14 +187,14 @@ export const getRoleMenu = (roleId: string) => {
  * @returns 结果
  */
 export const assignRoleMenu = (params: {
-  roleId: string
-  menuIds: string[]
+  roleId: string;
+  menuIds: string[];
 }) => {
   return HttpRequest.put({
     url: RoleApi.getRoleMenu + params.roleId,
     data: params.menuIds,
-  })
-}
+  });
+};
 
 /**
  * 分配角色用户
@@ -205,8 +205,8 @@ export const assignRoleUser = (params: any) => {
   return HttpRequest.post({
     url: RoleApi.assignRoleUser,
     data: params,
-  })
-}
+  });
+};
 
 /**
  * 获取角色用户
@@ -221,9 +221,9 @@ export const getRoleUser = (params: SysUserParams) => {
     },
     {
       successMessageMode: 'none',
-    }
-  )
-}
+    },
+  );
+};
 
 /**
  * 分页获取角色用户
@@ -238,9 +238,9 @@ export const getRoleUserByPage = (params: SysUserParams) => {
     },
     {
       successMessageMode: 'none',
-    }
-  )
-}
+    },
+  );
+};
 
 /**
  * 新增角色用户
@@ -255,9 +255,9 @@ export const postRoleUser = (params: SysUserType) => {
     },
     {
       successMessageMode: 'none',
-    }
-  )
-}
+    },
+  );
+};
 
 /**
  * 修改角色用户
@@ -272,9 +272,9 @@ export const putRoleUser = (params: SysUserType) => {
     },
     {
       successMessageMode: 'none',
-    }
-  )
-}
+    },
+  );
+};
 
 /**
  * 删除角色用户
@@ -284,8 +284,8 @@ export const putRoleUser = (params: SysUserType) => {
 export const deleteRoleUser = (id: string) => {
   return HttpRequest.delete({
     url: RoleApi.RoleUser + '/' + id,
-  })
-}
+  });
+};
 
 /**
  * 批量删除角色用户
@@ -300,9 +300,9 @@ export const postBatchRoleUser = (ids: string[]) => {
     },
     {
       successMessageMode: 'none',
-    }
-  )
-}
+    },
+  );
+};
 /**
  * 验证角色编码是否存在
  * @param params 角色编码
@@ -316,6 +316,6 @@ export const checkRoleCodeExist = (params: any) => {
     },
     {
       successMessageMode: 'none',
-    }
-  )
-}
+    },
+  );
+};

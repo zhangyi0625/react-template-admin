@@ -1,10 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { App, Form, Input, Select } from 'antd';
-import { SelectProps } from 'antd/es/select';
+import { Form, Input, Select } from 'antd';
 import DragModal from '@/components/modal/DragModal';
 import type { RouteMangeType } from '@/services/customerInformation/routeManage/routeManageModel';
-import DeleteIcon from '@/assets/svg/icon/delete.svg';
-import AddIcon from '@/assets/svg/icon/add.svg';
+import { getRouteManageList } from '@/services/customerInformation/routeManage/routeManageApi';
 
 export type AddCustomerManageProps = {
   params: {
@@ -12,61 +10,38 @@ export type AddCustomerManageProps = {
     currentRow: RouteMangeType | null;
     view: boolean;
   };
-  fndPortOptions: SelectProps['options'];
   onOk: (params: RouteMangeType) => void;
   onCancel: (e: React.MouseEvent<HTMLButtonElement>) => void;
 };
 
 const AddRouteManage: React.FC<AddCustomerManageProps> = ({
   params,
-  fndPortOptions,
   onOk,
   onCancel,
 }) => {
   const { visible, currentRow, view } = params;
 
-  const { message } = App.useApp();
+  const [routeOptions, setRouteOptions] = useState<RouteMangeType[]>([]);
 
   const [form] = Form.useForm();
 
-  const [fndOptions, setFndOptions] = useState<string[] | undefined[]>([]);
-
   useEffect(() => {
     if (!visible) return;
+    init();
     if (currentRow) {
       form.setFieldsValue(currentRow);
-      let fndPort = currentRow.fnds as string[];
-      setFndOptions(fndPort);
     } else {
       form.resetFields();
-      setFndOptions([undefined]);
     }
   }, [visible, view]);
 
-  const addFndPort = () => {
-    setFndOptions(fndOptions.concat([undefined]) as undefined[]);
-  };
-
-  const deleteFndPort = (index: number) => {
-    setFndOptions([
-      ...fndOptions.filter((_, i: number) => i !== index),
-    ] as string[]);
-  };
-
-  const selectChange = (value: string, index: number) => {
-    if (fndOptions.find((item) => item === value)) {
-      message.error('请勿添加重复的目的港！');
-      onClear(index);
+  const init = async () => {
+    try {
+      const res = await getRouteManageList();
+      setRouteOptions(res.filter((i: RouteMangeType) => !i.parentId));
+    } catch (error) {
+      console.log(error);
     }
-    fndOptions[index] = value;
-    setFndOptions([...fndOptions] as string[]);
-  };
-
-  const onClear = (index: number) => {
-    setTimeout(() => {
-      fndOptions[index] = undefined;
-      setFndOptions([...fndOptions] as string[]);
-    }, 300);
   };
 
   const handleOk = () => {
@@ -75,7 +50,6 @@ const AddRouteManage: React.FC<AddCustomerManageProps> = ({
       .then(() => {
         onOk({
           ...form.getFieldsValue(),
-          fnds: fndOptions.filter((item) => !!item),
         });
       })
       .catch((errorInfo) => {
@@ -98,8 +72,17 @@ const AddRouteManage: React.FC<AddCustomerManageProps> = ({
         <Form.Item name="id" hidden>
           <Input disabled />
         </Form.Item>
+        <Form.Item name="parentId" label="一级航线">
+          <Select
+            options={routeOptions}
+            fieldNames={{ label: 'name', value: 'id' }}
+            showSearch
+            allowClear
+            placeholder="选择一级航线"
+          />
+        </Form.Item>
         <Form.Item
-          name="routeName"
+          name="name"
           label="航线"
           rules={[
             {
@@ -110,7 +93,10 @@ const AddRouteManage: React.FC<AddCustomerManageProps> = ({
         >
           <Input placeholder="请输入航线名称" autoComplete="off" />
         </Form.Item>
-        <Form.Item label="目的港">
+        <Form.Item name="remark" label="备注">
+          <Input placeholder="请输入备注" autoComplete="off" />
+        </Form.Item>
+        {/* <Form.Item label="目的港">
           {fndOptions.map((item, index) => (
             <div className="flex items-center mb-[10px]" key={index}>
               <Select
@@ -148,7 +134,7 @@ const AddRouteManage: React.FC<AddCustomerManageProps> = ({
             />
             <p className="text-green-500 text-sm">新增港口</p>
           </div>
-        </Form.Item>
+        </Form.Item> */}
       </Form>
     </DragModal>
   );

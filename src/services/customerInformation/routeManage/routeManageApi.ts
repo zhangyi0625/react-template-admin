@@ -5,8 +5,8 @@ import type { RouteMangeParams, RouteMangeType } from './routeManageModel';
  * 枚举航线管理相关的api
  */
 export enum RouteManageApi {
-  routeManage = '/core/business/route',
-  routeManageByPage = '/core/business/route/page',
+  routeManage = '/business/route',
+  routeManageByPage = '/business/route/page',
 }
 
 /**
@@ -31,7 +31,7 @@ export const getRouteManageListByPage = (params?: RouteMangeParams) => {
  * @param params 航线管理参数
  * @returns 航线管理列表
  */
-export const getRouteManageList = (params?: RouteMangeParams) => {
+export const getRouteManageList = (params?: Partial<RouteMangeParams>) => {
   return HttpRequest.get(
     {
       url: RouteManageApi.routeManage,

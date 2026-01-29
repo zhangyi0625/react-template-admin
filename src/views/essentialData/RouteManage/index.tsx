@@ -1,10 +1,9 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import {
   App,
   Button,
   Card,
   ConfigProvider,
-  SelectProps,
   Space,
   TablePaginationConfig,
   TableProps,
@@ -12,7 +11,6 @@ import {
 import { ExclamationCircleFilled, PlusOutlined } from '@ant-design/icons';
 import { SearchForm, SearchTable } from 'customer-search-form-table';
 import AddRouteManage from './AddRouteManage';
-import { SelectRouteManageOptions } from './config';
 import {
   addRouteManage,
   deleteRouteManage,
@@ -24,9 +22,8 @@ import type {
   RouteMangeType,
 } from '@/services/customerInformation/routeManage/routeManageModel';
 import { filterKeys } from '@/utils/tool';
-import { PortManageType } from '@/services/essential/portManage/portManageApi';
 import useParentSize from '@/hooks/useParentSize';
-import useCacheData from '@/hooks/useCacheData';
+import { SelectRouteManageOptions } from './config';
 
 const RouteManage: React.FC = () => {
   const { modal, message } = App.useApp();
@@ -38,8 +35,6 @@ const RouteManage: React.FC = () => {
     limit: 10,
   });
 
-  const [selectOptions, setSelectOptions] = useState(SelectRouteManageOptions);
-
   const [params, setParams] = useState<{
     visible: boolean;
     currentRow: RouteMangeType | null;
@@ -50,37 +45,34 @@ const RouteManage: React.FC = () => {
     view: false,
   });
 
-  const [fndPortData, setFndPortData] = useState<SelectProps['options']>([]);
-
-  const { essential } = useCacheData({
-    cacheEssentialKeys: ['fndPortData'],
-    formMap: selectOptions,
-  });
-
-  useEffect(() => {
-    init();
-  }, [essential]);
-
   const columns: TableProps['columns'] = [
     {
-      title: '细分航线',
-      dataIndex: 'routeName',
-      key: 'routeName',
+      title: '航线代码',
+      dataIndex: 'code',
+      key: 'code',
       width: 100,
       align: 'center',
     },
     {
-      title: '目的港',
-      key: 'fnds',
+      title: '航线名称',
+      dataIndex: 'name',
+      key: 'name',
+      width: 100,
       align: 'center',
-      render(value) {
-        const newArr: string[] = [];
-        (essential?.fndPortData || []).map((item: PortManageType) => {
-          if (value.fnds && value.fnds.includes(item.code))
-            newArr.push(item.cnName);
-        });
-        return <div>{newArr.join('、')}</div>;
-      },
+    },
+    {
+      title: '更新时间',
+      dataIndex: 'updateTime',
+      key: 'updateTime',
+      width: 150,
+      align: 'center',
+    },
+    {
+      title: '备注',
+      dataIndex: 'remark',
+      key: 'remark',
+      width: 150,
+      align: 'center',
     },
     {
       title: '操作',
@@ -112,21 +104,6 @@ const RouteManage: React.FC = () => {
       },
     },
   ];
-
-  const init = () => {
-    let { fndPortData = [] } = essential;
-    let fnd = fndPortData.map((item: PortManageType) => {
-      return {
-        value: item.code,
-        label: item.enName + '-' + item.cnName,
-      };
-    });
-    selectOptions.map((item) => {
-      if (item.name === 'fnds') item.options = fnd;
-    });
-    setSelectOptions(selectOptions);
-    setFndPortData(fnd);
-  };
 
   const deleteBatch = (id: string) => {
     modal.confirm({
@@ -160,7 +137,7 @@ const RouteManage: React.FC = () => {
 
   const onUpdateSearch = (info?: RouteMangeParams | unknown) => {
     const filteredObj = Object.fromEntries(
-      Object.entries(info ?? {}).filter(([, value]) => !!value)
+      Object.entries(info ?? {}).filter(([, value]) => !!value),
     );
     let pageInfo = filterKeys(searchDefaultForm, ['page', 'limit'], true);
     setSearchDefaultForm({
@@ -178,7 +155,6 @@ const RouteManage: React.FC = () => {
   };
   return (
     <>
-      {/* 菜单检索条件栏 */}
       <ConfigProvider
         theme={{
           components: {
@@ -190,7 +166,7 @@ const RouteManage: React.FC = () => {
       >
         <Card>
           <SearchForm
-            columns={selectOptions}
+            columns={SelectRouteManageOptions}
             gutterWidth={24}
             iconHidden={true}
             labelPosition="left"
@@ -236,7 +212,6 @@ const RouteManage: React.FC = () => {
       </Card>
       {params.visible && (
         <AddRouteManage
-          fndPortOptions={fndPortData}
           params={params}
           onOk={onEditOk}
           onCancel={() =>

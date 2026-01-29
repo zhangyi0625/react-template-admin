@@ -1,15 +1,15 @@
-import { HttpRequest } from '@/utils/request'
+import { HttpRequest } from '@/utils/request';
 import type {
   CarrierManageParams,
   CarrierManageType,
-} from './carrierManageModel'
+} from './carrierManageModel';
 
 /**
  * 枚举船司管理相关的api
  */
 export enum CarrierManageApi {
-  carrier = '/core/business/base/carrier',
-  carrierByPage = '/core/business/base/carrier/page',
+  carrier = '/business/carrier',
+  carrierByPage = '/business/carrier/page',
 }
 
 /**
@@ -25,9 +25,9 @@ export const getCarrierManageListByPage = (params?: CarrierManageParams) => {
     },
     {
       successMessageMode: 'none',
-    }
-  )
-}
+    },
+  );
+};
 
 /**
  * 获取船司管理列表
@@ -42,9 +42,9 @@ export const getCarrierManageList = (params: Partial<CarrierManageParams>) => {
     },
     {
       successMessageMode: 'none',
-    }
-  )
-}
+    },
+  );
+};
 
 /**
  * 添加客户
@@ -59,9 +59,9 @@ export const addCarrierManage = (params: CarrierManageType) => {
     },
     {
       successMessageMode: 'none',
-    }
-  )
-}
+    },
+  );
+};
 
 /**
  * 修改客户
@@ -76,9 +76,9 @@ export const putCarrierManage = (params: CarrierManageType) => {
     },
     {
       successMessageMode: 'none',
-    }
-  )
-}
+    },
+  );
+};
 
 /**
  * 删除客户
@@ -92,6 +92,6 @@ export const deleteCarrierManage = (id: string) => {
     },
     {
       successMessageMode: 'none',
-    }
-  )
-}
+    },
+  );
+};

@@ -1,16 +1,16 @@
-import { HttpRequest } from '@/utils/request'
-import { PortManageParams, PortManageType } from './portManageApi'
+import { HttpRequest } from '@/utils/request';
+import { PortManageParams, PortManageType } from './portManageApi';
 
 /**
  * 枚举港口相关的api
  */
 export enum PortManageApi {
-  portManageList = '/core/business/port',
-  PortManageListByPage = '/core/business/port/page',
-  portFndList = '/core/business/port/fnd',
-  portPorList = '/core/business/port/por',
-  portAllRoute = '/core/business/route',
-  portAllCountry = '/core/business/country',
+  portManageList = '/business/port',
+  PortManageListByPage = '/business/port/page',
+  portFndList = '/business/port/fnd',
+  portPorList = '/business/port/por',
+  portAllRoute = '/business/route',
+  portAllCountry = '/business/country',
 }
 
 /**
@@ -26,16 +26,16 @@ export const getAllPortManageListByPage = (params: PortManageParams) => {
     },
     {
       successMessageMode: 'none',
-    }
-  )
-}
+    },
+  );
+};
 
 /**
  * 获取所有港口列表
  * @param params 港口管理参数
  * @returns 港口列表
  */
-export const getAllPortManageList = (params: PortManageParams) => {
+export const getAllPortManageList = (params: Partial<PortManageParams>) => {
   return HttpRequest.get(
     {
       url: PortManageApi.portManageList,
@@ -43,9 +43,9 @@ export const getAllPortManageList = (params: PortManageParams) => {
     },
     {
       successMessageMode: 'none',
-    }
-  )
-}
+    },
+  );
+};
 
 /**
  * 新增、修改港口信息
@@ -60,9 +60,9 @@ export const addPortManage = (params: PortManageType) => {
     },
     {
       successMessageMode: 'none',
-    }
-  )
-}
+    },
+  );
+};
 
 /**
  * 新增、修改港口信息
@@ -77,9 +77,9 @@ export const updatePortManage = (params: PortManageType) => {
     },
     {
       successMessageMode: 'none',
-    }
-  )
-}
+    },
+  );
+};
 
 /**
  * 更改港口状态
@@ -94,9 +94,9 @@ export const updatePortManageStatus = (params: PortManageType) => {
     },
     {
       successMessageMode: 'none',
-    }
-  )
-}
+    },
+  );
+};
 
 /**
  * 获取港口航线列表
@@ -110,9 +110,9 @@ export const getPortRouteManageList = () => {
     },
     {
       successMessageMode: 'none',
-    }
-  )
-}
+    },
+  );
+};
 
 /**
  * 获取港口国家列表
@@ -126,9 +126,9 @@ export const getPortCountryManageList = () => {
     },
     {
       successMessageMode: 'none',
-    }
-  )
-}
+    },
+  );
+};
 
 /**
  * 获取起运港列表
@@ -142,9 +142,9 @@ export const getPorPortManageList = () => {
     },
     {
       successMessageMode: 'none',
-    }
-  )
-}
+    },
+  );
+};
 
 /**
  * 获取目的港列表
@@ -158,9 +158,9 @@ export const getFndPortManageList = () => {
     },
     {
       successMessageMode: 'none',
-    }
-  )
-}
+    },
+  );
+};
 
 /**
  * 删除港口
@@ -174,6 +174,6 @@ export const deletePortManage = (id: String) => {
     },
     {
       successMessageMode: 'none',
-    }
-  )
-}
+    },
+  );
+};

@@ -81,7 +81,7 @@ const LeftMenu: React.FC = memo(() => {
   const deepLoopFloat = (menuList: RouteItem[], newArr: MenuItem[] = []) => {
     for (const item of menuList) {
       // 如果不能显示的菜单不显示
-      if (item.menuType === 2) {
+      if (item.menuType === 2 || item.path.includes(':id')) {
         continue;
       }
       // 处理子菜单

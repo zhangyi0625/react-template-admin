@@ -138,8 +138,9 @@ const IndustryDynamicsDetail: React.FC = () => {
         console.log(form.getFieldsValue(), html, companyPicList);
         let params = {
           ...form.getFieldsValue(),
-          imageIds: type === 'imageIds' ? companyPicList.join(',') : null,
+          mainImage: companyPicList[0] ?? null,
           content: type === 'content' ? html : null,
+          url: type === 'url' ? form.getFieldValue('url') : null,
         };
         form.getFieldValue('id')
           ? await updateIndustryDynamics(params)

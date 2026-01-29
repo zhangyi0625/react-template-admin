@@ -12,9 +12,9 @@ export enum MemberUnitManageApi {
   MemberUnitManage = '/business/company',
   MemberUnitManageByPage = '/business/company/page',
   AddEmployeeToCompany = '/business/company/addEmployeeToCompany',
-  AssignCompanyMaster = '/api/business/company/assignCompanyMaster/',
-  CompanyImage = '/api/business/company-image',
-  CompanyMemberRecord = '/api/business/company-member',
+  AssignCompanyMaster = '/business/company/assignCompanyMaster/',
+  CompanyImage = '/business/company-image',
+  CompanyMemberRecord = '/business/company-member',
 }
 
 /**

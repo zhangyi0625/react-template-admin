@@ -1,4 +1,4 @@
-import React, { useImperativeHandle, useState } from 'react';
+import React, { useEffect, useImperativeHandle, useState } from 'react';
 import { App, Button, Space, Table, type TableProps } from 'antd';
 import type {
   CompanyMemberRecordType,
@@ -52,12 +52,12 @@ const MemberUnitRecord = React.forwardRef<
       width: 120,
       align: 'center',
     },
-    {
-      title: '修改人',
-      dataIndex: 'position',
-      width: 120,
-      align: 'center',
-    },
+    // {
+    //   title: '修改人',
+    //   dataIndex: 'position',
+    //   width: 120,
+    //   align: 'center',
+    // },
     {
       title: '修改时间',
       dataIndex: 'updateTime',
@@ -103,9 +103,13 @@ const MemberUnitRecord = React.forwardRef<
     onRefresh: () => refresh(),
   }));
 
+  useEffect(() => {
+    if (detail?.id) {
+      refresh();
+    }
+  }, [detail?.id]);
+
   const refresh = async () => {
-    // setBaseInfo([]);
-    console.log('刷新MemberUnitPerson');
     try {
       const resp = await getCompanyMemberRecord(detail?.id as string);
       setTableData(resp);

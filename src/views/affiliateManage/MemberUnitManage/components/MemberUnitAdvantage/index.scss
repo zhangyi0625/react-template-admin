@@ -1,0 +1,32 @@
+.advantage-label {
+  font-weight: 400;
+  font-size: 14px;
+  color: #303133;
+  min-width: 90px;
+}
+.advantage-item {
+  padding: 5px 5px 5px 10px;
+  font-weight: 400;
+  font-size: 13px;
+  color: #ff6632;
+  display: flex;
+  align-items: center;
+  background: #fff0eb;
+  border-radius: 6px;
+  border: 1px solid #ff6632;
+  margin-right: 8px;
+  margin-bottom: 8px;
+  position: relative;
+  cursor: pointer;
+  .icon {
+    width: 12px;
+    height: 12px;
+    margin-left: 6px;
+  }
+}
+
+.advantage-select {
+  width: 160px !important;
+  height: 32px !important;
+  margin-bottom: 8px !important;
+}

@@ -1,12 +1,6 @@
 import { useState } from 'react';
-import {
-  App,
-  Card,
-  ConfigProvider,
-  TablePaginationConfig,
-  TableProps,
-} from 'antd';
-import { SearchForm, SearchTable } from 'customer-search-form-table';
+import { Card, type TablePaginationConfig, type TableProps } from 'antd';
+import { SearchTable } from 'customer-search-form-table';
 import useParentSize from '@/hooks/useParentSize';
 import { getMemberUnitApplyListByPage } from '@/services/affiliateManage/memberUnitApply/memberUnitApplyApi';
 import type { MemberUnitApplySearchParams } from '@/services/affiliateManage/memberUnitApply/memberUnitApplyModel';

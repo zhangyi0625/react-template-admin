@@ -7,6 +7,7 @@ import { getStaffManageList } from '@/services/affiliateManage/staffManage/staff
 export type MemberUnitPersonModalProps = {
   visible: boolean;
   type: 'add' | 'edit' | 'setting';
+  companyId?: string;
   onCancel: () => void;
   onOk: (params: { customerIds: string } | { customerId: string }) => void;
 };
@@ -14,6 +15,7 @@ export type MemberUnitPersonModalProps = {
 const MemberUnitPersonModal: React.FC<MemberUnitPersonModalProps> = ({
   visible,
   type,
+  companyId,
   onCancel,
   onOk,
 }) => {
@@ -29,8 +31,10 @@ const MemberUnitPersonModal: React.FC<MemberUnitPersonModalProps> = ({
 
   const loadCustomerList = async () => {
     try {
-      const resp = await getStaffManageList({});
-      setCustomerList(resp);
+      const resp: any = await getStaffManageList(
+        type === 'setting' ? { companyId: companyId as string } : {},
+      );
+      setCustomerList(resp.list || []);
     } catch {}
   };
 
@@ -72,7 +76,6 @@ const MemberUnitPersonModal: React.FC<MemberUnitPersonModalProps> = ({
             rules={[{ required: true, message: '请选择企业成员' }]}
           >
             <Select
-              mode="multiple"
               allowClear
               placeholder="请选择"
               showSearch

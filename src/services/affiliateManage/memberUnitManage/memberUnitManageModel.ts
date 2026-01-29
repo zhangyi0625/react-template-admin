@@ -1,4 +1,7 @@
-import { DefaultPaging } from '@/types/global';
+import type { RouteMangeType } from '@/services/customerInformation/routeManage/routeManageModel';
+import type { CarrierManageType } from '@/services/essential/carrierManage/carrierManageModel';
+import type { PortManageType } from '@/services/essential/portManage/portManageApi';
+import type { DefaultPaging } from '@/types/global';
 
 export interface MemberUnitManageSearchParams extends DefaultPaging {
   name?: string;
@@ -24,6 +27,15 @@ export interface MemberUnitManageType {
 
 export interface MemberUnitManageDetailType extends MemberUnitManageType {
   createTime: string;
+  advantageBusiness: string;
+  advantagePor: string;
+  porList?: PortManageType[];
+  advantageFnd: string;
+  fndList?: PortManageType[];
+  advantageRoute: string;
+  routeList?: RouteMangeType[];
+  advantageCarrier: string;
+  carrierList?: CarrierManageType[];
 }
 
 export interface CompanyMemberRecordType {

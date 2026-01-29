@@ -6,8 +6,8 @@ import {
   ConfigProvider,
   Space,
   Switch,
-  TablePaginationConfig,
-  TableProps,
+  type TablePaginationConfig,
+  type TableProps,
 } from 'antd';
 import { ExclamationCircleFilled, PlusOutlined } from '@ant-design/icons';
 import { SearchForm, SearchTable } from 'customer-search-form-table';
@@ -197,9 +197,10 @@ const MemberUnitManage: React.FC = () => {
   ) => {
     try {
       await updateMemberUnitManage({
-        id: value?.id ?? '',
+        ...value,
         isShow: checked,
       } as MemberUnitManageType);
+      message.success('修改成功');
       setSearchDefaultForm({ ...searchDefaultForm });
     } catch (error) {
       message.error('操作失败');
@@ -264,8 +265,7 @@ const MemberUnitManage: React.FC = () => {
           <Button
             type="primary"
             icon={<PlusOutlined />}
-            // onClick={() => setParams({ visible: true, currentRow: null })}
-            onClick={() => setDrawerVisible(true)}
+            onClick={() => setParams({ visible: true, currentRow: null })}
           >
             新增会员单位
           </Button>

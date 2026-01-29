@@ -17,7 +17,7 @@ import type { MemberUnitManageType } from '@/services/affiliateManage/memberUnit
 import { MemberUnitManageForm } from './config';
 import dayjs from 'dayjs';
 import { LoadingOutlined, PlusOutlined } from '@ant-design/icons';
-import { postUploadFile } from '@/services/upload';
+import { postUploadFile, previewPreviewFile } from '@/services/upload';
 import { filterKeys } from '@/utils/tool';
 import { formatTime } from '@/utils/format';
 
@@ -83,10 +83,11 @@ const MemberUnitModal: React.FC<MemberUnitModalProps> = ({
       setLoading(true);
       const formdata = new FormData();
       formdata.append('file', info.file as FileType); //将每一个文件图片都加进formdata
-      postUploadFile(formdata).then((resp) => {
-        console.log(resp, 'resp', info);
+      postUploadFile(formdata).then(async (resp) => {
         setLoading(false);
-        setImageUrl(resp.data);
+        const imgUrl = await previewPreviewFile(resp.data.id);
+        const image = await getBase64(imgUrl);
+        setImageUrl(image);
         form.setFieldValue('logo', resp.data.id);
       });
     },
@@ -95,6 +96,14 @@ const MemberUnitModal: React.FC<MemberUnitModalProps> = ({
     },
     fileList,
   };
+
+  const getBase64 = (file: Blob): Promise<string> =>
+    new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => resolve(reader.result as string);
+      reader.onerror = (error) => reject(error);
+    });
 
   const handleOk = () => {
     form
@@ -146,7 +155,7 @@ const MemberUnitModal: React.FC<MemberUnitModalProps> = ({
           labelCol={{ span: 2 }}
           labelAlign="left"
           layout="horizontal"
-          name="file"
+          name="logo"
           label="logo"
         >
           <Upload {...CustomUploadProps}>

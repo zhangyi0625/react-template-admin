@@ -1,11 +1,12 @@
-import { HttpRequest } from '@/utils/request'
-import type { Response } from '@/types/global'
+import { HttpRequest } from '@/utils/request';
+import type { Response } from '@/types/global';
 
 /**
  * 枚举系统配置需要的接口地址
  */
 export enum UploadApi {
-  uploadFile = '/api/file/upload',
+  uploadFile = '/system/file/upload',
+  previewFile = '/system/file/preview/',
 }
 
 /**
@@ -17,6 +18,19 @@ export const postUploadFile = (params: FormData) => {
       url: UploadApi.uploadFile,
       params,
     },
-    { isTransformResponse: false }
-  )
-}
+    { isTransformResponse: false },
+  );
+};
+
+/**
+ * 预览文件
+ */
+export const previewPreviewFile = (imageId: string) => {
+  return HttpRequest.get(
+    {
+      url: UploadApi.previewFile + imageId,
+      responseType: 'blob',
+    },
+    { isTransformResponse: false },
+  );
+};

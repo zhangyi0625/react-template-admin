@@ -1,4 +1,4 @@
-import React, { useImperativeHandle, useState } from 'react';
+import React, { useEffect, useImperativeHandle, useState } from 'react';
 import { App, Button, Space, Table, type TableProps } from 'antd';
 import MemberUnitPersonModal from './MemberUnitPersonModal';
 import {
@@ -93,21 +93,25 @@ const MemberUnitPerson = React.forwardRef<
   const deleteItem = async (id: string) => {
     await deleteMemberUnitManage(id);
     message.success('删除成功～');
-    refresh();
+    loadStaffManageList();
   };
 
+  useEffect(() => {
+    if (detail?.id) {
+      loadStaffManageList();
+    }
+  }, [detail?.id]);
+
   useImperativeHandle(ref, () => ({
-    onRefresh: () => refresh(),
+    onRefresh: () => loadStaffManageList(),
   }));
 
-  const refresh = async () => {
-    // setBaseInfo([]);
-    console.log('刷新MemberUnitPerson');
+  const loadStaffManageList = async () => {
     try {
-      const resp = await getStaffManageList({
+      const resp: any = await getStaffManageList({
         companyId: detail?.id as string,
       });
-      setTableData(resp);
+      setTableData(resp.list || []);
     } catch {}
   };
 
@@ -137,7 +141,7 @@ const MemberUnitPerson = React.forwardRef<
           : '修改成功',
       );
       setParams({ visible: false, type: 'add' });
-      refresh();
+      loadStaffManageList();
     } catch (error) {}
   };
   return (
@@ -163,6 +167,7 @@ const MemberUnitPerson = React.forwardRef<
         rowKey={() => Math.random().toString(36).substring(2)}
       />
       <MemberUnitPersonModal
+        companyId={detail?.id as string}
         visible={params.visible}
         type={params.type}
         onOk={onEditOk}

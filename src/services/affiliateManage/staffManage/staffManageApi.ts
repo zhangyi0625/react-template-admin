@@ -8,8 +8,8 @@ import type {
  * 枚举企业用户管理相关的api
  */
 export enum StaffManageApi {
-  staffManage = '/api/business/customer',
-  staffManageByPage = '/api/business/customer/page',
+  staffManage = '/business/customer',
+  staffManageByPage = '/business/customer/page',
 }
 
 /**

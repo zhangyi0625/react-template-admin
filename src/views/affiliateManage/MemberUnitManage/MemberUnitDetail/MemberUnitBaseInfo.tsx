@@ -137,7 +137,7 @@ export const MemberUnitDetailBaseInfo = React.forwardRef<
       <>
         <div className="flex items-center">
           <p className="mr-[20px] font-semibold">基本信息</p>
-          <Button type="primary" onClick={editBaseInfo}>
+          <Button type="primary" size="small" onClick={editBaseInfo}>
             编辑
           </Button>
         </div>
@@ -183,7 +183,7 @@ export const MemberUnitDetailBaseInfo = React.forwardRef<
         <div className="flex items-center mb-[20px]">
           <p className="mr-[20px] font-semibold">企业图鉴</p>
           <Upload {...CustomUploadProps}>
-            <Button type="primary" loading={loading}>
+            <Button type="primary" loading={loading} size="small">
               上传图片
             </Button>
           </Upload>

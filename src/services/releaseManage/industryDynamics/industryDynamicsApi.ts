@@ -151,3 +151,36 @@ export const createIndustryDynamicsGroup = (params: MemberUnitAboutType) => {
     },
   );
 };
+
+/**
+ * 修改行业动态分组
+ * @param params 行业动态分组参数
+ * @returns 行业动态分组详情
+ */
+export const updateIndustryDynamicsGroup = (params: MemberUnitAboutType) => {
+  return HttpRequest.put(
+    {
+      url: IndustryDynamicsApi.IndustryDynamicsGroup,
+      data: params,
+    },
+    {
+      successMessageMode: 'none',
+    },
+  );
+};
+
+/**
+ * 删除行业动态分组
+ * @param params 行业动态分组删除参数
+ * @returns 行业动态分组详情
+ */
+export const deleteIndustryDynamicsGroup = (id: string) => {
+  return HttpRequest.delete(
+    {
+      url: IndustryDynamicsApi.IndustryDynamicsGroup + '/' + id,
+    },
+    {
+      successMessageMode: 'none',
+    },
+  );
+};

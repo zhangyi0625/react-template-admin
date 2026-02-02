@@ -13,14 +13,13 @@ import useParentSize from '@/hooks/useParentSize';
 import type { IndustryDynamicsSearchParams } from '@/services/releaseManage/industryDynamics/industryDynamicsModel';
 import { SearchForm, SearchTable } from 'customer-search-form-table';
 import { IndustryDynamicsSearchColumns } from './config';
-import type { MemberUnitAboutType } from '@/services/releaseManage/memberUnitAbout/memberUnitAboutModel';
 import {
-  createIndustryDynamicsGroup,
   deleteIndustryDynamics,
   getIndustryDynamicsGroup,
   getIndustryDynamicsListByPage,
 } from '@/services/releaseManage/industryDynamics/industryDynamicsApi';
-import MemberUnitAboutModal from '../MemberUnitAbout/MemberUnitAboutModal';
+
+import IndustryDynamicsProgramDrawer from './IndustryDynamicsProgramDrawer';
 import { filterKeys } from '@/utils/tool';
 import { useNavigate } from 'react-router-dom';
 
@@ -43,19 +42,11 @@ const IndustryDynamics: React.FC = () => {
 
   const [formMaps, setFormMaps] = useState(IndustryDynamicsSearchColumns);
 
-  const [params, setParams] = useState<{
-    visible: boolean;
-    currentRow: MemberUnitAboutType | null;
-    source: 'industryDynamics' | 'memberUnitAbout';
-  }>({
-    visible: false,
-    currentRow: null,
-    source: 'industryDynamics',
-  });
+  const [drawerVisible, setDrawerVisible] = useState(false);
 
   useEffect(() => {
     loadIndustryDynamicsGroupList();
-  }, []);
+  }, [drawerVisible]);
 
   const loadIndustryDynamicsGroupList = async () => {
     try {
@@ -155,24 +146,6 @@ const IndustryDynamics: React.FC = () => {
     });
   };
 
-  const onEditOk = async (routeRow: MemberUnitAboutType) => {
-    try {
-      if (params.currentRow == null) {
-        // 新增数据
-        await createIndustryDynamicsGroup(routeRow);
-      }
-      // 操作成功，关闭弹窗，刷新数据
-      message.success(!params.currentRow ? '添加成功' : '修改成功');
-      await loadIndustryDynamicsGroupList();
-      setParams({
-        visible: false,
-        currentRow: null,
-        source: 'industryDynamics',
-      });
-      onUpdateSearch();
-    } catch (error) {}
-  };
-
   const onUpdateSearch = (info?: IndustryDynamicsSearchParams | unknown) => {
     const filteredObj = Object.fromEntries(
       Object.entries(info ?? {}).filter(([, value]) => !!value),
@@ -227,13 +200,7 @@ const IndustryDynamics: React.FC = () => {
           <Button
             variant="outlined"
             color="default"
-            onClick={() =>
-              setParams({
-                visible: true,
-                currentRow: null,
-                source: 'industryDynamics',
-              })
-            }
+            onClick={() => setDrawerVisible(true)}
           >
             栏目设置
           </Button>
@@ -254,10 +221,11 @@ const IndustryDynamics: React.FC = () => {
           onUpdatePagination={onUpdatePagination}
         />
       </Card>
-      <MemberUnitAboutModal
-        params={params}
-        onCancel={() => setParams({ ...params, visible: false })}
-        onOk={onEditOk}
+      <IndustryDynamicsProgramDrawer
+        industryDynamicsGroupList={industryDynamicsGroupList}
+        visible={drawerVisible}
+        onCancel={() => setDrawerVisible(false)}
+        onFresh={loadIndustryDynamicsGroupList}
       />
     </>
   );

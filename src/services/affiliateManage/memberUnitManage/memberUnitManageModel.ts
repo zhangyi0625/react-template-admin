@@ -8,6 +8,8 @@ export interface MemberUnitManageSearchParams extends DefaultPaging {
   unitLevel?: string;
   memberExpiryDateStart?: string;
   memberExpiryDateEnd?: string;
+  sort?: string;
+  order?: string;
 }
 
 export interface MemberUnitManageType {

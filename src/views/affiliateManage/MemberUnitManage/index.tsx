@@ -41,6 +41,8 @@ const MemberUnitManage: React.FC = () => {
     useState<MemberUnitManageSearchParams>({
       page: 1,
       limit: 10,
+      sort: 'update_time',
+      order: 'desc',
     });
 
   const [drawerVisible, setDrawerVisible] = useState<boolean>(false);
@@ -170,7 +172,11 @@ const MemberUnitManage: React.FC = () => {
     const filteredObj = Object.fromEntries(
       Object.entries(info ?? {}).filter(([, value]) => !!value),
     );
-    let pageInfo = filterKeys(searchDefaultForm, ['page', 'limit'], true);
+    let pageInfo = filterKeys(
+      searchDefaultForm,
+      ['page', 'limit', 'sort', 'order'],
+      true,
+    );
     setSearchDefaultForm({
       ...pageInfo,
       ...filteredObj,

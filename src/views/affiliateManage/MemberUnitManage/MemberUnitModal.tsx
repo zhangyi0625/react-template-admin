@@ -56,8 +56,12 @@ const MemberUnitModal: React.FC<MemberUnitModalProps> = ({
     } else {
       form.setFieldsValue({
         ...currentRow,
-        memberExpiryDate: dayjs(currentRow.memberExpiryDate),
-        establishmentDate: dayjs(currentRow.establishmentDate),
+        memberExpiryDate: currentRow.memberExpiryDate
+          ? dayjs(currentRow.memberExpiryDate)
+          : null,
+        establishmentDate: currentRow.establishmentDate
+          ? dayjs(currentRow.establishmentDate)
+          : null,
       });
     }
   }, [visible]);
@@ -136,7 +140,7 @@ const MemberUnitModal: React.FC<MemberUnitModalProps> = ({
   const uploadButton = (
     <button style={{ border: 0, background: 'none' }} type="button">
       {loading ? <LoadingOutlined /> : <PlusOutlined />}
-      <div style={{ marginTop: 8 }}>Upload</div>
+      <div style={{ marginTop: 8 }}>点击上传</div>
     </button>
   );
   return (

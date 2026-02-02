@@ -79,7 +79,11 @@ const MemberUnitPersonModal: React.FC<MemberUnitPersonModalProps> = ({
               allowClear
               placeholder="请选择"
               showSearch
-              filterOption
+              filterOption={(inputValue, option) =>
+                String(option?.label ?? '')
+                  .toLowerCase()
+                  .includes(inputValue.toLowerCase())
+              }
               options={customerList.map((item) => ({
                 label: item.name,
                 value: item.id,

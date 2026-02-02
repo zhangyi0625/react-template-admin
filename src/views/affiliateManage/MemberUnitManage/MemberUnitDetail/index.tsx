@@ -42,9 +42,9 @@ import MemberUnitModal from '../MemberUnitModal';
 import { getCarrierManageList } from '@/services/essential/carrierManage/carrierManageApi';
 import { getAllPortManageList } from '@/services/essential/portManage/portManageModel';
 import { getRouteManageList } from '@/services/customerInformation/routeManage/routeManageApi';
-import { PortManageType } from '@/services/essential/portManage/portManageApi';
-import { CarrierManageType } from '@/services/essential/carrierManage/carrierManageModel';
-import { RouteMangeType } from '@/services/customerInformation/routeManage/routeManageModel';
+import type { PortManageType } from '@/services/essential/portManage/portManageApi';
+import type { CarrierManageType } from '@/services/essential/carrierManage/carrierManageModel';
+import type { RouteMangeType } from '@/services/customerInformation/routeManage/routeManageModel';
 import { previewPreviewFile } from '@/services/upload';
 
 export type MemberUnitDetailProps = {
@@ -157,6 +157,11 @@ const MemberUnitDetail: React.FC<MemberUnitDetailProps> = ({
     {
       label: '地址：',
       value: getValueByKey('address'),
+      span: 8,
+    },
+    {
+      label: '企业成立日期：',
+      value: getValueByKey('establishmentDate'),
       span: 8,
     },
     {
@@ -378,10 +383,11 @@ const MemberUnitDetail: React.FC<MemberUnitDetailProps> = ({
       onClose={onCancel}
       classNames={{ footer: 'text-right' }}
       footer={null}
+      maskClosable={false}
     >
       <Spin spinning={loading}>
         <div className="flex items-center">
-          <img src={logo} className="w-[56px] h-[49px]" alt="" />
+          <img src={logo} className="w-[56px] h-[56px]" alt="" />
           <div className="flex flex-col ml-[12px]">
             <div className="text-xl font-semibold">{detail?.name}</div>
             <div className="flex items-center mt-[3px]">
@@ -400,7 +406,7 @@ const MemberUnitDetail: React.FC<MemberUnitDetailProps> = ({
           </div>
         </div>
         <Row gutter={24}>
-          {baseInfo.slice(0, baseInfo.length - 2).map((item) => (
+          {baseInfo.slice(0, baseInfo.length - 3).map((item) => (
             <Col key={item.label} span={item.span || 8}>
               <div className="flex items-center whitespace-nowrap mt-[12px]">
                 <div className="text-sm text-gray-400">{item.label}</div>
@@ -412,6 +418,7 @@ const MemberUnitDetail: React.FC<MemberUnitDetailProps> = ({
           ))}
         </Row>
         <Tabs
+          style={{ marginTop: '12px' }}
           items={TabItems}
           defaultActiveKey={defaultActiveKey}
           onChange={changeActiveKey}

@@ -15,6 +15,7 @@ export enum MemberUnitManageApi {
   AssignCompanyMaster = '/business/company/assignCompanyMaster/',
   CompanyImage = '/business/company-image',
   CompanyMemberRecord = '/business/company-member',
+  RemoveCustomer = '/business/company/removeCustomer/',
 }
 
 /**
@@ -166,6 +167,20 @@ export const assignCompanyMaster = (companyId: string) => {
     {
       url: MemberUnitManageApi.AssignCompanyMaster + companyId,
       data: {},
+    },
+    {
+      successMessageMode: 'none',
+    },
+  );
+};
+
+/**
+ * 删除单位成员
+ */
+export const deleteRemoveCustomer = (id: string) => {
+  return HttpRequest.post(
+    {
+      url: MemberUnitManageApi.RemoveCustomer + id,
     },
     {
       successMessageMode: 'none',

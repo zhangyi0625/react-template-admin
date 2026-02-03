@@ -72,7 +72,7 @@ const MemberUnitPersonModal: React.FC<MemberUnitPersonModalProps> = ({
         {type !== 'setting' ? (
           <Form.Item
             name="customerIds"
-            label="姓名/手机号"
+            label="姓名"
             rules={[{ required: true, message: '请选择企业成员' }]}
           >
             <Select

@@ -14,4 +14,5 @@ export interface AdvertisingManageType {
   endDate: string;
   link: string;
   imageId: string;
+  imagePath: string;
 }

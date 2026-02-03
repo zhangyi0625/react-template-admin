@@ -11,6 +11,7 @@ export interface MemberUnitAboutType {
   sort: number;
   type: string;
   imageIds: string;
+  imagePath: string[];
   content: string;
   name: string;
 }

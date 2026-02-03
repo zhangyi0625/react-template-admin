@@ -48,7 +48,7 @@ const MemberUnitAboutDetail: React.FC = () => {
 
   const [loading, setLoading] = useState<boolean>(false);
 
-  const [imageUrls, setImageUrls] = useState<Record<string, string>>({});
+  const [imageUrls, setImageUrls] = useState<string[]>([]);
 
   const [companyPicList, setCompanyPicList] = useState<string[]>([]);
 
@@ -59,9 +59,9 @@ const MemberUnitAboutDetail: React.FC = () => {
 
   // 模拟 ajax 请求，异步设置 html
   useEffect(() => {
-    setTimeout(() => {
-      setHtml('<p>hello world</p>');
-    }, 1500);
+    // setTimeout(() => {
+    //   setHtml('<p>hello world</p>');
+    // }, 1500);
   }, []);
 
   // 工具栏配置
@@ -95,8 +95,13 @@ const MemberUnitAboutDetail: React.FC = () => {
         type: resp.content ? 'content' : 'imageIds',
       });
       setCompanyPicList(resp.imageIds ? resp.imageIds.split(',') : []);
+
       // setFileList(resp.imageIds || []);
       setType(resp.content ? 'content' : 'imageIds');
+      setTimeout(() => {
+        setHtml(resp.content ?? '<p>hello world</p>');
+      }, 1500);
+      setImageUrls(resp.imagePath ? resp.imagePath : []);
       setImmediate(false);
     } catch {
       setImmediate(false);
@@ -126,8 +131,16 @@ const MemberUnitAboutDetail: React.FC = () => {
 
   // 组件挂载时加载所有图片
   useEffect(() => {
-    companyPicList.forEach((item) => getSrc(item));
+    // companyPicList.forEach((item) => getSrc(item));
   }, [companyPicList]);
+
+  const changeImageUrls = (item: string, index: number) => {
+    // setImageUrls((prev) => prev.filter((i, i) => i !== index));
+    setImageUrls((prev) => prev.filter((i) => i !== item));
+    setCompanyPicList((prev) =>
+      prev.filter((i) => i !== companyPicList[index]),
+    );
+  };
 
   const CustomUploadProps: UploadProps = {
     name: 'file',
@@ -153,6 +166,7 @@ const MemberUnitAboutDetail: React.FC = () => {
       postUploadFile(formdata).then((resp) => {
         setLoading(false);
         setCompanyPicList((prev) => [...prev, resp.data.id as string]);
+        setImageUrls((prev) => [...prev, resp.data.path]);
       });
     },
     onRemove() {
@@ -160,29 +174,6 @@ const MemberUnitAboutDetail: React.FC = () => {
     },
     fileList,
   };
-
-  const getSrc = async (imageId: string) => {
-    if (imageUrls[imageId]) {
-      return imageUrls[imageId];
-    }
-    try {
-      const resp = await previewPreviewFile(imageId);
-      const image = await getBase64(resp as Blob);
-      setImageUrls((prev) => ({ ...prev, [imageId]: image }));
-      return image;
-    } catch (error) {
-      console.error('获取图片失败:', error);
-      return '';
-    }
-  };
-
-  const getBase64 = (file: Blob): Promise<string> =>
-    new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
-      reader.onload = () => resolve(reader.result as string);
-      reader.onerror = (error) => reject(error);
-    });
 
   return (
     <>
@@ -271,31 +262,21 @@ const MemberUnitAboutDetail: React.FC = () => {
                   </Upload>
                 </div>
                 <div className="flex flex-wrap items-center">
-                  {companyPicList.map((item) => (
+                  {imageUrls.map((item, index) => (
                     <div
                       key={item}
                       className="mr-[12px] relative w-[80px] h-[80px]"
                     >
                       <img
-                        src={imageUrls[item] || ''}
+                        src={item || ''}
                         alt={item}
-                        // onClick={() => uploadCompanyPic(item)}
-                        onError={() => {
-                          if (!imageUrls[item]) {
-                            getSrc(item);
-                          }
-                        }}
                         className="w-full h-auto h-cover"
                       />
                       <img
                         src={IconClose}
                         alt="close"
                         className="absolute top-[2px] right-[0px] w-[24px] h-[24px] cursor-pointer"
-                        onClick={() =>
-                          setCompanyPicList((prev) =>
-                            prev.filter((i) => i !== item),
-                          )
-                        }
+                        onClick={() => changeImageUrls(item, index)}
                       />
                     </div>
                   ))}

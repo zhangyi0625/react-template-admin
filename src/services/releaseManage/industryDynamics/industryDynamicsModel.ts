@@ -10,6 +10,7 @@ export interface IndustryDynamicsType {
   sort: number;
   type: string;
   mainImage: string;
+  mainImagePath: string;
   content: string;
   url: string;
   title: string;

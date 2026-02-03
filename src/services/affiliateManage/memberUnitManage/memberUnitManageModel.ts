@@ -23,7 +23,8 @@ export interface MemberUnitManageType {
   address: string;
   enterpriseDescription: string;
   memberLevel: number;
-  logo: string;
+  logo: string | null;
+  logoPath: string | null;
   isShow: boolean;
 }
 

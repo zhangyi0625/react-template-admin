@@ -19,7 +19,7 @@ import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import '@wangeditor/editor/dist/css/style.css'; // 引入 css
 import { Editor, Toolbar } from '@wangeditor/editor-for-react';
 import { IDomEditor, IEditorConfig, IToolbarConfig } from '@wangeditor/editor';
-import { postUploadFile, previewPreviewFile } from '@/services/upload';
+import { postUploadFile } from '@/services/upload';
 import IconClose from '@/assets/svg/icon/close.svg';
 import {
   createIndustryDynamics,
@@ -50,7 +50,7 @@ const IndustryDynamicsDetail: React.FC = () => {
 
   const [loading, setLoading] = useState<boolean>(false);
 
-  const [imageUrls, setImageUrls] = useState<Record<string, string>>({});
+  const [imageUrls, setImageUrls] = useState<string>('');
 
   const [companyPicList, setCompanyPicList] = useState<string[]>([]);
 
@@ -65,9 +65,9 @@ const IndustryDynamicsDetail: React.FC = () => {
 
   // 模拟 ajax 请求，异步设置 html
   useEffect(() => {
-    setTimeout(() => {
-      setHtml('<p>hello world</p>');
-    }, 1500);
+    // setTimeout(() => {
+    //   setHtml('<p>hello world</p>');
+    // }, 1500);
   }, []);
 
   // 工具栏配置
@@ -115,10 +115,12 @@ const IndustryDynamicsDetail: React.FC = () => {
           type: resp.content ? 'content' : 'url',
         });
         setCompanyPicList(resp.mainImage ? resp.mainImage.split(',') : []);
-        // setFileList(resp.imageIds || []);
+        setImageUrls(resp.mainImagePath || '');
         setType(resp.content ? 'content' : 'url');
+        setTimeout(() => {
+          setHtml(resp.content || '<p>hello world</p>');
+        }, 1500);
       } else {
-        console.log(params, location);
         form.resetFields();
         form.setFieldsValue({
           type: 'url',
@@ -135,10 +137,9 @@ const IndustryDynamicsDetail: React.FC = () => {
     form
       .validateFields()
       .then(async () => {
-        console.log(form.getFieldsValue(), html, companyPicList);
         let params = {
           ...form.getFieldsValue(),
-          mainImage: companyPicList[0] ?? null,
+          mainImage: imageUrls && companyPicList[0] ? companyPicList[0] : null,
           content: type === 'content' ? html : null,
           url: type === 'url' ? form.getFieldValue('url') : null,
         };
@@ -178,7 +179,8 @@ const IndustryDynamicsDetail: React.FC = () => {
       formdata.append('file', info.file as FileType); //将每一个文件图片都加进formdata
       postUploadFile(formdata).then((resp) => {
         setLoading(false);
-        setCompanyPicList([resp.data.id as string]);
+        setCompanyPicList([resp.data.id]);
+        setImageUrls(resp.data.path);
       });
     },
     onRemove() {
@@ -186,29 +188,6 @@ const IndustryDynamicsDetail: React.FC = () => {
     },
     fileList,
   };
-
-  const getSrc = async (imageId: string) => {
-    if (imageUrls[imageId]) {
-      return imageUrls[imageId];
-    }
-    try {
-      const resp = await previewPreviewFile(imageId);
-      const image = await getBase64(resp as Blob);
-      setImageUrls((prev) => ({ ...prev, [imageId]: image }));
-      return image;
-    } catch (error) {
-      console.error('获取图片失败:', error);
-      return '';
-    }
-  };
-
-  const getBase64 = (file: Blob): Promise<string> =>
-    new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
-      reader.onload = () => resolve(reader.result as string);
-      reader.onerror = (error) => reject(error);
-    });
 
   return (
     <Spin spinning={immediate}>
@@ -277,34 +256,22 @@ const IndustryDynamicsDetail: React.FC = () => {
                   </Button>
                 </Upload>
                 <div className="flex flex-wrap items-center">
-                  {companyPicList.map((item) => (
-                    <div
-                      key={item}
-                      className="mr-[12px] mt-[12px] relative w-[80px] h-[80px]"
-                    >
-                      <img
-                        src={imageUrls[item] || ''}
-                        alt={item}
-                        // onClick={() => uploadCompanyPic(item)}
-                        onError={() => {
-                          if (!imageUrls[item]) {
-                            getSrc(item);
-                          }
-                        }}
-                        className="w-full h-auto h-cover"
-                      />
-                      <img
-                        src={IconClose}
-                        alt="close"
-                        className="absolute top-[2px] right-[0px] w-[24px] h-[24px] cursor-pointer"
-                        onClick={() =>
-                          setCompanyPicList((prev) =>
-                            prev.filter((i) => i !== item),
-                          )
-                        }
-                      />
-                    </div>
-                  ))}
+                  {/* {companyPicList.map((item) => ( */}
+                  <div className="mr-[12px] mt-[12px] relative w-[80px] h-[80px]">
+                    <img
+                      src={imageUrls || ''}
+                      alt={imageUrls || ''}
+                      // onClick={() => uploadCompanyPic(item)}
+                      className="w-full h-auto h-cover"
+                    />
+                    <img
+                      src={IconClose}
+                      alt="close"
+                      className="absolute top-[2px] right-[0px] w-[24px] h-[24px] cursor-pointer"
+                      onClick={() => setImageUrls('')}
+                    />
+                  </div>
+                  {/* ))} */}
                 </div>
               </Form.Item>
             </Col>

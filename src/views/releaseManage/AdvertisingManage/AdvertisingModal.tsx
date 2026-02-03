@@ -17,7 +17,7 @@ import { AdvertisingForm } from './config';
 import { formatTime } from '@/utils/format';
 import { filterKeys } from '@/utils/tool';
 import dayjs from 'dayjs';
-import { postUploadFile, previewPreviewFile } from '@/services/upload';
+import { postUploadFile } from '@/services/upload';
 
 export type AdvertisingModalProps = {
   params: {
@@ -56,20 +56,13 @@ const AdvertisingModal: React.FC<AdvertisingModalProps> = ({
         ...currentRow,
         date: [dayjs(currentRow.startDate), dayjs(currentRow.endDate)],
       });
-      loadImage();
+      setImageUrl(currentRow.imagePath);
     } else {
       form.resetFields();
       form.setFieldsValue({ date: [] });
       setImageUrl('');
     }
   }, [visible]);
-
-  const loadImage = async () => {
-    if (currentRow?.imageId) {
-      const image = await previewPreviewFile(currentRow.imageId);
-      setImageUrl(await getBase64(image as Blob));
-    }
-  };
 
   const CustomUploadProps: UploadProps = {
     name: 'file',
@@ -94,8 +87,7 @@ const AdvertisingModal: React.FC<AdvertisingModalProps> = ({
       formdata.append('file', info.file as FileType); //将每一个文件图片都加进formdata
       postUploadFile(formdata).then(async (resp) => {
         setLoading(false);
-        const image = await previewPreviewFile(resp.data.id);
-        setImageUrl(await getBase64(image as Blob));
+        setImageUrl(resp.data.path);
         form.setFieldValue('imageId', resp.data.id);
       });
     },
@@ -131,13 +123,6 @@ const AdvertisingModal: React.FC<AdvertisingModalProps> = ({
     </button>
   );
 
-  const getBase64 = (file: Blob): Promise<string> =>
-    new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
-      reader.onload = () => resolve(reader.result as string);
-      reader.onerror = (error) => reject(error);
-    });
   return (
     <DragModal
       width="50%"

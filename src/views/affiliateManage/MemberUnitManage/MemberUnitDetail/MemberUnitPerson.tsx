@@ -5,6 +5,7 @@ import {
   addEmployeeToCompany,
   assignCompanyMaster,
   deleteMemberUnitManage,
+  deleteRemoveCustomer,
   editEmployeeToCompany,
   getMemberUnitManageList,
 } from '@/services/affiliateManage/memberUnitManage/memberUnitManageApi';
@@ -91,7 +92,7 @@ const MemberUnitPerson = React.forwardRef<
   ];
 
   const deleteItem = async (id: string) => {
-    await deleteMemberUnitManage(id);
+    await deleteRemoveCustomer(id);
     message.success('删除成功～');
     loadStaffManageList();
   };

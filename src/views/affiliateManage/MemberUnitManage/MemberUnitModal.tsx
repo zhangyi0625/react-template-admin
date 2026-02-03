@@ -17,7 +17,7 @@ import type { MemberUnitManageType } from '@/services/affiliateManage/memberUnit
 import { MemberUnitManageForm } from './config';
 import dayjs from 'dayjs';
 import { LoadingOutlined, PlusOutlined } from '@ant-design/icons';
-import { postUploadFile, previewPreviewFile } from '@/services/upload';
+import { postUploadFile } from '@/services/upload';
 import { filterKeys } from '@/utils/tool';
 import { formatTime } from '@/utils/format';
 
@@ -63,6 +63,7 @@ const MemberUnitModal: React.FC<MemberUnitModalProps> = ({
           ? dayjs(currentRow.establishmentDate)
           : null,
       });
+      setImageUrl(currentRow.logoPath ?? '');
     }
   }, [visible]);
 
@@ -89,9 +90,7 @@ const MemberUnitModal: React.FC<MemberUnitModalProps> = ({
       formdata.append('file', info.file as FileType); //将每一个文件图片都加进formdata
       postUploadFile(formdata).then(async (resp) => {
         setLoading(false);
-        const imgUrl = await previewPreviewFile(resp.data.id);
-        const image = await getBase64(imgUrl);
-        setImageUrl(image);
+        setImageUrl(resp.data.path);
         form.setFieldValue('logo', resp.data.id);
       });
     },
@@ -100,14 +99,6 @@ const MemberUnitModal: React.FC<MemberUnitModalProps> = ({
     },
     fileList,
   };
-
-  const getBase64 = (file: Blob): Promise<string> =>
-    new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
-      reader.onload = () => resolve(reader.result as string);
-      reader.onerror = (error) => reject(error);
-    });
 
   const handleOk = () => {
     form

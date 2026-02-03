@@ -61,21 +61,17 @@ export const MemberUnitDetailBaseInfo = React.forwardRef<
 
     const [loading, setLoading] = useState<boolean>(false);
 
-    const [imageUrls, setImageUrls] = useState<Record<string, string>>({});
-
     useImperativeHandle(ref, () => ({
       onRefresh: () => onRefresh(),
     }));
 
     const onRefresh = () => {
       // 重置图片缓存，重新加载
-      setImageUrls({});
-      companyPicList.forEach((item) => getSrc(item));
     };
 
     // 组件挂载时加载所有图片
     useEffect(() => {
-      companyPicList.forEach((item) => getSrc(item));
+      // companyPicList.forEach((item) => getSrc(item));
     }, [companyPicList]);
 
     const CustomUploadProps: UploadProps = {
@@ -110,29 +106,6 @@ export const MemberUnitDetailBaseInfo = React.forwardRef<
       fileList,
     };
 
-    const getSrc = async (imageId: string) => {
-      if (imageUrls[imageId]) {
-        return imageUrls[imageId];
-      }
-      try {
-        const resp = await previewPreviewFile(imageId);
-        const image = await getBase64(resp as Blob);
-        setImageUrls((prev) => ({ ...prev, [imageId]: image }));
-        return image;
-      } catch (error) {
-        console.error('获取图片失败:', error);
-        return '';
-      }
-    };
-
-    const getBase64 = (file: Blob): Promise<string> =>
-      new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.readAsDataURL(file);
-        reader.onload = () => resolve(reader.result as string);
-        reader.onerror = (error) => reject(error);
-      });
-
     return (
       <>
         <div className="flex items-center">
@@ -144,8 +117,10 @@ export const MemberUnitDetailBaseInfo = React.forwardRef<
         <Row gutter={24}>
           {baseInfo.map((item) => (
             <Col key={item.label} span={item.span || 8}>
-              <div className="flex items-center whitespace-nowrap mt-[12px]">
-                <div className="text-sm text-gray-400">{item.label}</div>
+              <div className="flex items-start whitespace-pre-wrap mt-[12px]">
+                <div className="text-sm text-gray-400 whitespace-nowrap">
+                  {item.label}
+                </div>
                 <div className="text-sm text-stone-900 ml-[8px]">
                   {item.value()}
                 </div>
@@ -192,14 +167,9 @@ export const MemberUnitDetailBaseInfo = React.forwardRef<
           {companyPicList.map((item) => (
             <div key={item} className="mr-[12px] relative w-[80px] h-[80px]">
               <img
-                src={imageUrls[item] || ''}
+                src={item || ''}
                 alt={item}
                 onClick={() => uploadCompanyPic(item)}
-                onError={() => {
-                  if (!imageUrls[item]) {
-                    getSrc(item);
-                  }
-                }}
                 className="w-full h-auto h-cover"
               />
               <img

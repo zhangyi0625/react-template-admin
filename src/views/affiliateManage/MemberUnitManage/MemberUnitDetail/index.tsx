@@ -45,7 +45,6 @@ import { getRouteManageList } from '@/services/customerInformation/routeManage/r
 import type { PortManageType } from '@/services/essential/portManage/portManageApi';
 import type { CarrierManageType } from '@/services/essential/carrierManage/carrierManageModel';
 import type { RouteMangeType } from '@/services/customerInformation/routeManage/routeManageModel';
-import { previewPreviewFile } from '@/services/upload';
 
 export type MemberUnitDetailProps = {
   visible: boolean;
@@ -117,7 +116,7 @@ const MemberUnitDetail: React.FC<MemberUnitDetailProps> = ({
   });
 
   const [companyPicList, setCompanyPicList] = useState<
-    { companyId: string; imageId: string; id: string }[]
+    { companyId: string; imageId: string; id: string; imagePath: string }[]
   >([]);
 
   const getValueByKey = useCallback(
@@ -134,7 +133,7 @@ const MemberUnitDetail: React.FC<MemberUnitDetailProps> = ({
       span: 8,
     },
     {
-      label: '会员单位等级',
+      label: '会员单位等级：',
       value: () => {
         return (
           MemberUnitManageUnitLevelOptions?.find(
@@ -189,10 +188,8 @@ const MemberUnitDetail: React.FC<MemberUnitDetailProps> = ({
       const resp = await getMemberUnitManageDetail(currentRow?.id as string);
       loadCompanyPic();
       setDetail(resp);
-      if (resp.logo) {
-        const imageId = await previewPreviewFile(resp.logo ?? '');
-        const image = await getBase64(imageId as Blob);
-        setLogo(image);
+      if (resp.logoPath) {
+        setLogo(resp.logoPath);
       } else {
         setLogo(DefaultAvatar);
       }
@@ -222,10 +219,10 @@ const MemberUnitDetail: React.FC<MemberUnitDetailProps> = ({
     } catch {}
   };
 
-  const deleteCompanyPicItem = async (imageId: string) => {
+  const deleteCompanyPicItem = async (imagePath: string) => {
     try {
       await deleteCompanyImage(
-        companyPicList?.find((item) => item.imageId === imageId)?.id ?? '',
+        companyPicList?.find((item) => item.imagePath === imagePath)?.id ?? '',
       );
       message.success('删除成功');
       setTimeout(() => {
@@ -253,8 +250,16 @@ const MemberUnitDetail: React.FC<MemberUnitDetailProps> = ({
   const loadAdvantage = async () => {
     try {
       Promise.all([
-        getAllPortManageList({ isPor: true }),
-        getAllPortManageList({ isFnd: true }),
+        getAllPortManageList({
+          isPor: 1,
+          order: 'desc',
+          sort: 'is_popularity',
+        }),
+        getAllPortManageList({
+          isFnd: 1,
+          order: 'desc',
+          sort: 'is_popularity',
+        }),
         getRouteManageList({}),
         getCarrierManageList({}),
       ]).then((result) => {
@@ -333,7 +338,7 @@ const MemberUnitDetail: React.FC<MemberUnitDetailProps> = ({
           detail={(detail as MemberUnitManageDetailType) || {}}
           baseInfo={baseInfo as MemberUnitDetailBaseInfoType[]}
           advantageList={advantageList}
-          companyPicList={companyPicList.map((item) => item.imageId)}
+          companyPicList={companyPicList.map((item) => item.imagePath)}
           deleteCompanyPicItem={deleteCompanyPicItem}
           editBaseInfo={() =>
             setEditBaseInfo({ visible: true, currentRow: detail })
@@ -364,14 +369,6 @@ const MemberUnitDetail: React.FC<MemberUnitDetailProps> = ({
       ),
     },
   ];
-
-  const getBase64 = (file: Blob): Promise<string> =>
-    new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
-      reader.onload = () => resolve(reader.result as string);
-      reader.onerror = (error) => reject(error);
-    });
 
   return (
     <Drawer

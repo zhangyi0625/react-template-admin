@@ -2,6 +2,8 @@ import type { DefaultPaging } from '@/types/global';
 
 export interface MemberUnitAboutSearchParams extends DefaultPaging {
   columnName?: string;
+  sort?: string;
+  order?: string;
 }
 
 export interface MemberUnitAboutType {

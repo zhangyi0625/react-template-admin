@@ -2,6 +2,8 @@ import type { DefaultPaging } from '@/types/global';
 
 export interface IndustryDynamicsSearchParams extends DefaultPaging {
   groupId?: string;
+  sort?: string;
+  order?: string;
 }
 
 export interface IndustryDynamicsType {

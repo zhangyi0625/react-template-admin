@@ -26,10 +26,12 @@ import {
 import '@wangeditor/editor/dist/css/style.css'; // 引入 css
 import { Editor, Toolbar } from '@wangeditor/editor-for-react';
 import { IDomEditor, IEditorConfig, IToolbarConfig } from '@wangeditor/editor';
-import { postUploadFile, previewPreviewFile } from '@/services/upload';
+import { postUploadFile } from '@/services/upload';
 import IconClose from '@/assets/svg/icon/close.svg';
 
 type FileType = Parameters<GetProp<UploadProps, 'beforeUpload'>>[0];
+
+type InsertFnType = (url: string, alt: string, href: string) => void;
 
 const MemberUnitAboutDetail: React.FC = () => {
   const params = useParams();
@@ -70,6 +72,21 @@ const MemberUnitAboutDetail: React.FC = () => {
   // 编辑器配置
   const editorConfig: Partial<IEditorConfig> = {
     placeholder: '请输入内容...',
+    MENU_CONF: {
+      uploadImage: {
+        server: '/api/system/file/upload',
+        fieldName: 'file',
+        headers: {
+          Authorization: 'Bearer ' + sessionStorage.getItem('token'),
+        },
+        // 自定义插入图片
+        customInsert(res: any, insertFn: InsertFnType) {
+          console.log(res, 'res');
+          // 从 res 中找到 url alt href ，然后插入图片
+          insertFn(res.data.path, res.data.name, res.data.path);
+        },
+      },
+    },
   };
 
   // 及时销毁 editor ，重要！

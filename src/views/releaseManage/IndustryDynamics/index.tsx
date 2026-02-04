@@ -34,6 +34,8 @@ const IndustryDynamics: React.FC = () => {
     useState<IndustryDynamicsSearchParams>({
       page: 1,
       limit: 10,
+      sort: 'update_time',
+      order: 'desc',
     });
 
   const [industryDynamicsGroupList, setIndustryDynamicsGroupList] = useState<
@@ -150,7 +152,11 @@ const IndustryDynamics: React.FC = () => {
     const filteredObj = Object.fromEntries(
       Object.entries(info ?? {}).filter(([, value]) => !!value),
     );
-    let pageInfo = filterKeys(searchDefaultForm, ['page', 'limit'], true);
+    let pageInfo = filterKeys(
+      searchDefaultForm,
+      ['page', 'limit', 'sort', 'order'],
+      true,
+    );
     setSearchDefaultForm({
       ...pageInfo,
       ...filteredObj,

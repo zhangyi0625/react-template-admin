@@ -6,6 +6,7 @@ import {
   Form,
   GetProp,
   Input,
+  InputNumber,
   Row,
   Select,
   Upload,
@@ -53,6 +54,7 @@ const MemberUnitModal: React.FC<MemberUnitModalProps> = ({
     if (!visible) return;
     if (!currentRow) {
       form.resetFields();
+      setImageUrl('');
     } else {
       form.setFieldsValue({
         ...currentRow,
@@ -207,6 +209,14 @@ const MemberUnitModal: React.FC<MemberUnitModalProps> = ({
                     placeholder={`请输入${item.label}`}
                     autoComplete="off"
                     style={{ minHeight: '100px' }}
+                  />
+                )}
+                {item.formType === 'input-number' && (
+                  <InputNumber
+                    placeholder={`请输入${item.label}`}
+                    autoComplete="off"
+                    style={{ width: '100%' }}
+                    min={0}
                   />
                 )}
               </Form.Item>

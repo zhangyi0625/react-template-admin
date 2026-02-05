@@ -135,6 +135,12 @@ export const MemberUnitManageForm: Omit<
     span: 12,
   },
   {
+    label: '排序',
+    name: 'sort',
+    formType: 'input-number',
+    span: 12,
+  },
+  {
     label: '企业简介',
     name: 'enterpriseDescription',
     formType: 'textarea',

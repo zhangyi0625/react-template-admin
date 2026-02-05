@@ -137,6 +137,12 @@ const MemberUnitManage: React.FC = () => {
       dataIndex: 'createTime',
     },
     {
+      title: '排序',
+      width: 80,
+      align: 'center',
+      dataIndex: 'sort',
+    },
+    {
       title: '操作',
       width: '10%',
       fixed: 'right',

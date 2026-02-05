@@ -101,6 +101,8 @@ const MemberUnitAboutDetail: React.FC = () => {
   useEffect(() => {
     if (!params.id) return;
     init();
+    setFileList([]);
+    setImageUrls([]);
   }, [params.id]);
 
   const init = async () => {

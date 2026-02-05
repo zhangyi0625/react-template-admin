@@ -107,6 +107,8 @@ const IndustryDynamicsDetail: React.FC = () => {
   useEffect(() => {
     if (!params.id) return;
     init();
+    setFileList([]);
+    setImageUrls('');
     loadIndustryDynamicsGroupList();
   }, [params.id]);
 
@@ -272,24 +274,23 @@ const IndustryDynamicsDetail: React.FC = () => {
                     上传图片
                   </Button>
                 </Upload>
-                <div className="flex flex-wrap items-center">
-                  {/* {companyPicList.map((item) => ( */}
-                  <div className="mr-[12px] mt-[12px] relative w-[80px] h-[80px]">
-                    <img
-                      src={imageUrls || ''}
-                      alt={imageUrls || ''}
-                      // onClick={() => uploadCompanyPic(item)}
-                      className="w-full h-auto h-cover"
-                    />
-                    <img
-                      src={IconClose}
-                      alt="close"
-                      className="absolute top-[2px] right-[0px] w-[24px] h-[24px] cursor-pointer"
-                      onClick={() => setImageUrls('')}
-                    />
+                {imageUrls && (
+                  <div className="flex flex-wrap items-center">
+                    <div className="mr-[12px] mt-[12px] relative w-[80px] h-[80px]">
+                      <img
+                        src={imageUrls || ''}
+                        alt={imageUrls || ''}
+                        className="w-full h-auto h-cover"
+                      />
+                      <img
+                        src={IconClose}
+                        alt="close"
+                        className="absolute top-[2px] right-[0px] w-[24px] h-[24px] cursor-pointer"
+                        onClick={() => setImageUrls('')}
+                      />
+                    </div>
                   </div>
-                  {/* ))} */}
-                </div>
+                )}
               </Form.Item>
             </Col>
           </Row>

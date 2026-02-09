@@ -4,7 +4,7 @@ import { Select } from 'antd';
 import AdvantageIcon from '@/assets/svg/icon/advantage-close.svg';
 import type { MemberUnitManageDetailType } from '@/services/affiliateManage/memberUnitManage/memberUnitManageModel';
 import type { AdvantageListType } from '../../MemberUnitDetail';
-import type { PortManageType } from '@/services/essential/portManage/portManageApi';
+// import type { PortManageType } from '@/services/essential/portManage/portManageApi';
 
 export type MemberUnitAdvantageProps = {
   business: Pick<
@@ -48,9 +48,10 @@ const MemberUnitAdvantage: React.FC<MemberUnitAdvantageProps> = ({
       return value
         ? key === 'advantageBusiness'
           ? value.split(',')
-          : value.map((i: PortManageType) =>
-              key !== 'routeList' ? i.cnName : i.name,
-            )
+          : // : value.map((i: PortManageType) =>
+            //     key !== 'routeList' ? i.cnName : i.name,
+            //   )
+            value
         : [];
     },
     [business],
@@ -90,16 +91,18 @@ const MemberUnitAdvantage: React.FC<MemberUnitAdvantageProps> = ({
       <div className="flex items-start mt-[20px]">
         <p className="advantage-label">优势起运港：</p>
         <div className="flex flex-wrap">
-          {getValueByKey('porList').map((item: string) => (
-            <div
-              key={item}
-              className="advantage-item"
-              onClick={() => deleteAdvantageItem(item, 'advantagePor')}
-            >
-              {item}
-              <img className="icon" src={AdvantageIcon} alt="" />
-            </div>
-          ))}
+          {getValueByKey('porList').map(
+            (item: { code: string; cnName: string }) => (
+              <div
+                key={item.code}
+                className="advantage-item"
+                onClick={() => deleteAdvantageItem(item.code, 'advantagePor')}
+              >
+                {item.cnName}
+                <img className="icon" src={AdvantageIcon} alt="" />
+              </div>
+            ),
+          )}
           <Select
             options={advantageList.advantagePor}
             showSearch
@@ -120,16 +123,18 @@ const MemberUnitAdvantage: React.FC<MemberUnitAdvantageProps> = ({
       <div className="flex items-start mt-[20px]">
         <p className="advantage-label">优势目的港：</p>
         <div className="flex flex-wrap">
-          {getValueByKey('fndList').map((item: string) => (
-            <div
-              key={item}
-              className="advantage-item"
-              onClick={() => deleteAdvantageItem(item, 'advantageFnd')}
-            >
-              {item}
-              <img className="icon" src={AdvantageIcon} alt="" />
-            </div>
-          ))}
+          {getValueByKey('fndList').map(
+            (item: { code: string; cnName: string }) => (
+              <div
+                key={item.code}
+                className="advantage-item"
+                onClick={() => deleteAdvantageItem(item.code, 'advantageFnd')}
+              >
+                {item.cnName}
+                <img className="icon" src={AdvantageIcon} alt="" />
+              </div>
+            ),
+          )}
           <Select
             options={advantageList.advantageFnd}
             showSearch
@@ -150,16 +155,18 @@ const MemberUnitAdvantage: React.FC<MemberUnitAdvantageProps> = ({
       <div className="flex items-start mt-[20px]">
         <p className="advantage-label">优势航线：</p>
         <div className="flex flex-wrap">
-          {getValueByKey('routeList').map((item: string) => (
-            <div
-              key={item}
-              className="advantage-item"
-              onClick={() => deleteAdvantageItem(item, 'advantageRoute')}
-            >
-              {item}
-              <img className="icon" src={AdvantageIcon} alt="" />
-            </div>
-          ))}
+          {getValueByKey('routeList').map(
+            (item: { code: string; name: string }) => (
+              <div
+                key={item.code}
+                className="advantage-item"
+                onClick={() => deleteAdvantageItem(item.code, 'advantageRoute')}
+              >
+                {item.name}
+                <img className="icon" src={AdvantageIcon} alt="" />
+              </div>
+            ),
+          )}
           <Select
             options={advantageList.advantageRoute}
             showSearch
@@ -180,16 +187,20 @@ const MemberUnitAdvantage: React.FC<MemberUnitAdvantageProps> = ({
       <div className="flex items-start mt-[20px]">
         <p className="advantage-label">优势船东：</p>
         <div className="flex flex-wrap">
-          {getValueByKey('carrierList').map((item: string) => (
-            <div
-              key={item}
-              className="advantage-item"
-              onClick={() => deleteAdvantageItem(item, 'advantageCarrier')}
-            >
-              {item}
-              <img className="icon" src={AdvantageIcon} alt="" />
-            </div>
-          ))}
+          {getValueByKey('carrierList').map(
+            (item: { code: string; cnName: string }) => (
+              <div
+                key={item.code}
+                className="advantage-item"
+                onClick={() =>
+                  deleteAdvantageItem(item.code, 'advantageCarrier')
+                }
+              >
+                {item.cnName}
+                <img className="icon" src={AdvantageIcon} alt="" />
+              </div>
+            ),
+          )}
           <Select
             options={advantageList.advantageCarrier}
             showSearch

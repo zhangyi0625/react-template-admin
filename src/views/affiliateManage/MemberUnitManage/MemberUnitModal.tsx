@@ -15,7 +15,11 @@ import {
 } from 'antd';
 import DragModal from '@/components/modal/DragModal';
 import type { MemberUnitManageType } from '@/services/affiliateManage/memberUnitManage/memberUnitManageModel';
-import { MemberUnitManageForm } from './config';
+import {
+  MemberUnitManageForm,
+  MemberUnitManageMemberLevelOptions,
+  MemberUnitManageUnitLevelOptions,
+} from './config';
 import dayjs from 'dayjs';
 import { LoadingOutlined, PlusOutlined } from '@ant-design/icons';
 import { postUploadFile } from '@/services/upload';
@@ -121,6 +125,11 @@ const MemberUnitModal: React.FC<MemberUnitModalProps> = ({
             'Y-M-D',
           ),
           isShow: true,
+          memberLevel: (MemberUnitManageMemberLevelOptions || [])[
+            (MemberUnitManageUnitLevelOptions || []).findIndex(
+              (item) => item.value === form.getFieldValue('memberLevel'),
+            )
+          ].value,
         });
       })
       .catch((errorInfo) => {

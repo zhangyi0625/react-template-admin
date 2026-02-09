@@ -393,12 +393,12 @@ const MemberUnitDetail: React.FC<MemberUnitDetailProps> = ({
                 className="w-[43px] h-[18px]"
                 alt=""
               />
-              <p
+              {/* <p
                 className="underline text-blue-500 text-sm ml-[4px] font-normal cursor-pointer"
                 onClick={() => setLevelRulesVisible(true)}
               >
                 查看等级计算规则
-              </p>
+              </p> */}
             </div>
           </div>
         </div>

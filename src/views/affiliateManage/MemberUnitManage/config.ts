@@ -11,17 +11,17 @@ export const MemberUnitManageUnitLevelOptions: SelectProps['options'] = [
     value: 3,
   },
   {
-    label: '理事单位',
+    label: '理事/监事单位',
     value: 5,
   },
   {
-    label: '监事单位',
+    label: '会员单位',
     value: 7,
   },
-  {
-    label: '会员单位',
-    value: 9,
-  },
+  // {
+  //   label: '会员单位',
+  //   value: 9,
+  // },
 ];
 
 export const MemberUnitManageMemberLevelOptions: SelectProps['options'] = [
@@ -41,10 +41,10 @@ export const MemberUnitManageMemberLevelOptions: SelectProps['options'] = [
     label: 'V4',
     value: 4,
   },
-  {
-    label: 'V5',
-    value: 5,
-  },
+  // {
+  //   label: 'V5',
+  //   value: 5,
+  // },
 ];
 
 export const MemberUnitManageSearchColumns: CustomColumn[] = [
@@ -108,14 +108,14 @@ export const MemberUnitManageForm: Omit<
     span: 12,
     isRules: true,
   },
-  {
-    label: '会员等级',
-    name: 'memberLevel',
-    formType: 'normalSelect',
-    options: MemberUnitManageMemberLevelOptions,
-    span: 12,
-    isRules: true,
-  },
+  // {
+  //   label: '会员等级',
+  //   name: 'memberLevel',
+  //   formType: 'normalSelect',
+  //   options: MemberUnitManageMemberLevelOptions,
+  //   span: 12,
+  //   isRules: true,
+  // },
   {
     label: '企业成立日期',
     name: 'establishmentDate',

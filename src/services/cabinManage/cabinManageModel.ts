@@ -22,8 +22,7 @@ export interface CabinTaskTemplateType {
 }
 
 export interface CabinTaskTemplateParams
-  extends Partial<PortCodeInfo>,
-    DefaultPaging {
+  extends Partial<PortCodeInfo>, DefaultPaging {
   routeFndId: null | string;
   etdStart?: string;
   etdEnd?: string;
@@ -36,16 +35,14 @@ export interface CabinTaskTemplateParams
 }
 
 export interface CabinHistoryParams
-  extends Partial<PortCodeInfo>,
-    DefaultPaging {
+  extends Partial<PortCodeInfo>, DefaultPaging {
   router: string | number | null;
   cabinStart?: string;
   cabinEnd?: string;
 }
 
 export interface CabinResultParams
-  extends Partial<PortCodeInfo>,
-    DefaultPaging {
+  extends Partial<PortCodeInfo>, DefaultPaging {
   carrier?: string | null;
   customerId?: string | number | null;
   cabinStart?: string;
@@ -65,4 +62,6 @@ export interface LocationItem {
   localName: string;
   name: string;
   unlocode: string;
+  cnName: string;
+  enName: string;
 }

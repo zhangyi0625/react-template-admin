@@ -63,6 +63,14 @@ export const BrashBoxListForms: Omit<
     isRules: true,
   },
   {
+    label: '总箱量',
+    name: 'totalNumber',
+    formType: 'input-number',
+    options: [],
+    isRules: true,
+    span: 24,
+  },
+  {
     label: '箱型',
     name: 'ctnType',
     formType: 'normalSelect',
@@ -88,7 +96,7 @@ export const BrashBoxListForms: Omit<
     isRules: true,
   },
   {
-    label: '箱量',
+    label: '本次刷箱量',
     name: 'ctnNumber',
     formType: 'input-number',
     options: [],

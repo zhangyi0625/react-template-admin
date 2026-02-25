@@ -15,6 +15,7 @@ import { SearchForm, SearchTable } from 'customer-search-form-table';
 import { BrashBoxListSearchColumns } from '../config';
 import useParentSize from '@/hooks/useParentSize';
 import BrashBoxShapeCode from './BrashBoxShapeCode';
+import BrashBoxDrawer from './BrashBoxDrawer';
 import {
   getBrashBoxListPage,
   cancelBrashBoxList,
@@ -71,6 +72,9 @@ const BrashBoxList: React.FC = () => {
 
   const [defaultActiveKey, setDefaultActiveKey] = useState<string>('PENDING');
 
+  const [brashBoxDrawerVisible, setBrashBoxDrawerVisible] =
+    useState<boolean>(false);
+
   const tableColumns: TableProps['columns'] = [
     {
       title: '用户手机号',
@@ -94,14 +98,28 @@ const BrashBoxList: React.FC = () => {
       width: 120,
     },
     {
-      title: '箱型数量',
+      title: '总数量',
+      align: 'left',
+      width: 120,
+      render(value) {
+        return <div>{value.totalNumber}</div>;
+      },
+    },
+    {
+      title: '本次刷箱量',
       align: 'left',
       width: 120,
       render(value) {
         return (
-          <div>
-            {value.ctnType} * {value.ctnNumber}
-          </div>
+          value.containers && (
+            <div>
+              {Object.keys(value.containers).map((key) => (
+                <div key={key}>
+                  {key} * {value.containers[key]}
+                </div>
+              ))}
+            </div>
+          )
         );
       },
     },
@@ -199,13 +217,25 @@ const BrashBoxList: React.FC = () => {
       title: '操作',
       key: 'customer',
       align: 'center',
-      width: 100,
+      width: 150,
       fixed: 'right',
-      hidden: defaultActiveKey !== 'SUCCESS' && defaultActiveKey !== 'RUNNING',
       render(_) {
         return (
           <Space>
             <Button
+              type="link"
+              onClick={() => {
+                (setParams({
+                  visible: false,
+                  currentRow: _,
+                  type: 'shapeCode',
+                }),
+                  setBrashBoxDrawerVisible(true));
+              }}
+            >
+              详情
+            </Button>
+            {/* <Button
               type="link"
               hidden={defaultActiveKey !== 'SUCCESS'}
               onClick={() =>
@@ -213,7 +243,7 @@ const BrashBoxList: React.FC = () => {
               }
             >
               有效条形码
-            </Button>
+            </Button> */}
             <Button
               variant="link"
               color="danger"
@@ -324,6 +354,11 @@ const BrashBoxList: React.FC = () => {
           onCancel={() => setParams({ ...params, visible: false })}
         />
       )}
+      <BrashBoxDrawer
+        visible={brashBoxDrawerVisible}
+        detailId={params.currentRow?.id ?? ''}
+        onCancel={() => setBrashBoxDrawerVisible(false)}
+      />
     </>
   );
 };

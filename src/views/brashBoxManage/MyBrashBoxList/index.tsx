@@ -31,6 +31,7 @@ import type {
 } from '@/services/brashBoxManage/brashBoxList/brashBoxListModel';
 import { filterKeys } from '@/utils/tool';
 import { formatTime } from '@/utils/format';
+import BrashBoxDrawer from '../BrashBoxList/BrashBoxDrawer';
 
 const MyBrashBoxList: React.FC = () => {
   const { message, modal } = App.useApp();
@@ -77,6 +78,9 @@ const MyBrashBoxList: React.FC = () => {
 
   const [defaultActiveKey, setDefaultActiveKey] = useState<string>('PENDING');
 
+  const [brashBoxDrawerVisible, setBrashBoxDrawerVisible] =
+    useState<boolean>(false);
+
   const tableColumns: TableProps['columns'] = [
     {
       title: '提单号',
@@ -86,14 +90,28 @@ const MyBrashBoxList: React.FC = () => {
       width: 120,
     },
     {
-      title: '箱型数量',
+      title: '总数量',
+      align: 'left',
+      width: 120,
+      render(value) {
+        return <div>{value.totalNumber}</div>;
+      },
+    },
+    {
+      title: '本次刷箱量',
       align: 'left',
       width: 120,
       render(value) {
         return (
-          <div>
-            {value.ctnType} * {value.ctnNumber}
-          </div>
+          value.containers && (
+            <div className="flex items-center whitespace-nowrap">
+              {Object.keys(value.containers).map((key) => (
+                <div key={key} className="mr-[10px]">
+                  {key} * {value.containers[key]}
+                </div>
+              ))}
+            </div>
+          )
         );
       },
     },
@@ -168,7 +186,7 @@ const MyBrashBoxList: React.FC = () => {
       dataIndex: 'remark',
       align: 'left',
       hidden: defaultActiveKey !== 'FAILED',
-      width: 120,
+      width: 150,
     },
     {
       title: '上次执行时间',
@@ -190,15 +208,27 @@ const MyBrashBoxList: React.FC = () => {
     {
       title: '操作',
       key: 'customer',
-      align: 'center',
+      align: 'left',
       width: 100,
       fixed: 'right',
-      hidden: defaultActiveKey === 'FAILED',
       render(_) {
         return (
           <Space>
-            {defaultActiveKey === 'PENDING' && getPendingBrashBoxBtn(_)}
             <Button
+              type="link"
+              onClick={() => {
+                (setParams({
+                  visible: false,
+                  currentRow: _,
+                  type: 'add',
+                }),
+                  setBrashBoxDrawerVisible(true));
+              }}
+            >
+              详情
+            </Button>
+            {defaultActiveKey === 'PENDING' && getPendingBrashBoxBtn(_)}
+            {/* <Button
               type="link"
               hidden={defaultActiveKey !== 'SUCCESS'}
               onClick={() =>
@@ -206,7 +236,7 @@ const MyBrashBoxList: React.FC = () => {
               }
             >
               有效条形码
-            </Button>
+            </Button> */}
             <Button
               variant="link"
               color="danger"
@@ -265,7 +295,7 @@ const MyBrashBoxList: React.FC = () => {
     );
     let pageInfo = filterKeys(
       searchDefaultForm,
-      ['page', 'limit', 'sort', 'desc', 'status'],
+      ['page', 'limit', 'sort', 'order', 'status'],
       true,
     );
     setSearchDefaultForm({
@@ -286,20 +316,40 @@ const MyBrashBoxList: React.FC = () => {
   const onEditOk = async (
     editRow: Pick<
       BrashBoxListType['task'],
-      'billNo' | 'id' | 'ctnType' | 'ctnNumber'
+      'billNo' | 'id' | 'ctnType' | 'ctnNumber' | 'totalNumber'
     >,
   ) => {
     try {
       if (!editRow.id) {
         // 新增数据
         await addBrashBoxList(editRow);
+        setParams({ visible: false, currentRow: null, type: 'edit' });
+        modal.confirm({
+          title: `任务新增成功`,
+          icon: <ExclamationCircleFilled />,
+          content: `你还可以继续添加不同箱型的刷箱任务`,
+          okText: '继续添加',
+          async onOk() {
+            setParams({
+              visible: true,
+              currentRow: {
+                billNo: editRow.billNo,
+                totalNumber: editRow.totalNumber,
+              } as unknown as BrashBoxListType['task'],
+              type: 'add',
+            });
+          },
+          onCancel() {
+            setParams({ visible: false, currentRow: null, type: 'add' });
+          },
+        });
       } else {
         // 编辑数据
         await editBrashBoxList(editRow);
+        setParams({ visible: false, currentRow: null, type: 'edit' });
       }
       // 操作成功，关闭弹窗，刷新数据
       // message.success(!editRow.id ? '添加成功' : '修改成功');
-      setParams({ visible: false, currentRow: null, type: 'edit' });
       onUpdateSearch();
     } catch (error) {}
   };
@@ -408,6 +458,11 @@ const MyBrashBoxList: React.FC = () => {
           onOk={onEditOk}
         />
       )}
+      <BrashBoxDrawer
+        visible={brashBoxDrawerVisible}
+        detailId={params.currentRow?.id ?? ''}
+        onCancel={() => setBrashBoxDrawerVisible(false)}
+      />
     </>
   );
 };

@@ -11,6 +11,7 @@ export enum BrashBoxManageApi {
   BrashBoxListStop = '/business/container-task/pause/',
   BrashBoxListCancel = '/business/container-task/cancel/',
   MyBrashBoxListPage = '/business/container-task/rel/page',
+  getByBillNo = '/business/container-task/getByBillNo/',
 }
 
 /**
@@ -174,6 +175,23 @@ export const postBrashBoxStop = (id: string) => {
   return HttpRequest.post(
     {
       url: BrashBoxManageApi.BrashBoxListStop + '/' + id,
+    },
+    {
+      successMessageMode: 'none',
+    },
+  );
+};
+
+/**
+ * 根据提单号获取刷箱任务
+ * @param billNo 提单号
+ * @returns 刷箱任务
+ */
+
+export const getBrashBoxListByBillNo = (billNo: string) => {
+  return HttpRequest.get(
+    {
+      url: BrashBoxManageApi.getByBillNo + billNo,
     },
     {
       successMessageMode: 'none',

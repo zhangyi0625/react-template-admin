@@ -31,6 +31,9 @@ export interface BrashBoxListDetailType {
   transit: string | null;
   vesselName: string | null;
   voyNo: string | null;
+  createTime: string;
+  totalNumber: number;
+  containers: Record<string, number> | null;
 }
 
 export interface BrashBoxListTaskType extends Omit<

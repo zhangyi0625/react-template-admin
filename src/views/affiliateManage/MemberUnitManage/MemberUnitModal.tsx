@@ -127,7 +127,7 @@ const MemberUnitModal: React.FC<MemberUnitModalProps> = ({
           isShow: true,
           memberLevel: (MemberUnitManageMemberLevelOptions || [])[
             (MemberUnitManageUnitLevelOptions || []).findIndex(
-              (item) => item.value === form.getFieldValue('memberLevel'),
+              (item) => item.value === form.getFieldValue('unitLevel'),
             )
           ].value,
         });

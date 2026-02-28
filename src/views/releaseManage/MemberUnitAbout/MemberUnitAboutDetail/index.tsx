@@ -26,7 +26,7 @@ import {
 import '@wangeditor/editor/dist/css/style.css'; // 引入 css
 import { Editor, Toolbar } from '@wangeditor/editor-for-react';
 import { IDomEditor, IEditorConfig, IToolbarConfig } from '@wangeditor/editor';
-import { postUploadFile } from '@/services/upload';
+import { postSaveFile, postUploadFile } from '@/services/upload';
 import IconClose from '@/assets/svg/icon/close.svg';
 
 type FileType = Parameters<GetProp<UploadProps, 'beforeUpload'>>[0];
@@ -80,10 +80,11 @@ const MemberUnitAboutDetail: React.FC = () => {
           Authorization: 'Bearer ' + sessionStorage.getItem('token'),
         },
         // 自定义插入图片
-        customInsert(res: any, insertFn: InsertFnType) {
+        async customInsert(res: any, insertFn: InsertFnType) {
           console.log(res, 'res');
           // 从 res 中找到 url alt href ，然后插入图片
           insertFn(res.data.path, res.data.name, res.data.path);
+          await postSaveFile(res.data.id);
         },
       },
     },

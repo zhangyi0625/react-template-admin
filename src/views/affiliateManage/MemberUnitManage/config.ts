@@ -3,19 +3,19 @@ import type { CustomColumn } from 'customer-search-form-table/SearchForm/type';
 
 export const MemberUnitManageUnitLevelOptions: SelectProps['options'] = [
   {
-    label: '会长单位',
+    label: '会员单位',
     value: 1,
   },
   {
-    label: '副会长单位',
+    label: '理事/监事单位',
     value: 3,
   },
   {
-    label: '理事/监事单位',
+    label: '副会长单位',
     value: 5,
   },
   {
-    label: '会员单位',
+    label: '会长单位',
     value: 7,
   },
   // {

@@ -1,10 +1,9 @@
-import { useCallback } from 'react';
+import { useCallback, useMemo } from 'react';
 import './index.scss';
 import { Select } from 'antd';
 import AdvantageIcon from '@/assets/svg/icon/advantage-close.svg';
 import type { MemberUnitManageDetailType } from '@/services/affiliateManage/memberUnitManage/memberUnitManageModel';
 import type { AdvantageListType } from '../../MemberUnitDetail';
-// import type { PortManageType } from '@/services/essential/portManage/portManageApi';
 
 export type MemberUnitAdvantageProps = {
   business: Pick<
@@ -30,6 +29,53 @@ export type MemberUnitAdvantageProps = {
   ) => void;
 };
 
+type AdvantageItemConfig = {
+  label: string;
+  valueKey: keyof MemberUnitManageDetailType;
+  listKey: keyof MemberUnitManageDetailType;
+  optionsKey: keyof AdvantageListType;
+  isString?: boolean;
+  displayField?: 'cnName' | 'name';
+};
+
+const advantageConfigs: AdvantageItemConfig[] = [
+  {
+    label: '优势业务',
+    valueKey: 'advantageBusiness',
+    listKey: 'advantageBusiness',
+    optionsKey: 'advantageBusiness',
+    isString: true,
+  },
+  {
+    label: '优势起运港',
+    valueKey: 'advantagePor',
+    listKey: 'porList',
+    optionsKey: 'advantagePor',
+    displayField: 'cnName',
+  },
+  {
+    label: '优势目的港',
+    valueKey: 'advantageFnd',
+    listKey: 'fndList',
+    optionsKey: 'advantageFnd',
+    displayField: 'cnName',
+  },
+  {
+    label: '优势航线',
+    valueKey: 'advantageRoute',
+    listKey: 'routeList',
+    optionsKey: 'advantageRoute',
+    displayField: 'name',
+  },
+  {
+    label: '优势船东',
+    valueKey: 'advantageCarrier',
+    listKey: 'carrierList',
+    optionsKey: 'advantageCarrier',
+    displayField: 'cnName',
+  },
+];
+
 const MemberUnitAdvantage: React.FC<MemberUnitAdvantageProps> = ({
   business = {
     advantageBusiness: '',
@@ -45,180 +91,74 @@ const MemberUnitAdvantage: React.FC<MemberUnitAdvantageProps> = ({
   const getValueByKey = useCallback(
     (key: keyof AdvantageListType | keyof MemberUnitManageDetailType) => {
       const value = (business as any)[key];
-      return value
-        ? key === 'advantageBusiness'
-          ? value.split(',')
-          : // : value.map((i: PortManageType) =>
-            //     key !== 'routeList' ? i.cnName : i.name,
-            //   )
-            value
-        : [];
+      if (!value) return [];
+
+      // advantageBusiness是字符串，需要分割成数组
+      if (key === 'advantageBusiness') {
+        return value.split(',');
+      }
+
+      // 其他字段已经是数组
+      return value;
     },
     [business],
   );
-  return (
-    <>
-      <div className="flex items-start mt-[20px]">
-        <p className="advantage-label">优势业务：</p>
-        <div className="flex flex-wrap">
-          {getValueByKey('advantageBusiness').map((item: string) => (
-            <div
-              key={item}
-              className="advantage-item"
-              onClick={() => deleteAdvantageItem(item, 'advantageBusiness')}
-            >
-              {item}
-              <img className="icon" src={AdvantageIcon} alt="" />
-            </div>
-          ))}
-          <Select
-            options={advantageList.advantageBusiness}
-            showSearch
-            filterOption={(input, option) =>
-              String(option?.label ?? '')
-                .toLowerCase()
-                .includes(input.toLowerCase())
-            }
-            fieldNames={{ label: 'label', value: 'label' }}
-            placeholder="请选择"
-            className="advantage-select"
-            onChange={(value) => {
-              createAdvantageItem(value, 'advantageBusiness');
-            }}
-          />
-        </div>
-      </div>
-      <div className="flex items-start mt-[20px]">
-        <p className="advantage-label">优势起运港：</p>
-        <div className="flex flex-wrap">
-          {getValueByKey('porList').map(
-            (item: { code: string; cnName: string }) => (
+
+  const AdvantageItem = useCallback(
+    ({ config }: { config: AdvantageItemConfig }) => {
+      const { label, valueKey, listKey, optionsKey, isString, displayField } =
+        config;
+      const items = getValueByKey(listKey);
+      const options = advantageList[optionsKey] as any;
+
+      return (
+        <div className="flex items-start mt-[20px]" key={label}>
+          <p className="advantage-label">{label}：</p>
+          <div className="flex flex-wrap">
+            {items.map((item: any) => (
               <div
-                key={item.code}
+                key={item.code || item}
                 className="advantage-item"
-                onClick={() => deleteAdvantageItem(item.code, 'advantagePor')}
+                onClick={() => deleteAdvantageItem(item.code || item, valueKey)}
               >
-                {item.cnName}
+                {isString ? item : item[displayField || 'cnName']}
                 <img className="icon" src={AdvantageIcon} alt="" />
               </div>
-            ),
-          )}
-          <Select
-            options={advantageList.advantagePor}
-            showSearch
-            fieldNames={{ label: 'cnName', value: 'code' }}
-            filterOption={(input, option) =>
-              String(option?.cnName ?? '')
-                .toLowerCase()
-                .includes(input.toLowerCase())
-            }
-            placeholder="请选择"
-            className="advantage-select"
-            onChange={(value) => {
-              createAdvantageItem(value, 'advantagePor');
-            }}
-          />
+            ))}
+            <Select
+              options={options}
+              showSearch
+              filterOption={(input, option) =>
+                String(option?.[displayField || 'label'] ?? '')
+                  .toLowerCase()
+                  .includes(input.toLowerCase())
+              }
+              fieldNames={
+                isString
+                  ? { label: 'label', value: 'label' }
+                  : { label: displayField || 'cnName', value: 'code' }
+              }
+              placeholder="请选择"
+              className="advantage-select"
+              onChange={(value) => {
+                createAdvantageItem(value, valueKey);
+              }}
+            />
+          </div>
         </div>
-      </div>
-      <div className="flex items-start mt-[20px]">
-        <p className="advantage-label">优势目的港：</p>
-        <div className="flex flex-wrap">
-          {getValueByKey('fndList').map(
-            (item: { code: string; cnName: string }) => (
-              <div
-                key={item.code}
-                className="advantage-item"
-                onClick={() => deleteAdvantageItem(item.code, 'advantageFnd')}
-              >
-                {item.cnName}
-                <img className="icon" src={AdvantageIcon} alt="" />
-              </div>
-            ),
-          )}
-          <Select
-            options={advantageList.advantageFnd}
-            showSearch
-            filterOption={(input, option) =>
-              String(option?.cnName ?? '')
-                .toLowerCase()
-                .includes(input.toLowerCase())
-            }
-            fieldNames={{ label: 'cnName', value: 'code' }}
-            placeholder="请选择"
-            className="advantage-select"
-            onChange={(value) => {
-              createAdvantageItem(value, 'advantageFnd');
-            }}
-          />
-        </div>
-      </div>
-      <div className="flex items-start mt-[20px]">
-        <p className="advantage-label">优势航线：</p>
-        <div className="flex flex-wrap">
-          {getValueByKey('routeList').map(
-            (item: { code: string; name: string }) => (
-              <div
-                key={item.code}
-                className="advantage-item"
-                onClick={() => deleteAdvantageItem(item.code, 'advantageRoute')}
-              >
-                {item.name}
-                <img className="icon" src={AdvantageIcon} alt="" />
-              </div>
-            ),
-          )}
-          <Select
-            options={advantageList.advantageRoute}
-            showSearch
-            filterOption={(input, option) =>
-              String(option?.cnName ?? '')
-                .toLowerCase()
-                .includes(input.toLowerCase())
-            }
-            fieldNames={{ label: 'name', value: 'code' }}
-            placeholder="请选择"
-            className="advantage-select"
-            onChange={(value) => {
-              createAdvantageItem(value, 'advantageRoute');
-            }}
-          />
-        </div>
-      </div>
-      <div className="flex items-start mt-[20px]">
-        <p className="advantage-label">优势船东：</p>
-        <div className="flex flex-wrap">
-          {getValueByKey('carrierList').map(
-            (item: { code: string; cnName: string }) => (
-              <div
-                key={item.code}
-                className="advantage-item"
-                onClick={() =>
-                  deleteAdvantageItem(item.code, 'advantageCarrier')
-                }
-              >
-                {item.cnName}
-                <img className="icon" src={AdvantageIcon} alt="" />
-              </div>
-            ),
-          )}
-          <Select
-            options={advantageList.advantageCarrier}
-            showSearch
-            filterOption={(input, option) =>
-              String(option?.cnName ?? '')
-                .toLowerCase()
-                .includes(input.toLowerCase())
-            }
-            placeholder="请选择"
-            className="advantage-select"
-            onChange={(value) => {
-              createAdvantageItem(value, 'advantageCarrier');
-            }}
-          />
-        </div>
-      </div>
-    </>
+      );
+    },
+    [advantageList, deleteAdvantageItem, createAdvantageItem, getValueByKey],
   );
+
+  const advantageItems = useMemo(
+    () =>
+      advantageConfigs.map((config) => (
+        <AdvantageItem key={config.label} config={config} />
+      )),
+    [AdvantageItem],
+  );
+  return <>{advantageItems}</>;
 };
 
 export default MemberUnitAdvantage;

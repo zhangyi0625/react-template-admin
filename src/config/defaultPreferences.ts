@@ -19,7 +19,7 @@ export const defaultPreferences: Preferences = {
     layout: 'sidebar-nav',
     locale: 'zh-CN',
     loginExpiredMode: 'page',
-    name: '在舱VIP管理平台',
+    name: '协会管理平台',
     preferencesButtonPosition: 'auto',
     watermark: false,
   },

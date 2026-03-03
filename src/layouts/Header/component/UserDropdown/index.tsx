@@ -133,7 +133,7 @@ const UserDropdown: React.FC = () => {
     sessionStorage.removeItem('loginUser');
 
     // 修改回document.title
-    document.title = '在舱VIP管理平台 - 登录';
+    document.title = '协会管理平台 - 登录';
     // 退出到登录页面
     navigate('/login');
   };

@@ -117,7 +117,7 @@ const Login: React.FC = () => {
             navigate(homePath);
             antdUtils.notification?.success({
               message: '登录成功',
-              description: '欢迎来到在舱VIP管理平台!',
+              description: '欢迎来到协会管理平台!',
             });
           }
           break;
@@ -176,7 +176,7 @@ const Login: React.FC = () => {
                     fontWeight: 700,
                   }}
                 >
-                  融合管理平台
+                  协会管理平台
                 </span>
               </p>
               <p style={{ fontSize: '14px', margin: 0 }}>
@@ -187,7 +187,7 @@ const Login: React.FC = () => {
                     color: '#999999',
                   }}
                 >
-                  在舱VIP管理平台
+                  协会管理平台
                 </span>
               </p>
             </div>

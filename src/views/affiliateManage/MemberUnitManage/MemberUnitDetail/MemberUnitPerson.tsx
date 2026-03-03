@@ -4,10 +4,8 @@ import MemberUnitPersonModal from './MemberUnitPersonModal';
 import {
   addEmployeeToCompany,
   assignCompanyMaster,
-  deleteMemberUnitManage,
   deleteRemoveCustomer,
   editEmployeeToCompany,
-  getMemberUnitManageList,
 } from '@/services/affiliateManage/memberUnitManage/memberUnitManageApi';
 import type { MemberUnitManageDetailType } from '@/services/affiliateManage/memberUnitManage/memberUnitManageModel';
 import { getStaffManageList } from '@/services/affiliateManage/staffManage/staffManageApi';

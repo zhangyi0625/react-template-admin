@@ -29,7 +29,16 @@ const ResetUserPassword: React.FC<ResetUserPasswordProps> = ({
   }, [visible]);
 
   const handleOk = () => {
-    onOk(form.getFieldsValue());
+    form
+      .validateFields()
+      .then(() => {
+        onOk(form.getFieldsValue());
+      })
+      .catch((errorInfo) => {
+        // 滚动并聚焦到第一个错误字段
+        form.scrollToField(errorInfo.errorFields[0].name);
+        form.focusField(errorInfo.errorFields[0].name);
+      });
   };
 
   return (
@@ -47,13 +56,43 @@ const ResetUserPassword: React.FC<ResetUserPasswordProps> = ({
         <Form.Item name="username" hidden>
           <Input />
         </Form.Item>
-        <Form.Item className="mb-0" label="重置密码" name="password">
-          <Input.Password
-            placeholder="请输入重置密码"
-            allowClear
-            autoComplete="off"
-          />
-        </Form.Item>
+        {currentRow?.userId && (
+          <Form.Item className="mb-0" label="重置密码" name="password">
+            <Input.Password
+              placeholder="请输入重置密码"
+              allowClear
+              autoComplete="off"
+            />
+          </Form.Item>
+        )}
+        {!currentRow?.userId && (
+          <Form.Item
+            className="mb-0"
+            label="原始密码"
+            name="oldPassword"
+            rules={[{ required: true, message: '请输入原始密码' }]}
+          >
+            <Input.Password
+              placeholder="请输入原始密码"
+              allowClear
+              autoComplete="off"
+            />
+          </Form.Item>
+        )}
+        {!currentRow?.userId && (
+          <Form.Item
+            className="mb-0"
+            label="新密码"
+            name="password"
+            rules={[{ required: true, message: '请输入新密码' }]}
+          >
+            <Input.Password
+              placeholder="请输入新密码"
+              allowClear
+              autoComplete="off"
+            />
+          </Form.Item>
+        )}
       </Form>
     </DragModal>
   );

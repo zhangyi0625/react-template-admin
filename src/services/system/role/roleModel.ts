@@ -21,18 +21,18 @@ export interface SysRoleType {
 }
 
 export interface SysRoleParams
-  extends Partial<Omit<SysRoleType, 'id'>>,
-    DefaultPaging {}
+  extends Partial<Omit<SysRoleType, 'id'>>, DefaultPaging {}
 
 export interface SysUserParams
-  extends Pick<SysRoleType, 'roleId'>,
-    DefaultPaging {
+  extends Pick<SysRoleType, 'roleId'>, DefaultPaging {
   userName: string | null;
   nickname: string | null;
 }
 
-export interface SysUserType
-  extends Pick<SysUserParams, 'userName' | 'nickname'> {
+export interface SysUserType extends Pick<
+  SysUserParams,
+  'userName' | 'nickname'
+> {
   userId: string | null;
   organizationId: string;
   phone: string;
@@ -41,5 +41,6 @@ export interface SysUserType
   roles: string | string[] | any;
   email: string;
   status?: boolean | number;
+  oldPassword?: string | null;
   password: string | null;
 }

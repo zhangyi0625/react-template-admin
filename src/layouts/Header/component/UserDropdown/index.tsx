@@ -4,21 +4,15 @@ import { useNavigate } from 'react-router-dom';
 import {
   ExclamationCircleFilled,
   ExclamationCircleOutlined,
-  // FileMarkdownOutlined,
-  // LockOutlined,
   LogoutOutlined,
-  // QuestionCircleFilled,
-  // SyncOutlined,
   UserOutlined,
 } from '@ant-design/icons';
 import { logout } from '@/services/login/loginApi';
 import type { ReactNode } from 'react';
 import React, { useState } from 'react';
-// import { updatePreferences } from '@/stores/store';
-import { useDispatch } from 'react-redux';
 import ResetUserPassword from '@/views/system/User/ResetUserPassword';
 import type { SysUserType } from '@/services/system/role/roleModel';
-import { updateUserPassword } from '@/services/system/user/userApi';
+import { putUserPassword } from '@/services/system/user/userApi';
 
 const { useToken } = theme;
 
@@ -27,7 +21,6 @@ const { useToken } = theme;
  * @returns
  */
 const UserDropdown: React.FC = () => {
-  const dispatch = useDispatch();
   const { token } = useToken();
   const { modal } = App.useApp();
 
@@ -43,11 +36,6 @@ const UserDropdown: React.FC = () => {
 
   // 菜单栏
   const items: MenuProps['items'] = [
-    // {
-    //   key: 'doc',
-    //   label: '文档',
-    //   icon: <FileMarkdownOutlined />,
-    // },
     {
       key: '1',
       label: '修改密码',
@@ -57,46 +45,10 @@ const UserDropdown: React.FC = () => {
         // 个人中心做成一个弹窗，内部可以修改
         setResetPassword({
           visible: true,
-          currentRow: {
-            userId: sessionStorage.getItem('roleId') as string,
-            username: '',
-            password: '',
-          },
+          currentRow: null,
         });
       },
     },
-    // {
-    //   key: 'help',
-    //   label: '问题 & 帮助',
-    //   icon: <QuestionCircleFilled />,
-    // },
-    // {
-    //   type: 'divider',
-    // },
-    // {
-    //   key: '3',
-    //   label: '刷新缓存',
-    //   icon: <SyncOutlined />,
-    //   onClick: () => {
-    /**
-     * 后端的缓存信息（相当于把缓存数据刷新）
-     * 清除local storage所有redux数据 为了重新缓存新数据
-     */
-    //     localStorage.clear();
-    //     window.location.reload();
-    //   },
-    // },
-    // {
-    //   type: 'divider',
-    // },
-    // {
-    //   key: 'lock',
-    //   label: '锁屏',
-    //   icon: <LockOutlined />,
-    //   onClick: () => {
-    //     dispatch(updatePreferences('widget', 'lockScreenStatus', true));
-    //   },
-    // },
     {
       type: 'divider',
     },
@@ -168,15 +120,12 @@ const UserDropdown: React.FC = () => {
 
   const resetUserPassword = (row: SysUserType) => {
     modal.confirm({
-      title: `重置密码`,
+      title: `修改密码`,
       icon: <ExclamationCircleFilled />,
-      content: `确定重置密码吗？数据重置后将无法恢复！`,
+      content: `确定修改密码吗？数据重置后将无法恢复！`,
       onOk() {
-        updateUserPassword(row).then(() => {
-          // message.success('重置成功');
+        putUserPassword(row).then(() => {
           setResetPassword({ visible: false, currentRow: null });
-          // // 刷新表格数据
-          // onUpdateSearch(searchDefaultForm);
           getLogout();
         });
       },

@@ -9,6 +9,7 @@ export enum UserApi {
   userManageByPage = '/system/user/page',
   batchUserManage = '/system/user/batch',
   resetUserPassword = '/system/user/password',
+  authPassword = '/user/auth/password',
 }
 
 /**
@@ -22,7 +23,7 @@ export const getUserList = () => {
     },
     {
       successMessageMode: 'none',
-    }
+    },
   );
 };
 
@@ -39,7 +40,7 @@ export const getUserListByPage = (params: SysUserParams) => {
     },
     {
       successMessageMode: 'none',
-    }
+    },
   );
 };
 
@@ -54,7 +55,7 @@ export const getUserDetail = (id: string) => {
     },
     {
       successMessageMode: 'none',
-    }
+    },
   );
 };
 
@@ -95,7 +96,26 @@ export const updateUserPassword = (params: Pick<SysUserType, 'userId'>) => {
     },
     {
       successMessageMode: 'none',
-    }
+    },
+  );
+};
+
+/**
+ * 修改用户密码
+ * @param params 用户参数
+ * @returns 结果
+ */
+export const putUserPassword = (
+  params: Pick<SysUserType, 'oldPassword' | 'password'>,
+) => {
+  return HttpRequest.put(
+    {
+      url: UserApi.authPassword,
+      data: params,
+    },
+    {
+      successMessageMode: 'none',
+    },
   );
 };
 
@@ -110,7 +130,7 @@ export const deleteUserList = (id: string) => {
     },
     {
       successMessageMode: 'none',
-    }
+    },
   );
 };
 
@@ -126,6 +146,6 @@ export const deletebatchUserList = (ids: string[]) => {
     },
     {
       successMessageMode: 'none',
-    }
+    },
   );
 };

@@ -112,7 +112,7 @@ const MemberUnitPerson = React.forwardRef<
       const resp: any = await getStaffManageList({
         companyId: detail?.id as string,
       });
-      setTableData(resp.list || []);
+      setTableData(resp || []);
     } catch {}
   };
 

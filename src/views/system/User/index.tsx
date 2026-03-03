@@ -177,7 +177,7 @@ const User: React.FC = () => {
                   currentRow: filterKeys(
                     _,
                     ['userId', 'username', 'password'],
-                    true
+                    true,
                   ),
                 })
               }
@@ -198,7 +198,7 @@ const User: React.FC = () => {
 
   const onUpdateSearch = (info?: SysRoleParams | unknown) => {
     const filteredObj = Object.fromEntries(
-      Object.entries(info ?? {}).filter(([, value]) => value !== undefined)
+      Object.entries(info ?? {}).filter(([, value]) => value !== undefined),
     );
     let pageInfo = filterKeys(searchDefaultForm, ['page', 'limit'], true);
     setSearchDefaultForm({

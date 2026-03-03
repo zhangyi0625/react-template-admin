@@ -39,7 +39,7 @@ export const getStaffManageList = (
 ) => {
   return HttpRequest.get<StaffManageType[]>(
     {
-      url: StaffManageApi.staffManageByPage,
+      url: StaffManageApi.staffManage,
       params: params,
     },
     {

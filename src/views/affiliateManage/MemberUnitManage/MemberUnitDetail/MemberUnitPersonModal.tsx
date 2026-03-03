@@ -34,7 +34,7 @@ const MemberUnitPersonModal: React.FC<MemberUnitPersonModalProps> = ({
       const resp: any = await getStaffManageList(
         type === 'setting' ? { companyId: companyId as string } : {},
       );
-      setCustomerList(resp.list || []);
+      setCustomerList(resp || []);
     } catch {}
   };
 

@@ -1,7 +1,7 @@
 import {
   LockOutlined,
   SearchOutlined,
-  SettingOutlined,
+  // SettingOutlined,
 } from '@ant-design/icons';
 import { Input, Layout, Skeleton, Space, Tooltip } from 'antd';
 import React, { Suspense } from 'react';
@@ -81,12 +81,12 @@ const Header: React.FC = memo(() => {
               <BellOutlined style={{ cursor: 'pointer', fontSize: '18px' }} />
             </Badge>
           </Dropdown> */}
-          <Tooltip placement="bottomRight" title="系统设置">
+          {/* <Tooltip placement="bottomRight" title="系统设置">
             <SettingOutlined
               style={{ cursor: 'pointer', fontSize: '18px' }}
               onClick={() => setOpenSetting(true)}
             />
-          </Tooltip>
+          </Tooltip> */}
           <FullScreen />
           {/* 用户信息 */}
           <UserDropdown />

@@ -34,10 +34,10 @@ const ScreenLock: React.FC = () => {
 
   return lockScreenStatus ? (
     <div className={style['screen-lock']}>
-      <div className="screen-lock-content">
-        <div className="screen-lock-title">
+      <div className={style['screen-lock-content']}>
+        <div className="text-center">
           <img src={favicon} alt="" width={100} />
-          <span>系统锁屏</span>
+          <span className="mt-[10px]">系统锁屏</span>
         </div>
         <div className="screen-lock-input">
           <Input.Password

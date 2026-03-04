@@ -12,12 +12,12 @@ export enum SubscriptionApi {
 }
 
 /**
- * 分页查询订阅数据
+ * @description 分页查询订阅数据
  * @param params 订阅参数
  * @returns 订阅列表
  */
 export const getSubscriptionManageByPage = (
-  params: SubscriptionManageParams
+  params: SubscriptionManageParams,
 ) => {
   let qsParams = {
     ...params,
@@ -30,12 +30,12 @@ export const getSubscriptionManageByPage = (
     },
     {
       isTransformResponse: false,
-    }
+    },
   );
 };
 
 /**
- * 开启订阅
+ * @description 开启订阅
  * @param id 订阅参数
  * @returns 订阅列表
  */
@@ -46,12 +46,12 @@ export const updateSubscriptionEnable = (id: string) => {
     },
     {
       isTransformResponse: false,
-    }
+    },
   );
 };
 
 /**
- * 暂停订阅
+ * @description 暂停订阅
  * @param id 订阅参数
  * @returns 订阅列表
  */
@@ -62,12 +62,12 @@ export const updateSubscriptionSuspend = (id: string) => {
     },
     {
       isTransformResponse: false,
-    }
+    },
   );
 };
 
 /**
- * 删除订阅
+ * @description 删除订阅
  * @param id 订阅参数
  * @returns 订阅列表
  */
@@ -78,6 +78,6 @@ export const deleteSubscription = (id: string) => {
     },
     {
       isTransformResponse: false,
-    }
+    },
   );
 };

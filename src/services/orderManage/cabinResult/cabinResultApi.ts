@@ -41,9 +41,9 @@ export enum CabinResultAPi {
 }
 
 /**
- * 查询拍舱结果
- * @param params
- * @returns
+ * @description 查询拍舱结果
+ * @param params 拍舱结果参数
+ * @returns 拍舱结果列表
  */
 
 export const getCabinResultByPage = (params: CabinResultSearchParams) => {
@@ -53,14 +53,14 @@ export const getCabinResultByPage = (params: CabinResultSearchParams) => {
       url: CabinResultAPi.CabinResultByPage,
       params: qsParams,
     },
-    { isTransformResponse: false }
+    { isTransformResponse: false },
   );
 };
 
 /**
- * 导入拍舱结果
- * @param data
- * @returns
+ * @description 导入拍舱结果
+ * @param data 拍舱结果参数
+ * @returns 拍舱结果列表
  */
 
 export const postCabinResult = (data: ImportCabinResultType) => {
@@ -69,14 +69,14 @@ export const postCabinResult = (data: ImportCabinResultType) => {
       url: CabinResultAPi.ImportCabinResult,
       data: data,
     },
-    { isTransformResponse: false }
+    { isTransformResponse: false },
   );
 };
 
 /**
- * 批量发布舱位
- * @param data
- * @returns
+ * @description 批量发布舱位
+ * @param data 拍舱结果参数
+ * @returns 拍舱结果列表
  */
 
 export const postBatchProduct = (data: string[]) => {
@@ -85,14 +85,14 @@ export const postBatchProduct = (data: string[]) => {
       url: CabinResultAPi.BatchProduct,
       data: data,
     },
-    { isTransformResponse: false }
+    { isTransformResponse: false },
   );
 };
 
 /**
- * 取消关联舱位
- * @param data
- * @returns
+ * @description 取消关联舱位
+ * @param data 拍舱结果参数
+ * @returns 拍舱结果列表
  */
 
 export const postOnRelevance = (data: { ids: string[] }) => {
@@ -101,14 +101,14 @@ export const postOnRelevance = (data: { ids: string[] }) => {
       url: CabinResultAPi.OnRelevance,
       data: data,
     },
-    { isTransformResponse: false }
+    { isTransformResponse: false },
   );
 };
 
 /**
- * 关联订舱结果
- * @param data
- * @returns
+ * @description 关联订舱结果
+ * @param data 拍舱结果参数
+ * @returns 拍舱结果列表
  */
 
 export const postRelevanceResult = (data: {
@@ -120,14 +120,14 @@ export const postRelevanceResult = (data: {
       url: CabinResultAPi.RelevanceResult,
       data: data,
     },
-    { isTransformResponse: false }
+    { isTransformResponse: false },
   );
 };
 
 /**
- * 取消已关联订舱结果
- * @param data
- * @returns
+ * @description 取消已关联订舱结果
+ * @param data 拍舱结果参数
+ * @returns 拍舱结果列表
  */
 
 export const postCancelRelevanceResult = (data: { ids: string[] }) => {
@@ -136,14 +136,14 @@ export const postCancelRelevanceResult = (data: { ids: string[] }) => {
       url: CabinResultAPi.CancelRelevanceResult,
       data: data,
     },
-    { isTransformResponse: false }
+    { isTransformResponse: false },
   );
 };
 
 /**
- * 手动发布舱位
- * @param params
- * @returns
+ * @description 手动发布舱位
+ * @param params 拍舱结果参数
+ * @returns 拍舱结果列表
  */
 
 export const postManualPublication = (params: ManualPublicationType) => {
@@ -152,6 +152,6 @@ export const postManualPublication = (params: ManualPublicationType) => {
       url: CabinResultAPi.ManualPublication,
       data: params,
     },
-    { isTransformResponse: false }
+    { isTransformResponse: false },
   );
 };

@@ -79,7 +79,9 @@ export enum RegularBookingAPi {
 }
 
 /**
- * 查询公司列表
+ * @description 查询公司列表
+ * @param params 查询公司参数
+ * @returns 公司列表
  */
 export const getSearchAffiliate = (params: { keyword?: string }) => {
   return HttpRequest.get<Response>(
@@ -87,12 +89,14 @@ export const getSearchAffiliate = (params: { keyword?: string }) => {
       url: RegularBookingAPi.affiliate,
       params: params,
     },
-    { isTransformResponse: false }
+    { isTransformResponse: false },
   );
 };
 
 /**
- * 查询用户列表
+ * @description 查询用户列表
+ * @param params 查询用户参数
+ * @returns 用户列表
  */
 export const getSearchCustomer = (params: { keyword?: string }) => {
   return HttpRequest.get(
@@ -100,14 +104,14 @@ export const getSearchCustomer = (params: { keyword?: string }) => {
       url: RegularBookingAPi.customer,
       params: params,
     },
-    { isTransformResponse: false }
+    { isTransformResponse: false },
   );
 };
 
 /**
  * 查询订单列表（普通）
- * @param params
- * @returns
+ * @param params 查询订单参数
+ * @returns 订单列表
  */
 
 export const getRegularBookingByPage = (params: RegularBookingSearchParams) => {
@@ -117,14 +121,14 @@ export const getRegularBookingByPage = (params: RegularBookingSearchParams) => {
       url: RegularBookingAPi.RegularBookingByPage,
       params: qsParams,
     },
-    { isTransformResponse: false }
+    { isTransformResponse: false },
   );
 };
 
 /**
- * 查询订单详情（普通）
- * @param id
- * @returns
+ * @description 查询订单详情（普通）
+ * @param id 订单id
+ * @returns 订单详情
  */
 
 export const getRegularBookingDetail = (id: string) => {
@@ -132,33 +136,33 @@ export const getRegularBookingDetail = (id: string) => {
     {
       url: RegularBookingAPi.RegularBookingDetail + id,
     },
-    { isTransformResponse: false }
+    { isTransformResponse: false },
   );
 };
 
 /**
  * 取消订舱
- * @param data
- * @returns
+ * @param data 取消订舱参数
+ * @returns 取消订舱结果
  */
 
 export const postCancelBooking = (
   id: string | number,
-  data: { remark: string }
+  data: { remark: string },
 ) => {
   return HttpRequest.post<Response>(
     {
       url: RegularBookingAPi.cancelBooking + id,
       data: data,
     },
-    { isTransformResponse: false }
+    { isTransformResponse: false },
   );
 };
 
 /**
- * 开启订舱 接受订单, 订单状态转为处理中
- * @param id
- * @returns
+ * @description 开启订舱 接受订单, 订单状态转为处理中
+ * @param id 订单id
+ * @returns 开启订舱结果
  */
 
 export const postStartBooking = (id: string | number) => {
@@ -166,14 +170,14 @@ export const postStartBooking = (id: string | number) => {
     {
       url: RegularBookingAPi.startBooking + id,
     },
-    { isTransformResponse: false }
+    { isTransformResponse: false },
   );
 };
 
 /**
- * 订舱成功
- * @param id
- * @returns
+ * @description 订舱成功
+ * @param id 订单id
+ * @returns 订舱成功结果
  */
 
 export const postBookingSuccess = (id: string | number) => {
@@ -181,33 +185,34 @@ export const postBookingSuccess = (id: string | number) => {
     {
       url: RegularBookingAPi.settingBookingSuccess + id,
     },
-    { isTransformResponse: false }
+    { isTransformResponse: false },
   );
 };
 
 /**
- * 订舱执行违约
- * @param data
- * @returns
+ * @description 订舱执行违约
+ * @param id 订单id
+ * @param data 执行违约参数
+ * @returns 执行违约结果
  */
 
 export const postExecutionBreach = (
   id: string | number,
-  data: { remark: string }
+  data: { remark: string },
 ) => {
   return HttpRequest.post<Response>(
     {
       url: RegularBookingAPi.executionBreach + id,
       data: data,
     },
-    { isTransformResponse: false }
+    { isTransformResponse: false },
   );
 };
 
 /**
- * 订舱执行退款
- * @param id
- * @returns
+ * @description 订舱执行退款
+ * @param id 订单id
+ * @returns 执行退款结果
  */
 
 export const postBookingRefund = (id: string | number) => {
@@ -215,14 +220,14 @@ export const postBookingRefund = (id: string | number) => {
     {
       url: RegularBookingAPi.bookingRefund + id,
     },
-    { isTransformResponse: false }
+    { isTransformResponse: false },
   );
 };
 
 /**
- * 订舱执行结束
- * @param id
- * @returns
+ * @description 订舱执行结束
+ * @param id 订单id
+ * @returns 执行结束结果
  */
 
 export const postBookingFinish = (id: string | number) => {
@@ -230,14 +235,14 @@ export const postBookingFinish = (id: string | number) => {
     {
       url: RegularBookingAPi.bookingFinish + id,
     },
-    { isTransformResponse: false }
+    { isTransformResponse: false },
   );
 };
 
 /**
- * 订舱同意取消
- * @param id
- * @returns
+ * @description 订舱同意取消
+ * @param id 订单id
+ * @returns 同意取消结果
  */
 
 export const postAgreeCancelApply = (id: string | number) => {
@@ -245,33 +250,34 @@ export const postAgreeCancelApply = (id: string | number) => {
     {
       url: RegularBookingAPi.agreeCancelApply + id,
     },
-    { isTransformResponse: false }
+    { isTransformResponse: false },
   );
 };
 
 /**
- * 订舱拒绝取消
- * @param data
- * @returns
+ * @description 订舱拒绝取消
+ * @param id 订单id
+ * @param data 拒绝取消参数
+ * @returns 拒绝取消结果
  */
 
 export const postRejectCancelApply = (
   id: string | number,
-  data: { remark: string }
+  data: { remark: string },
 ) => {
   return HttpRequest.post<Response>(
     {
       url: RegularBookingAPi.rejectCancelApply + id,
       data: data,
     },
-    { isTransformResponse: false }
+    { isTransformResponse: false },
   );
 };
 
 /**
- * 登陆订舱账号
- * @param id
- * @returns
+ * @description 登陆订舱账号
+ * @param id 订单id
+ * @returns 登陆订舱账号结果
  */
 
 export const postLoginOrderAccount = (id: string | number) => {
@@ -279,14 +285,15 @@ export const postLoginOrderAccount = (id: string | number) => {
     {
       url: RegularBookingAPi.loginOrderAccount + id,
     },
-    { isTransformResponse: false }
+    { isTransformResponse: false },
   );
 };
 
 /**
- * 修改订舱频率
- * @param data
- * @returns
+ * @description 修改订舱频率
+ * @param id 订单id
+ * @param data 修改订舱频率参数
+ * @returns 修改订舱频率结果
  */
 
 export const postBookingFrequency = (
@@ -295,21 +302,21 @@ export const postBookingFrequency = (
     cronPattern: string;
     frequencyType: string;
     hourRange: string;
-  }>
+  }>,
 ) => {
   return HttpRequest.post<Response>(
     {
       url: RegularBookingAPi.editBookingFrequency + id,
       data: data,
     },
-    { isTransformResponse: false }
+    { isTransformResponse: false },
   );
 };
 
 /**
- * 查询船期数据
- * @param params
- * @returns
+ * @description 查询船期数据
+ * @param params 查询船期参数
+ * @returns 船期数据
  */
 
 export const getShippingSchedule = (params: ShippingScheduleParams) => {
@@ -319,14 +326,14 @@ export const getShippingSchedule = (params: ShippingScheduleParams) => {
       url: RegularBookingAPi.shippingSchedule,
       params: params,
     },
-    { isTransformResponse: false }
+    { isTransformResponse: false },
   );
 };
 
 /**
- * 查询船期数据
- * @param params
- * @returns
+ * @description 查询船期数据
+ * @param params 查询船期参数
+ * @returns 船期数据
  */
 
 export const getSearchRoutePage = (params: SearchRoutePageType) => {
@@ -336,6 +343,6 @@ export const getSearchRoutePage = (params: SearchRoutePageType) => {
       url: RegularBookingAPi.SearchRoutePage,
       params: qsParams,
     },
-    { isTransformResponse: false }
+    { isTransformResponse: false },
   );
 };

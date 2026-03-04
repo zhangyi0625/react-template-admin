@@ -13,12 +13,12 @@ export enum FinancialDetailsApi {
 }
 
 /**
- * 分页获取资金明细列表
+ * @description 分页获取资金明细列表
  * @param params 资金明细参数
  * @returns 资金明细列表
  */
 export const getFinancialDetailsListByPage = (
-  params: FinancialDetailsSearchParams
+  params: FinancialDetailsSearchParams,
 ) => {
   let qsParams = {
     ...params,
@@ -31,12 +31,12 @@ export const getFinancialDetailsListByPage = (
     },
     {
       isTransformResponse: false,
-    }
+    },
   );
 };
 
 /**
- * 获取资金明细
+ * @description 获取资金明细
  * @param id 资金明细参数
  * @returns 资金明细列表
  */
@@ -47,12 +47,12 @@ export const getFinancialDetails = (id: string) => {
     },
     {
       isTransformResponse: false,
-    }
+    },
   );
 };
 
 /**
- * 新增资金明细列表
+ * @description 新增资金明细列表
  * @param params 资金明细参数
  * @returns 资金明细列表
  */
@@ -64,12 +64,12 @@ export const addFinancialDetails = (params: FinancialDetailsType) => {
     },
     {
       isTransformResponse: false,
-    }
+    },
   );
 };
 
 /**
- * 修改资金明细列表
+ * @description 修改资金明细列表
  * @param params 资金明细参数
  * @returns 资金明细列表
  */
@@ -81,12 +81,12 @@ export const putFinancialDetails = (params: FinancialDetailsType) => {
     },
     {
       isTransformResponse: false,
-    }
+    },
   );
 };
 
 /**
- * 删除资金明细列表
+ * @description 删除资金明细列表
  * @param params 资金明细参数
  * @returns 资金明细列表
  */
@@ -97,6 +97,6 @@ export const deleteFinancialDetails = (id: string) => {
     },
     {
       isTransformResponse: false,
-    }
+    },
   );
 };

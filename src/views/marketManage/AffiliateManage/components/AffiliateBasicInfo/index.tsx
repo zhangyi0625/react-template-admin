@@ -27,14 +27,14 @@ import {
   type AffiliateComboPermissionRemarkRef,
 } from './AffiliateComboPermissionRemark';
 import AffiliateComboPermissionEdit from './AffiliateComboPermissionEdit';
-import type { EquityRightsBaseEditType } from '@/services/otherSetting/queryRightsSettings/queryRightsSettingsApi';
+import type { EquityRightsBaseEditType } from '@/services/otherSetting/queryRightsSettings/queryRightsSettingsModel';
 import { useSelector } from 'react-redux';
 import { store, type RootState } from '@/stores/store';
 import { ComboPermission } from '@/enums/setting';
 import dayjs from 'dayjs';
 import { formatTime } from '@/utils/format';
 import { filterKeys } from '@/utils/tool';
-import { postEquityRightsEdit } from '@/services/otherSetting/queryRightsSettings/queryRightsSettingsModel';
+import { postEquityRightsEdit } from '@/services/otherSetting/queryRightsSettings/queryRightsSettingsApi';
 
 export type AffiliateBasicInfoProps = {
   detail: AffiliateDetailType;

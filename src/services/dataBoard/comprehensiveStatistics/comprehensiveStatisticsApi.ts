@@ -9,12 +9,12 @@ export enum ComprehensiveStatisticsApi {
 }
 
 /**
- * 分页获取综合统计列表
+ * @description 分页获取综合统计列表
  * @param params 综合统计参数
  * @returns 综合统计列表
  */
 export const getComprehensiveStatisticsListByPage = (
-  params: ComprehensiveStatisticsSearchParams
+  params: ComprehensiveStatisticsSearchParams,
 ) => {
   let qsParams = {
     ...params,
@@ -27,6 +27,6 @@ export const getComprehensiveStatisticsListByPage = (
     },
     {
       isTransformResponse: false,
-    }
+    },
   );
 };

@@ -33,13 +33,13 @@ export enum QuickEnquiryOrderAPI {
 }
 
 /**
- * 分页查询找舱订单列表
- * @param params
- * @returns
+ * @description 分页查询找舱订单列表
+ * @param params 找舱订单参数
+ * @returns 找舱订单列表
  */
 
 export const getQuickEnquiryOrderByPage = (
-  params: QuickEnquiryOrderSearchParams
+  params: QuickEnquiryOrderSearchParams,
 ) => {
   let qsParams = { ...params, filter: JSON.stringify(params.filter) };
   return HttpRequest.get<Response>(
@@ -47,14 +47,14 @@ export const getQuickEnquiryOrderByPage = (
       url: QuickEnquiryOrderAPI.QuickEnquiryOrderByPage,
       params: qsParams,
     },
-    { isTransformResponse: false }
+    { isTransformResponse: false },
   );
 };
 
 /**
- * 找舱订单列表详情
- * @param id
- * @returns
+ * @description 找舱订单列表详情
+ * @param id 找舱订单参数
+ * @returns 找舱订单列表
  */
 
 export const getQuickEnquiryOrderDetail = (id: string) => {
@@ -62,14 +62,14 @@ export const getQuickEnquiryOrderDetail = (id: string) => {
     {
       url: QuickEnquiryOrderAPI.QuickEnquiryOrder + id,
     },
-    { isTransformResponse: false }
+    { isTransformResponse: false },
   );
 };
 
 /**
- * 找舱订单报价记录
- * @param id
- * @returns
+ * @description 找舱订单报价记录
+ * @param id 找舱订单参数
+ * @returns 找舱订单列表
  */
 
 export const getQuickEnquiryOrderRecords = (id: string) => {
@@ -77,14 +77,14 @@ export const getQuickEnquiryOrderRecords = (id: string) => {
     {
       url: QuickEnquiryOrderAPI.QuickEnquiryOrderRecords + id,
     },
-    { isTransformResponse: false }
+    { isTransformResponse: false },
   );
 };
 
 /**
- * 找舱订单事件记录
- * @param id
- * @returns
+ * @description 找舱订单事件记录
+ * @param id 找舱订单参数
+ * @returns 找舱订单列表
  */
 
 export const getQuickEnquiryOrderEvents = (id: string) => {
@@ -92,34 +92,34 @@ export const getQuickEnquiryOrderEvents = (id: string) => {
     {
       url: QuickEnquiryOrderAPI.QuickEnquiryOrderEvents + id,
     },
-    { isTransformResponse: false }
+    { isTransformResponse: false },
   );
 };
 
 /**
- * 发送客服消息
+ * @description 发送客服消息
  * @param params 客服消息参数
  * @param id 找舱订单id
- * @returns
+ * @returns 找舱订单列表
  */
 
 export const postQuickEnquiryOrderNotifyMsg = (
   params: { content: string },
-  id: string
+  id: string,
 ) => {
   return HttpRequest.post<Response>(
     {
       url: QuickEnquiryOrderAPI.QuickEnquiryOrderNotifyMsg + id,
       params,
     },
-    { isTransformResponse: false }
+    { isTransformResponse: false },
   );
 };
 
 /**
- * 取消找舱订单
- * @param id
- * @returns
+ * @description 取消找舱订单
+ * @param id 找舱订单参数
+ * @returns 找舱订单列表
  */
 
 export const putQuickEnquiryOrderCancel = (id: string) => {
@@ -127,6 +127,6 @@ export const putQuickEnquiryOrderCancel = (id: string) => {
     {
       url: QuickEnquiryOrderAPI.QuickEnquiryOrderCancel + id,
     },
-    { isTransformResponse: false }
+    { isTransformResponse: false },
   );
 };

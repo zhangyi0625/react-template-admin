@@ -16,7 +16,7 @@ export enum OpenInterfaceApi {
 }
 
 /**
- * 分页查询开放接口数据
+ * @description 分页查询开放接口数据
  * @param params 开放接口参数
  * @returns 开放接口列表
  */
@@ -32,12 +32,12 @@ export const getOpenInterfaceManageByPage = (params: OpenInterfaceParams) => {
     },
     {
       isTransformResponse: false,
-    }
+    },
   );
 };
 
 /**
- * 查看开放接口详情
+ * @description 查看开放接口详情
  * @param id 开放接口参数
  * @returns 开放接口列表
  */
@@ -48,13 +48,13 @@ export const getOpenInterfaceDetail = (id: string) => {
     },
     {
       isTransformResponse: false,
-    }
+    },
   );
 };
 
 /**
- * 新增开放接口
- * @param id 开放接口参数
+ * @description 新增开放接口
+ * @param params 开放接口参数
  * @returns 开放接口列表
  */
 export const addOpenInterface = (params: OpenInterfaceType) => {
@@ -65,13 +65,13 @@ export const addOpenInterface = (params: OpenInterfaceType) => {
     },
     {
       isTransformResponse: false,
-    }
+    },
   );
 };
 
 /**
- * 修改开放接口
- * @param id 开放接口参数
+ * @description 修改开放接口
+ * @param params 开放接口参数
  * @returns 开放接口列表
  */
 export const updateOpenInterface = (params: OpenInterfaceType) => {
@@ -82,13 +82,13 @@ export const updateOpenInterface = (params: OpenInterfaceType) => {
     },
     {
       isTransformResponse: false,
-    }
+    },
   );
 };
 
 /**
- * 获取放接口业务功能
- * @param id 开放接口参数
+ * @description 获取开放接口业务功能
+ * @param params 开放接口参数
  * @returns 开放接口列表
  */
 export const getOpenInterfaceBusiness = (params: { id: string }) => {
@@ -98,12 +98,12 @@ export const getOpenInterfaceBusiness = (params: { id: string }) => {
     },
     {
       isTransformResponse: false,
-    }
+    },
   );
 };
 
 /**
- * 获取放接口业务功能
+ * @description 重置开放接口密钥
  * @param id 开放接口参数
  * @returns 开放接口列表
  */
@@ -114,13 +114,13 @@ export const resetOpenInterfaceSecret = (id: string) => {
     },
     {
       isTransformResponse: false,
-    }
+    },
   );
 };
 
 /**
- * 新增开放接口业务功能
- * @param id 开放接口参数
+ * @description 新增开放接口业务功能
+ * @param params 开放接口参数
  * @returns 开放接口列表
  */
 export const addOpenInterfaceBusiness = (params: OpenInterfaceBusinessType) => {
@@ -131,17 +131,17 @@ export const addOpenInterfaceBusiness = (params: OpenInterfaceBusinessType) => {
     },
     {
       isTransformResponse: false,
-    }
+    },
   );
 };
 
 /**
- * 修改开放接口业务功能
- * @param id 开放接口参数
+ * @description 修改开放接口业务功能
+ * @param params 开放接口参数
  * @returns 开放接口列表
  */
 export const updateOpenInterfaceBusiness = (
-  params: OpenInterfaceBusinessType
+  params: OpenInterfaceBusinessType,
 ) => {
   return HttpRequest.put(
     {
@@ -150,12 +150,12 @@ export const updateOpenInterfaceBusiness = (
     },
     {
       isTransformResponse: false,
-    }
+    },
   );
 };
 
 /**
- * 删除开放接口业务功能
+ * @description 删除开放接口业务功能
  * @param id 开放接口参数
  * @returns 开放接口列表
  */
@@ -166,6 +166,6 @@ export const deleteOpenInterfaceBusiness = (id: string) => {
     },
     {
       isTransformResponse: false,
-    }
+    },
   );
 };

@@ -15,12 +15,12 @@ export enum CabinMonitoringApi {
 }
 
 /**
- * 分页获取舱位监控列表
+ * @description 分页获取舱位监控列表
  * @param params 舱位监控参数
  * @returns 舱位监控列表
  */
 export const getCabinMonitoringListByPage = (
-  params: CabinMonitoringSearchParams
+  params: CabinMonitoringSearchParams,
 ) => {
   let qsParams = {
     ...params,
@@ -33,14 +33,14 @@ export const getCabinMonitoringListByPage = (
     },
     {
       isTransformResponse: false,
-    }
+    },
   );
 };
 
 /**
- * 获取舱位监控详情
+ * @description 获取舱位监控详情
  * @param id 舱位监控参数
- * @returns 舱位监控列表
+ * @returns 舱位监控详情
  */
 export const getCabinMonitoringDetail = (id: string) => {
   return HttpRequest.get(
@@ -49,14 +49,14 @@ export const getCabinMonitoringDetail = (id: string) => {
     },
     {
       isTransformResponse: false,
-    }
+    },
   );
 };
 
 /**
- * 舱位监控 查询额外参数
+ * @description 舱位监控 查询额外参数
  * @param params 舱位监控参数
- * @returns 舱位监控列表
+ * @returns 舱位监控额外参数
  */
 export const getCabinMonitoringExtra = (params: { carrierType: string }) => {
   return HttpRequest.get(
@@ -66,14 +66,14 @@ export const getCabinMonitoringExtra = (params: { carrierType: string }) => {
     },
     {
       isTransformResponse: false,
-    }
+    },
   );
 };
 
 /**
- * 舱位监控 修改额外参数
+ * @description 舱位监控 修改额外参数
  * @param params 舱位监控参数
- * @returns 舱位监控列表
+ * @returns 结果
  */
 export const putCabinMonitoringExtra = (params: CabinMonitoringExtraParams) => {
   return HttpRequest.post(
@@ -83,14 +83,14 @@ export const putCabinMonitoringExtra = (params: CabinMonitoringExtraParams) => {
     },
     {
       isTransformResponse: false,
-    }
+    },
   );
 };
 
 /**
- * 舱位监控 删除船司航线
+ * @description 舱位监控 删除船司航线
  * @param id 舱位监控参数
- * @returns 舱位监控列表
+ * @returns 结果
  */
 export const deleteCabinMonitoring = (id: string) => {
   return HttpRequest.delete(
@@ -99,14 +99,14 @@ export const deleteCabinMonitoring = (id: string) => {
     },
     {
       isTransformResponse: false,
-    }
+    },
   );
 };
 
 /**
- * 舱位监控 更新船司航线
+ * @description 舱位监控 更新船司航线
  * @param id 舱位监控参数
- * @returns 舱位监控列表
+ * @returns 结果
  */
 export const updateShippingCabinMonitoring = (id: string) => {
   return HttpRequest.post(
@@ -115,6 +115,6 @@ export const updateShippingCabinMonitoring = (id: string) => {
     },
     {
       isTransformResponse: false,
-    }
+    },
   );
 };

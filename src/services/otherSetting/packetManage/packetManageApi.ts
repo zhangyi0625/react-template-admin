@@ -13,7 +13,7 @@ export enum PacketApi {
 }
 
 /**
- * 分页查询活动红包列表
+ * @description 分页查询活动红包列表
  * @param params 活动红包参数
  * @returns 活动红包列表
  */
@@ -25,12 +25,12 @@ export const getPacketListByPage = (params: PacketManageParams) => {
     },
     {
       isTransformResponse: false,
-    }
+    },
   );
 };
 
 /**
- * 编辑活动红包信息
+ * @description 编辑活动红包信息
  * @param params 活动红包参数
  * @returns 结果
  */
@@ -42,12 +42,12 @@ export const editPacketList = (params: PacketManageType) => {
     },
     {
       isTransformResponse: false,
-    }
+    },
   );
 };
 
 /**
- * 修改活动红包状态
+ * @description 修改活动红包状态
  * @param params 活动红包参数
  * @returns 结果
  */
@@ -58,12 +58,13 @@ export const updatePacketStatus = (id: string, status: number) => {
     },
     {
       isTransformResponse: false,
-    }
+    },
   );
 };
 
 /**
- * 删除活动红包信息
+ * @description 删除活动红包信息
+ * @param id 活动红包id
  * @returns 活动红包列表
  */
 export const deletePacketList = (id: string) => {
@@ -73,13 +74,13 @@ export const deletePacketList = (id: string) => {
     },
     {
       isTransformResponse: false,
-    }
+    },
   );
 };
 
 /**
- * 查询活动红包领取记录
- * @param params 活动红包参数
+ * @description 查询活动红包领取记录
+ * @param id 活动红包id
  * @returns 活动红包列表
  */
 export const getPacketRecord = (id: string) => {
@@ -89,13 +90,13 @@ export const getPacketRecord = (id: string) => {
     },
     {
       isTransformResponse: false,
-    }
+    },
   );
 };
 
 /**
- * 查询活动红包领取记录详情
- * @param params 活动红包参数
+ * @description 查询活动红包领取记录详情
+ * @param id 活动红包id
  * @returns 活动红包列表
  */
 export const getPacketRecordDetail = (id: string) => {
@@ -105,6 +106,6 @@ export const getPacketRecordDetail = (id: string) => {
     },
     {
       isTransformResponse: false,
-    }
+    },
   );
 };

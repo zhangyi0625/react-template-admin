@@ -16,12 +16,12 @@ export enum ReleaseShippingHistoryApi {
 }
 
 /**
- * 分页获取放舱历史列表
+ * @description 分页获取放舱历史列表
  * @param params 放舱历史参数
  * @returns 放舱历史列表
  */
 export const getReleaseShippingHistoryListByPage = (
-  params: ReleaseShippingHistorySearchParams
+  params: ReleaseShippingHistorySearchParams,
 ) => {
   let qsParams = {
     ...params,
@@ -34,17 +34,17 @@ export const getReleaseShippingHistoryListByPage = (
     },
     {
       isTransformResponse: false,
-    }
+    },
   );
 };
 
 /**
- * 分页获取放舱历史 监控港口列表
+ * @description 分页获取放舱历史 监控港口列表
  * @param params 放舱历史参数
  * @returns 放舱历史列表
  */
 export const getReleaseShippingHistoryMonitoringPortByPage = (
-  params: ReleaseShippingHistorySearchParams
+  params: ReleaseShippingHistorySearchParams,
 ) => {
   let qsParams = {
     ...params,
@@ -57,17 +57,17 @@ export const getReleaseShippingHistoryMonitoringPortByPage = (
     },
     {
       isTransformResponse: false,
-    }
+    },
   );
 };
 
 /**
- * 放舱历史 添加监控港口
+ * @description 放舱历史 添加监控港口
  * @param id 放舱历史参数
  * @returns 放舱历史列表
  */
 export const postReleaseShippingHistoryAddPort = (
-  params: ReleaseShippingHistoryMonitoringPortType
+  params: ReleaseShippingHistoryMonitoringPortType,
 ) => {
   return HttpRequest.post(
     {
@@ -76,17 +76,17 @@ export const postReleaseShippingHistoryAddPort = (
     },
     {
       isTransformResponse: false,
-    }
+    },
   );
 };
 
 /**
- * 放舱历史 修改监控港口
+ * @description 放舱历史 修改监控港口
  * @param params 放舱历史参数
  * @returns 放舱历史列表
  */
 export const putReleaseShippingHistoryAddPort = (
-  params: ReleaseShippingHistoryMonitoringPortType
+  params: ReleaseShippingHistoryMonitoringPortType,
 ) => {
   return HttpRequest.post(
     {
@@ -95,12 +95,12 @@ export const putReleaseShippingHistoryAddPort = (
     },
     {
       isTransformResponse: false,
-    }
+    },
   );
 };
 
 /**
- * 放舱历史 删除监控港口
+ * @description 放舱历史 删除监控港口
  * @param id 放舱历史参数
  * @returns 放舱历史列表
  */
@@ -112,6 +112,6 @@ export const deleteReleaseShippingHistoryDeletePort = (id: string) => {
     },
     {
       isTransformResponse: false,
-    }
+    },
   );
 };

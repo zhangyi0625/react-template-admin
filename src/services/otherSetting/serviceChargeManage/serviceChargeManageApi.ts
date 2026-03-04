@@ -14,11 +14,12 @@ export enum ServiceChargeManageApi {
 }
 
 /**
- * 查询服务费保证金管理数据
+ * @description 查询服务费保证金管理数据
+ * @param params 服务费保证金管理参数
  * @returns 服务费保证金管理列表
  */
 export const getServiceChargeManageByList = (
-  params: ServiceChargeManageSearchParams
+  params: ServiceChargeManageSearchParams,
 ) => {
   return HttpRequest.get(
     {
@@ -27,12 +28,13 @@ export const getServiceChargeManageByList = (
     },
     {
       isTransformResponse: false,
-    }
+    },
   );
 };
 
 /**
- * 查询服务费保证金明细
+ * @description 查询服务费保证金明细
+ * @param id 服务费保证金管理id
  * @returns 服务费保证金管理列表
  */
 export const getServiceChargeManageDetail = (id: string) => {
@@ -42,12 +44,12 @@ export const getServiceChargeManageDetail = (id: string) => {
     },
     {
       isTransformResponse: false,
-    }
+    },
   );
 };
 
 /**
- * 新增服务费保证金规则
+ * @description 新增服务费保证金规则
  * @param params 服务费保证金管理参数
  * @returns 服务费保证金管理列表
  */
@@ -59,18 +61,19 @@ export const addServiceCharge = (params: ServiceChargeManageEditType) => {
     },
     {
       isTransformResponse: false,
-    }
+    },
   );
 };
 
 /**
- * 修改服务费保证金规则
+ * @description 修改服务费保证金规则
  * @param params 服务费保证金管理参数
+ * @param id 服务费保证金管理id
  * @returns 服务费保证金管理列表
  */
 export const updateServiceCharge = (
   params: ServiceChargeManageEditType,
-  id: string
+  id: string,
 ) => {
   return HttpRequest.put(
     {
@@ -79,18 +82,19 @@ export const updateServiceCharge = (
     },
     {
       isTransformResponse: false,
-    }
+    },
   );
 };
 
 /**
- * 修改服务费保证金明细
+ * @description 修改服务费保证金明细
  * @param params 服务费保证金管理参数
+ * @param id 服务费保证金管理id
  * @returns 服务费保证金管理列表
  */
 export const updateServiceChargeItems = (
   params: ServiceChargeFeeItems[],
-  id: string
+  id: string,
 ) => {
   return HttpRequest.put(
     {
@@ -99,12 +103,13 @@ export const updateServiceChargeItems = (
     },
     {
       isTransformResponse: false,
-    }
+    },
   );
 };
 
 /**
- * 删除服务费保证金规则
+ * @description 删除服务费保证金规则
+ * @param id 服务费保证金管理id
  * @returns 服务费保证金管理列表
  */
 export const deleteServiceChargeManageDetail = (id: string) => {
@@ -114,6 +119,6 @@ export const deleteServiceChargeManageDetail = (id: string) => {
     },
     {
       isTransformResponse: false,
-    }
+    },
   );
 };

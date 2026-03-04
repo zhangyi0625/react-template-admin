@@ -9,12 +9,12 @@ export enum DailyActiveUserRecordApi {
 }
 
 /**
- * 分页获取用户日活记录列表
+ * @description 分页获取用户日活记录列表
  * @param params 用户日活记录参数
  * @returns 用户日活记录列表
  */
 export const getDailyActiveUserRecordListByPage = (
-  params: DailyActiveUserRecordSearchParams
+  params: DailyActiveUserRecordSearchParams,
 ) => {
   let qsParams = {
     ...params,
@@ -27,6 +27,6 @@ export const getDailyActiveUserRecordListByPage = (
     },
     {
       isTransformResponse: false,
-    }
+    },
   );
 };

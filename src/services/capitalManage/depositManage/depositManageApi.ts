@@ -13,12 +13,12 @@ export enum DepositManageApi {
 }
 
 /**
- * 分页获取提现管理列表
+ * @description 分页获取提现管理列表
  * @param params 提现管理参数
  * @returns 提现管理列表
  */
 export const getDepositManageListByPage = (
-  params: DepositManageSearchParams
+  params: DepositManageSearchParams,
 ) => {
   let qsParams = {
     ...params,
@@ -31,12 +31,12 @@ export const getDepositManageListByPage = (
     },
     {
       isTransformResponse: false,
-    }
+    },
   );
 };
 
 /**
- * 获取提现管理
+ * @description 获取提现管理
  * @param id 提现管理参数
  * @returns 提现管理列表
  */
@@ -47,12 +47,12 @@ export const getDepositManage = (id: string) => {
     },
     {
       isTransformResponse: false,
-    }
+    },
   );
 };
 
 /**
- * 提现管理 接受提现
+ * @description 提现管理 接受提现
  * @param params 提现管理参数
  * @returns 提现管理列表
  */
@@ -64,12 +64,12 @@ export const postAcceptDepositManage = (params: DepositManageType) => {
     },
     {
       isTransformResponse: false,
-    }
+    },
   );
 };
 
 /**
- * 提现管理 拒绝提现
+ * @description 提现管理 拒绝提现
  * @param params 提现管理参数
  * @returns 提现管理列表
  */
@@ -81,6 +81,6 @@ export const postRejectDepositManage = (params: DepositManageType) => {
     },
     {
       isTransformResponse: false,
-    }
+    },
   );
 };

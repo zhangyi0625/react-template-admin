@@ -9,7 +9,7 @@ export enum QueryRecordApi {
 }
 
 /**
- * 分页获取查询记录列表
+ * @description 分页获取查询记录列表
  * @param params 查询记录参数
  * @returns 查询记录列表
  */
@@ -25,6 +25,6 @@ export const getQueryRecordListByPage = (params: QueryRecordSearchParams) => {
     },
     {
       isTransformResponse: false,
-    }
+    },
   );
 };

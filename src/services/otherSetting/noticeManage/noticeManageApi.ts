@@ -13,7 +13,8 @@ export enum NoticeManageApi {
 }
 
 /**
- * 查询公告管理数据
+ * @description 查询公告管理数据
+ * @param params 查询参数
  * @returns 公告管理列表
  */
 export const getNoticeManageByList = (params: NoticeManageSearchParams) => {
@@ -28,12 +29,13 @@ export const getNoticeManageByList = (params: NoticeManageSearchParams) => {
     },
     {
       isTransformResponse: false,
-    }
+    },
   );
 };
 
 /**
- * 查询公告管理详情
+ * @description 查询公告管理详情
+ * @param id 公告管理id
  * @returns 公告管理列表
  */
 export const getNoticeManageDetail = (id: string) => {
@@ -43,12 +45,12 @@ export const getNoticeManageDetail = (id: string) => {
     },
     {
       isTransformResponse: false,
-    }
+    },
   );
 };
 
 /**
- * 新增服务费保证金规则
+ * @description 新增服务费保证金规则
  * @param params 公告管理参数
  * @returns 公告管理列表
  */
@@ -60,18 +62,19 @@ export const addNoticeManage = (params: NoticeManageEditType) => {
     },
     {
       isTransformResponse: false,
-    }
+    },
   );
 };
 
 /**
- * 修改服务费保证金规则
+ * @description 修改服务费保证金规则
  * @param params 公告管理参数
+ * @param id 公告管理id
  * @returns 公告管理列表
  */
 export const updateNoticeManage = (
   params: NoticeManageEditType,
-  id: string
+  id: string,
 ) => {
   return HttpRequest.put(
     {
@@ -80,12 +83,13 @@ export const updateNoticeManage = (
     },
     {
       isTransformResponse: false,
-    }
+    },
   );
 };
 
 /**
- * 删除服务费保证金规则
+ * @description 删除服务费保证金规则
+ * @param id 公告管理id
  * @returns 公告管理列表
  */
 export const deleteNoticeManage = (id: string) => {
@@ -95,6 +99,6 @@ export const deleteNoticeManage = (id: string) => {
     },
     {
       isTransformResponse: false,
-    }
+    },
   );
 };

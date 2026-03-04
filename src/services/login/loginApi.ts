@@ -22,9 +22,9 @@ export enum LoginApi {
 }
 
 /**
- * 登录接口的实现
- * @param params
- * @returns
+ * @description 登录接口的实现
+ * @param params 登录参数
+ * @returns 登录结果
  */
 export const login = (params: LoginType) => {
   return HttpRequest.post<Response>(
@@ -34,12 +34,13 @@ export const login = (params: LoginType) => {
     },
     {
       isTransformResponse: false,
-    }
+    },
   );
 };
 
 /**
- * 获取验证码
+ * @description 获取验证码
+ * @param checkKey 校验参数
  * @returns 验证码
  */
 export const getCaptcha = (checkKey: string) => {
@@ -49,12 +50,12 @@ export const getCaptcha = (checkKey: string) => {
     },
     {
       successMessageMode: 'none',
-    }
+    },
   );
 };
 
 /**
- * 用户退出登录
+ * @description 用户退出登录
  * @param token 用户token
  */
 export const logout = (token: string) => {

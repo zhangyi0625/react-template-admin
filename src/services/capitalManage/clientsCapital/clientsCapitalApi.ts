@@ -10,12 +10,12 @@ export enum ClientsCapitalApi {
 }
 
 /**
- * 分页获取客户资金列表
+ * @description 分页获取客户资金列表
  * @param params 客户资金参数
  * @returns 客户资金列表
  */
 export const getClientsCapitalListByPage = (
-  params: ClientsCapitalSearchParams
+  params: ClientsCapitalSearchParams,
 ) => {
   let qsParams = {
     ...params,
@@ -28,12 +28,12 @@ export const getClientsCapitalListByPage = (
     },
     {
       isTransformResponse: false,
-    }
+    },
   );
 };
 
 /**
- * 获取客户资金
+ * @description 获取客户资金
  * @param id 客户资金参数
  * @returns 客户资金列表
  */
@@ -44,6 +44,6 @@ export const getClientsCapital = (id: string) => {
     },
     {
       isTransformResponse: false,
-    }
+    },
   );
 };

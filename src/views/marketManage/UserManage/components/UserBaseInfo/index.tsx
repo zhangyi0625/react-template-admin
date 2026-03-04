@@ -35,8 +35,8 @@ import { UserManageDetailEditForm } from '../../config';
 import { formatTime } from '@/utils/format';
 import type { CheckboxGroupProps } from 'antd/es/checkbox';
 import { filterKeys } from '@/utils/tool';
-import { EquityRightsExtraEditType } from '@/services/otherSetting/queryRightsSettings/queryRightsSettingsApi';
-import { postEquityRightsExtraEdit } from '@/services/otherSetting/queryRightsSettings/queryRightsSettingsModel';
+import { EquityRightsExtraEditType } from '@/services/otherSetting/queryRightsSettings/queryRightsSettingsModel';
+import { postEquityRightsExtraEdit } from '@/services/otherSetting/queryRightsSettings/queryRightsSettingsApi';
 
 export type UserBaseInfoProps = {
   detail: StaffDetailType;

@@ -16,12 +16,12 @@ export enum AffiliateApi {
 }
 
 /**
- * 分页查询认证数据
+ * @description 分页查询认证数据
  * @param params 认证参数
  * @returns 认证列表
  */
 export const getAuthenticationManageByPage = (
-  params: AuthenticationManageParams
+  params: AuthenticationManageParams,
 ) => {
   let qsParams = {
     ...params,
@@ -34,17 +34,17 @@ export const getAuthenticationManageByPage = (
     },
     {
       isTransformResponse: false,
-    }
+    },
   );
 };
 
 /**
- * 分页查询企业信息审核数据
+ * @description 分页查询企业信息审核数据
  * @param params 认证参数
  * @returns 认证列表
  */
 export const getAuthenticationSupplierManageByPage = (
-  params: AuthenticationManageParams
+  params: AuthenticationManageParams,
 ) => {
   let qsParams = {
     ...params,
@@ -57,12 +57,12 @@ export const getAuthenticationSupplierManageByPage = (
     },
     {
       isTransformResponse: false,
-    }
+    },
   );
 };
 
 /**
- * 查询企业信息审核详情数据
+ * @description 查询企业信息审核详情数据
  * @param params 认证参数
  * @returns 认证列表
  */
@@ -73,13 +73,13 @@ export const getAuthenticationManageDetail = (id: string) => {
     },
     {
       isTransformResponse: false,
-    }
+    },
   );
 };
 
 /**
- * 通过企业信息审核数据
- * @param params 认证参数
+ * @description 通过企业信息审核数据
+ * @param id 认证参数
  * @returns 认证列表
  */
 export const postAuthenticationCertificationByPass = (id: string) => {
@@ -89,17 +89,17 @@ export const postAuthenticationCertificationByPass = (id: string) => {
     },
     {
       isTransformResponse: false,
-    }
+    },
   );
 };
 
 /**
- * 拒绝企业信息审核数据
+ * @description 拒绝企业信息审核数据
  * @param params 认证参数
  * @returns 认证列表
  */
 export const postAuthenticationCertificationByReject = (
-  params: AuthenticationAuditRejectType
+  params: AuthenticationAuditRejectType,
 ) => {
   return HttpRequest.post(
     {
@@ -108,6 +108,6 @@ export const postAuthenticationCertificationByReject = (
     },
     {
       isTransformResponse: false,
-    }
+    },
   );
 };

@@ -24,8 +24,8 @@ export enum MenuApi {
 }
 
 /**
- * 根据角色获取菜单
- * @param params
+ * @description 根据角色获取菜单
+ * @param roleId 角色ID
  * @returns
  */
 export const getMenuListByRoleId = (roleId: string) => {
@@ -38,8 +38,9 @@ export const getMenuListByRoleId = (roleId: string) => {
 };
 
 /**
- * 查询所有菜单
+ * @description 查询所有菜单
  * @param params 查询条件
+ * @returns 菜单列表
  */
 export const getMenusList = (params?: MenuParams) => {
   return HttpRequest.get(
@@ -54,8 +55,9 @@ export const getMenusList = (params?: MenuParams) => {
 };
 
 /**
- * 分页查询菜单
+ * @description 分页查询菜单
  * @param params 查询条件
+ * @returns 菜单列表
  */
 export const getMenusByPage = (params: MenuParams) => {
   return HttpRequest.get(
@@ -70,8 +72,8 @@ export const getMenusByPage = (params: MenuParams) => {
 };
 
 /**
- * 获取所有的一级菜单
- * @returns
+ * @description 获取所有的一级菜单
+ * @returns 一级菜单列表
  */
 export const getDirectory = () => {
   return HttpRequest.get(
@@ -81,7 +83,7 @@ export const getDirectory = () => {
 };
 
 /**
- * 新增菜单
+ * @description 新增菜单
  * @param params 菜单数据
  * @returns
  */
@@ -93,7 +95,7 @@ export const addMenu = (params: Record<string, any>) => {
 };
 
 /**
- * 修改菜单数据
+ * @description 修改菜单数据
  * @param params 菜单数据
  * @returns
  */
@@ -105,7 +107,7 @@ export const updateMenu = (params: Record<string, any>) => {
 };
 
 /**
- * 删除菜单
+ * @description 删除菜单
  * @param menuId 菜单ID
  * @returns
  */
@@ -116,8 +118,8 @@ export const deleteMenu = (menuId: string) => {
 };
 
 /**
- * 批量删除菜单
- * @param menuIds  选中的菜单
+ * @description 批量删除菜单
+ * @param menuIds  选中的菜单ID列表
  * @returns
  */
 export const deleteMenuBatch = (menuIds: string[]) => {
@@ -128,7 +130,7 @@ export const deleteMenuBatch = (menuIds: string[]) => {
 };
 
 /**
- * 导出菜单（导出到Excel）
+ * @description 导出菜单（导出到Excel）
  * @param menus 需要导出的菜单数据
  * @returns
  */
@@ -140,7 +142,7 @@ export const exportMenu = (menus: any) => {
 };
 
 /**
- * 导入菜单（从Excel里面导入）
+ * @description 导入菜单（从Excel里面导入）
  * @param file 文件内容（Excel文件）
  * @returns
  */
@@ -152,7 +154,7 @@ export const importMenu = (file: any) => {
 };
 
 /**
- * 验证菜单权限
+ * @description 验证菜单权限
  * @param params 菜单数据
  * @returns 结果
  */

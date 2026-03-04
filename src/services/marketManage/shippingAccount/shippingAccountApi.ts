@@ -14,12 +14,12 @@ export enum ShippingAccountApi {
 }
 
 /**
- * 分页查询船司账号数据
+ * @description 分页查询船司账号数据
  * @param params 船司账号参数
  * @returns 船司账号列表
  */
 export const getShippingAccountManageByPage = (
-  params: ShippingAccountManageParams
+  params: ShippingAccountManageParams,
 ) => {
   let qsParams = {
     ...params,
@@ -32,12 +32,12 @@ export const getShippingAccountManageByPage = (
     },
     {
       isTransformResponse: false,
-    }
+    },
   );
 };
 
 /**
- * 开启船司账号
+ * @description 获取船司账号详情数据
  * @param id 船司账号参数
  * @returns 船司账号列表
  */
@@ -48,13 +48,13 @@ export const getShippingAccountDetail = (id: string) => {
     },
     {
       isTransformResponse: false,
-    }
+    },
   );
 };
 
 /**
- * 审核船司账号
- * @param id 船司账号参数
+ * @description 审核船司账号
+ * @param params 船司账号参数
  * @returns 船司账号列表
  */
 export const auditShippingAccount = (params: ShippingAccountAuditType) => {
@@ -65,6 +65,6 @@ export const auditShippingAccount = (params: ShippingAccountAuditType) => {
     },
     {
       isTransformResponse: false,
-    }
+    },
   );
 };

@@ -18,12 +18,12 @@ export enum HplQQCabinPlanApi {
 }
 
 /**
- * 分页获取HPLQQ订舱任务列表
+ * @description 分页获取HPLQQ订舱任务列表
  * @param params HPLQQ订舱任务参数
  * @returns HPLQQ订舱任务列表
  */
 export const getHplQQCabinPlanListByPage = (
-  params: HplQQCabinPlanSearchParams
+  params: HplQQCabinPlanSearchParams,
 ) => {
   let qsParams = {
     ...params,
@@ -36,17 +36,17 @@ export const getHplQQCabinPlanListByPage = (
     },
     {
       isTransformResponse: false,
-    }
+    },
   );
 };
 
 /**
- * 分页获取HPLQQ订舱 船期列表
+ * @description 分页获取HPLQQ订舱 船期列表
  * @param params HPLQQ订舱任务参数
  * @returns HPLQQ订舱任务列表
  */
 export const getHplQQCabinPlanShippingScheduleByPage = (
-  params: HplQQCabinPlanShippingScheduleSearchParams
+  params: HplQQCabinPlanShippingScheduleSearchParams,
 ) => {
   let qsParams = {
     ...params,
@@ -59,12 +59,12 @@ export const getHplQQCabinPlanShippingScheduleByPage = (
     },
     {
       isTransformResponse: false,
-    }
+    },
   );
 };
 
 /**
- * HPLQQ订舱任务 查询船期
+ * @description HPLQQ订舱任务 查询船期
  * @param id HPLQQ订舱任务参数
  * @returns HPLQQ订舱任务列表
  */
@@ -76,17 +76,17 @@ export const getHplQQCabinPlanShippingSchedule = (id: string) => {
     },
     {
       isTransformResponse: false,
-    }
+    },
   );
 };
 
 /**
- * HPLQQ订舱任务 查询船期
+ * @description HPLQQ订舱任务 查询船期
  * @param params HPLQQ订舱任务参数
  * @returns HPLQQ订舱任务列表
  */
 export const postHplQQCabinPlanShippingSchedule = (
-  params: HplQQCabinPlanShippingScheduleSearchParams['filter']
+  params: HplQQCabinPlanShippingScheduleSearchParams['filter'],
 ) => {
   return HttpRequest.post(
     {
@@ -95,18 +95,18 @@ export const postHplQQCabinPlanShippingSchedule = (
     },
     {
       isTransformResponse: false,
-    }
+    },
   );
 };
 
 /**
- * HPLQQ订舱任务 更新任务
+ * @description HPLQQ订舱任务 更新任务
  * @param params HPLQQ订舱任务参数
  * @returns HPLQQ订舱任务列表
  */
 export const putHplQQCabinPlanUpdate = (
   params: { vesselIds: string[]; type: 'VESSEL' },
-  id: string
+  id: string,
 ) => {
   return HttpRequest.put(
     {
@@ -115,12 +115,12 @@ export const putHplQQCabinPlanUpdate = (
     },
     {
       isTransformResponse: false,
-    }
+    },
   );
 };
 
 /**
- * HPLQQ订舱任务 取消任务
+ * @description HPLQQ订舱任务 取消任务
  * @param id HPLQQ订舱任务参数
  * @returns HPLQQ订舱任务列表
  */
@@ -131,12 +131,12 @@ export const deleteHplQQCabinPlan = (id: string) => {
     },
     {
       isTransformResponse: false,
-    }
+    },
   );
 };
 
 /**
- * HPLQQ订舱任务 订舱结果
+ * @description HPLQQ订舱任务 订舱结果
  * @param id HPLQQ订舱任务参数
  * @returns HPLQQ订舱任务列表
  */
@@ -147,6 +147,6 @@ export const getHplQQCabinPlanResult = (id: string) => {
     },
     {
       isTransformResponse: false,
-    }
+    },
   );
 };

@@ -21,9 +21,9 @@ export enum FreightInsurancePolicyAPI {
 }
 
 /**
- * 分页查询货运保险单订单列表
- * @param params
- * @returns
+ * @description 分页查询货运保险单订单列表
+ * @param params 货运保险单订单参数
+ * @returns 货运保险单订单列表
  */
 
 export const getFreightInsurancePolicyByPage = (
@@ -40,9 +40,9 @@ export const getFreightInsurancePolicyByPage = (
 };
 
 /**
- * 货运保险单订单列表详情
- * @param id
- * @returns
+ * @description 货运保险单订单列表详情
+ * @param id 货运保险单订单参数
+ * @returns 货运保险单订单列表
  */
 
 export const getFreightInsurancePolicyDetail = (id: string) => {

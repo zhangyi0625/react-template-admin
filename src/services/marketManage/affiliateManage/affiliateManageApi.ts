@@ -16,7 +16,7 @@ export enum AffiliateApi {
 }
 
 /**
- * 分页查询客户数据
+ * @description 分页查询客户数据
  * @param params 客户参数
  * @returns 客户列表
  */
@@ -33,12 +33,12 @@ export const getAffiliateManageByPage = (params: AffiliateManageParams) => {
     },
     {
       isTransformResponse: false,
-    }
+    },
   );
 };
 
 /**
- * 获取客户详情数据
+ * @description 获取客户详情数据
  * @param id 客户参数
  * @returns 客户列表
  */
@@ -49,12 +49,12 @@ export const getAffiliateManageDetail = (id: string) => {
     },
     {
       isTransformResponse: false,
-    }
+    },
   );
 };
 
 /**
- * 新增客户数据
+ * @description 新增客户数据
  * @param params 客户参数
  * @returns 客户列表
  */
@@ -66,18 +66,18 @@ export const addAffiliateManage = (params: AffiliateManageType) => {
     },
     {
       isTransformResponse: false,
-    }
+    },
   );
 };
 
 /**
- * 修改客户数据
+ * @description 修改客户数据
  * @param params 客户参数
  * @returns 客户列表
  */
 export const updateAffiliateManage = (
   params: AffiliateManageType,
-  id: string
+  id: string,
 ) => {
   return HttpRequest.put(
     {
@@ -86,12 +86,12 @@ export const updateAffiliateManage = (
     },
     {
       isTransformResponse: false,
-    }
+    },
   );
 };
 
 /**
- * 删除客户数据
+ * @description 删除客户数据
  * @param id 客户参数
  * @returns 客户列表
  */
@@ -102,18 +102,18 @@ export const deleteAffiliateManage = (id: string) => {
     },
     {
       isTransformResponse: false,
-    }
+    },
   );
 };
 
 /**
- * 修改供应商查询权限
+ * @description 修改供应商查询权限
  * @param params 客户参数
  * @returns 客户列表
  */
 export const updateAffiliateSearchSupplier = (
   params: { show: boolean },
-  id: string
+  id: string,
 ) => {
   return HttpRequest.put(
     {
@@ -122,12 +122,12 @@ export const updateAffiliateSearchSupplier = (
     },
     {
       isTransformResponse: false,
-    }
+    },
   );
 };
 
 /**
- * 获取客户额外套餐权限数据
+ * @description 获取客户额外套餐权限数据
  * @param id 客户参数
  * @returns 客户列表
  */
@@ -141,6 +141,6 @@ export const getAffiliateManageComboPermission = (params: {
     },
     {
       isTransformResponse: false,
-    }
+    },
   );
 };

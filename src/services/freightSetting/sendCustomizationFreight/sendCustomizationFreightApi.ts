@@ -14,12 +14,12 @@ export enum SendCustomizationFreightApi {
 }
 
 /**
- * 分页获取发送定制运价列表
+ * @description 分页获取发送定制运价列表
  * @param params 发送定制运价参数
  * @returns 发送定制运价列表
  */
 export const getSendCustomizationFreightListByPage = (
-  params: SendCustomizationFreightSearchParams
+  params: SendCustomizationFreightSearchParams,
 ) => {
   let qsParams = {
     ...params,
@@ -32,17 +32,17 @@ export const getSendCustomizationFreightListByPage = (
     },
     {
       isTransformResponse: false,
-    }
+    },
   );
 };
 
 /**
- * 新增发送定制运价列表
+ * @description 新增发送定制运价列表
  * @param params 发送定制运价参数
  * @returns 发送定制运价列表
  */
 export const addSendCustomizationFreight = (
-  params: SendCustomizationFreightType
+  params: SendCustomizationFreightType,
 ) => {
   return HttpRequest.post(
     {
@@ -51,17 +51,17 @@ export const addSendCustomizationFreight = (
     },
     {
       isTransformResponse: false,
-    }
+    },
   );
 };
 
 /**
- * 修改发送定制运价列表
+ * @description 修改发送定制运价列表
  * @param params 发送定制运价参数
  * @returns 发送定制运价列表
  */
 export const putSendCustomizationFreight = (
-  params: SendCustomizationFreightType
+  params: SendCustomizationFreightType,
 ) => {
   return HttpRequest.put(
     {
@@ -70,13 +70,13 @@ export const putSendCustomizationFreight = (
     },
     {
       isTransformResponse: false,
-    }
+    },
   );
 };
 
 /**
- * 删除发送定制运价列表
- * @param params 发送定制运价参数
+ * @description 删除发送定制运价列表
+ * @param id 发送定制运价参数
  * @returns 发送定制运价列表
  */
 export const deleteSendCustomizationFreight = (id: string) => {
@@ -86,6 +86,6 @@ export const deleteSendCustomizationFreight = (id: string) => {
     },
     {
       isTransformResponse: false,
-    }
+    },
   );
 };

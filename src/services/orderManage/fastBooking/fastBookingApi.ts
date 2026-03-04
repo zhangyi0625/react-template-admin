@@ -46,9 +46,9 @@ export enum FastBookingAPi {
 }
 
 /**
- * 查询光速预定
- * @param params
- * @returns
+ * @description 查询光速预定
+ * @param params 光速预定参数
+ * @returns 光速预定列表
  */
 
 export const getFastBooingByPage = (params: RegularBookingSearchParams) => {
@@ -58,14 +58,14 @@ export const getFastBooingByPage = (params: RegularBookingSearchParams) => {
       url: FastBookingAPi.FastBooingByPage,
       params: qsParams,
     },
-    { isTransformResponse: false }
+    { isTransformResponse: false },
   );
 };
 
 /**
- * 导出光速预定列表
- * @param params
- * @returns
+ * @description 导出光速预定列表
+ * @param params 光速预定参数
+ * @returns 光速预定列表
  */
 
 export const downFastOrder = (params: { ids: string }) => {
@@ -75,14 +75,14 @@ export const downFastOrder = (params: { ids: string }) => {
       params: params,
       responseType: 'blob',
     },
-    { isTransformResponse: false }
+    { isTransformResponse: false },
   );
 };
 
 /**
- * 导出光速预定订单结果
- * @param params
- * @returns
+ * @description 导出光速预定订单结果
+ * @param params 光速预定参数
+ * @returns 光速预定列表
  */
 
 export const downOrderResult = (params: { ids: string }) => {
@@ -92,14 +92,14 @@ export const downOrderResult = (params: { ids: string }) => {
       params: params,
       responseType: 'blob',
     },
-    { isTransformResponse: false }
+    { isTransformResponse: false },
   );
 };
 
 /**
- * 光速预定详情
- * @param id
- * @returns
+ * @description 光速预定详情
+ * @param id 光速预定参数
+ * @returns 光速预定列表
  */
 
 export const getFastBookingDetail = (id: string) => {
@@ -107,14 +107,14 @@ export const getFastBookingDetail = (id: string) => {
     {
       url: FastBookingAPi.FastBookingDetail + id,
     },
-    { isTransformResponse: false }
+    { isTransformResponse: false },
   );
 };
 
 /**
- * 光速预定动态记录
- * @param id
- * @returns
+ * @description 光速预定动态记录
+ * @param id 光速预定参数
+ * @returns 光速预定列表
  */
 
 export const getFastBookingEvents = (id: string) => {
@@ -122,55 +122,55 @@ export const getFastBookingEvents = (id: string) => {
     {
       url: FastBookingAPi.FastBookingDetail + id + '/events',
     },
-    { isTransformResponse: false }
+    { isTransformResponse: false },
   );
 };
 
 /**
- * 光速预定查询下单账号
- * @param params
- * @returns
+ * @description 光速预定查询下单账号
+ * @param params 光速预定参数
+ * @returns 光速预定列表
  */
 
 export const getFastBookingOrderAccount = (
-  params: FastBookingOrderAccountParams
+  params: FastBookingOrderAccountParams,
 ) => {
   return HttpRequest.get(
     {
       url: FastBookingAPi.FastBookingOrderAccount,
       params: params,
     },
-    { isTransformResponse: false }
+    { isTransformResponse: false },
   );
 };
 
 /**
- * 光速预定查询拍舱结果
- * @param params
- * @returns
+ * @description 光速预定查询拍舱结果
+ * @param params 光速预定参数
+ * @returns 光速预定列表
  */
 
 export const getFastBookingCabinResult = (
-  params: FastBookingCabinResultParams
+  params: FastBookingCabinResultParams,
 ) => {
   return HttpRequest.get(
     {
       url: FastBookingAPi.FastBookingCabinResult,
       params: params,
     },
-    { isTransformResponse: false }
+    { isTransformResponse: false },
   );
 };
 
 /**
- * 光速预定结果通知
- * @param params
- * @returns
+ * @description 光速预定结果通知
+ * @param params 光速预定参数
+ * @returns 光速预定列表
  */
 
 export const postSendFastBookingResult = (
   params: { remark: string },
-  id: string
+  id: string,
 ) => {
   return HttpRequest.post<Response>(
     {
@@ -180,14 +180,14 @@ export const postSendFastBookingResult = (
         'Content-Type': ContentTypeEnum.FORM_DATA,
       },
     },
-    { isTransformResponse: false }
+    { isTransformResponse: false },
   );
 };
 
 /**
- * 光速预定取消预订
- * @param params
- * @returns
+ * @description 光速预定取消预订
+ * @param id 光速预定参数
+ * @returns 光速预定列表
  */
 
 export const postFastBookingStatusByCancel = (id: string) => {
@@ -195,14 +195,14 @@ export const postFastBookingStatusByCancel = (id: string) => {
     {
       url: FastBookingAPi.FastBookingDetail + id + '/cancelled',
     },
-    { isTransformResponse: false }
+    { isTransformResponse: false },
   );
 };
 
 /**
- * 光速预定自有下单
- * @param params
- * @returns
+ * @description 光速预定自有下单
+ * @param id 光速预定参数
+ * @returns 光速预定列表
  */
 
 export const postFastBookingStatusByPreparing = (id: string) => {
@@ -210,14 +210,14 @@ export const postFastBookingStatusByPreparing = (id: string) => {
     {
       url: FastBookingAPi.FastBookingDetail + id + 'preparing',
     },
-    { isTransformResponse: false }
+    { isTransformResponse: false },
   );
 };
 
 /**
- * 光速预定API极虎下单
- * @param params
- * @returns
+ * @description 光速预定API极虎下单
+ * @param id 光速预定参数
+ * @returns 光速预定列表
  */
 
 export const postFastBookingByOther = (id: string) => {
@@ -225,14 +225,14 @@ export const postFastBookingByOther = (id: string) => {
     {
       url: FastBookingAPi.FastBookingByOther + id,
     },
-    { isTransformResponse: false }
+    { isTransformResponse: false },
   );
 };
 
 /**
- * 光速预定 设置订舱成功
- * @param params
- * @returns
+ * @description 光速预定 设置订舱成功
+ * @param id 光速预定参数
+ * @returns 光速预定列表
  */
 
 export const postFastBookingStatusByPrepared = (id: string) => {
@@ -240,6 +240,6 @@ export const postFastBookingStatusByPrepared = (id: string) => {
     {
       url: FastBookingAPi.FastBookingDetail + id + 'prepared',
     },
-    { isTransformResponse: false }
+    { isTransformResponse: false },
   );
 };

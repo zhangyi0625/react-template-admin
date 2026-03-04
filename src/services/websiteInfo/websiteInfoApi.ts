@@ -17,9 +17,9 @@ export enum WebsiteInfoApi {
 }
 
 /**
- * 分页查询用户反馈
+ * @description 分页查询用户反馈列表
  * @param params 用户反馈参数
- * @returns 用户反馈
+ * @returns 用户反馈列表
  */
 export const getUserFeedbackByPage = (params: UserFeedbackParams) => {
   return HttpRequest.get(
@@ -29,17 +29,17 @@ export const getUserFeedbackByPage = (params: UserFeedbackParams) => {
     },
     {
       isTransformResponse: false,
-    }
+    },
   );
 };
 
 /**
- * 分页查询船司专区数据
+ * @description 分页查询船司专区数据
  * @param params 船司专区参数
  * @returns 船司专区列表
  */
 export const getShippingCompanyZoneByPage = (
-  params: ShippingCompanyZoneParams
+  params: ShippingCompanyZoneParams,
 ) => {
   return HttpRequest.get(
     {
@@ -48,14 +48,14 @@ export const getShippingCompanyZoneByPage = (
     },
     {
       isTransformResponse: false,
-    }
+    },
   );
 };
 
 /**
- * 新增船司专区数据
+ * @description 新增船司专区数据
  * @param params 船司专区参数
- * @returns 船司专区列表
+ * @returns 结果
  */
 export const addShippingCompanyZone = (params: ShippingCompanyZoneType) => {
   return HttpRequest.post(
@@ -65,18 +65,18 @@ export const addShippingCompanyZone = (params: ShippingCompanyZoneType) => {
     },
     {
       isTransformResponse: false,
-    }
+    },
   );
 };
 
 /**
- * 修改船司专区数据
+ * @description 修改船司专区数据
  * @param params 船司专区参数
- * @returns 船司专区列表
+ * @returns 结果
  */
 export const updateShippingCompanyZone = (
   params: ShippingCompanyZoneType,
-  id: string
+  id: string,
 ) => {
   return HttpRequest.put(
     {
@@ -85,14 +85,14 @@ export const updateShippingCompanyZone = (
     },
     {
       isTransformResponse: false,
-    }
+    },
   );
 };
 
 /**
- * 删除船司专区数据
- * @param id 船司专区参数
- * @returns 船司专区列表
+ * @description 删除船司专区数据
+ * @param id 船司专区id
+ * @returns 结果
  */
 export const deleteShippingCompanyZone = (id: string) => {
   return HttpRequest.delete(
@@ -101,13 +101,13 @@ export const deleteShippingCompanyZone = (id: string) => {
     },
     {
       isTransformResponse: false,
-    }
+    },
   );
 };
 
 /**
- * 查询船司百科数据
- * @param id 船司专区参数
+ * @description 查询船司百科数据
+ * @param id 船司专区id
  * @returns 船司专区列表
  */
 export const getShipownerEncyclopedia = (id: string) => {
@@ -117,18 +117,18 @@ export const getShipownerEncyclopedia = (id: string) => {
     },
     {
       isTransformResponse: false,
-    }
+    },
   );
 };
 
 /**
- * 修改船司百科数据
+ * @description 修改船司百科数据
  * @param params 船司专区参数
- * @returns 船司专区列表
+ * @returns 结果
  */
 export const updateShipownerEncyclopedia = (
   params: ShipownerEncyclopediaType,
-  id: string
+  id: string,
 ) => {
   return HttpRequest.put(
     {
@@ -137,6 +137,6 @@ export const updateShipownerEncyclopedia = (
     },
     {
       isTransformResponse: false,
-    }
+    },
   );
 };

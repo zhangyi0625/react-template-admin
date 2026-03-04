@@ -14,7 +14,7 @@ export enum CabinManageApi {
 }
 
 /**
- * 分页获取舱位管理列表
+ * @description 分页获取舱位管理列表
  * @param params 舱位管理参数
  * @returns 舱位管理列表
  */
@@ -32,14 +32,15 @@ export const getCabinManageListByPage = (params: CabinManageSearchParams) => {
     },
     {
       isTransformResponse: false,
-    }
+    },
   );
 };
 
 /**
- * 获取舱位管理详情
+ * @description 获取舱位管理详情
+ * @param id 舱位管理参数
  * @param params 舱位管理参数
- * @returns 舱位管理列表
+ * @returns 舱位管理详情
  */
 export const getCabinManageDetail = (id: string, params: { type: string }) => {
   return HttpRequest.get(
@@ -50,13 +51,13 @@ export const getCabinManageDetail = (id: string, params: { type: string }) => {
     },
     {
       isTransformResponse: false,
-    }
+    },
   );
 };
 
 /**
- * 获取舱位管理服务费用详情
- * @param id 舱位管理参数
+ * @description 获取舱位管理服务费用详情
+ * @param params 舱位管理参数
  * @returns 舱位管理列表
  */
 export const getCabinManageServiceFee = (params: { service: 'BOOKING' }) => {
@@ -67,14 +68,14 @@ export const getCabinManageServiceFee = (params: { service: 'BOOKING' }) => {
     },
     {
       isTransformResponse: false,
-    }
+    },
   );
 };
 
 /**
- * 舱位管理 舱位下线
- * @param id 舱位管理参数
- * @returns 舱位管理列表
+ * @description 舱位管理 舱位下线
+ * @param params 舱位管理参数
+ * @returns 结果
  */
 export const deleteCabinManage = (params: string[]) => {
   return HttpRequest.post(
@@ -84,12 +85,12 @@ export const deleteCabinManage = (params: string[]) => {
     },
     {
       isTransformResponse: false,
-    }
+    },
   );
 };
 
 /**
- * 获取舱位管理 发票记录
+ * @description 获取舱位管理
  * @param id 舱位管理参数
  * @returns 舱位管理列表
  */
@@ -100,14 +101,14 @@ export const getCabinManageFile = (id: string) => {
     },
     {
       isTransformResponse: false,
-    }
+    },
   );
 };
 
 /**
- * 舱位管理 提交发票记录
+ * @description 舱位管理
  * @param params 舱位管理参数
- * @returns 舱位管理列表
+ * @returns 结果
  */
 export const postCabinManageUploadFile = (params: FormData, id: string) => {
   return HttpRequest.post<Response>(
@@ -117,14 +118,14 @@ export const postCabinManageUploadFile = (params: FormData, id: string) => {
     },
     {
       isTransformResponse: false,
-    }
+    },
   );
 };
 
 /**
- * 舱位管理 删除发票
+ * @description 舱位管理
  * @param id 舱位管理参数
- * @returns 舱位管理列表
+ * @returns 结果
  */
 export const deleteCabinManageFile = (id: string) => {
   return HttpRequest.delete(
@@ -133,6 +134,6 @@ export const deleteCabinManageFile = (id: string) => {
     },
     {
       isTransformResponse: false,
-    }
+    },
   );
 };

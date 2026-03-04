@@ -20,7 +20,7 @@ export enum StaffApi {
 }
 
 /**
- * 分页查询用户数据
+ * @description 分页查询用户数据
  * @param params 用户参数
  * @returns 用户列表
  */
@@ -37,12 +37,12 @@ export const getStaffManageByPage = (params: StaffManageParams) => {
     },
     {
       isTransformResponse: false,
-    }
+    },
   );
 };
 
 /**
- * 获取用户详情数据
+ * @description 获取用户详情数据
  * @param id 客户参数
  * @returns 客户列表
  */
@@ -53,12 +53,12 @@ export const getStaffManageDetail = (id: string) => {
     },
     {
       isTransformResponse: false,
-    }
+    },
   );
 };
 
 /**
- * 新增用户
+ * @description 新增用户
  * @param params 用户参数
  * @returns 用户列表
  */
@@ -70,12 +70,12 @@ export const addStaffManage = (params: StaffManageType) => {
     },
     {
       isTransformResponse: false,
-    }
+    },
   );
 };
 
 /**
- * 修改用户
+ * @description 修改用户
  * @param params 用户参数
  * @returns 用户列表
  */
@@ -87,12 +87,12 @@ export const updateStaffManage = (params: StaffManageType, id: string) => {
     },
     {
       isTransformResponse: false,
-    }
+    },
   );
 };
 
 /**
- * 删除用户
+ * @description 删除用户
  * @param params 用户参数
  * @returns 用户列表
  */
@@ -103,12 +103,12 @@ export const deleteStaffManage = (id: string) => {
     },
     {
       isTransformResponse: false,
-    }
+    },
   );
 };
 
 /**
- * 新增用户加入企业
+ * @description 新增用户加入企业
  * @param params 用户参数
  * @returns 用户列表
  */
@@ -120,13 +120,13 @@ export const addStaffJoinAffiliate = (params: StaffJoinAffiliateType) => {
     },
     {
       isTransformResponse: false,
-    }
+    },
   );
 };
 
 /**
- * 删除企业用户
- * @param params 用户参数
+ * @description 删除企业用户
+ * @param id 用户参数
  * @returns 用户列表
  */
 export const deleteStaffInAffiliate = (id: string) => {
@@ -136,18 +136,19 @@ export const deleteStaffInAffiliate = (id: string) => {
     },
     {
       isTransformResponse: false,
-    }
+    },
   );
 };
 
 /**
- * 新增用户跟进记录
+ * @description 新增用户跟进记录
+ * @param id 用户参数
  * @param params 用户参数
  * @returns 用户列表
  */
 export const addStaffFollowRecord = (
   id: string,
-  params: { content: string }
+  params: { content: string },
 ) => {
   return HttpRequest.post(
     {
@@ -156,14 +157,14 @@ export const addStaffFollowRecord = (
     },
     {
       isTransformResponse: false,
-    }
+    },
   );
 };
 
 /**
- * 获取套餐外权限变更记录
- * @param id 客户参数
- * @returns 客户列表
+ * @description 获取套餐外权限变更记录
+ * @param params 用户参数
+ * @returns 用户列表
  */
 export const getStaffComboPermissionRecord = (params: {
   filter: {
@@ -182,14 +183,14 @@ export const getStaffComboPermissionRecord = (params: {
     },
     {
       isTransformResponse: false,
-    }
+    },
   );
 };
 
 /**
- * 获取用户等级变更记录
- * @param id 客户参数
- * @returns 客户列表
+ * @description 获取用户等级变更记录
+ * @param params 用户参数
+ * @returns 用户列表
  */
 export const getStaffLevelRecord = (params: {
   filter: {
@@ -207,14 +208,14 @@ export const getStaffLevelRecord = (params: {
     },
     {
       isTransformResponse: false,
-    }
+    },
   );
 };
 
 /**
- * 获取用户查询记录
- * @param id 客户参数
- * @returns 客户列表
+ * @description 获取用户查询记录
+ * @param params 用户参数
+ * @returns 用户列表
  */
 export const getStaffSearchStatistic = (params: {
   type: 'WEEk' | 'MONTH';
@@ -227,14 +228,14 @@ export const getStaffSearchStatistic = (params: {
     },
     {
       isTransformResponse: false,
-    }
+    },
   );
 };
 
 /**
- * 登陆后台用户账号(工作台)
- * @param id 客户参数
- * @returns 客户列表
+ * @description 登陆后台用户账号(工作台)
+ * @param id 用户参数
+ * @returns 用户列表
  */
 export const postStaffSearchStatistic = (id: string) => {
   return HttpRequest.post(
@@ -243,14 +244,14 @@ export const postStaffSearchStatistic = (id: string) => {
     },
     {
       isTransformResponse: false,
-    }
+    },
   );
 };
 
 /**
- * 获取用户额外套餐权限
- * @param id 客户参数
- * @returns 客户列表
+ * @description 获取用户额外套餐权限
+ * @param params 用户参数
+ * @returns 用户列表
  */
 export const getStaffExtraEquityLimit = (params: { customerId: string }) => {
   return HttpRequest.get(
@@ -260,6 +261,6 @@ export const getStaffExtraEquityLimit = (params: { customerId: string }) => {
     },
     {
       isTransformResponse: false,
-    }
+    },
   );
 };

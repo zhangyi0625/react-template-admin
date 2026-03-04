@@ -9,12 +9,12 @@ export enum UserInvitationRecordApi {
 }
 
 /**
- * 分页获取用户邀请记录列表
+ * @description 分页获取用户邀请记录列表
  * @param params 用户邀请记录参数
  * @returns 用户邀请记录列表
  */
 export const getUserInvitationRecordListByPage = (
-  params: UserInvitationRecordSearchParams
+  params: UserInvitationRecordSearchParams,
 ) => {
   let qsParams = {
     ...params,
@@ -27,6 +27,6 @@ export const getUserInvitationRecordListByPage = (
     },
     {
       isTransformResponse: false,
-    }
+    },
   );
 };

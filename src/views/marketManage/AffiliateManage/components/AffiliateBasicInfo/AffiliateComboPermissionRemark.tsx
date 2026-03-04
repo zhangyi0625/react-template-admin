@@ -4,7 +4,7 @@ import DragModal from '@/components/modal/DragModal';
 import {
   getEquityRightsBase,
   getEquityRightsExtra,
-} from '@/services/otherSetting/queryRightsSettings/queryRightsSettingsModel';
+} from '@/services/otherSetting/queryRightsSettings/queryRightsSettingsApi';
 import { SearchTable } from 'customer-search-form-table';
 import { ComboPermission } from '@/enums/setting';
 
@@ -205,7 +205,7 @@ export const AffiliateComboPermissionRemark = React.forwardRef<
 
   const getBaseValue = (
     limit: string,
-    module: keyof typeof ComboPermission
+    module: keyof typeof ComboPermission,
   ) => {
     return limit ? (
       <div>
@@ -224,7 +224,7 @@ export const AffiliateComboPermissionRemark = React.forwardRef<
 
   const getExtraValue = (
     level: string,
-    module: keyof typeof ComboPermission
+    module: keyof typeof ComboPermission,
   ) => {
     return '¥' + level + (filterExtraKeys.includes(module) ? ' / 条' : ' / 次');
   };

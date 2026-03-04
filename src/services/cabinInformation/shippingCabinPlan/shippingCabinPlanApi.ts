@@ -14,12 +14,12 @@ export enum ShippingCabinPlanApi {
 }
 
 /**
- * 分页获取船司舱位计划列表
+ * @description 分页获取船司舱位计划列表
  * @param params 船司舱位计划参数
  * @returns 船司舱位计划列表
  */
 export const getShippingCarrierCabinPlanByPage = (
-  params: ShippingCabinPlanSearchParams
+  params: ShippingCabinPlanSearchParams,
 ) => {
   let qsParams = {
     ...params,
@@ -32,17 +32,17 @@ export const getShippingCarrierCabinPlanByPage = (
     },
     {
       isTransformResponse: false,
-    }
+    },
   );
 };
 
 /**
- * 分页获取维护放舱计划列表
+ * @description 分页获取维护放舱计划列表
  * @param params 船司舱位计划参数
  * @returns 船司舱位计划列表
  */
 export const getShippingCabinPlanListByPage = (
-  params: ShippingCabinPlanSearchParams
+  params: ShippingCabinPlanSearchParams,
 ) => {
   let qsParams = {
     ...params,
@@ -55,13 +55,13 @@ export const getShippingCabinPlanListByPage = (
     },
     {
       isTransformResponse: false,
-    }
+    },
   );
 };
 
 /**
- * 新增放舱计划
- * @param id 船司舱位计划参数
+ * @description 新增放舱计划
+ * @param params 船司舱位计划参数
  * @returns 船司舱位计划列表
  */
 export const postShippingCabinPlan = (params: ShippingCabinPlanType) => {
@@ -72,18 +72,18 @@ export const postShippingCabinPlan = (params: ShippingCabinPlanType) => {
     },
     {
       isTransformResponse: false,
-    }
+    },
   );
 };
 
 /**
- * 修改放舱计划
+ * @description 修改放舱计划
  * @param params 船司舱位计划参数
  * @returns 船司舱位计划列表
  */
 export const putShippingCabinPlan = (
   params: ShippingCabinPlanType,
-  id: string
+  id: string,
 ) => {
   return HttpRequest.put(
     {
@@ -92,12 +92,12 @@ export const putShippingCabinPlan = (
     },
     {
       isTransformResponse: false,
-    }
+    },
   );
 };
 
 /**
- * 船司舱位计划 删除船司航线
+ * @description 船司舱位计划 删除船司航线
  * @param id 船司舱位计划参数
  * @returns 船司舱位计划列表
  */
@@ -108,6 +108,6 @@ export const deleteShippingCabinPlan = (id: string) => {
     },
     {
       isTransformResponse: false,
-    }
+    },
   );
 };

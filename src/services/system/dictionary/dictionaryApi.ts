@@ -1,9 +1,9 @@
-import { HttpRequest } from '@/utils/request'
+import { HttpRequest } from '@/utils/request';
 import type {
   SysDictionaryClassType,
   SysDictionaryParams,
   SysDictionaryType,
-} from './dictionaryModel'
+} from './dictionaryModel';
 
 /**
  * 枚举角色相关的api
@@ -17,7 +17,7 @@ export enum DictionaryApi {
 }
 
 /**
- * 分页获取字典分类列表
+ * @description 分页获取字典分类列表
  * @param params 字典参数
  * @returns 字典分类列表
  */
@@ -29,12 +29,12 @@ export const getDictionaryListByPage = (params?: SysDictionaryClassType) => {
     },
     {
       successMessageMode: 'none',
-    }
-  )
-}
+    },
+  );
+};
 
 /**
- * 获取字典分类列表
+ * @description 获取字典分类列表
  * @param params 字典参数
  * @returns 字典分类列表
  */
@@ -46,12 +46,12 @@ export const getDictionaryList = (params?: SysDictionaryClassType) => {
     },
     {
       successMessageMode: 'none',
-    }
-  )
-}
+    },
+  );
+};
 
 /**
- * 添加字典分类
+ * @description 添加字典分类
  * @param params 字典参数
  * @returns
  */
@@ -63,12 +63,12 @@ export const addDictionary = (params: SysDictionaryClassType) => {
     },
     {
       successMessageMode: 'none',
-    }
-  )
-}
+    },
+  );
+};
 
 /**
- * 更新字典分类
+ * @description 更新字典分类
  * @param params 字典参数
  * @returns
  */
@@ -80,13 +80,13 @@ export const updateDictionary = (params: SysDictionaryClassType) => {
     },
     {
       successMessageMode: 'none',
-    }
-  )
-}
+    },
+  );
+};
 
 /**
- * 删除字典分类
- * @param id
+ * @description 删除字典分类
+ * @param id 字典分类id
  * @returns
  */
 export const deleteDictionary = (id: string) => {
@@ -96,17 +96,18 @@ export const deleteDictionary = (id: string) => {
     },
     {
       successMessageMode: 'none',
-    }
-  )
-}
+    },
+  );
+};
 
 /**
- * 分页查询字典项
- * @param id
+ * @description 分页查询字典项
+ * @param id 字典分类id
+ * @param params 查询参数
  * @returns
  */
 export const getDictionaryListByIdPage = (
-  params: Partial<SysDictionaryParams>
+  params: Partial<SysDictionaryParams>,
 ) => {
   return HttpRequest.get(
     {
@@ -115,12 +116,12 @@ export const getDictionaryListByIdPage = (
     },
     {
       successMessageMode: 'none',
-    }
-  )
-}
+    },
+  );
+};
 
 /**
- * 查询全部字典项
+ * @description 查询全部字典项
  * @returns
  */
 export const getDictionaryListById = () => {
@@ -130,12 +131,12 @@ export const getDictionaryListById = () => {
     },
     {
       successMessageMode: 'none',
-    }
-  )
-}
+    },
+  );
+};
 
 /**
- * 添加字典项
+ * @description 添加字典项
  * @param params 字典参数
  * @returns
  */
@@ -147,12 +148,12 @@ export const addDictionaryById = (params: SysDictionaryType) => {
     },
     {
       successMessageMode: 'none',
-    }
-  )
-}
+    },
+  );
+};
 
 /**
- * 更新字典项
+ * @description 更新字典项
  * @param params 字典参数
  * @returns
  */
@@ -164,13 +165,13 @@ export const updateDictionaryById = (params: SysDictionaryType) => {
     },
     {
       successMessageMode: 'none',
-    }
-  )
-}
+    },
+  );
+};
 
 /**
- * 删除字典项
- * @param id
+ * @description 删除字典项
+ * @param id 字典项id
  * @returns
  */
 export const deleteDictionaryById = (id: string) => {
@@ -180,12 +181,12 @@ export const deleteDictionaryById = (id: string) => {
     },
     {
       successMessageMode: 'none',
-    }
-  )
-}
+    },
+  );
+};
 
 /**
- * 批量删除字典项
+ * @description 批量删除字典项
  * @param params 字典参数
  * @returns
  */
@@ -197,6 +198,6 @@ export const batchDeleteDictionaryById = (params: { ids: string[] }) => {
     },
     {
       successMessageMode: 'none',
-    }
-  )
-}
+    },
+  );
+};

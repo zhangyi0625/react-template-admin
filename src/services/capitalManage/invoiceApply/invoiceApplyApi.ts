@@ -14,7 +14,7 @@ export enum InvoiceApplyApi {
 }
 
 /**
- * 分页获取开票申请列表
+ * @description 分页获取开票申请列表
  * @param params 开票申请参数
  * @returns 开票申请列表
  */
@@ -30,12 +30,12 @@ export const getInvoiceApplyListByPage = (params: InvoiceApplySearchParams) => {
     },
     {
       isTransformResponse: false,
-    }
+    },
   );
 };
 
 /**
- * 获取开票申请
+ * @description 获取开票申请
  * @param id 开票申请参数
  * @returns 开票申请列表
  */
@@ -46,12 +46,12 @@ export const getInvoiceApply = (id: string) => {
     },
     {
       isTransformResponse: false,
-    }
+    },
   );
 };
 
 /**
- * 获取开票申请包含订单
+ * @description 获取开票申请包含订单
  * @param id 开票申请参数
  * @returns 开票申请列表
  */
@@ -62,12 +62,12 @@ export const getInvoiceApplyOrderImport = (id: string) => {
     },
     {
       isTransformResponse: false,
-    }
+    },
   );
 };
 
 /**
- * 获取开票申请操作记录
+ * @description 获取开票申请操作记录
  * @param id 开票申请参数
  * @returns 开票申请列表
  */
@@ -78,12 +78,12 @@ export const getInvoiceApplyRecord = (id: string) => {
     },
     {
       isTransformResponse: false,
-    }
+    },
   );
 };
 
 /**
- * 获取开票申请 发票记录
+ * @description 获取开票申请 发票记录
  * @param id 开票申请参数
  * @returns 开票申请列表
  */
@@ -94,13 +94,14 @@ export const getInvoiceApplyFile = (id: string) => {
     },
     {
       isTransformResponse: false,
-    }
+    },
   );
 };
 
 /**
- * 开票申请 提交发票记录
+ * @description 开票申请 提交发票记录
  * @param params 开票申请参数
+ * @param id 开票申请参数
  * @returns 开票申请列表
  */
 export const postInvoiceApplyUploadFile = (params: FormData, id: string) => {
@@ -111,12 +112,12 @@ export const postInvoiceApplyUploadFile = (params: FormData, id: string) => {
     },
     {
       isTransformResponse: false,
-    }
+    },
   );
 };
 
 /**
- * 开票申请 删除发票
+ * @description 开票申请 删除发票
  * @param id 开票申请参数
  * @returns 开票申请列表
  */
@@ -127,6 +128,6 @@ export const deleteInvoiceApplyFile = (id: string) => {
     },
     {
       isTransformResponse: false,
-    }
+    },
   );
 };

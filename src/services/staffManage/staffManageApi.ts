@@ -16,7 +16,7 @@ export enum StaffApi {
 }
 
 /**
- * 查询所有用户列表
+ * @description 查询所有用户列表
  * @returns 用户列表
  */
 export const getStaffList = () => {
@@ -26,12 +26,12 @@ export const getStaffList = () => {
     },
     {
       isTransformResponse: false,
-    }
+    },
   );
 };
 
 /**
- * 分页查询用户列表
+ * @description 分页查询用户列表
  * @param params 用户参数
  * @returns 用户列表
  */
@@ -43,13 +43,13 @@ export const getStaffListByPage = (params: SysStaffParams) => {
     },
     {
       isTransformResponse: false,
-    }
+    },
   );
 };
 
 /**
- * 查询用户详情信息
- * @param params 用户参数
+ * @description 查询用户详情信息
+ * @param id 用户id
  * @returns 用户列表
  */
 export const getStaffDetail = (id: string) => {
@@ -59,12 +59,12 @@ export const getStaffDetail = (id: string) => {
     },
     {
       isTransformResponse: false,
-    }
+    },
   );
 };
 
 /**
- * 新增用户
+ * @description 新增用户
  * @param params 用户参数
  * @returns 结果
  */
@@ -76,13 +76,14 @@ export const addStaffList = (params: SysStaffType) => {
     },
     {
       isTransformResponse: false,
-    }
+    },
   );
 };
 
 /**
- * 编辑用户信息
+ * @description 编辑用户信息
  * @param params 用户参数
+ * @param id 用户id
  * @returns 结果
  */
 export const editStaffList = (params: SysStaffType, id: string) => {
@@ -93,12 +94,12 @@ export const editStaffList = (params: SysStaffType, id: string) => {
     },
     {
       isTransformResponse: false,
-    }
+    },
   );
 };
 
 /**
- * 发送验证码
+ * @description 发送验证码
  * @param params 用户参数
  * @returns 结果
  */
@@ -109,12 +110,12 @@ export const postSendVerifyCode = () => {
     },
     {
       isTransformResponse: false,
-    }
+    },
   );
 };
 
 /**
- * 重置用户密码
+ * @description 重置用户密码
  * @param params 用户参数
  * @returns 结果
  */
@@ -126,12 +127,13 @@ export const updateStaffPassword = (params: SysStaffResetPasswordType) => {
     },
     {
       successMessageMode: 'none',
-    }
+    },
   );
 };
 
 /**
- * 删除用户信息
+ * @description 删除用户信息
+ * @param id 用户id
  * @returns 用户列表
  */
 export const deleteStaffList = (id: string) => {
@@ -141,6 +143,6 @@ export const deleteStaffList = (id: string) => {
     },
     {
       successMessageMode: 'none',
-    }
+    },
   );
 };

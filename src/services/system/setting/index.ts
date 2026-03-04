@@ -10,25 +10,27 @@ export enum PublicApi {
 }
 
 /**
- * 查询系统参数
+ * @description 查询系统参数
+ * @returns 系统参数
  */
 export const getPublicData = () => {
   return HttpRequest.get<Response>(
     {
       url: PublicApi.PublicData,
     },
-    { isTransformResponse: false }
+    { isTransformResponse: false },
   );
 };
 
 /**
- * 查询系统配置
+ * @description 查询系统配置
+ * @returns 系统配置
  */
 export const getPublicSetting = () => {
   return HttpRequest.get<Response>(
     {
       url: PublicApi.PublicSetting,
     },
-    { isTransformResponse: false }
+    { isTransformResponse: false },
   );
 };

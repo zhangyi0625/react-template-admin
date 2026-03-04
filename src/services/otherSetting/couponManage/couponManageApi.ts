@@ -15,7 +15,8 @@ export enum CouponManageApi {
 }
 
 /**
- * 查询优惠券管理数据
+ * @description 查询优惠券管理数据
+ * @param params 查询优惠券管理参数
  * @returns 优惠券管理列表
  */
 export const getCouponManageByList = (params: CouponManageSearchParams) => {
@@ -26,13 +27,14 @@ export const getCouponManageByList = (params: CouponManageSearchParams) => {
     },
     {
       isTransformResponse: false,
-    }
+    },
   );
 };
 
 /**
- * 查询优惠券管理详情
- * @returns 优惠券管理列表
+ * @description 查询优惠券管理详情
+ * @param id 优惠券管理id
+ * @returns 优惠券管理详情
  */
 export const getCouponManageDetail = (id: string) => {
   return HttpRequest.get(
@@ -41,12 +43,12 @@ export const getCouponManageDetail = (id: string) => {
     },
     {
       isTransformResponse: false,
-    }
+    },
   );
 };
 
 /**
- * 制定优惠券发放
+ * @description 制定优惠券发放
  * @param params 优惠券发放参数
  * @returns 优惠券管理列表
  */
@@ -58,13 +60,13 @@ export const putCouponProvider = (params: CouponProvideType, id: string) => {
     },
     {
       isTransformResponse: false,
-    }
+    },
   );
 };
 
 /**
- * 查询优惠券管理具体使用情况
- * @param params 查询参数
+ * @description 查询优惠券管理具体使用情况
+ * @param params 查询优惠券管理具体使用情况参数
  * @returns 优惠券管理列表
  */
 export const getCouponManageUseDetail = (params: {
@@ -78,12 +80,12 @@ export const getCouponManageUseDetail = (params: {
     },
     {
       isTransformResponse: false,
-    }
+    },
   );
 };
 
 /**
- * 新增优惠券管理
+ * @description 新增优惠券管理
  * @param params 优惠券管理参数
  * @returns 优惠券管理列表
  */
@@ -95,18 +97,18 @@ export const addCouponManage = (params: CouponManageEditType) => {
     },
     {
       isTransformResponse: false,
-    }
+    },
   );
 };
 
 /**
- * 修改优惠券管理
+ * @description 修改优惠券管理
  * @param params 优惠券管理参数
  * @returns 优惠券管理列表
  */
 export const updateCouponManage = (
   params: CouponManageEditType,
-  id: string
+  id: string,
 ) => {
   return HttpRequest.put(
     {
@@ -115,12 +117,13 @@ export const updateCouponManage = (
     },
     {
       isTransformResponse: false,
-    }
+    },
   );
 };
 
 /**
- * 删除优惠券管理
+ * @description 删除优惠券管理
+ * @param id 优惠券管理id
  * @returns 优惠券管理列表
  */
 export const deleteCouponManage = (id: string) => {
@@ -130,6 +133,6 @@ export const deleteCouponManage = (id: string) => {
     },
     {
       isTransformResponse: false,
-    }
+    },
   );
 };

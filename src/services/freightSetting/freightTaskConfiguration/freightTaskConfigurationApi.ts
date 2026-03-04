@@ -14,12 +14,12 @@ export enum FreightTaskConfigurationApi {
 }
 
 /**
- * 分页获取运价任务配置列表
+ * @description 分页获取运价任务配置列表
  * @param params 运价任务配置参数
  * @returns 运价任务配置列表
  */
 export const getFreightTaskConfigurationListByPage = (
-  params: FreightTaskConfigurationSearchParams
+  params: FreightTaskConfigurationSearchParams,
 ) => {
   let qsParams = {
     ...params,
@@ -32,17 +32,17 @@ export const getFreightTaskConfigurationListByPage = (
     },
     {
       isTransformResponse: false,
-    }
+    },
   );
 };
 
 /**
- * 新增运价任务配置列表
+ * @description 新增运价任务配置列表
  * @param params 运价任务配置参数
  * @returns 运价任务配置列表
  */
 export const addFreightTaskConfiguration = (
-  params: FreightTaskConfigurationType
+  params: FreightTaskConfigurationType,
 ) => {
   return HttpRequest.post(
     {
@@ -51,17 +51,17 @@ export const addFreightTaskConfiguration = (
     },
     {
       isTransformResponse: false,
-    }
+    },
   );
 };
 
 /**
- * 修改运价任务配置列表
+ * @description 修改运价任务配置列表
  * @param params 运价任务配置参数
  * @returns 运价任务配置列表
  */
 export const putFreightTaskConfiguration = (
-  params: FreightTaskConfigurationType
+  params: FreightTaskConfigurationType,
 ) => {
   return HttpRequest.put(
     {
@@ -70,13 +70,13 @@ export const putFreightTaskConfiguration = (
     },
     {
       isTransformResponse: false,
-    }
+    },
   );
 };
 
 /**
- * 删除运价任务配置列表
- * @param params 运价任务配置参数
+ * @description 删除运价任务配置列表
+ * @param id 运价任务配置参数
  * @returns 运价任务配置列表
  */
 export const deleteFreightTaskConfiguration = (id: string) => {
@@ -86,6 +86,6 @@ export const deleteFreightTaskConfiguration = (id: string) => {
     },
     {
       isTransformResponse: false,
-    }
+    },
   );
 };

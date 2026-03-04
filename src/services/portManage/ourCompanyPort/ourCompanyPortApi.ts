@@ -13,12 +13,12 @@ export enum OurCompanyPortApi {
 }
 
 /**
- * 分页获取我司港口列表
+ * @description 分页获取我司港口列表
  * @param params 我司港口参数
  * @returns 我司港口列表
  */
 export const getOurCompanyPortListByPage = (
-  params: OurCompanyPortSearchParams
+  params: OurCompanyPortSearchParams,
 ) => {
   let qsParams = {
     ...params,
@@ -31,12 +31,12 @@ export const getOurCompanyPortListByPage = (
     },
     {
       isTransformResponse: false,
-    }
+    },
   );
 };
 
 /**
- * 新增我司港口列表
+ * @description 新增我司港口列表
  * @param params 我司港口参数
  * @returns 我司港口列表
  */
@@ -48,12 +48,12 @@ export const addOurCompanyPort = (params: OurCompanyPortType) => {
     },
     {
       isTransformResponse: false,
-    }
+    },
   );
 };
 
 /**
- * 修改我司港口列表
+ * @description 修改我司港口列表
  * @param params 我司港口参数
  * @returns 我司港口列表
  */
@@ -65,13 +65,13 @@ export const putOurCompanyPort = (params: OurCompanyPortType) => {
     },
     {
       isTransformResponse: false,
-    }
+    },
   );
 };
 
 /**
- * 删除我司港口列表
- * @param params 我司港口参数
+ * @description 删除我司港口列表
+ * @param id 我司港口id
  * @returns 我司港口列表
  */
 export const deleteOurCompanyPort = (id: string) => {
@@ -81,6 +81,6 @@ export const deleteOurCompanyPort = (id: string) => {
     },
     {
       isTransformResponse: false,
-    }
+    },
   );
 };

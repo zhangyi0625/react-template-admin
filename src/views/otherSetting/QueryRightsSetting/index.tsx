@@ -13,10 +13,10 @@ import {
   getEquityRightsBase,
   getEquityRightsExtra,
   postEquityRightsExtraPriceUpdate,
-} from '@/services/otherSetting/queryRightsSettings/queryRightsSettingsModel';
+} from '@/services/otherSetting/queryRightsSettings/queryRightsSettingsApi';
 import type { DefaultPaging } from '@/types/global';
 import QueryRightsSettingModal from './QueryRightsSettingModal';
-import type { EquityRightsExtraPriceUpdateType } from '@/services/otherSetting/queryRightsSettings/queryRightsSettingsApi';
+import type { EquityRightsExtraPriceUpdateType } from '@/services/otherSetting/queryRightsSettings/queryRightsSettingsModel';
 import { ComboPermission, LevelSetting } from '@/enums/setting';
 import { isNumber } from 'lodash-es';
 
@@ -40,7 +40,7 @@ const QueryRightsSetting: React.FC = () => {
 
   const loadComboPermissionByLevel = (): TableProps['columns'] => {
     let keys = Object.keys(LevelSetting).filter(
-      (key) => key !== 'L9' && key !== 'L10' && key !== 'L21'
+      (key) => key !== 'L9' && key !== 'L10' && key !== 'L21',
     );
     const filterComboPermission: TableProps['columns'] = keys.map((key) => ({
       title: LevelSetting[key as keyof typeof LevelSetting],

@@ -12,7 +12,9 @@ export enum UploadApi {
 }
 
 /**
- * 查询系统参数
+ * @description 上传文件
+ * @param params 上传文件参数
+ * @returns 结果
  */
 export const postUploadFile = (params: FormData) => {
   return HttpRequest.post<Response>(
@@ -20,14 +22,14 @@ export const postUploadFile = (params: FormData) => {
       url: UploadApi.uploadFile,
       params,
     },
-    { isTransformResponse: false }
+    { isTransformResponse: false },
   );
 };
 
 /**
- * 获取源文件
- * @param params
- * @returns
+ * @description 获取源文件
+ * @param params 文件id
+ * @returns 文件流
  */
 export const getFileUrl = (id: string) => {
   return HttpRequest.get<Response>(
@@ -35,14 +37,14 @@ export const getFileUrl = (id: string) => {
       url: UploadApi.getFileUrl + id,
       responseType: 'blob',
     },
-    { isTransformResponse: false }
+    { isTransformResponse: false },
   );
 };
 
 /**
- * 获取源文件
- * @param params
- * @returns
+ * @description 上传公告文件
+ * @param params 上传公告文件参数
+ * @returns 结果
  */
 export const postUploadBulletinFile = (params: FormData) => {
   return HttpRequest.post(
@@ -53,6 +55,6 @@ export const postUploadBulletinFile = (params: FormData) => {
         'Content-Type': ContentTypeEnum.FORM_DATA,
       },
     },
-    { isTransformResponse: false }
+    { isTransformResponse: false },
   );
 };

@@ -14,7 +14,7 @@ export enum RouteManageApi {
 }
 
 /**
- * 分页获取航线管理列表
+ * @description 分页获取航线管理列表
  * @param params 航线管理参数
  * @returns 航线管理列表
  */
@@ -31,12 +31,12 @@ export const getRouteManageListByPage = (params: RouteManageSearchParams) => {
     },
     {
       isTransformResponse: false,
-    }
+    },
   );
 };
 
 /**
- * 获取航线管理详情
+ * @description 获取航线管理详情
  * @param id 航线管理参数
  * @returns 航线管理列表
  */
@@ -47,17 +47,17 @@ export const getRouteManageDetail = (id: string) => {
     },
     {
       isTransformResponse: false,
-    }
+    },
   );
 };
 
 /**
- * 航线管理 批量添加船司航线
- * @param id 航线管理参数
+ * @description 航线管理 批量添加船司航线
+ * @param params 航线管理参数
  * @returns 航线管理列表
  */
 export const postBatchAddRouteManage = (
-  params: RouteManageByCarrierRouteType
+  params: RouteManageByCarrierRouteType,
 ) => {
   return HttpRequest.post(
     {
@@ -66,18 +66,18 @@ export const postBatchAddRouteManage = (
     },
     {
       isTransformResponse: false,
-    }
+    },
   );
 };
 
 /**
- * 航线管理 修改船司航线
+ * @description 航线管理 修改船司航线
  * @param params 航线管理参数
  * @returns 航线管理列表
  */
 export const putRouteManage = (
   params: RouteManageByCarrierRouteType,
-  id: string
+  id: string,
 ) => {
   return HttpRequest.post(
     {
@@ -86,12 +86,12 @@ export const putRouteManage = (
     },
     {
       isTransformResponse: false,
-    }
+    },
   );
 };
 
 /**
- * 航线管理 删除船司航线
+ * @description 航线管理 删除船司航线
  * @param id 航线管理参数
  * @returns 航线管理列表
  */
@@ -102,12 +102,12 @@ export const deleteRouteManage = (id: string) => {
     },
     {
       isTransformResponse: false,
-    }
+    },
   );
 };
 
 /**
- * 航线管理 更新船司航线
+ * @description 航线管理 更新船司航线
  * @param id 航线管理参数
  * @returns 航线管理列表
  */
@@ -118,6 +118,6 @@ export const updateShippingRouteManage = (id: string) => {
     },
     {
       isTransformResponse: false,
-    }
+    },
   );
 };

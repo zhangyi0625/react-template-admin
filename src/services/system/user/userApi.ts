@@ -17,7 +17,7 @@ export enum UserApi {
 }
 
 /**
- * 查询所有用户列表
+ * @description 查询所有用户列表
  * @returns 用户列表
  */
 export const getUserList = () => {
@@ -27,13 +27,13 @@ export const getUserList = () => {
     },
     {
       isTransformResponse: false,
-    }
+    },
   );
 };
 
 /**
- * 分页查询用户列表
- * @param params 用户参数
+ * @description 分页查询用户列表
+ * @param params 查询用户参数
  * @returns 用户列表
  */
 export const getUserListByPage = (params: SysUserParams) => {
@@ -44,14 +44,14 @@ export const getUserListByPage = (params: SysUserParams) => {
     },
     {
       isTransformResponse: false,
-    }
+    },
   );
 };
 
 /**
- * 查询用户详情信息
- * @param params 用户参数
- * @returns 用户列表
+ * @description 查询用户详情信息
+ * @param params 查询用户参数
+ * @returns 用户详情
  */
 export const getUserDetail = (id: string) => {
   return HttpRequest.get(
@@ -60,13 +60,13 @@ export const getUserDetail = (id: string) => {
     },
     {
       isTransformResponse: false,
-    }
+    },
   );
 };
 
 /**
- * 新增用户
- * @param params 用户参数
+ * @description 新增用户
+ * @param params 新增用户参数
  * @returns 结果
  */
 export const addUserList = (params: SysUserType) => {
@@ -77,13 +77,13 @@ export const addUserList = (params: SysUserType) => {
     },
     {
       isTransformResponse: false,
-    }
+    },
   );
 };
 
 /**
- * 编辑用户信息
- * @param params 用户参数
+ * @description 编辑用户信息
+ * @param params 编辑用户参数
  * @returns 结果
  */
 export const editUserList = (params: SysUserType, id: string) => {
@@ -94,13 +94,12 @@ export const editUserList = (params: SysUserType, id: string) => {
     },
     {
       isTransformResponse: false,
-    }
+    },
   );
 };
 
 /**
- * 发送验证码
- * @param params 用户参数
+ * @description 发送验证码
  * @returns 结果
  */
 export const postSendVerifyCode = () => {
@@ -110,13 +109,13 @@ export const postSendVerifyCode = () => {
     },
     {
       isTransformResponse: false,
-    }
+    },
   );
 };
 
 /**
- * 重置用户密码
- * @param params 用户参数
+ * @description 重置用户密码
+ * @param params 重置用户密码参数
  * @returns 结果
  */
 export const updateUserPassword = (params: SysUserResetPasswordType) => {
@@ -127,13 +126,14 @@ export const updateUserPassword = (params: SysUserResetPasswordType) => {
     },
     {
       successMessageMode: 'none',
-    }
+    },
   );
 };
 
 /**
- * 删除用户信息
- * @returns 用户列表
+ * @description 删除用户信息
+ * @param id 用户id
+ * @returns 结果
  */
 export const deleteUserList = (id: string) => {
   return HttpRequest.delete(
@@ -142,13 +142,14 @@ export const deleteUserList = (id: string) => {
     },
     {
       successMessageMode: 'none',
-    }
+    },
   );
 };
 
 /**
- * 批量删除用户信息
- * @returns 用户列表
+ * @description 批量删除用户信息
+ * @param ids 用户id列表
+ * @returns 结果
  */
 export const deleteBatchUserList = (ids: string[]) => {
   return HttpRequest.delete(
@@ -158,6 +159,6 @@ export const deleteBatchUserList = (ids: string[]) => {
     },
     {
       successMessageMode: 'none',
-    }
+    },
   );
 };

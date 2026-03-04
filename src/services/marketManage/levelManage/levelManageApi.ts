@@ -9,7 +9,7 @@ export enum LevelApi {
 }
 
 /**
- * 分页查询等级数据
+ * @description 分页查询等级数据
  * @param params 等级参数
  * @returns 等级列表
  */
@@ -25,6 +25,6 @@ export const getLevelManageByPage = (params: LevelManageParams) => {
     },
     {
       isTransformResponse: false,
-    }
+    },
   );
 };

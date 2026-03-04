@@ -67,15 +67,10 @@ export enum RoleApi {
    * 给角色分配用户
    */
   assignRoleUser = '/system/role/assignRoleUser',
-
-  /**
-   * 校验角色编码是否重复
-   */
-  checkRoleCodeExist = '/system/role/checkRoleCodeExist',
 }
 
 /**
- * 查询所有角色列表
+ * @description 查询所有角色列表
  * @returns 角色列表
  */
 export const getRoleList = () => {
@@ -86,12 +81,12 @@ export const getRoleList = () => {
     {
       // successMessageMode: 'none',
       isTransformResponse: false,
-    }
+    },
   );
 };
 
 /**
- * 分页查询角色列表
+ * @description 分页查询角色列表
  * @param params 角色参数
  * @returns 角色列表
  */
@@ -103,12 +98,12 @@ export const getRoleListByPage = (params: SysRoleParams) => {
     },
     {
       successMessageMode: 'none',
-    }
+    },
   );
 };
 
 /**
- * 新增角色
+ * @description 新增角色
  * @param params 角色参数
  * @returns 结果
  */
@@ -120,7 +115,7 @@ export const addRole = (params: SysRoleType) => {
 };
 
 /**
- * 编辑角色信息
+ * @description 编辑角色信息
  * @param params 角色参数
  * @returns 结果
  */
@@ -132,7 +127,7 @@ export const editRole = (params: SysRoleType) => {
 };
 
 /**
- * 更新角色状态
+ * @description 更新角色状态
  * @param params 角色参数
  * @returns 结果
  */
@@ -144,7 +139,7 @@ export const changStatus = (params: SysUserType) => {
 };
 
 /**
- * 删除角色
+ * @description 删除角色
  * @param params 角色参数
  * @returns 结果
  */
@@ -155,7 +150,7 @@ export const deleteRole = (id: string) => {
 };
 
 /**
- * 批量删除角色
+ * @description 批量删除角色
  * @param params 角色参数
  * @returns 结果
  */
@@ -167,7 +162,7 @@ export const deleteBatchRole = (params: { ids: string[] }) => {
 };
 
 /**
- * 获取角色菜单权限
+ * @description 获取角色菜单权限
  * @param params 角色参数
  * @returns 结果
  */
@@ -178,12 +173,12 @@ export const getRoleMenu = (roleId: string) => {
     },
     {
       successMessageMode: 'none',
-    }
+    },
   );
 };
 
 /**
- * 分配角色菜单权限
+ * @description 分配角色菜单权限
  * @param params 角色参数
  * @returns 结果
  */
@@ -198,7 +193,7 @@ export const assignRoleMenu = (params: {
 };
 
 /**
- * 分配角色用户
+ * @description 分配角色用户
  * @param params 角色参数
  * @returns 结果
  */
@@ -210,7 +205,7 @@ export const assignRoleUser = (params: any) => {
 };
 
 /**
- * 获取角色用户
+ * @description 获取角色用户
  * @param params 角色参数
  * @returns 结果
  */
@@ -222,12 +217,12 @@ export const getRoleUser = (params: SysUserParams) => {
     },
     {
       successMessageMode: 'none',
-    }
+    },
   );
 };
 
 /**
- * 分页获取角色用户
+ * @description 分页获取角色用户
  * @param params 角色参数
  * @returns 结果
  */
@@ -239,12 +234,12 @@ export const getRoleUserByPage = (params: SysUserParams) => {
     },
     {
       successMessageMode: 'none',
-    }
+    },
   );
 };
 
 /**
- * 新增角色用户
+ * @description 新增角色用户
  * @param params 用户参数
  * @returns 结果
  */
@@ -256,12 +251,12 @@ export const postRoleUser = (params: SysUserType) => {
     },
     {
       successMessageMode: 'none',
-    }
+    },
   );
 };
 
 /**
- * 修改角色用户
+ * @description 修改角色用户
  * @param params 用户参数
  * @returns 结果
  */
@@ -273,13 +268,13 @@ export const putRoleUser = (params: SysUserType) => {
     },
     {
       successMessageMode: 'none',
-    }
+    },
   );
 };
 
 /**
- * 删除角色用户
- * @param params 用户参数
+ * @description 删除角色用户
+ * @param params 用户id
  * @returns 结果
  */
 export const deleteRoleUser = (id: string) => {
@@ -289,8 +284,8 @@ export const deleteRoleUser = (id: string) => {
 };
 
 /**
- * 批量删除角色用户
- * @param params 用户参数
+ * @description 批量删除角色用户
+ * @param params 用户id列表
  * @returns 结果
  */
 export const postBatchRoleUser = (ids: string[]) => {
@@ -301,22 +296,6 @@ export const postBatchRoleUser = (ids: string[]) => {
     },
     {
       successMessageMode: 'none',
-    }
-  );
-};
-/**
- * 验证角色编码是否存在
- * @param params 角色编码
- * @returns 结果
- */
-export const checkRoleCodeExist = (params: any) => {
-  return HttpRequest.get(
-    {
-      url: RoleApi.checkRoleCodeExist,
-      params,
     },
-    {
-      successMessageMode: 'none',
-    }
   );
 };

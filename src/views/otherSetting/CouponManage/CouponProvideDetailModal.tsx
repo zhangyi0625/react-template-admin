@@ -6,6 +6,7 @@ import {
   getCouponManageUseDetail,
 } from '@/services/otherSetting/couponManage/couponManageApi';
 import type { CouponManageEditType } from '@/services/otherSetting/couponManage/couponManageModel';
+import { randomNum } from '@/utils/tool';
 
 export type CouponProvideDetailModalProps = {
   params: {
@@ -129,7 +130,7 @@ const CouponProvideDetailModal: React.FC<CouponProvideDetailModalProps> = ({
   };
 
   const loadCouponManageUseDetail = async (
-    row: Pick<CouponManageEditType, 'created' | 'customerId'>
+    row: Pick<CouponManageEditType, 'created' | 'customerId'>,
   ) => {
     try {
       const res = await getCouponManageUseDetail({
@@ -153,7 +154,7 @@ const CouponProvideDetailModal: React.FC<CouponProvideDetailModalProps> = ({
           columns={CouponUseDetailColumns}
           dataSource={visibleUseDetail.tableData}
           pagination={false}
-          rowKey={() => Math.random().toString()}
+          rowKey={() => randomNum().toString()}
         />
       </DragModal>
     );
@@ -172,7 +173,7 @@ const CouponProvideDetailModal: React.FC<CouponProvideDetailModalProps> = ({
         columns={columns}
         dataSource={tableData}
         pagination={false}
-        rowKey={() => Math.random().toString()}
+        rowKey={() => randomNum().toString()}
       />
       {visibleUseDetail.visible && showUseDetail()}
     </DragModal>

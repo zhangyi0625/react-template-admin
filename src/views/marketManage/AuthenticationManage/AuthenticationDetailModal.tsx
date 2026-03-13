@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Table, TableProps } from 'antd';
 import DragModal from '@/components/modal/DragModal';
 import { getAuthenticationManageDetail } from '@/services/marketManage/authenticationManage/authenticationManageApi';
+import { randomNum } from '@/utils/tool';
 
 export type AuthenticationDetailModalProps = {
   params: {
@@ -31,7 +32,7 @@ const AuthenticationDetailModal: React.FC<AuthenticationDetailModalProps> = ({
       const resp = await getAuthenticationManageDetail(editId as string);
       setDetailInfo([
         {
-          id: Math.random().toString(),
+          id: randomNum().toString(),
           old: resp.old,
           new: resp.new,
         },

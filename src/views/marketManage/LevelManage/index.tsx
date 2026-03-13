@@ -9,7 +9,7 @@ import { SearchForm, SearchTable } from 'customer-search-form-table';
 import { LevelManageSearchColumns, LevelOptions } from './config';
 import { getLevelManageByPage } from '@/services/marketManage/levelManage/levelManageApi';
 import type { LevelManageParams } from '@/services/marketManage/levelManage/levelManageModel';
-import { filterKeys } from '@/utils/tool';
+import { filterKeys, randomNum } from '@/utils/tool';
 import useParentSize from '@/hooks/useParentSize';
 import { formatTime } from '@/utils/format';
 
@@ -20,7 +20,7 @@ const LevelManage: React.FC = () => {
     {
       pageIndex: 1,
       pageSize: 10,
-    }
+    },
   );
 
   const columns: TableProps['columns'] = [
@@ -51,7 +51,7 @@ const LevelManage: React.FC = () => {
           <div>
             {
               LevelOptions?.find(
-                (item) => item.value === String(value.gradeLevel)
+                (item) => item.value === String(value.gradeLevel),
               )?.label
             }
           </div>
@@ -89,13 +89,13 @@ const LevelManage: React.FC = () => {
   const onUpdateSearch = (info?: LevelManageParams | unknown) => {
     const filteredObj = Object.fromEntries(
       Object.entries(info ?? {}).filter(
-        ([, value]) => !!value && value !== undefined
-      )
+        ([, value]) => !!value && value !== undefined,
+      ),
     );
     let pageInfo = filterKeys(
       searchDefaultForm,
       ['pageIndex', 'pageSize'],
-      true
+      true,
     );
     setSearchDefaultForm({
       ...pageInfo,
@@ -147,7 +147,7 @@ const LevelManage: React.FC = () => {
           pageIndexKey="pageIndex"
           pageSizeKey="pageSize"
           scroll={{ x: 'max-content', y: height - 128 }}
-          rowKey={(_) => Math.random().toString()}
+          rowKey={(_) => randomNum().toString()}
           totalKey="total"
           fetchResultKey="entries"
           isPagination={true}

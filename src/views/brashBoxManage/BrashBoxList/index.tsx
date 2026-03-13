@@ -106,7 +106,7 @@ const BrashBoxList: React.FC = () => {
       },
     },
     {
-      title: '本次刷箱量',
+      title: '刷箱量',
       align: 'left',
       width: 120,
       render(value) {
@@ -182,13 +182,13 @@ const BrashBoxList: React.FC = () => {
         );
       },
     },
-    {
-      title: '中转港',
-      dataIndex: 'transit',
-      align: 'left',
-      hidden: defaultActiveKey !== 'SUCCESS',
-      width: 120,
-    },
+    // {
+    //   title: '中转港',
+    //   dataIndex: 'transit',
+    //   align: 'left',
+    //   hidden: defaultActiveKey !== 'SUCCESS',
+    //   width: 120,
+    // },
     {
       title: '失败原因',
       dataIndex: 'remark',

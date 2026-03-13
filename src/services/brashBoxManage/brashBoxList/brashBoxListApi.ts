@@ -11,7 +11,9 @@ export enum BrashBoxManageApi {
   BrashBoxListStop = '/business/container-task/pause/',
   BrashBoxListCancel = '/business/container-task/cancel/',
   MyBrashBoxListPage = '/business/container-task/rel/page',
+  MyBrashBoxListCancelPage = '/business/container-task-cancel/page',
   getByBillNo = '/business/container-task/getByBillNo/',
+  RefreshResult = '/business/container-task/refresh/reuslt/',
 }
 
 /**
@@ -40,6 +42,25 @@ export const getBrashBoxListPage = (params: BrashBoxListSearchParams) => {
   return HttpRequest.get(
     {
       url: BrashBoxManageApi.BrashBoxListPage,
+      params: params,
+    },
+    {
+      successMessageMode: 'none',
+    },
+  );
+};
+
+/**
+ * 分页获取我的取消刷箱记录列表
+ * @param params 订舱管理参数
+ * @returns 刷箱记录列表
+ */
+export const getMyBrashBoxListCancelPage = (
+  params: BrashBoxListSearchParams,
+) => {
+  return HttpRequest.get(
+    {
+      url: BrashBoxManageApi.MyBrashBoxListCancelPage,
       params: params,
     },
     {
@@ -159,6 +180,22 @@ export const postBrashBoxStart = (id: string) => {
   return HttpRequest.post(
     {
       url: BrashBoxManageApi.BrashBoxListStart + '/' + id,
+    },
+    {
+      successMessageMode: 'none',
+    },
+  );
+};
+
+/**
+ * 启动刷箱任务
+ * @param id 刷箱任务id
+ * @returns 结果
+ */
+export const postRefreshResult = (id: string) => {
+  return HttpRequest.get(
+    {
+      url: BrashBoxManageApi.RefreshResult + '/' + id,
     },
     {
       successMessageMode: 'none',

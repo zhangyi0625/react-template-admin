@@ -22,8 +22,10 @@ import {
   cancelBrashBoxList,
   deleteBrashBoxList,
   editBrashBoxList,
+  getMyBrashBoxListCancelPage,
   getMyBrashBoxListPage,
   postBrashBoxStart,
+  postRefreshResult,
 } from '@/services/brashBoxManage/brashBoxList/brashBoxListApi';
 import type {
   BrashBoxListSearchParams,
@@ -71,8 +73,8 @@ const MyBrashBoxList: React.FC = () => {
       key: 'SUCCESS',
     },
     {
-      label: '刷箱失败',
-      key: 'FAILED',
+      label: '取消刷箱',
+      key: 'CANCEL',
     },
   ];
 
@@ -228,15 +230,13 @@ const MyBrashBoxList: React.FC = () => {
               详情
             </Button>
             {defaultActiveKey === 'PENDING' && getPendingBrashBoxBtn(_)}
-            {/* <Button
+            <Button
               type="link"
-              hidden={defaultActiveKey !== 'SUCCESS'}
-              onClick={() =>
-                setParams({ visible: true, currentRow: _, type: 'edit' })
-              }
+              hidden={defaultActiveKey !== 'RUNNING'}
+              onClick={() => updateBrashBoxStatus(_.id as string)}
             >
-              有效条形码
-            </Button> */}
+              更新状态
+            </Button>
             <Button
               variant="link"
               color="danger"
@@ -289,6 +289,14 @@ const MyBrashBoxList: React.FC = () => {
     });
   };
 
+  const updateBrashBoxStatus = async (id: string) => {
+    try {
+      await postRefreshResult(id);
+      message.success('更新成功');
+      onUpdateSearch();
+    } catch (error) {}
+  };
+
   const onUpdateSearch = (info?: BrashBoxListSearchParams | unknown) => {
     const filteredObj = Object.fromEntries(
       Object.entries(info ?? {}).filter(([, value]) => !!value),
@@ -327,9 +335,13 @@ const MyBrashBoxList: React.FC = () => {
         modal.confirm({
           title: `任务新增成功`,
           icon: <ExclamationCircleFilled />,
-          content: `你还可以继续添加不同箱型的刷箱任务`,
-          okText: '继续添加',
+          content: `如继续添加该票其他箱型任务 请点继续添加`,
+          okText: '完成',
+          cancelText: '继续添加',
           async onOk() {
+            setParams({ visible: false, currentRow: null, type: 'add' });
+          },
+          onCancel() {
             setParams({
               visible: true,
               currentRow: {
@@ -338,9 +350,6 @@ const MyBrashBoxList: React.FC = () => {
               } as unknown as BrashBoxListType['task'],
               type: 'add',
             });
-          },
-          onCancel() {
-            setParams({ visible: false, currentRow: null, type: 'add' });
           },
         });
       } else {
@@ -433,7 +442,11 @@ const MyBrashBoxList: React.FC = () => {
           columns={tableColumns}
           rowKey={(record) => record.id}
           scroll={{ x: 'max-content', y: height - 228 }}
-          fetchData={getMyBrashBoxListPage}
+          fetchData={
+            defaultActiveKey === 'CANCEL'
+              ? getMyBrashBoxListCancelPage
+              : getMyBrashBoxListPage
+          }
           searchFilter={searchDefaultForm}
           isSelection={false}
           onUpdatePagination={onUpdatePagination}

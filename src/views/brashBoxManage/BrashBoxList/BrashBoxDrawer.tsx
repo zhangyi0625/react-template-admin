@@ -52,10 +52,10 @@ export const BrashBoxDrawer: React.FC<BrashBoxDrawerProps> = ({
             {detail.task?.fnd?.countryCode ?? '-'}
           </p>
         </div>
-        <div className="mt-[12px]">
+        {/* <div className="mt-[12px]">
           中转港：
           <span className="text-[#303133]">{detail.task?.transit ?? '-'}</span>
-        </div>
+        </div> */}
         <div className="mt-[12px]">船司：{detail.task?.carrier ?? '-'}</div>
         <div className="mt-[12px]">
           船名航次：{detail.task?.vesselName ?? '-'} /{' '}
@@ -77,7 +77,7 @@ export const BrashBoxDrawer: React.FC<BrashBoxDrawerProps> = ({
                 )}
             </div>
             <div className="flex flex-col">
-              <div className="mb-[12px]">
+              <div className="translate-y-[-6px] mb-[6px]">
                 创建时间：{formatTime(item.createTime, 'Y-M-D h:m')}
               </div>
               <p className="mb-[12px] flex items-center">

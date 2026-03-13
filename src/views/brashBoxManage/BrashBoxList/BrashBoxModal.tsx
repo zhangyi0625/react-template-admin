@@ -24,6 +24,7 @@ export type BrashBoxModalProps = {
   params: {
     visible: boolean;
     currentRow: BrashBoxListType['task'] | null;
+    type: 'add' | 'edit';
   };
   onCancel: () => void;
   onOk: (
@@ -76,7 +77,6 @@ const BrashBoxModal = ({ params, onCancel, onOk }: BrashBoxModalProps) => {
             ctnType: '40GP',
             ctnNumber: 1,
           });
-        console.log(form.getFieldsValue());
       } else {
         form.setFieldsValue(currentRow);
       }
@@ -145,19 +145,9 @@ const BrashBoxModal = ({ params, onCancel, onOk }: BrashBoxModalProps) => {
           icon: <ExclamationCircleFilled />,
           content: (
             <div>
-              <p>
-                已设置总箱量：{resp.totalNumber}
-                {currentRow?.id && <span>，确认修改成：8？</span>}
-              </p>
+              <p>已设置总箱量：{resp.totalNumber}</p>
               <p className="my-[12px]">已成功刷箱：{resp.successCount ?? 0}</p>
-              <p className="flex items-center">
-                本次刷箱量：
-                {Object.keys(resp.containers ?? {}).map((key) => (
-                  <div key={key}>
-                    {key} * {resp.containers[key]}
-                  </div>
-                ))}
-              </p>
+              <p className="flex items-center">已添加刷箱：{resp.useNumber}</p>
             </div>
           ),
           okText: '确认',
@@ -187,35 +177,6 @@ const BrashBoxModal = ({ params, onCancel, onOk }: BrashBoxModalProps) => {
     form
       .validateFields()
       .then(async () => {
-        // const resp = await getBrashBoxListByBillNo(
-        //   form.getFieldValue('billNo'),
-        // );
-        // modal.confirm({
-        //   title: `该提单号已有历史刷箱任务`,
-        //   icon: <ExclamationCircleFilled />,
-        //   content: (
-        //     <div>
-        //       <p>
-        //         已设置总箱量：{resp.totalNumber}
-        //         {currentRow?.id && <span>，确认修改成：8？</span>}
-        //       </p>
-        //       <p className="my-[12px]">已成功刷箱：{resp.successCount ?? 0}</p>
-        //       <p className="flex items-center">
-        //         本次刷箱量：
-        //         {Object.keys(resp.containers ?? {}).map((key) => (
-        //           <div key={key}>
-        //             {key} * {resp.containers[key]}
-        //           </div>
-        //         ))}
-        //       </p>
-        //     </div>
-        //   ),
-        //   okText: '确认',
-        //   async onOk() {
-        //     // setParams({ visible: true, currentRow: null, type: 'add' });
-        //     onOk(form.getFieldsValue());
-        //   },
-        // });
         onOk(form.getFieldsValue());
       })
       .catch((errorInfo) => {
@@ -273,7 +234,11 @@ const BrashBoxModal = ({ params, onCancel, onOk }: BrashBoxModalProps) => {
                         autoComplete="off"
                         style={{ width: '80%' }}
                         min={1}
-                        disabled={isHistory && item.name === 'totalNumber'}
+                        disabled={
+                          item.name === 'totalNumber' &&
+                          params.type === 'add' &&
+                          form.getFieldValue('totalNumber')
+                        }
                         value={ctnNumberValue}
                         onChange={(value) => {
                           setCtnNumberValue(value);
@@ -284,6 +249,7 @@ const BrashBoxModal = ({ params, onCancel, onOk }: BrashBoxModalProps) => {
                         <Checkbox
                           checked={checked}
                           onChange={(e) => checkedChange(e.target.checked)}
+                          disabled={params.type === 'add' && isHistory}
                         >
                           同总箱量
                         </Checkbox>

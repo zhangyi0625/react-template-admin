@@ -28,7 +28,7 @@ export function filterKeys(source: any, keys: string[], invert?: boolean) {
 export function replaceObjectName(
   arr: any,
   wishName: string[],
-  newName: string[]
+  newName: string[],
 ) {
   if (wishName.length !== newName.length || !arr.length) return;
   let refreshArr = [];
@@ -100,7 +100,7 @@ export function copyValue(elementId: string) {
  */
 export function getPublicSettingByKey(
   key: string,
-  publicSetting: { [key: string]: string } = {}
+  publicSetting: { [key: string]: string } = {},
 ) {
   if (!publicSetting || !publicSetting[key]) return;
   const maps = publicSetting[key] as unknown as { [key: string]: string };
@@ -123,7 +123,7 @@ export function safeJsonParse(
   options?: {
     errorMessage?: string;
     errorCallback?: (error: Error) => void;
-  }
+  },
 ) {
   const { errorMessage = '', errorCallback } = options || {};
   if (typeof text !== 'string') {
@@ -147,7 +147,7 @@ export function safeJsonParse(
 export function searchSelectFilterOption(
   input: string,
   fieldNames: CustomColumn['selectFieldName'],
-  option: DefaultOptionType | undefined
+  option: DefaultOptionType | undefined,
 ) {
   const key = fieldNames
     ? (fieldNames['label'] as keyof DefaultOptionType)
@@ -156,3 +156,14 @@ export function searchSelectFilterOption(
     .toLowerCase()
     .includes(input.toLowerCase());
 }
+
+/**
+ * @description: 生成随机数工具函数
+ * @param min 最小值
+ * @param max 最大值
+ * @returns 随机数
+ */
+export const randomNum = (min: number = 1, max: number = 1000000) => {
+  let num = Math.floor(Math.random() * (max - min + 1) + min);
+  return num;
+};

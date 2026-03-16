@@ -2,19 +2,21 @@ import { SelectProps } from 'antd';
 import type { CustomColumn } from 'customer-search-form-table/SearchForm/type';
 
 export type AffiliateManageTabItemsType = {
-  key: null | number;
+  key: string | number | null;
   label: string;
 };
 
-export interface AffiliateManageDetailEditFormProps
-  extends Omit<CustomColumn, 'selectFetch' | 'hiddenItem'> {
+export interface AffiliateManageDetailEditFormProps extends Omit<
+  CustomColumn,
+  'selectFetch' | 'hiddenItem'
+> {
   disabled: boolean;
   ExtraKey?: string;
 }
 
 export const AffiliateManageTabItems: AffiliateManageTabItemsType[] = [
   {
-    key: null,
+    key: '',
     label: '全部客户',
   },
   {

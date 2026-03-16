@@ -44,12 +44,14 @@ const AffiliateManage: React.FC = () => {
 
   const { parentRef, height } = useParentSize();
 
+  const [defaultTab, setDefaultTab] = useState<string | number>('');
+
   const [searchDefaultForm, setSearchDefaultForm] =
     useState<AffiliateManageParams>({
       pageIndex: 1,
       pageSize: 10,
       filter: {},
-      sort: { validTo: '-1' },
+      sort: { id: '-1' },
     });
 
   const [params, setParams] = useState<{
@@ -74,7 +76,7 @@ const AffiliateManage: React.FC = () => {
       render(value) {
         return (
           <div>
-            {AffiliateLevel?.find((item) => item.value === value.type)?.label}
+            {AffiliateLevel?.find((item) => item.value === value.level)?.label}
           </div>
         );
       },
@@ -99,11 +101,11 @@ const AffiliateManage: React.FC = () => {
       width: 150,
       render(value) {
         const oneDay = 24 * 60 * 60 * 1000;
-        const validTo = new Date(value.validTo).getTime();
-        const difference = Math.abs(
-          validTo - new Date(value.validTo).getTime()
+        const validTo = new Date(value.grade?.validTo).getTime();
+        const difference = Math.abs(validTo - new Date().getTime());
+        return (
+          value.grade?.validTo && <div>{Math.floor(difference / oneDay)}</div>
         );
-        return value.validTo && <div>{Math.ceil(difference / oneDay)}</div>;
       },
       hidden: !searchDefaultForm.filter.expiredDays,
     },
@@ -176,8 +178,17 @@ const AffiliateManage: React.FC = () => {
   }, []);
 
   const tabChange = (key: string) => {
-    onUpdateSearch({ expiredDays: key });
+    setDefaultTab(key);
   };
+
+  useEffect(() => {
+    defaultTab
+      ? onUpdateSearch({
+          ...searchDefaultForm.filter,
+          expiredDays: defaultTab,
+        })
+      : onUpdateSearch({ ...searchDefaultForm.filter });
+  }, [defaultTab]);
 
   const switchChange = (e: boolean, row: AffiliateManageType) => {
     updateAffiliateSearchSupplier({ show: e }, row.id as string).then(() => {
@@ -194,20 +205,21 @@ const AffiliateManage: React.FC = () => {
     });
   };
 
-  const onUpdateSearch = (info?: AffiliateManageParams | unknown) => {
+  const onUpdateSearch = (info?: AffiliateManageParams['filter'] | unknown) => {
     const filteredObj = Object.fromEntries(
-      Object.entries(info ?? {}).filter(
-        ([, value]) => !!value && value !== undefined
-      )
+      Object.entries({ ...(info ?? {}), expiredDays: defaultTab ?? '' }).filter(
+        ([, value]) => !!value && value !== undefined,
+      ),
     );
     let pageInfo = filterKeys(
       searchDefaultForm,
       ['pageIndex', 'pageSize', 'sort'],
-      true
+      true,
     );
     setSearchDefaultForm({
       ...pageInfo,
       filter: { ...filteredObj },
+      sort: filteredObj.expiredDays ? { validTo: '-1' } : { id: '-1' },
     });
   };
 
@@ -231,7 +243,6 @@ const AffiliateManage: React.FC = () => {
 
   return (
     <>
-      {/* 菜单检索条件栏 */}
       <ConfigProvider>
         <Card
           tabList={AffiliateManageTabItems.map((item) => ({
@@ -239,6 +250,7 @@ const AffiliateManage: React.FC = () => {
             key: item.key as unknown as string,
           }))}
           onTabChange={tabChange}
+          defaultValue={defaultTab}
         >
           <SearchForm
             columns={AffiliateManageSearchColumns}
@@ -282,7 +294,7 @@ const AffiliateManage: React.FC = () => {
           style={{ marginTop: '8px' }}
           pageIndexKey="pageIndex"
           pageSizeKey="pageSize"
-          scroll={{ x: 'max-content', y: height - 178 }}
+          scroll={{ x: 'max-content', y: height - 158 }}
           rowKey="id"
           totalKey="total"
           fetchResultKey="entries"

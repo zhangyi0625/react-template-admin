@@ -21,7 +21,7 @@ export interface AffiliateManageParams extends DefaultPaging {
       expiredDays: string;
     }
   >;
-  sort: { validTo: string };
+  sort: { validTo?: string; id?: string };
 }
 
 export interface AffiliateDetailType extends AffiliateManageType {

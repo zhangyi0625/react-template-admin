@@ -338,13 +338,13 @@ const AffiliateBasicInfo: React.FC<AffiliateBasicInfoProps> = memo(
               <div className="flex items-center mt-[22px]">
                 <p>简称：{detail.shortName}</p>
                 {detail.contact.tel && (
-                  <div className="inline-flex mx-[30px]">
+                  <div className="flex items-center mx-[30px]">
                     <IconPhone width={18} height={18} className="mr-[2px]" />
                     <span>{detail.contact.tel}</span>
                   </div>
                 )}
                 {detail.contact.email && (
-                  <div className="inline-flex">
+                  <div className="flex items-center">
                     <IconEmail width={18} height={18} className="mr-[2px]" />
                     <span>{detail.contact.email}</span>
                   </div>

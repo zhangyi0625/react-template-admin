@@ -28,8 +28,6 @@ const BreadcrumbNav: React.FC = () => {
       breadcrumb.showIcon,
     );
 
-    console.log(breadItems, 'bre');
-
     if (breadItems.length > 0) {
       setItems(breadItems);
     }

@@ -320,7 +320,7 @@ const AffiliateBasicInfo: React.FC<AffiliateBasicInfoProps> = memo(
         <div className="bg-white px-[20px] py-[31px] rounded-[6px] w-full">
           {!isEdit ? (
             <>
-              <div className="flex items-center justify-between">
+              <div className="flex items-center justify-between whitespace-nowrap">
                 <div className="flex items-center">
                   <IconAffiliate className="w-[26px] h-[26px] mr-[4px]" />
                   <p className="ml-[4px] text-3xl font-medium">{detail.name}</p>

@@ -44,7 +44,7 @@ const AffiliateUser: React.FC<AffiliateUserProps> = ({ affiliateId }) => {
         affiliateId: affiliateId,
       },
       projection: 'AFFILIATE_CUSTOMER',
-    }
+    },
   );
 
   const columns: TableProps['columns'] = [
@@ -129,7 +129,7 @@ const AffiliateUser: React.FC<AffiliateUserProps> = ({ affiliateId }) => {
       },
     },
   ];
-  const addAffilateUser = () => {
+  const addAffiliateUser = () => {
     setParams({ visible: true, currentRow: null });
     setTimeout(() => {
       AffiliateUserDrawerRef.current?.onRefreshUserData();
@@ -163,7 +163,7 @@ const AffiliateUser: React.FC<AffiliateUserProps> = ({ affiliateId }) => {
   };
   return (
     <>
-      <div className="bg-white rounded-[6px] px-[20px] py-[15px] w-full">
+      <div className="bg-white rounded-[6px] px-[20px] py-[15px] w-full overflow-hidden">
         <div className="flex items-center justify-between">
           <p className={styles['basic-title']} style={{ margin: 0 }}>
             企业用户
@@ -172,7 +172,7 @@ const AffiliateUser: React.FC<AffiliateUserProps> = ({ affiliateId }) => {
             color="primary"
             variant="filled"
             icon={<PlusCircleFilled />}
-            onClick={addAffilateUser}
+            onClick={addAffiliateUser}
             style={{
               fontSize: '12px',
               fontWeight: 'bold',

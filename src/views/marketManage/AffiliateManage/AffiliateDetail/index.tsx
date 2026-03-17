@@ -45,14 +45,14 @@ const AffiliateDetail: React.FC = () => {
     <>
       {affiliateDetail?.id && (
         <div className="flex items-start">
-          <div className="flex flex-col w-3xl">
+          <div className="flex flex-col max-w-3xl">
             <AffiliateBasicInfo
               detail={affiliateDetail}
               onLoadBaseDetail={loadAffiliateDetail}
             />
             <AffiliateSearchRecord affiliateId={affiliateDetail.id} />
           </div>
-          <div className="max-w-[440px] ml-[16px] flex1">
+          <div className="max-w-[440px] ml-[16px] flex-1">
             <AffiliateUser affiliateId={affiliateDetail.id} />
             <AffiliateFinancialDetail
               wallet={filterKeys(affiliateDetail, ['bond', 'balance'], true)}

@@ -25,7 +25,7 @@ const BreadcrumbNav: React.FC = () => {
     const breadItems = patchBreadcrumb(
       menus,
       location.pathname,
-      breadcrumb.showIcon
+      breadcrumb.showIcon,
     );
 
     if (breadItems.length > 0) {
@@ -56,50 +56,118 @@ export default BreadcrumbNav;
 function patchBreadcrumb(
   routerList: RouteItem[],
   pathname: string,
-  joinIcon: boolean
+  joinIcon: boolean,
 ): Record<string, any>[] {
   const result: Record<string, any>[] = [];
+
   if (routerList) {
     for (let i = 0; i < routerList.length; i++) {
       const item = routerList[i];
-      if (
+
+      // 检查当前路径是否匹配当前路由或其子路径
+      const isMatch =
         pathname === item.path ||
         (pathname.includes(item.path) &&
           pathname.length > item.path.length &&
-          pathname.substring(item.path.length, item.path.length + 1) === '/')
-      ) {
+          pathname.substring(item.path.length, item.path.length + 1) === '/');
+
+      if (isMatch) {
+        // 创建面包屑项
         const pth: Record<string, any> = {};
-        pth.title = (
-          <>
-            {joinIcon && item.icon && getIcon(item.icon)}
-            <span style={{ padding: '0 4px' }}>{item.meta?.title}</span>
-          </>
-        );
         pth.key = item.path;
 
-        if (pathname === item.path) {
+        // 对于详情页，创建可点击的父路由面包屑
+        if (pathname !== item.path) {
+          // 父路由面包屑项 - 只有有component的路由才是可点击的
           pth.title = (
             <>
               {joinIcon && item.icon && getIcon(item.icon)}
-              <Link to={item.path}>{item.meta?.title}</Link>
+              {item.component ? (
+                <Link to={item.path}>{item.meta?.title}</Link>
+              ) : (
+                <span style={{ padding: '0 4px' }}>{item.meta?.title}</span>
+              )}
             </>
           );
-        } else {
-          if (item.component) {
-            pth.title = (
-              <>
-                {joinIcon && item.icon && getIcon(item.icon)}
-                <Link to={pathname}>{item.meta?.title}详情</Link>
-              </>
+          result.push(pth);
+
+          // 检查是否有子路由
+          if (item.children && item.children.length > 0) {
+            const childResult = patchBreadcrumb(
+              item.children,
+              pathname,
+              joinIcon,
             );
+            if (childResult.length > 0) {
+              return [...result, ...childResult];
+            }
+          }
+
+          // 如果没有子路由匹配，创建详情页面包屑
+          const detailPth: Record<string, any> = {};
+          detailPth.key = pathname;
+          detailPth.title = (
+            <>
+              {joinIcon && item.icon && getIcon(item.icon)}
+              <span style={{ padding: '0 4px' }}>{item.meta?.title}详情</span>
+            </>
+          );
+          result.push(detailPth);
+          return result;
+        } else {
+          // 对于普通页面，创建可点击的面包屑 - 只有有component的路由才是可点击的
+          pth.title = (
+            <>
+              {joinIcon && item.icon && getIcon(item.icon)}
+              {item.component ? (
+                <Link to={item.path}>{item.meta?.title}</Link>
+              ) : (
+                <span style={{ padding: '0 4px' }}>{item.meta?.title}</span>
+              )}
+            </>
+          );
+          result.push(pth);
+
+          // 检查是否有子路由
+          if (item.children && item.children.length > 0) {
+            const childResult = patchBreadcrumb(
+              item.children,
+              pathname,
+              joinIcon,
+            );
+            if (childResult.length > 0) {
+              return [...result, ...childResult];
+            }
           }
         }
-        result.push(pth);
       }
+
+      // 检查子路由
       if (item.children && item.children.length > 0) {
-        const rst = patchBreadcrumb(item.children, pathname, joinIcon);
-        if (rst.length > 0) {
-          return [...result, ...rst];
+        const childResult = patchBreadcrumb(item.children, pathname, joinIcon);
+        if (childResult.length > 0) {
+          // 如果子路由匹配，添加当前路由到面包屑
+          if (isMatch) {
+            // 只有有component的路由才添加到面包屑
+            if (item.component || pathname !== item.path) {
+              const pth: Record<string, any> = {};
+              pth.key = item.path;
+              pth.title = (
+                <>
+                  {joinIcon && item.icon && getIcon(item.icon)}
+                  {item.component ? (
+                    <Link to={item.path}>{item.meta?.title}</Link>
+                  ) : (
+                    <span style={{ padding: '0 4px' }}>{item.meta?.title}</span>
+                  )}
+                </>
+              );
+              result.push(pth);
+              return [...result, ...childResult];
+            }
+            return childResult;
+          }
+          return childResult;
         }
       }
     }

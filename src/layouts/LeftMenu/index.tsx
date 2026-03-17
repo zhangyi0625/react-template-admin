@@ -18,7 +18,7 @@ const logo = process.env.RS_STATIC_API + '/static/website/icon/logo.png';
 const LeftMenu: React.FC = memo(() => {
   // 从状态库中获取状态
   const { sidebar, theme, navigation } = useSelector(
-    (state: RootState) => state.preferences
+    (state: RootState) => state.preferences,
   );
   const { menus } = useSelector((state: RootState) => state.menuState);
   const { pathname } = useLocation();
@@ -27,6 +27,7 @@ const LeftMenu: React.FC = memo(() => {
   const [menuList, setMenuList] = useState<MenuItem[]>([]);
   const [loading, setLoading] = useState(false);
   const [openKeys, setOpenKeys] = useState<string[]>([]);
+  const [selectedKeys, setSelectedKeys] = useState<string[]>([]);
 
   const { collapsed, width } = sidebar;
   let { mode } = theme;
@@ -45,7 +46,7 @@ const LeftMenu: React.FC = memo(() => {
     key?: React.Key | null,
     icon?: React.ReactNode,
     children?: MenuItem[],
-    type?: 'group'
+    type?: 'group',
   ): MenuItem => {
     return {
       key,
@@ -66,7 +67,7 @@ const LeftMenu: React.FC = memo(() => {
       // 下面判断代码解释 *** !item?.children?.length   ==>   (!item.children || item.children.length === 0)
       if (!item?.children?.length) {
         newArr.push(
-          getItem(item.meta?.title, item.path, getIcon(item.meta?.icon))
+          getItem(item.meta?.title, item.path, getIcon(item.meta?.icon)),
         );
         continue;
       }
@@ -75,8 +76,8 @@ const LeftMenu: React.FC = memo(() => {
           item.meta?.title,
           item.path,
           getIcon(item.meta?.icon),
-          deepLoopFloat(item.children)
-        )
+          deepLoopFloat(item.children),
+        ),
       );
     }
     return newArr;
@@ -100,6 +101,36 @@ const LeftMenu: React.FC = memo(() => {
       const title = route.meta?.title;
       if (title) document.title = `${title} - Fusion Admin`;
       if (!collapsed) setOpenKeys(openKey);
+      // 设置选中的菜单项
+      setSelectedKeys([route.path]);
+    } else {
+      // 如果没有找到路由，尝试查找父路由
+      const findParentRoute = (
+        path: string,
+        routes: RouteItem[],
+      ): RouteItem | null => {
+        for (const item of routes) {
+          if (
+            path.includes(item.path) &&
+            path.length > item.path.length &&
+            path.substring(item.path.length, item.path.length + 1) === '/'
+          ) {
+            return item;
+          }
+          if (item.children) {
+            const res = findParentRoute(path, item.children);
+            if (res) {
+              return res;
+            }
+          }
+        }
+        return null;
+      };
+      const parentRoute = findParentRoute(pathname, menus);
+      if (parentRoute) {
+        if (!collapsed) setOpenKeys(openKey);
+        setSelectedKeys([parentRoute.path]);
+      }
     }
   }, [pathname, collapsed, menus]);
 
@@ -160,7 +191,7 @@ const LeftMenu: React.FC = memo(() => {
           <Menu
             mode="inline"
             theme={mode}
-            defaultSelectedKeys={[pathname]}
+            selectedKeys={selectedKeys}
             openKeys={navigation.accordion ? openKeys : undefined}
             items={menuList}
             onClick={clickMenu}

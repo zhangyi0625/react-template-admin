@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react';
 import {
   App,
   Button,
@@ -14,49 +14,50 @@ import {
   type TableProps,
   Tag,
   Upload,
-} from 'antd'
+} from 'antd';
 import {
   DeleteOutlined,
   ExclamationCircleFilled,
   PlusOutlined,
   RedoOutlined,
   SearchOutlined,
-} from '@ant-design/icons'
+} from '@ant-design/icons';
 import {
   addMenu,
   deleteMenu,
   deleteMenuBatch,
   getMenusList,
   updateMenu,
-} from '@/services/system/menu/menuApi'
-import MenuInfoModal from './MenuInfoModal'
-import useParentSize from '@/hooks/useParentSize'
-import { addIcon } from '@/utils/utils'
-import { buildTree } from '@/utils/tool'
+} from '@/services/system/menu/menuApi';
+import MenuInfoModal from './MenuInfoModal';
+import useParentSize from '@/hooks/useParentSize';
+import { addIcon } from '@/utils/utils';
+import { buildTree } from '@/utils/tool';
+import { MenuModel } from '@/services/system/menu/menuModel';
 
 /**
  * 系统菜单维护
  */
 const Menu: React.FC = () => {
-  const { modal } = App.useApp()
-  const [form] = Form.useForm()
+  const { modal } = App.useApp();
+  const [form] = Form.useForm();
   // 编辑弹窗窗口打开关闭
-  const [openEditModal, setOpenEditorModal] = useState<boolean>(false)
+  const [openEditModal, setOpenEditorModal] = useState<boolean>(false);
 
   // 表格数据
-  const [tableData, setTableData] = useState<any[]>([])
+  const [tableData, setTableData] = useState<any[]>([]);
   // 当前编辑的行数据
-  const [currentRow, setCurrentRow] = useState(null)
+  const [currentRow, setCurrentRow] = useState(null);
   // 表格加载状态
-  const [loading, setLoading] = useState<boolean>(false)
+  const [loading, setLoading] = useState<boolean>(false);
   // 当前选中的行数据
-  const [selRows, setSelectedRows] = useState<any[]>([])
+  const [selRows, setSelectedRows] = useState<any[]>([]);
   // 容器高度计算（表格）
-  const { parentRef, height } = useParentSize()
+  const { parentRef, height } = useParentSize();
 
   useEffect(() => {
-    queryMenuData()
-  }, [])
+    queryMenuData();
+  }, []);
 
   // 定义表格列
   const columns: TableProps['columns'] = [
@@ -87,11 +88,11 @@ const Menu: React.FC = () => {
       render(value) {
         switch (value) {
           case 0:
-            return '目录'
+            return '目录';
           case 1:
-            return '子菜单'
+            return '子菜单';
           default:
-            return ''
+            return '';
         }
       },
     },
@@ -102,7 +103,7 @@ const Menu: React.FC = () => {
       key: 'icon',
       align: 'center',
       render(value) {
-        return addIcon(value)
+        return addIcon(value);
       },
     },
     {
@@ -120,18 +121,17 @@ const Menu: React.FC = () => {
       align: 'center',
       render(value) {
         if (value === 1) {
-          return <Tag color="green">是</Tag>
+          return <Tag color="green">是</Tag>;
         }
-        return <Tag color="gray">否</Tag>
+        return <Tag color="gray">否</Tag>;
       },
     },
     {
       title: '操作',
       width: '10%',
-      dataIndex: 'operation',
       fixed: 'right',
       align: 'center',
-      render: (_: any, record: any) => {
+      render: (_) => {
         return (
           <Space size={0}>
             <Button
@@ -139,8 +139,8 @@ const Menu: React.FC = () => {
               type="link"
               style={{ color: '#fa8c16' }}
               onClick={() => {
-                setCurrentRow(record)
-                setOpenEditorModal(true)
+                setCurrentRow(_);
+                setOpenEditorModal(true);
               }}
             >
               修改
@@ -149,15 +149,15 @@ const Menu: React.FC = () => {
               size="small"
               variant="link"
               color="danger"
-              onClick={() => deleteBatch(record.menuId)}
+              onClick={() => deleteBatch(_.menuId)}
             >
               删除
             </Button>
           </Space>
-        )
+        );
       },
     },
-  ]
+  ];
 
   /**
    * 多行选中的配置
@@ -165,43 +165,43 @@ const Menu: React.FC = () => {
   const rowSelection: TableProps['rowSelection'] = {
     // 行选中的回调
     onChange(_selectedRowKeys, selectedRows) {
-      setSelectedRows(selectedRows.map((item: any) => item.menuId))
+      setSelectedRows(selectedRows.map((item: any) => item.menuId));
     },
     columnWidth: 32,
     fixed: true,
-  }
+  };
 
   /**
    * 检索表单提交
    * @param values  检索表单条件
    */
-  const onFinish = (values: any) => {
-    queryMenuData(values)
-  }
+  const onFinish = (values: MenuModel) => {
+    queryMenuData(values);
+  };
 
   /**
    * 查询菜单数据
    */
-  const queryMenuData = async (params?: any) => {
-    setLoading(true)
+  const queryMenuData = async (params?: MenuModel) => {
+    setLoading(true);
     // 获取表单查询条件
-    const formCon = params || form.getFieldsValue()
+    const formCon = params || form.getFieldsValue();
     // 拼接查询条件，没有选择的条件就不拼接
-    const queryCondition: Record<string, any> = {}
+    const queryCondition: Record<string, MenuModel[keyof MenuModel]> = {};
     for (const item of Object.keys(formCon)) {
       if (formCon[item] || formCon[item] === 0) {
-        queryCondition[item] = formCon[item]
+        queryCondition[item] = formCon[item];
       }
     }
     // 调用查询
     getMenusList(queryCondition)
       .then((response) => {
-        setTableData(buildTree(response, 'menuId'))
+        setTableData(buildTree(response, 'menuId'));
       })
       .finally(() => {
-        setLoading(false)
-      })
-  }
+        setLoading(false);
+      });
+  };
 
   /**
    * 转换菜单数据，children没有数据的转换为null
@@ -210,13 +210,13 @@ const Menu: React.FC = () => {
   const transformMenuData = (data: any) => {
     return data.map((item: any) => {
       if (!item.children || item.children.length === 0) {
-        item.children = null
+        item.children = null;
       } else {
-        item.children = transformMenuData(item.children)
+        item.children = transformMenuData(item.children);
       }
-      return item
-    })
-  }
+      return item;
+    });
+  };
 
   /**
    * 批量删除选中的菜单
@@ -228,30 +228,30 @@ const Menu: React.FC = () => {
       content: `确定${type ? '批量' : ''}删除菜单吗？数据删除后将无法恢复！`,
       onOk() {
         // 调用删除接口，删除成功后刷新页面数据
-        ;(type
+        (type
           ? deleteMenuBatch(ids as string[])
           : deleteMenu(ids as string)
         ).then(() => {
-          queryMenuData()
-        })
+          queryMenuData();
+        });
       },
-    })
-  }
+    });
+  };
 
   /**
    * 新增按钮点击
    */
   const onAddMenuClick = () => {
-    setCurrentRow(null)
-    setOpenEditorModal(true)
-  }
+    setCurrentRow(null);
+    setOpenEditorModal(true);
+  };
 
   /**
    * 关闭编辑弹窗
    */
   const closeEditModal = () => {
-    setOpenEditorModal(false)
-  }
+    setOpenEditorModal(false);
+  };
 
   /**
    * 弹窗点击确定的回调函数
@@ -262,16 +262,16 @@ const Menu: React.FC = () => {
     try {
       if (currentRow == null) {
         // 新增数据
-        await addMenu(menuData)
+        await addMenu(menuData);
       } else {
         // 编辑数据
-        await updateMenu(menuData)
+        await updateMenu(menuData);
       }
       // 操作成功，关闭弹窗，刷新数据
-      closeEditModal()
-      queryMenuData()
+      closeEditModal();
+      queryMenuData();
     } catch (error) {}
-  }
+  };
 
   return (
     <>
@@ -328,7 +328,7 @@ const Menu: React.FC = () => {
                     type="default"
                     icon={<RedoOutlined />}
                     onClick={() => {
-                      form.resetFields()
+                      form.resetFields();
                     }}
                   >
                     重置
@@ -391,6 +391,6 @@ const Menu: React.FC = () => {
         onOk={onEditOk}
       />
     </>
-  )
-}
-export default Menu
+  );
+};
+export default Menu;

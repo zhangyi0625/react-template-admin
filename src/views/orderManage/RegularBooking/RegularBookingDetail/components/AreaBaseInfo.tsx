@@ -2,39 +2,11 @@ import { memo, useEffect, useMemo, useState } from 'react';
 import { Input, Table, TableProps } from 'antd';
 import { ORDER, RegularBookingDetailBaseInfoOptions } from '../../config';
 import { loadAdditionalCharges } from '@/utils/freight';
-import type { FreightPriceListType } from '@/utils/freight/type';
-
-type CtnType = {
-  ctnType: string;
-  ctnNum: number;
-  cargoWeights: number;
-  limitedPrice: number;
-  totalPriceUsd: number;
-  vote: number;
-};
-
-type ProductInfoType = {
-  surchargeRemark: string;
-  penaltyRemark: string;
-  remark: string;
-  priceList: FreightPriceListType[];
-  [key: string]: string | any;
-};
-
-type OrderInfoParams = {
-  items: CtnType[];
-  bookingInfo: ProductInfoType;
-  carrierInfo: any;
-  orderCarrierAccounts: any;
-  por: any;
-  fnd: any;
-  productChannel: string;
-  [key: string]: string | any;
-};
+import type { RegularBookingDetailType } from '@/services/orderManage/regularBooking/regularBookingModel';
 
 export type AreaBaseInfoProps = {
   type: string;
-  orderInfo: OrderInfoParams;
+  orderInfo: RegularBookingDetailType;
 };
 
 const OtherRemarkInfo = [
@@ -173,10 +145,10 @@ const AreaBaseInfo: React.FC<AreaBaseInfoProps> = memo((props) => {
                 ? item.totalPriceUsd
                 : item.limitedPrice
               : type === 'BOOKING'
-              ? item.ctnNum
-              : item.vote +
-                '票 ' +
-                (item.ctnNum ? ' 每票' + item.ctnNum + '箱' : ''),
+                ? item.ctnNum
+                : item.vote +
+                  '票 ' +
+                  (item.ctnNum ? ' 每票' + item.ctnNum + '箱' : ''),
         });
       });
     }

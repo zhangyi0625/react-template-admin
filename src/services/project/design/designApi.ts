@@ -1,10 +1,10 @@
-import { HttpRequest } from "@/utils/request";
+import { HttpRequest } from '@/utils/request';
 
 export enum DesignApi {
   /**
    * 获取项目设计列表
    */
-  getProjectList = "/engine/project/getProjectList",
+  getProjectList = '/engine/project/getProjectList',
 }
 
 /**
@@ -12,14 +12,14 @@ export enum DesignApi {
  * @param params 参数
  * @returns 结果
  */
-export const getProjectList = (params?: any) => {
+export const getProjectList = (params?: unknown) => {
   return HttpRequest.post(
     {
       url: DesignApi.getProjectList,
       data: params,
     },
     {
-      successMessageMode: "none",
-    }
+      successMessageMode: 'none',
+    },
   );
 };

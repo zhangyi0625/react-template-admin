@@ -18,7 +18,10 @@ import {
   postSendFastBookingResult,
 } from '@/services/orderManage/fastBooking/fastBookingApi';
 import useParentSize from '@/hooks/useParentSize';
-import type { RegularBookingSearchParams } from '@/services/orderManage/regularBooking/regularBookingModel';
+import type {
+  RegularBookingDetailType,
+  RegularBookingSearchParams,
+} from '@/services/orderManage/regularBooking/regularBookingModel';
 import { FastBookingSearchColumns, FastBookingStatus } from './config';
 import FastBooingResultDrawer from './components/FastBooingResultDrawer';
 import type { FastBookingOrderSearchFilter } from '@/services/orderManage/fastBooking/fastBookingModel';
@@ -158,14 +161,19 @@ const FastBooking: React.FC = () => {
       width: 250,
       align: 'center',
       render(value) {
-        return value.content?.items.map((item: any, index: number) => (
-          <div key={index}>
-            {item.containerType} * {item.containerQuantity}
-            {item.orderNum ? (
-              <span className="mx-[8px]">{item.orderNum} 票</span>
-            ) : null}
-          </div>
-        ));
+        return value.content?.items.map(
+          (
+            item: { ctnType: string; ctnNum: number; orderNum?: number },
+            index: number,
+          ) => (
+            <div key={index}>
+              {item.ctnType} * {item.ctnNum}
+              {item.orderNum ? (
+                <span className="mx-[8px]">{item.orderNum} 票</span>
+              ) : null}
+            </div>
+          ),
+        );
       },
     },
     {
@@ -173,22 +181,34 @@ const FastBooking: React.FC = () => {
       width: 250,
       align: 'center',
       render(value) {
-        return value.content?.items.map((item: any, index: number) => (
-          <div key={index}>
-            {item.containerType}
-            {item.priceLimit.TOTAL && item.rose >= 0 ? (
-              <span>
-                $ {item.priceLimit.TOTAL['USD']}
-                <span className="mx-[10px]">拍一手价,允许涨幅{item.rose}</span>
-                <span></span>
-              </span>
-            ) : item.rose === 0 && !item.priceLimit.TOTAL ? (
-              <span>一手价</span>
-            ) : (
-              <span>拍一手价，允许涨幅{item.rose}</span>
-            )}
-          </div>
-        ));
+        return value.content?.items.map(
+          (
+            item: {
+              ctnType: string;
+              ctnNum: number;
+              priceLimit: { TOTAL?: Record<string, number> };
+              rose: number;
+            },
+            index: number,
+          ) => (
+            <div key={index}>
+              {item.ctnType}
+              {item.priceLimit.TOTAL && item.rose >= 0 ? (
+                <span>
+                  $ {item.priceLimit.TOTAL['USD']}
+                  <span className="mx-[10px]">
+                    拍一手价,允许涨幅{item.rose}
+                  </span>
+                  <span></span>
+                </span>
+              ) : item.rose === 0 && !item.priceLimit.TOTAL ? (
+                <span>一手价</span>
+              ) : (
+                <span>拍一手价，允许涨幅{item.rose}</span>
+              )}
+            </div>
+          ),
+        );
       },
     },
     {
@@ -206,8 +226,8 @@ const FastBooking: React.FC = () => {
             {value.status === 'PENDING'
               ? '-'
               : value.api
-              ? 'API极虎'
-              : '自有订舱'}
+                ? 'API极虎'
+                : '自有订舱'}
           </div>
         );
       },
@@ -279,13 +299,13 @@ const FastBooking: React.FC = () => {
   const onUpdateSearch = (info?: RegularBookingSearchParams | unknown) => {
     const filteredObj = Object.fromEntries(
       Object.entries(info ?? {}).filter(
-        ([, value]) => !!value && value !== undefined
-      )
+        ([, value]) => !!value && value !== undefined,
+      ),
     );
     let pageInfo = filterKeys(
       searchDefaultForm,
       ['pageIndex', 'pageSize'],
-      true
+      true,
     );
     setSearchDefaultForm({
       ...pageInfo,
@@ -348,7 +368,7 @@ const FastBooking: React.FC = () => {
     try {
       await postSendFastBookingResult(
         { remark: remark },
-        fastBookingNotice.editId as string
+        fastBookingNotice.editId as string,
       );
       message.success('发送成功～');
       setFastBookingNotice({ visible: false, editId: null });

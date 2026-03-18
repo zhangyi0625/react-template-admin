@@ -9,7 +9,7 @@ export type RegularBookingDetailBaseInfoType = {
   key: string;
   type: 'ALL' | 'BOOKING' | 'PREBOOKING';
   bySetting?: string;
-  getValue?: ((value: any) => void) | null;
+  getValue?: ((value: unknown) => void) | null;
   value?: string;
 };
 

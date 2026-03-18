@@ -15,6 +15,7 @@ import {
 import DragModal from '@/components/modal/DragModal';
 import { getMenusList } from '@/services/system/menu/menuApi';
 import IconPanel from '@/components/IconPanel';
+import type { MenuModel } from '@/services/system/menu/menuModel';
 
 // 菜单信息弹窗的参数
 export type MenuInfoModalProps = {
@@ -23,9 +24,9 @@ export type MenuInfoModalProps = {
   // 弹窗需要的数据
   currentRow: Record<string, any> | null;
   // 点击确定的回调
-  onOk: any;
+  onOk: (params: MenuModel) => void;
   // 点击取消的回调
-  onCancel: any;
+  onCancel: (e: React.MouseEvent<HTMLButtonElement>) => void;
 };
 
 /**

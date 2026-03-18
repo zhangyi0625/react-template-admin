@@ -1,10 +1,11 @@
 import React from 'react';
 import DragModal from '@/components/modal/DragModal';
+import type { PacketManageType } from '@/services/otherSetting/packetManage/packetManageModel';
 
 export type PacketAwardDetailProps = {
   params: {
     visible: boolean;
-    detail: any;
+    detail: PacketManageType | null;
   };
   onCancel: () => void;
 };
@@ -13,7 +14,7 @@ const PacketAwardDetail: React.FC<PacketAwardDetailProps> = ({
   params,
   onCancel,
 }) => {
-  const { visible, detail } = params;
+  const { visible } = params;
   return (
     <DragModal
       open={visible}

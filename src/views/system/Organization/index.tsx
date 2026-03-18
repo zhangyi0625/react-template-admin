@@ -1,5 +1,5 @@
 import type React from 'react';
-import { Key, useEffect, useState } from 'react';
+import { ChangeEvent, Key, useEffect, useState } from 'react';
 import useParentSize from '@/hooks/useParentSize';
 
 import {
@@ -50,7 +50,7 @@ const Organization: React.FC = () => {
   // 将当前编辑行和窗口开关合并为一个状态对象
   const [params, setParams] = useState<{
     visible: boolean;
-    currentRow: any;
+    currentRow: SysOrganizationType | null;
   }>({
     visible: false,
     currentRow: null,
@@ -113,17 +113,16 @@ const Organization: React.FC = () => {
     {
       title: '操作',
       width: '14%',
-      dataIndex: 'action',
       fixed: 'right',
       align: 'center',
-      render(_, record) {
+      render(_) {
         return (
           <Space size={0}>
             <Button
               type="link"
               size="small"
               onClick={() => {
-                setParams({ visible: true, currentRow: record });
+                setParams({ visible: true, currentRow: _ });
               }}
             >
               修改
@@ -132,7 +131,7 @@ const Organization: React.FC = () => {
               type="link"
               danger
               size="small"
-              onClick={() => deleteDic(record.organizationId)}
+              onClick={() => deleteDic(_.organizationId)}
             >
               删除
             </Button>
@@ -152,7 +151,7 @@ const Organization: React.FC = () => {
         };
       });
       let parId = newArr.find(
-        (item: SysOrganizationType) => item.parentId === '0'
+        (item: SysOrganizationType) => item.parentId === '0',
       ).organizationId;
       setTreeData(buildTree(newArr, 'organizationId') as any);
       setSearchDefaultForm({ ...searchDefaultForm, parentId: parId });
@@ -164,7 +163,7 @@ const Organization: React.FC = () => {
 
   const onUpdateSearch = (info?: SysOrganizationType | unknown) => {
     const filteredObj = Object.fromEntries(
-      Object.entries(info ?? {}).filter(([, value]) => !!value)
+      Object.entries(info ?? {}).filter(([, value]) => !!value),
     );
     let pageInfo = filterKeys(searchDefaultForm, ['page', 'limit'], true);
     setSearchDefaultForm({
@@ -266,7 +265,7 @@ const Organization: React.FC = () => {
                         value={searchDefaultForm.organizationName as string}
                         placeholder="机构名称"
                         allowClear
-                        onChange={(e: any) =>
+                        onChange={(e: ChangeEvent<HTMLInputElement>) =>
                           setSearchDefaultForm({
                             ...searchDefaultForm,
                             organizationName: e.target.value,

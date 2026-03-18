@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
 import { App, Button, Spin, Tabs, TabsProps, Timeline } from 'antd';
+import { ExclamationCircleOutlined } from '@ant-design/icons';
 import '../index.scss';
 import { useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -20,6 +21,7 @@ import type {
   RegularBookingStatusConditionType,
 } from '../type';
 import RegularBookingDetailBaseInfo from './components/RegularBookingDetailBaseInfo';
+import type { RegularBookingDetailType } from '@/services/orderManage/regularBooking/regularBookingModel';
 import AreaBaseInfo from './components/AreaBaseInfo';
 import BookingFrequency from './components/BookingFrequency';
 import BookingResult from './components/BookingResult';
@@ -30,11 +32,10 @@ import OrderAccountModal, {
   CarrierAccountsType,
 } from './modal/OrderAccountModal';
 import { filterKeys } from '@/utils/tool';
-import { ExclamationCircleOutlined } from '@ant-design/icons';
 
 type ModalContent = {
   visible: boolean;
-  editRow: any;
+  editRow: RegularBookingDetailType | null;
 };
 
 const RegularBookingDetail: React.FC = () => {
@@ -152,8 +153,8 @@ const RegularBookingDetail: React.FC = () => {
         filterKeys(
           orderInfo,
           ['status', 'cancelStatus', 'refundStatus', 'payStatus'],
-          true
-        )
+          true,
+        ),
       )
     );
   }, [orderInfo]);

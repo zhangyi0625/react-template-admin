@@ -4,11 +4,12 @@ import {
   FastBookingCargoRequirementOptions,
   RegularBookingCargoRequirementOptions,
 } from './config';
+import type { RegularBookingDetailType } from '@/services/orderManage/regularBooking/regularBookingModel';
 
 export type CargoRequirementModalProps = {
   params: {
     visible: boolean;
-    editRow: any;
+    editRow: RegularBookingDetailType | null;
   };
   source: 'RegularBooking' | 'FastBooking';
   onCancel: (e: React.MouseEvent<HTMLButtonElement>) => void;
@@ -19,12 +20,15 @@ const CargoRequirementModal: React.FC<CargoRequirementModalProps> = memo(
     const [loading, setLoading] = useState<boolean>(true);
 
     const [options, setoptions] = useState(
-      RegularBookingCargoRequirementOptions
+      RegularBookingCargoRequirementOptions,
     );
 
     useEffect(() => {
       if (!params.visible) return;
-      getOptionsByCarrier(params.editRow?.bookingInfo, params.editRow?.carrier);
+      getOptionsByCarrier(
+        params.editRow?.bookingInfo,
+        params.editRow?.carrier ?? '',
+      );
     }, [params.visible]);
 
     const getOptionsByCarrier = (options: any, carrier: string) => {
@@ -62,7 +66,7 @@ const CargoRequirementModal: React.FC<CargoRequirementModalProps> = memo(
         ))}
       </DragModal>
     );
-  }
+  },
 );
 
 export default CargoRequirementModal;

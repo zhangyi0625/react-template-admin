@@ -18,6 +18,8 @@ export interface ManualPublicationType {
   etaEtdDay: string;
   carrier: string;
   porId: string;
+  porName: string;
+  fndName: string;
   fndId: string;
   vesselName: string;
   voyageNo: string;
@@ -26,6 +28,8 @@ export interface ManualPublicationType {
   etd: string;
   eta: string;
   transshipment: string;
+  transferInfoList: string;
+  totalDuration: number;
   validFrom: string;
   validTo: string;
   deadlines: {
@@ -39,7 +43,7 @@ export interface ManualPublicationType {
       inventory: '0';
       price: string;
       priceCurrency: string;
-    }
+    },
   ];
 }
 

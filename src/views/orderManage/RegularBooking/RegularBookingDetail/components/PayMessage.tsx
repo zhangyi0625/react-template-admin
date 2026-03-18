@@ -2,18 +2,19 @@ import { memo, useCallback, useEffect, useState } from 'react';
 import { Table, TableProps } from 'antd';
 import { RootState } from '@/stores/store';
 import { useSelector } from 'react-redux';
+import type { RegularBookingDetailType } from '@/services/orderManage/regularBooking/regularBookingModel';
 import { RegularBookingStatusOptions } from '../../config';
 import { filterKeys } from '@/utils/tool';
 
 export type PayMessageProps = {
-  orderInfo: any;
+  orderInfo: RegularBookingDetailType;
 };
 
 const PayMessage: React.FC<PayMessageProps> = memo(({ orderInfo }) => {
   const [tableData, setTableData] = useState([]);
 
   const publicData = useSelector(
-    (state: RootState) => state.publicSetting.publicData
+    (state: RootState) => state.publicSetting.publicData,
   );
 
   const { paymentWay, fundRechargeStatus } = publicData;

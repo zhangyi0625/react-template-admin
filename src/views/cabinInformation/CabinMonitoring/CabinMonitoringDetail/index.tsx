@@ -31,7 +31,7 @@ const CabinMonitoringDetail: React.FC<CabinMonitoringDetailProps> = ({
       }
       return (currentRow as { [key: string]: any })[key] ?? '';
     },
-    [currentRow, params.visible]
+    [currentRow, params.visible],
   );
 
   const baseInfoOptions = [
@@ -70,7 +70,7 @@ const CabinMonitoringDetail: React.FC<CabinMonitoringDetailProps> = ({
       key: 'portConfig',
       value: (
         (getValueByKey(
-          'portConfig'
+          'portConfig',
         ) as CabinMonitoringDetailType['portConfig']) || []
       ).map((i, index: number) => (
         <span key={index}>
@@ -156,7 +156,7 @@ const CabinMonitoringDetail: React.FC<CabinMonitoringDetailProps> = ({
             <p className={styles['basic-value']}>
               {(
                 (getValueByKey(
-                  'etdRange'
+                  'etdRange',
                 ) as CabinMonitoringDetailType['etdRange']) || []
               ).map((i, index) => (
                 <span key={index}>

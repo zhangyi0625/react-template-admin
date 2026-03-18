@@ -3,7 +3,7 @@ import styles from '../../AffiliateManage.module.scss';
 import { Form, Input, Radio } from 'antd';
 import DragModal from '@/components/modal/DragModal';
 import { ComboPermission } from '@/enums/setting';
-import type { EquityRightsBaseEditType } from '@/services/otherSetting/queryRightsSettings/queryRightsSettingsApi';
+import type { EquityRightsBaseEditType } from '@/services/otherSetting/queryRightsSettings/queryRightsSettingsModel';
 
 export type AffiliateComboPermissionEditProps = {
   visible: boolean;

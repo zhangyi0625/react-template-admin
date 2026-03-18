@@ -177,7 +177,7 @@ const AffiliateBasicInfo: React.FC<AffiliateBasicInfoProps> = memo(
     }, [detail.id, isEdit]);
 
     const affiliateBasicInfoInit = () => {
-      let params: { [key: string]: any } = {};
+      let params: Record<string, unknown> = {};
       AffiliateManageDetailEditForm.map((item) => {
         if (detail[item.name])
           params[item.name] =
@@ -221,7 +221,7 @@ const AffiliateBasicInfo: React.FC<AffiliateBasicInfoProps> = memo(
           <p className="font-semibold text-base mb-[10px]">
             套餐外权限
             <span
-              className="text-normal-blue font-meduim ml-[12px] underline cursor-pointer text-sm font-normal"
+              className="text-normal-blue font-medium ml-[12px] underline cursor-pointer text-sm font-normal"
               onClick={() => {
                 (setShowRemark(true),
                   AffiliateComboPermissionRemarkRef.current?.onLoadRemark());

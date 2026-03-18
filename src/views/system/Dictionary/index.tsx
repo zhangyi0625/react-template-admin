@@ -1,5 +1,5 @@
 import type React from 'react';
-import { Key, useEffect, useState } from 'react';
+import { ChangeEvent, Key, useEffect, useState } from 'react';
 import {
   App,
   Button,
@@ -223,7 +223,7 @@ const Dictionary: React.FC = () => {
 
   const onUpdateSearch = (info?: SysDictionaryParams | unknown) => {
     const filteredObj = Object.fromEntries(
-      Object.entries(info ?? {}).filter(([, value]) => !!value)
+      Object.entries(info ?? {}).filter(([, value]) => !!value),
     );
     let pageInfo = filterKeys(searchDefaultForm, ['page', 'limit'], true);
     setSearchDefaultForm({
@@ -291,7 +291,7 @@ const Dictionary: React.FC = () => {
                       visible: true,
                       currentRow: dictionaryClass.find(
                         (item: { key: string }) =>
-                          item.key === searchDefaultForm.dictId
+                          item.key === searchDefaultForm.dictId,
                       ) as unknown as SysDictionaryClassType,
                       view: false,
                     })
@@ -327,7 +327,7 @@ const Dictionary: React.FC = () => {
                         value={searchDefaultForm.keywords as string}
                         placeholder="字典数据代码或字典数据名称"
                         allowClear
-                        onChange={(e: any) =>
+                        onChange={(e: ChangeEvent<HTMLInputElement>) =>
                           setSearchDefaultForm({
                             ...searchDefaultForm,
                             keywords: e.target.value,

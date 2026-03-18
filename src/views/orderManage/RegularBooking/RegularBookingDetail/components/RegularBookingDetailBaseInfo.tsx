@@ -1,10 +1,11 @@
 import React from 'react';
 import { Divider } from 'antd';
 import type { RegularBookingDetailBaseInfoType } from '../../type';
+import type { RegularBookingDetailType } from '@/services/orderManage/regularBooking/regularBookingModel';
 
 export type RegularBookingDetailBaseInfoProps = {
   detail: RegularBookingDetailBaseInfoType[];
-  orderInfo: any;
+  orderInfo: RegularBookingDetailType;
   onClick: (item: RegularBookingDetailBaseInfoType) => void;
 };
 

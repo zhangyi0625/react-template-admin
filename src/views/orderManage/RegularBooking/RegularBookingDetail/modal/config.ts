@@ -35,7 +35,7 @@ export const RegularBookingCargoRequirementOptions: CargoRequirementOptionsType[
       label: '货物毛重',
       includeCarrier: 'HPL,ONE,CMA,MSK,EMC,HPLQQ',
       key: 'cargoWeights',
-      replaceFn: (value: any) => {
+      replaceFn: (value: Record<string, string>) => {
         let resTxt = '';
         for (let i in value) {
           resTxt += `${i}/${value[i]}`;

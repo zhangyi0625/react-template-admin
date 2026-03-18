@@ -18,7 +18,7 @@ import { formatTime } from '@/utils/format';
 import { filterKeys } from '@/utils/tool';
 import dayjs from 'dayjs';
 import { SearchTable } from 'customer-search-form-table';
-import type { ManualpublicationType } from '@/services/orderManage/cabinResult/cabinResultModel';
+import type { ManualPublicationType } from '@/services/orderManage/cabinResult/cabinResultModel';
 import SystemPortSelect, {
   SystemPortSelectRef,
 } from '@/components/SystemPortSelect';
@@ -28,10 +28,10 @@ import { changeSelectOptionsByLabel } from '@/utils/options';
 export type ManualReleaseType = {
   params: {
     visible: boolean;
-    editRow: any;
+    editRow: ManualPublicationType | null;
     carrierOptions?: string[];
   };
-  onOk: (params: ManualpublicationType) => void;
+  onOk: (params: ManualPublicationType) => void;
   onCancel: () => void;
 };
 
@@ -116,12 +116,12 @@ const ManualRelease: React.FC<ManualReleaseType> = ({
     let info = filterKeys(
       editRow,
       ['carrier', 'etd', 'voyNo', 'vesselName', 'remark'],
-      true
+      true,
     );
 
     let portInfo = {
-      porInfo: params.editRow.porName.split(',')[0] ?? undefined,
-      fndInfo: params.editRow.fndName.split(',')[0] ?? undefined,
+      porInfo: params.editRow?.porName.split(',')[0] ?? undefined,
+      fndInfo: params.editRow?.fndName.split(',')[0] ?? undefined,
     };
     setPortCode(portInfo);
     systemPortSelectRef.current?.init(params.editRow ? 'EDIT' : 'ADD');
@@ -153,12 +153,16 @@ const ManualRelease: React.FC<ManualReleaseType> = ({
       return;
     }
     setSearchDefaultForm(
-      filterKeys(form.getFieldsValue(), ['porCode', 'fndCode', 'carrier'], true)
+      filterKeys(
+        form.getFieldsValue(),
+        ['porCode', 'fndCode', 'carrier'],
+        true,
+      ),
     );
     setImmediate(false);
   };
 
-  const changeSelected = (_: string[], checked: any[]) => {
+  const changeSelected = (_: string[], checked: ManualPublicationType[]) => {
     const { transferInfoList, eta, totalDuration, vesselName, etd } =
       checked[0];
     form.setFieldsValue({
@@ -177,13 +181,11 @@ const ManualRelease: React.FC<ManualReleaseType> = ({
         const info = filterKeys(
           form.getFieldsValue(),
           ['etaEtdDay', 'carrier', 'vesselName', 'transshipment'],
-          true
+          true,
         );
         const prices = JSON.parse(form.getFieldValue('price')) ?? {};
         const params = {
           ...info,
-          // porId: defalueOptions['POR']![0].id || '',
-          // fndId: defalueOptions['FND']![0].id || '',
           voyageNo: form.getFieldValue('voyNo'),
           haulage: 'CY-CY',
           transitDays: '',
@@ -198,7 +200,7 @@ const ManualRelease: React.FC<ManualReleaseType> = ({
           inventories: [
             {
               containerType: Object.keys(
-                JSON.parse(form.getFieldValue('inventories'))
+                JSON.parse(form.getFieldValue('inventories')),
               )[0],
               discountPrice: prices?.bas.value,
               inventory: '0',
@@ -223,7 +225,7 @@ const ManualRelease: React.FC<ManualReleaseType> = ({
       title="手动发布"
       onOk={handleOk}
       onCancel={() => {
-        setImmediate(true), onCancel();
+        (setImmediate(true), onCancel());
       }}
       okText="发布"
       loading={loading}

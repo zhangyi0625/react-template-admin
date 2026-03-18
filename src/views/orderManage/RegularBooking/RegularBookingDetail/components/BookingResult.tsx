@@ -3,9 +3,10 @@ import { Table, type TableProps } from 'antd';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/stores/store';
 import { getFastBookingCabinResult } from '@/services/orderManage/fastBooking/fastBookingApi';
+import type { RegularBookingDetailType } from '@/services/orderManage/regularBooking/regularBookingModel';
 
 export type BookingResultProps = {
-  orderInfo: any;
+  orderInfo: RegularBookingDetailType;
   source: 'RegularBooking' | 'FastBooking';
 };
 
@@ -22,7 +23,7 @@ const BookingResult: React.FC<BookingResultProps> = memo(
     const [tableData, setTableData] = useState([]);
 
     const { publicData } = useSelector(
-      (state: RootState) => state.publicSetting
+      (state: RootState) => state.publicSetting,
     );
 
     const [tableLoading, setTableLoading] = useState<boolean>(false);
@@ -33,7 +34,7 @@ const BookingResult: React.FC<BookingResultProps> = memo(
       (price: PriceType, ctnType: string) => {
         return price?.bas?.[ctnType]?.value ?? '';
       },
-      [orderInfo]
+      [orderInfo],
     );
 
     const columns: TableProps['columns'] = [
@@ -158,7 +159,7 @@ const BookingResult: React.FC<BookingResultProps> = memo(
                 orderInfo?.items[0]?.basPrice ??
                 orderInfo?.items[0]?.limitedPrice,
             };
-          }
+          },
         );
         setTableData(arr);
         setTableLoading(false);
@@ -187,7 +188,7 @@ const BookingResult: React.FC<BookingResultProps> = memo(
         loading={tableLoading}
       />
     );
-  }
+  },
 );
 
 export default BookingResult;

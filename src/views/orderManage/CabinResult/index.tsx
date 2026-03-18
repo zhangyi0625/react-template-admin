@@ -64,7 +64,7 @@ const CabinResult: React.FC = () => {
 
   const [manualReleaseParams, setManualReleaseParams] = useState<{
     visible: boolean;
-    editRow: any | null;
+    editRow: ManualPublicationType | null;
     carrierOptions?: string[];
   }>({
     visible: false,
@@ -114,8 +114,8 @@ const CabinResult: React.FC = () => {
             {value.publishStatus == 1
               ? '已发布'
               : value.publishMsg
-              ? '发布失败'
-              : '未发布'}
+                ? '发布失败'
+                : '未发布'}
           </div>
         );
       },
@@ -228,8 +228,8 @@ const CabinResult: React.FC = () => {
               取消关联
             </div>
             <div
-              className={getClassName(!record.publishStatus, 'blue')}
-              onClick={() => openManual(record)}
+              className={getClassName(!_.publishStatus, 'blue')}
+              onClick={() => openManual(_)}
             >
               手动发布
             </div>
@@ -273,7 +273,7 @@ const CabinResult: React.FC = () => {
       flag === true
         ? message.success('批量发布成功')
         : message.error(
-            `发布成功${resp.data.effected}条数据，其余发布失败，失败原因：${errorMsg}等...`
+            `发布成功${resp.data.effected}条数据，其余发布失败，失败原因：${errorMsg}等...`,
           );
       setLoading(false);
     } catch {
@@ -288,13 +288,13 @@ const CabinResult: React.FC = () => {
   const onUpdateSearch = (info?: CabinResultSearchParams | unknown) => {
     const filteredObj = Object.fromEntries(
       Object.entries(info ?? {}).filter(
-        ([, value]) => !!value && value !== undefined
-      )
+        ([, value]) => !!value && value !== undefined,
+      ),
     );
     let pageInfo = filterKeys(
       searchDefaultForm,
       ['pageIndex', 'pageSize'],
-      true
+      true,
     );
     setSearchDefaultForm({
       ...pageInfo,
@@ -331,9 +331,9 @@ const CabinResult: React.FC = () => {
     }
   };
 
-  const openManual = (row: any) => {
+  const openManual = (row: ManualPublicationType) => {
     let arr = CabinResultSearchColumns.find(
-      (item) => item.name === 'carrier'
+      (item) => item.name === 'carrier',
     )?.options;
     setManualReleaseParams({
       visible: true,

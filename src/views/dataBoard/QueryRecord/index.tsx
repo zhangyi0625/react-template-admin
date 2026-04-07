@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
   Card,
   ConfigProvider,
@@ -9,6 +9,8 @@ import {
 } from 'antd';
 import { SearchForm, SearchTable } from 'customer-search-form-table';
 import { QueryRecordSearchColumns } from '../config';
+import { ComboPermission } from '@/enums/setting';
+import { useSearchParams } from 'react-router-dom';
 import useParentSize from '@/hooks/useParentSize';
 import { getQueryRecordListByPage } from '@/services/dataBoard/queryRecord/queryRecordApt';
 import type {
@@ -16,10 +18,15 @@ import type {
   QueryRecordSearchParams,
 } from '@/services/dataBoard/queryRecord/queryRecordModel';
 import { filterKeys, safeJsonParse } from '@/utils/tool';
-import { ComboPermission } from '@/enums/setting';
 
 const QueryRecord: React.FC = () => {
   const { parentRef, height } = useParentSize();
+
+  const [searchParams] = useSearchParams();
+
+  const [immediate, setImmediate] = useState<boolean>(true);
+
+  const [formMaps, setFormMaps] = useState(QueryRecordSearchColumns);
 
   const [searchDefaultForm, setSearchDefaultForm] =
     useState<QueryRecordSearchParams>({
@@ -35,6 +42,31 @@ const QueryRecord: React.FC = () => {
   const [defaultActiveKey, setDefaultActiveKey] =
     useState<string>('CARGO_TRACE');
 
+  useEffect(() => {
+    formMaps.map((item) => {
+      if (item.name === 'customerId' && item.apiByUrlParams) {
+        item.defaultValue = searchParams.get('customerName');
+        Reflect.set(
+          item.apiByUrlParams,
+          'keyword',
+          searchParams.get('customerName'),
+        );
+        setDefaultActiveKey(searchParams.get('module') as string);
+        setSearchDefaultForm({
+          ...searchDefaultForm,
+          filter: {
+            ...searchDefaultForm.filter,
+            customerId: searchParams.get('customerId') as string,
+          } as QueryRecordSearchFilterParams,
+        });
+      }
+    });
+    setFormMaps([...formMaps]);
+    setTimeout(() => {
+      setImmediate(false);
+    }, 500);
+  }, [searchParams]);
+
   const getTableColumnsByModule = () => {
     const tableColumns: TableProps['columns'] = [
       {
@@ -49,6 +81,7 @@ const QueryRecord: React.FC = () => {
         title: '提单号/箱号',
         align: 'center',
         hidden: defaultActiveKey !== 'CARGO_TRACE',
+        width: 120,
         render(value) {
           return <div>{safeJsonParse(value?.queryParam)?.number}</div>;
         },
@@ -133,13 +166,13 @@ const QueryRecord: React.FC = () => {
   const onUpdateSearch = (info?: QueryRecordSearchFilterParams | unknown) => {
     const filteredObj = Object.fromEntries(
       Object.entries(info ?? {}).filter(
-        ([, value]) => !!value && value !== undefined
-      )
+        ([, value]) => !!value && value !== undefined,
+      ),
     );
     let pageInfo = filterKeys(
       searchDefaultForm,
       ['pageIndex', 'pageSize'],
-      true
+      true,
     );
     setSearchDefaultForm({
       ...pageInfo,
@@ -170,46 +203,50 @@ const QueryRecord: React.FC = () => {
   return (
     <>
       <ConfigProvider>
-        <Card>
-          <Tabs
-            defaultActiveKey={defaultActiveKey}
-            items={tabItems}
-            onChange={tabChange}
-          />
-          <SearchForm
-            columns={QueryRecordSearchColumns}
-            gutterWidth={24}
-            labelPosition="left"
-            btnSeparate={false}
-            iconHidden={false}
-            isShowReset={true}
-            isShowExpend={false}
-            onUpdateSearch={onUpdateSearch}
+        {!immediate && (
+          <Card>
+            <Tabs
+              defaultActiveKey={defaultActiveKey}
+              items={tabItems}
+              onChange={tabChange}
+            />
+            <SearchForm
+              columns={formMaps}
+              gutterWidth={24}
+              labelPosition="left"
+              btnSeparate={false}
+              iconHidden={false}
+              isShowReset={true}
+              isShowExpend={false}
+              onUpdateSearch={onUpdateSearch}
+            />
+          </Card>
+        )}
+      </ConfigProvider>
+      {!immediate && (
+        <Card
+          style={{ flex: 1, marginTop: '8px', minHeight: 0 }}
+          styles={{ body: { height: '100%' } }}
+          ref={parentRef}
+        >
+          <SearchTable
+            size="small"
+            columns={columns}
+            pageIndexKey="pageIndex"
+            pageSizeKey="pageSize"
+            scroll={{ x: 'max-content', y: height - 118 }}
+            rowKey={'id'}
+            loading={tableLoading}
+            totalKey="total"
+            fetchResultKey="entries"
+            isPagination={true}
+            fetchData={getQueryRecordListByPage}
+            searchFilter={searchDefaultForm}
+            isSelection={false}
+            onUpdatePagination={onUpdatePagination}
           />
         </Card>
-      </ConfigProvider>
-      <Card
-        style={{ flex: 1, marginTop: '8px', minHeight: 0 }}
-        styles={{ body: { height: '100%' } }}
-        ref={parentRef}
-      >
-        <SearchTable
-          size="small"
-          columns={columns}
-          pageIndexKey="pageIndex"
-          pageSizeKey="pageSize"
-          scroll={{ x: 'max-content', y: height - 118 }}
-          rowKey={'id'}
-          loading={tableLoading}
-          totalKey="total"
-          fetchResultKey="entries"
-          isPagination={true}
-          fetchData={getQueryRecordListByPage}
-          searchFilter={searchDefaultForm}
-          isSelection={false}
-          onUpdatePagination={onUpdatePagination}
-        />
-      </Card>
+      )}
     </>
   );
 };

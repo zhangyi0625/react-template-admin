@@ -13,7 +13,7 @@ export type AffiliateSearchRecordProps = {
 const AffiliateSearchRecord: React.FC<AffiliateSearchRecordProps> = ({
   affiliateId,
 }) => {
-  const [selectedkey, setSelectedKey] = useState<string>('order');
+  const [selectedKey, setSelectedKey] = useState<string>('order');
 
   const RecordTabsItemRef = useRef<RecordTabsItemRef>(null);
 
@@ -72,7 +72,7 @@ const AffiliateSearchRecord: React.FC<AffiliateSearchRecordProps> = ({
     <>
       <div className="px-[20px] py-[12px] bg-white rounded-[6px] w-full mt-[16px]">
         <Tabs
-          activeKey={selectedkey}
+          activeKey={selectedKey}
           items={tabsItems}
           tabBarStyle={{ marginBottom: '20px' }}
           onChange={changeTab}

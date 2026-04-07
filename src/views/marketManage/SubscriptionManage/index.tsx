@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
   App,
   Button,
@@ -10,8 +10,12 @@ import {
 } from 'antd';
 import { ExclamationCircleFilled } from '@ant-design/icons';
 import { SearchForm, SearchTable } from 'customer-search-form-table';
+import { useSearchParams } from 'react-router-dom';
 import { SubscriptionManageSearchColumns } from './config';
-import type { SubscriptionManageParams } from '@/services/marketManage/subscriptionManage/subscriptionManageModel';
+import type {
+  SubscriptionManageFilterParams,
+  SubscriptionManageParams,
+} from '@/services/marketManage/subscriptionManage/subscriptionManageModel';
 import {
   deleteSubscription,
   getSubscriptionManageByPage,
@@ -27,11 +31,41 @@ const SubscriptionManage: React.FC = () => {
 
   const { parentRef, height } = useParentSize();
 
+  const [formMaps, setFormMaps] = useState(SubscriptionManageSearchColumns);
+
+  const [immediate, setImmediate] = useState<boolean>(true);
+
   const [searchDefaultForm, setSearchDefaultForm] =
     useState<SubscriptionManageParams>({
       pageIndex: 1,
       pageSize: 10,
     });
+
+  const [searchParams] = useSearchParams();
+
+  useEffect(() => {
+    formMaps.map((item) => {
+      if (item.name === 'customerId' && item.apiByUrlParams) {
+        item.defaultValue = searchParams.get('customerName');
+        Reflect.set(
+          item.apiByUrlParams,
+          'keyword',
+          searchParams.get('customerName'),
+        );
+        setSearchDefaultForm({
+          ...searchDefaultForm,
+          filter: {
+            ...searchDefaultForm.filter,
+            customerId: searchParams.get('customerId') as string,
+          } as SubscriptionManageFilterParams,
+        });
+      }
+    });
+    setFormMaps([...formMaps]);
+    setTimeout(() => {
+      setImmediate(false);
+    }, 500);
+  }, [searchParams]);
 
   const columns: TableProps['columns'] = [
     {
@@ -136,13 +170,13 @@ const SubscriptionManage: React.FC = () => {
   const onUpdateSearch = (info?: SubscriptionManageParams | unknown) => {
     const filteredObj = Object.fromEntries(
       Object.entries(info ?? {}).filter(
-        ([, value]) => !!value && value !== undefined
-      )
+        ([, value]) => !!value && value !== undefined,
+      ),
     );
     let pageInfo = filterKeys(
       searchDefaultForm,
       ['pageIndex', 'pageSize'],
-      true
+      true,
     );
     setSearchDefaultForm({
       ...pageInfo,
@@ -186,51 +220,55 @@ const SubscriptionManage: React.FC = () => {
   return (
     <>
       <ConfigProvider>
-        <Card>
-          <SearchForm
-            columns={SubscriptionManageSearchColumns}
-            gutterWidth={24}
-            labelPosition="left"
-            btnSeparate={false}
-            defaultFormItemLayout={{
-              labelCol: {
-                xs: { span: 17 },
-                sm: { span: 7 },
-              },
-              wrapperCol: {
-                xs: { span: 4 },
-                sm: { span: 20 },
-              },
-            }}
-            iconHidden={true}
-            isShowReset={true}
-            isShowExpend={false}
-            onUpdateSearch={onUpdateSearch}
+        {!immediate && (
+          <Card>
+            <SearchForm
+              columns={formMaps}
+              gutterWidth={24}
+              labelPosition="left"
+              btnSeparate={false}
+              defaultFormItemLayout={{
+                labelCol: {
+                  xs: { span: 17 },
+                  sm: { span: 7 },
+                },
+                wrapperCol: {
+                  xs: { span: 4 },
+                  sm: { span: 20 },
+                },
+              }}
+              iconHidden={true}
+              isShowReset={true}
+              isShowExpend={false}
+              onUpdateSearch={onUpdateSearch}
+            />
+          </Card>
+        )}
+      </ConfigProvider>
+      {!immediate && (
+        <Card
+          style={{ flex: 1, marginTop: '8px', minHeight: 0 }}
+          styles={{ body: { height: '100%' } }}
+          ref={parentRef}
+        >
+          <SearchTable
+            size="small"
+            columns={columns}
+            style={{ marginTop: '8px' }}
+            pageIndexKey="pageIndex"
+            pageSizeKey="pageSize"
+            scroll={{ x: 'max-content', y: height - 128 }}
+            rowKey="id"
+            totalKey="total"
+            fetchResultKey="entries"
+            isPagination={true}
+            fetchData={getSubscriptionManageByPage}
+            searchFilter={searchDefaultForm}
+            isSelection={false}
+            onUpdatePagination={onUpdatePagination}
           />
         </Card>
-      </ConfigProvider>
-      <Card
-        style={{ flex: 1, marginTop: '8px', minHeight: 0 }}
-        styles={{ body: { height: '100%' } }}
-        ref={parentRef}
-      >
-        <SearchTable
-          size="small"
-          columns={columns}
-          style={{ marginTop: '8px' }}
-          pageIndexKey="pageIndex"
-          pageSizeKey="pageSize"
-          scroll={{ x: 'max-content', y: height - 128 }}
-          rowKey="id"
-          totalKey="total"
-          fetchResultKey="entries"
-          isPagination={true}
-          fetchData={getSubscriptionManageByPage}
-          searchFilter={searchDefaultForm}
-          isSelection={false}
-          onUpdatePagination={onUpdatePagination}
-        />
-      </Card>
+      )}
     </>
   );
 };

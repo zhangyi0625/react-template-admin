@@ -14,6 +14,13 @@ export interface StaffManageType {
   validTo: string;
 }
 
+export interface StaffSearchStatisticParams {
+  affiliateId: string;
+  module: string;
+  createdStart: string;
+  createdEnd: string;
+}
+
 export interface StaffManageParams extends DefaultPaging {
   filter: Partial<Pick<StaffManageType, 'affiliateId' | 'name' | 'phone'>>;
   projection?: 'AFFILIATE_CUSTOMER' | 'SMALL';

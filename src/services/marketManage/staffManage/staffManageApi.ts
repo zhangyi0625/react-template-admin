@@ -3,6 +3,7 @@ import type {
   StaffJoinAffiliateType,
   StaffManageParams,
   StaffManageType,
+  StaffSearchStatisticParams,
 } from './staffManageModel';
 
 /**
@@ -14,7 +15,8 @@ export enum StaffApi {
   StaffSearchSupplier = '/staff/customer/affiliate/supplier/',
   StaffJoinAffiliate = '/staff/customer/affiliate/join',
   StaffComboPermissionRecord = '/staff/customer/query/log',
-  StaffSearchStatistic = '/staff/customer/affiliate/search',
+  // StaffSearchStatistic = '/staff/customer/affiliate/search',
+  StaffSearchStatistic = '/staff/customer/affiliate/module/query/statistics',
   StaffLevelRecord = '/staff/customer/query/log',
   StaffExtraEquityLimit = '/staff/customer/extra/query/rights',
 }
@@ -217,13 +219,10 @@ export const getStaffLevelRecord = (params: {
  * @param params 用户参数
  * @returns 用户列表
  */
-export const getStaffSearchStatistic = (params: {
-  type: 'WEEk' | 'MONTH';
-  affiliateId: string;
-}) => {
+export const getStaffSearchStatistic = (params: StaffSearchStatisticParams) => {
   return HttpRequest.get(
     {
-      url: StaffApi.StaffSearchStatistic + '/' + params.affiliateId,
+      url: StaffApi.StaffSearchStatistic,
       params: params,
     },
     {

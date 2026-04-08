@@ -7,6 +7,7 @@ import {
 } from 'antd';
 import { SearchForm, SearchTable } from 'customer-search-form-table';
 import { CabinQueryRecordSearchColumns } from '../config';
+import { useSearchParams } from 'react-router-dom';
 import useParentSize from '@/hooks/useParentSize';
 import { getCabinQueryRecordListByPage } from '@/services/dataBoard/cabinQueryRecord/cabinQueryRecordApi';
 import type {
@@ -28,7 +29,11 @@ const CabinQueryRecord: React.FC = () => {
       filter: undefined,
     });
 
+  const [immediate, setImmediate] = useState<boolean>(true);
+
   const [areaOptions, setAreaOptions] = useState<SystemAreaOptionsType[]>([]);
+
+  const [formMaps, setFormMaps] = useState(CabinQueryRecordSearchColumns);
 
   const columns: TableProps['columns'] = [
     {
@@ -125,6 +130,32 @@ const CabinQueryRecord: React.FC = () => {
     },
   ];
 
+  const [searchParams] = useSearchParams();
+
+  useEffect(() => {
+    formMaps.map((item) => {
+      if (item.name === 'customerId' && item.apiByUrlParams) {
+        item.defaultValue = searchParams.get('customerName');
+        Reflect.set(
+          item.apiByUrlParams,
+          'keyword',
+          searchParams.get('customerName'),
+        );
+        setSearchDefaultForm({
+          ...searchDefaultForm,
+          filter: {
+            ...searchDefaultForm.filter,
+            customerId: searchParams.get('customerId') as string,
+          } as CabinQueryRecordSearchFilterParams,
+        });
+      }
+    });
+    setFormMaps([...formMaps]);
+    setTimeout(() => {
+      setImmediate(false);
+    }, 500);
+  }, [searchParams]);
+
   useEffect(() => {
     loadAreaOptions();
   }, []);
@@ -139,17 +170,17 @@ const CabinQueryRecord: React.FC = () => {
   };
 
   const onUpdateSearch = (
-    info?: CabinQueryRecordSearchFilterParams | unknown
+    info?: CabinQueryRecordSearchFilterParams | unknown,
   ) => {
     const filteredObj = Object.fromEntries(
       Object.entries(info ?? {}).filter(
-        ([, value]) => !!value && value !== undefined
-      )
+        ([, value]) => !!value && value !== undefined,
+      ),
     );
     let pageInfo = filterKeys(
       searchDefaultForm,
       ['pageIndex', 'pageSize'],
-      true
+      true,
     );
     setSearchDefaultForm({
       ...pageInfo,
@@ -167,18 +198,20 @@ const CabinQueryRecord: React.FC = () => {
   return (
     <>
       <ConfigProvider>
-        <Card>
-          <SearchForm
-            columns={CabinQueryRecordSearchColumns}
-            gutterWidth={24}
-            labelPosition="left"
-            btnSeparate={false}
-            iconHidden={false}
-            isShowReset={true}
-            isShowExpend={false}
-            onUpdateSearch={onUpdateSearch}
-          />
-        </Card>
+        {!immediate && (
+          <Card>
+            <SearchForm
+              columns={formMaps}
+              gutterWidth={24}
+              labelPosition="left"
+              btnSeparate={false}
+              iconHidden={false}
+              isShowReset={true}
+              isShowExpend={false}
+              onUpdateSearch={onUpdateSearch}
+            />
+          </Card>
+        )}
       </ConfigProvider>
       <Card
         style={{ flex: 1, marginTop: '8px', minHeight: 0 }}
@@ -193,6 +226,7 @@ const CabinQueryRecord: React.FC = () => {
           scroll={{ x: 'max-content', y: height - 118 }}
           rowKey={'id'}
           totalKey="total"
+          immediate={immediate}
           fetchResultKey="entries"
           isPagination={true}
           fetchData={getCabinQueryRecordListByPage}

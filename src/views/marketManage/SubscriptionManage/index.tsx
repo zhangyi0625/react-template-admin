@@ -245,30 +245,29 @@ const SubscriptionManage: React.FC = () => {
           </Card>
         )}
       </ConfigProvider>
-      {!immediate && (
-        <Card
-          style={{ flex: 1, marginTop: '8px', minHeight: 0 }}
-          styles={{ body: { height: '100%' } }}
-          ref={parentRef}
-        >
-          <SearchTable
-            size="small"
-            columns={columns}
-            style={{ marginTop: '8px' }}
-            pageIndexKey="pageIndex"
-            pageSizeKey="pageSize"
-            scroll={{ x: 'max-content', y: height - 128 }}
-            rowKey="id"
-            totalKey="total"
-            fetchResultKey="entries"
-            isPagination={true}
-            fetchData={getSubscriptionManageByPage}
-            searchFilter={searchDefaultForm}
-            isSelection={false}
-            onUpdatePagination={onUpdatePagination}
-          />
-        </Card>
-      )}
+      <Card
+        style={{ flex: 1, marginTop: '8px', minHeight: 0 }}
+        styles={{ body: { height: '100%' } }}
+        ref={parentRef}
+      >
+        <SearchTable
+          size="small"
+          columns={columns}
+          style={{ marginTop: '8px' }}
+          pageIndexKey="pageIndex"
+          pageSizeKey="pageSize"
+          scroll={{ x: 'max-content', y: height - 128 }}
+          rowKey="id"
+          totalKey="total"
+          fetchResultKey="entries"
+          immediate={immediate}
+          isPagination={true}
+          fetchData={getSubscriptionManageByPage}
+          searchFilter={searchDefaultForm}
+          isSelection={false}
+          onUpdatePagination={onUpdatePagination}
+        />
+      </Card>
     </>
   );
 };

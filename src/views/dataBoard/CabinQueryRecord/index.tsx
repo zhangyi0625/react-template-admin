@@ -213,30 +213,28 @@ const CabinQueryRecord: React.FC = () => {
           </Card>
         )}
       </ConfigProvider>
-      {!immediate && (
-        <Card
-          style={{ flex: 1, marginTop: '8px', minHeight: 0 }}
-          styles={{ body: { height: '100%' } }}
-          ref={parentRef}
-        >
-          <SearchTable
-            size="small"
-            columns={columns}
-            pageIndexKey="pageIndex"
-            pageSizeKey="pageSize"
-            scroll={{ x: 'max-content', y: height - 118 }}
-            rowKey={'id'}
-            totalKey="total"
-            // immediate={immediate}
-            fetchResultKey="entries"
-            isPagination={true}
-            fetchData={getCabinQueryRecordListByPage}
-            searchFilter={searchDefaultForm}
-            isSelection={false}
-            onUpdatePagination={onUpdatePagination}
-          />
-        </Card>
-      )}
+      <Card
+        style={{ flex: 1, marginTop: '8px', minHeight: 0 }}
+        styles={{ body: { height: '100%' } }}
+        ref={parentRef}
+      >
+        <SearchTable
+          size="small"
+          columns={columns}
+          pageIndexKey="pageIndex"
+          pageSizeKey="pageSize"
+          scroll={{ x: 'max-content', y: height - 118 }}
+          rowKey={'id'}
+          totalKey="total"
+          immediate={immediate}
+          fetchResultKey="entries"
+          isPagination={true}
+          fetchData={getCabinQueryRecordListByPage}
+          searchFilter={searchDefaultForm}
+          isSelection={false}
+          onUpdatePagination={onUpdatePagination}
+        />
+      </Card>
     </>
   );
 };

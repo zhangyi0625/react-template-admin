@@ -6,6 +6,7 @@ import {
   type TabsProps,
   type TablePaginationConfig,
   type TableProps,
+  Spin,
 } from 'antd';
 import { SearchForm, SearchTable } from 'customer-search-form-table';
 import { QueryRecordSearchColumns } from '../config';
@@ -43,6 +44,7 @@ const QueryRecord: React.FC = () => {
     useState<string>('CARGO_TRACE');
 
   useEffect(() => {
+    setTableLoading(true);
     formMaps.map((item) => {
       if (item.name === 'customerId' && item.apiByUrlParams) {
         item.defaultValue = searchParams.get('customerName');
@@ -63,6 +65,7 @@ const QueryRecord: React.FC = () => {
     });
     setFormMaps([...formMaps]);
     setTimeout(() => {
+      setTableLoading(false);
       setImmediate(false);
     }, 500);
   }, [searchParams]);
@@ -223,30 +226,28 @@ const QueryRecord: React.FC = () => {
           </Card>
         )}
       </ConfigProvider>
-      {!immediate && (
-        <Card
-          style={{ flex: 1, marginTop: '8px', minHeight: 0 }}
-          styles={{ body: { height: '100%' } }}
-          ref={parentRef}
-        >
-          <SearchTable
-            size="small"
-            columns={columns}
-            pageIndexKey="pageIndex"
-            pageSizeKey="pageSize"
-            scroll={{ x: 'max-content', y: height - 118 }}
-            rowKey={'id'}
-            loading={tableLoading}
-            totalKey="total"
-            fetchResultKey="entries"
-            isPagination={true}
-            fetchData={getQueryRecordListByPage}
-            searchFilter={searchDefaultForm}
-            isSelection={false}
-            onUpdatePagination={onUpdatePagination}
-          />
-        </Card>
-      )}
+      <Card
+        style={{ flex: 1, marginTop: '8px', minHeight: 0 }}
+        styles={{ body: { height: '100%' } }}
+        ref={parentRef}
+      >
+        <SearchTable
+          size="small"
+          columns={columns}
+          pageIndexKey="pageIndex"
+          pageSizeKey="pageSize"
+          scroll={{ x: 'max-content', y: height - 118 }}
+          rowKey={'id'}
+          immediate={immediate}
+          totalKey="total"
+          fetchResultKey="entries"
+          isPagination={true}
+          fetchData={getQueryRecordListByPage}
+          searchFilter={searchDefaultForm}
+          isSelection={false}
+          onUpdatePagination={onUpdatePagination}
+        />
+      </Card>
     </>
   );
 };

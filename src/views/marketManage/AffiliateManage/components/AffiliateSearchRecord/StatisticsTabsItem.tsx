@@ -68,10 +68,6 @@ const StatisticsTabsItem = React.forwardRef<
 
   const navigate = useNavigate();
 
-  // useEffect(() => {
-  //   init();
-  // }, []);
-
   useImperativeHandle(ref, () => ({
     onRefresh: () => init(),
   }));

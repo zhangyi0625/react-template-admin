@@ -1,4 +1,5 @@
 import type { CustomColumn } from 'customer-search-form-table/SearchForm/type';
+import { changeSelectOptionsByLabel } from '@/utils/options';
 
 export const SelectStaffOptions: CustomColumn[] = [
   {
@@ -22,18 +23,8 @@ export const SelectStaffOptions: CustomColumn[] = [
     name: 'valid',
     formType: 'normalSelect',
     options: [
-      {
-        label: '全部',
-        value: '',
-      },
-      {
-        label: '可用',
-        value: 1,
-      },
-      {
-        label: '禁用',
-        value: 0,
-      },
+      { label: '全部', value: '' },
+      ...(changeSelectOptionsByLabel(['可用', '禁用']) || []),
     ],
     defaultValue: '',
     span: 6,
@@ -94,16 +85,7 @@ export const SelectStaffForm: Omit<CustomColumn, 'selectFetch'>[] = [
     label: '状态',
     name: 'valid',
     formType: 'normalSelect',
-    options: [
-      {
-        label: '可用',
-        value: 1,
-      },
-      {
-        label: '禁用',
-        value: 0,
-      },
-    ],
+    options: changeSelectOptionsByLabel(['可用', '禁用']),
     defaultValue: '',
     span: 12,
     hiddenItem: false,

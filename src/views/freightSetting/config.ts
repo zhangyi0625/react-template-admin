@@ -86,16 +86,7 @@ export const FreightTaskConfigurationForms: Omit<
     label: '运输条款',
     name: 'transClause',
     formType: 'normalSelect',
-    options: [
-      {
-        label: 'CY-CY',
-        value: 'CY-CY',
-      },
-      {
-        label: 'CY-SD',
-        value: 'CY-SD',
-      },
-    ],
+    options: changeSelectOptionsByLabel(['CY-CY', 'CY-SD']),
     span: 6,
   },
   {

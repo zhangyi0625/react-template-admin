@@ -1,5 +1,6 @@
 import { SelectProps } from 'antd';
 import type { CustomColumn } from 'customer-search-form-table/SearchForm/type';
+import { changeSelectOptionsByLabel } from '@/utils/options';
 
 export type AffiliateManageTabItemsType = {
   key: string | number | null;
@@ -116,18 +117,8 @@ export const AffiliateManageSearchColumns: CustomColumn[] = [
     name: 'showSupplier',
     formType: 'normalSelect',
     options: [
-      {
-        label: '全部',
-        value: '',
-      },
-      {
-        label: '已开启',
-        value: 1,
-      },
-      {
-        label: '已关闭',
-        value: 0,
-      },
+      { label: '全部', value: '' },
+      ...(changeSelectOptionsByLabel(['已开启', '已关闭']) || []),
     ],
     defaultValue: '',
     span: 6,

@@ -81,7 +81,7 @@ const FinancialDetailsParticulars: React.FC<
     (key: string) => {
       return detailInfo[key] ?? '-';
     },
-    [detailInfo]
+    [detailInfo],
   );
 
   const detailViewOptions: DetailViewOptionsType[] = [
@@ -92,7 +92,10 @@ const FinancialDetailsParticulars: React.FC<
         return (
           <div>
             {getDetailByKey('no') ?? ''}
-            <Tag style={{ margin: '0 10px' }} onClick={() => copyValue('no')}>
+            <Tag
+              style={{ margin: '0 10px' }}
+              onClick={() => copyValue(getDetailByKey('no'))}
+            >
               复制
             </Tag>
           </div>
@@ -109,7 +112,7 @@ const FinancialDetailsParticulars: React.FC<
             {getDetailByKey('tradeNo') ?? ''}
             <Tag
               style={{ margin: '0 10px' }}
-              onClick={() => copyValue('tradeNo')}
+              onClick={() => copyValue(getDetailByKey('tradeNo'))}
             >
               复制
             </Tag>
@@ -163,8 +166,8 @@ const FinancialDetailsParticulars: React.FC<
         viewSource === 'FinancialDetails'
           ? '资金类型归属'
           : viewSource === 'DepositManage'
-          ? '业务归属'
-          : '资金类型',
+            ? '业务归属'
+            : '资金类型',
       key: 'fund',
       value: () => {
         let fundSource = publicData['fundSource'];
@@ -183,8 +186,8 @@ const FinancialDetailsParticulars: React.FC<
         viewSource === 'FinancialDetails'
           ? '创建时间'
           : viewSource === 'DepositManage'
-          ? '提现发起时间'
-          : '交易创建时间',
+            ? '提现发起时间'
+            : '交易创建时间',
       key: 'created',
       value: () => {
         return <div>{getDetailByKey('created') ?? ''}</div>;
@@ -196,7 +199,7 @@ const FinancialDetailsParticulars: React.FC<
       key: 'accomplished',
       value:
         getDetailByKey(
-          viewSource === 'FinancialDetails' ? 'accomplished' : 'handled'
+          viewSource === 'FinancialDetails' ? 'accomplished' : 'handled',
         ) ?? '',
       hidden: viewSource === 'ClientsCapital',
     },
@@ -219,7 +222,7 @@ const FinancialDetailsParticulars: React.FC<
             {
               paymentWay[
                 getDetailByKey(
-                  viewSource === 'ClientsCapital' ? 'type' : 'paymentWay'
+                  viewSource === 'ClientsCapital' ? 'type' : 'paymentWay',
                 ) ?? ''
               ]
             }
@@ -237,7 +240,7 @@ const FinancialDetailsParticulars: React.FC<
             {getDetailByKey('paymentNo') ?? ''}
             <Tag
               style={{ margin: '0 10px' }}
-              onClick={() => copyValue('paymentNo')}
+              onClick={() => copyValue(getDetailByKey('paymentNo'))}
             >
               复制
             </Tag>
@@ -271,7 +274,7 @@ const FinancialDetailsParticulars: React.FC<
         return (
           <div>
             {DepositManageStatusOptions?.find(
-              (item) => item.value === getDetailByKey('status')
+              (item) => item.value === getDetailByKey('status'),
             )?.label ?? ''}
           </div>
         );
@@ -332,8 +335,8 @@ const FinancialDetailsParticulars: React.FC<
         viewSource === 'FinancialDetails'
           ? await getFinancialDetails(financialDetailsId)
           : viewSource === 'DepositManage'
-          ? await getDepositManage(financialDetailsId)
-          : await getClientsCapital(financialDetailsId);
+            ? await getDepositManage(financialDetailsId)
+            : await getClientsCapital(financialDetailsId);
       setDetailInfo(resp);
       setLoading(false);
     } catch {}
@@ -356,7 +359,7 @@ const FinancialDetailsParticulars: React.FC<
                     )}
                   </span>
                 </div>
-              )
+              ),
           )}
         </div>
       </>
@@ -369,7 +372,7 @@ const FinancialDetailsParticulars: React.FC<
       newValue,
       type,
       type === 'customerId' ? setCustomerData : setAffiliateData,
-      type === 'customerId' ? getSearchCustomer : getSearchAffiliate
+      type === 'customerId' ? getSearchCustomer : getSearchAffiliate,
     );
   };
 
@@ -381,12 +384,12 @@ const FinancialDetailsParticulars: React.FC<
           ...filterKeys(
             form.getFieldsValue(),
             ['created', 'accomplished'],
-            false
+            false,
           ),
           created: formatTime(form.getFieldValue('created'), 'Y-M-D h:m:s'),
           accomplished: formatTime(
             form.getFieldValue('accomplished'),
-            'Y-M-D h:m:s'
+            'Y-M-D h:m:s',
           ),
         };
         onOk(params);

@@ -73,23 +73,16 @@ export function buildTree(data: any | BuildTreeType[], mapId: string) {
 
 /**
  * 复制copy
- * @param elementId
+ * @param text
  */
-export function copyValue(elementId: string) {
-  // 需要复制文字的节点
-  const copyDOM = document.getElementById(elementId);
-  const range = document.createRange(); // 创建一个range
-  window.getSelection()?.removeAllRanges(); // 清楚页面中已有的selection
-  range.selectNode(copyDOM as HTMLElement); // 选中需要复制的节点
-  window.getSelection()?.addRange(range); // 执行选中元素
-  const successful = document.execCommand('copy'); // 执行 copy 操作
-  if (successful) {
+export async function copyValue(text: string) {
+  try {
+    await navigator.clipboard.writeText(text);
+    console.log('Text copied to clipboard');
     message.success('复制成功！');
-  } else {
-    message.warning('复制失败，请手动复制！');
+  } catch (err) {
+    console.error('Failed to copy text: ', err);
   }
-  // 移除选中的元素
-  window.getSelection()?.removeAllRanges();
 }
 
 /**

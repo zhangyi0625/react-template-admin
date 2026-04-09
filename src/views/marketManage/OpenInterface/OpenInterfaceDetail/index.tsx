@@ -193,7 +193,7 @@ export const OpenInterfaceDetail: React.FC = () => {
             {item.showCopyTag && item.value && (
               <Tag
                 style={{ margin: '0 10px' }}
-                onClick={() => copyValue(item.key)}
+                onClick={() => copyValue(item.value as string)}
               >
                 复制
               </Tag>

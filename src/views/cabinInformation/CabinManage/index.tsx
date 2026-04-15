@@ -22,9 +22,9 @@ import {
 } from '@/services/cabinInformation/cabinManage/cabinManageApi';
 import useParentSize from '@/hooks/useParentSize';
 import useCacheData from '@/hooks/useCacheData';
-import { filterKeys } from '@/utils/tool';
 import { ExportTableDataByXLSX } from '@/utils/export';
 import { formatTime } from '@/utils/format';
+import { updateSearchFilter } from '@/utils/filter';
 
 const CabinManage: React.FC = () => {
   const { message } = App.useApp();
@@ -214,20 +214,12 @@ const CabinManage: React.FC = () => {
   ];
 
   const onUpdateSearch = (info?: CabinManageSearchFilterParams | unknown) => {
-    const filteredObj = Object.fromEntries(
-      Object.entries(info ?? {}).filter(
-        ([, value]) => !!value && value !== undefined,
-      ),
-    );
-    let pageInfo = filterKeys(
+    updateSearchFilter(
       searchDefaultForm,
+      setSearchDefaultForm,
       ['pageIndex', 'pageSize'],
-      true,
+      info,
     );
-    setSearchDefaultForm({
-      ...pageInfo,
-      filter: { ...filteredObj },
-    });
   };
 
   const onUpdatePagination = (pagination: TablePaginationConfig) => {

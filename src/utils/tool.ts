@@ -9,7 +9,7 @@ import type { CustomColumn } from 'customer-search-form-table/SearchForm/type';
  * @param invert
  * @returns
  */
-export function filterKeys(source: any, keys: string[], invert?: boolean) {
+export function filterKeys(source: any, keys: string[] = [], invert?: boolean) {
   return Object.keys(source)
     .filter((key) => (invert ? keys.includes(key) : !keys.includes(key)))
     .reduce((res: any, key) => {

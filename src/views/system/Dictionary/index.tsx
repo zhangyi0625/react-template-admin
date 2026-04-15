@@ -35,7 +35,7 @@ import type {
 import DictionaryModal from './DictionaryModal';
 import DictionaryClassModal from '../DictionaryClass/DictionaryClassModal';
 import useParentSize from '@/hooks/useParentSize';
-import { filterKeys } from '@/utils/tool';
+import { updateSearchFilter } from '@/utils/filter';
 
 const Dictionary: React.FC = () => {
   const { modal, message } = App.useApp();
@@ -222,14 +222,12 @@ const Dictionary: React.FC = () => {
   };
 
   const onUpdateSearch = (info?: SysDictionaryParams | unknown) => {
-    const filteredObj = Object.fromEntries(
-      Object.entries(info ?? {}).filter(([, value]) => !!value),
+    updateSearchFilter(
+      searchDefaultForm,
+      setSearchDefaultForm,
+      ['page', 'limit'],
+      info,
     );
-    let pageInfo = filterKeys(searchDefaultForm, ['page', 'limit'], true);
-    setSearchDefaultForm({
-      ...pageInfo,
-      ...filteredObj,
-    });
   };
 
   const onUpdatePagination = (pagination: TablePaginationConfig) => {

@@ -36,10 +36,14 @@ export const getStaffList = () => {
  * @returns 用户列表
  */
 export const getStaffListByPage = (params: SysStaffParams) => {
+  let qsParams = {
+    ...params,
+    filter: JSON.stringify(params.filter),
+  };
   return HttpRequest.get(
     {
       url: StaffApi.StaffManageByPage,
-      params: params,
+      params: qsParams,
     },
     {
       isTransformResponse: false,

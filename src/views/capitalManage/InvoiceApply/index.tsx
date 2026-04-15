@@ -16,8 +16,8 @@ import type {
   InvoiceApplySearchParams,
 } from '@/services/capitalManage/invoiceApply/invoiceApplyModel';
 import { useNavigate } from 'react-router-dom';
-import { filterKeys } from '@/utils/tool';
 import { formatTime } from '@/utils/format';
+import { updateSearchFilter } from '@/utils/filter';
 
 const InvoiceApply: React.FC = () => {
   const navigate = useNavigate();
@@ -118,20 +118,12 @@ const InvoiceApply: React.FC = () => {
   ];
 
   const onUpdateSearch = (info?: InvoiceApplySearchFilterParams | unknown) => {
-    const filteredObj = Object.fromEntries(
-      Object.entries(info ?? {}).filter(
-        ([, value]) => !!value && value !== undefined
-      )
-    );
-    let pageInfo = filterKeys(
+    updateSearchFilter(
       searchDefaultForm,
+      setSearchDefaultForm,
       ['pageIndex', 'pageSize'],
-      true
+      info,
     );
-    setSearchDefaultForm({
-      ...pageInfo,
-      filter: { ...filteredObj },
-    });
   };
 
   const onUpdatePagination = (pagination: TablePaginationConfig) => {

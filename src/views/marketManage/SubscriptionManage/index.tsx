@@ -22,9 +22,9 @@ import {
   updateSubscriptionEnable,
   updateSubscriptionSuspend,
 } from '@/services/marketManage/subscriptionManage/subscriptionManageApi';
-import { filterKeys } from '@/utils/tool';
 import useParentSize from '@/hooks/useParentSize';
 import { formatTime } from '@/utils/format';
+import { updateSearchFilter } from '@/utils/filter';
 
 const SubscriptionManage: React.FC = () => {
   const { message, modal } = App.useApp();
@@ -168,20 +168,12 @@ const SubscriptionManage: React.FC = () => {
   ];
 
   const onUpdateSearch = (info?: SubscriptionManageParams | unknown) => {
-    const filteredObj = Object.fromEntries(
-      Object.entries(info ?? {}).filter(
-        ([, value]) => !!value && value !== undefined,
-      ),
-    );
-    let pageInfo = filterKeys(
+    updateSearchFilter(
       searchDefaultForm,
+      setSearchDefaultForm,
       ['pageIndex', 'pageSize'],
-      true,
+      info,
     );
-    setSearchDefaultForm({
-      ...pageInfo,
-      filter: { ...filteredObj },
-    });
   };
 
   const onUpdatePagination = (pagination: TablePaginationConfig) => {

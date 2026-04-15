@@ -6,7 +6,6 @@ import {
   type TabsProps,
   type TablePaginationConfig,
   type TableProps,
-  Spin,
 } from 'antd';
 import { SearchForm, SearchTable } from 'customer-search-form-table';
 import { QueryRecordSearchColumns } from '../config';
@@ -18,7 +17,8 @@ import type {
   QueryRecordSearchFilterParams,
   QueryRecordSearchParams,
 } from '@/services/dataBoard/queryRecord/queryRecordModel';
-import { filterKeys, safeJsonParse } from '@/utils/tool';
+import { safeJsonParse } from '@/utils/tool';
+import { updateSearchFilter } from '@/utils/filter';
 
 const QueryRecord: React.FC = () => {
   const { parentRef, height } = useParentSize();
@@ -167,20 +167,12 @@ const QueryRecord: React.FC = () => {
   ];
 
   const onUpdateSearch = (info?: QueryRecordSearchFilterParams | unknown) => {
-    const filteredObj = Object.fromEntries(
-      Object.entries(info ?? {}).filter(
-        ([, value]) => !!value && value !== undefined,
-      ),
-    );
-    let pageInfo = filterKeys(
+    updateSearchFilter(
       searchDefaultForm,
+      setSearchDefaultForm,
       ['pageIndex', 'pageSize'],
-      true,
+      info,
     );
-    setSearchDefaultForm({
-      ...pageInfo,
-      filter: { ...filteredObj },
-    });
   };
 
   const onUpdatePagination = (pagination: TablePaginationConfig) => {
@@ -239,6 +231,7 @@ const QueryRecord: React.FC = () => {
           scroll={{ x: 'max-content', y: height - 118 }}
           rowKey={'id'}
           immediate={immediate}
+          loading={tableLoading}
           totalKey="total"
           fetchResultKey="entries"
           isPagination={true}

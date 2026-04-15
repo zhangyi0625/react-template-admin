@@ -29,8 +29,8 @@ import type {
   ImportCabinResultType,
   ManualPublicationType,
 } from '@/services/orderManage/cabinResult/cabinResultModel';
-import { filterKeys } from '@/utils/tool';
 import { formatTime } from '@/utils/format';
+import { updateSearchFilter } from '@/utils/filter';
 
 const CabinResult: React.FC = () => {
   const { message } = App.useApp();
@@ -286,20 +286,12 @@ const CabinResult: React.FC = () => {
   };
 
   const onUpdateSearch = (info?: CabinResultSearchParams | unknown) => {
-    const filteredObj = Object.fromEntries(
-      Object.entries(info ?? {}).filter(
-        ([, value]) => !!value && value !== undefined,
-      ),
-    );
-    let pageInfo = filterKeys(
+    updateSearchFilter(
       searchDefaultForm,
+      setSearchDefaultForm,
       ['pageIndex', 'pageSize'],
-      true,
+      info,
     );
-    setSearchDefaultForm({
-      ...pageInfo,
-      filter: { ...filteredObj },
-    });
   };
 
   const onUpdatePagination = (pagination: TablePaginationConfig) => {

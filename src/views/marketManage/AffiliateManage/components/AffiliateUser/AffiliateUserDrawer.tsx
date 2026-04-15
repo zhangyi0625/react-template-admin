@@ -14,8 +14,8 @@ import type {
 import { CloseOutlined } from '@ant-design/icons';
 import { SearchForm, SearchTable } from 'customer-search-form-table';
 import { getStaffManageByPage } from '@/services/marketManage/staffManage/staffManageApi';
-import { filterKeys } from '@/utils/tool';
 import { AffiliateUserDrawerColumns } from '../../config';
+import { updateSearchFilter } from '@/utils/filter';
 
 export type AffiliateUserDrawerProps = {
   params: {
@@ -81,20 +81,12 @@ const AffiliateUserDrawer = React.forwardRef<
   };
 
   const onUpdateSearch = (info?: StaffManageParams['filter'] | unknown) => {
-    const filteredObj = Object.fromEntries(
-      Object.entries(info ?? {}).filter(
-        ([, value]) => !!value && value !== undefined,
-      ),
-    );
-    let pageInfo = filterKeys(
+    updateSearchFilter(
       searchDefaultForm,
+      setSearchDefaultForm,
       ['pageIndex', 'pageSize', 'projection'],
-      true,
+      info,
     );
-    setSearchDefaultForm({
-      ...pageInfo,
-      filter: { ...filteredObj },
-    });
   };
 
   return (

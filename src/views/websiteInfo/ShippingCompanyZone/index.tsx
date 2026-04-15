@@ -27,7 +27,7 @@ import {
   updateShippingCompanyZone,
 } from '@/services/websiteInfo/websiteInfoApi';
 import { ShippingCompanyZoneColumns } from './config';
-import { filterKeys } from '@/utils/tool';
+import { updateSearchFilter } from '@/utils/filter';
 
 const ShippingCompanyZone: React.FC = () => {
   const { message, modal } = App.useApp();
@@ -127,19 +127,12 @@ const ShippingCompanyZone: React.FC = () => {
   };
 
   const onUpdateSearch = (info?: ShippingCompanyZoneParams | unknown) => {
-    const filteredObj = Object.fromEntries(
-      Object.entries(info ?? {}).filter(([, value]) => value !== undefined)
-    );
-    let pageInfo = filterKeys(
+    updateSearchFilter(
       searchDefaultForm,
+      setSearchDefaultForm,
       ['pageIndex', 'pageSize'],
-      true
+      info,
     );
-
-    setSearchDefaultForm({
-      ...pageInfo,
-      filter: JSON.stringify(filteredObj),
-    });
   };
 
   const onUpdatePagination = (pagination: TablePaginationConfig) => {
@@ -174,7 +167,7 @@ const ShippingCompanyZone: React.FC = () => {
   };
 
   const editOkShipownerEncyclopedia = async (
-    info: ShipownerEncyclopediaType
+    info: ShipownerEncyclopediaType,
   ) => {
     try {
       await updateShipownerEncyclopedia(info, info.id);

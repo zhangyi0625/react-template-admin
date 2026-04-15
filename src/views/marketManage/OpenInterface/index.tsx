@@ -23,7 +23,7 @@ import {
 import { deleteSubscription } from '@/services/marketManage/subscriptionManage/subscriptionManageApi';
 import AddOpenInterfaceModal from './AddOpenInterfaceModal';
 import { useNavigate } from 'react-router-dom';
-import { filterKeys } from '@/utils/tool';
+import { updateSearchFilter } from '@/utils/filter';
 
 const OpenInterface: React.FC = () => {
   const { message, modal } = App.useApp();
@@ -123,20 +123,12 @@ const OpenInterface: React.FC = () => {
   };
 
   const onUpdateSearch = (info?: OpenInterfaceParams | unknown) => {
-    const filteredObj = Object.fromEntries(
-      Object.entries(info ?? {}).filter(
-        ([, value]) => !!value && value !== undefined
-      )
-    );
-    let pageInfo = filterKeys(
+    updateSearchFilter(
       searchDefaultForm,
+      setSearchDefaultForm,
       ['pageIndex', 'pageSize'],
-      true
+      info,
     );
-    setSearchDefaultForm({
-      ...pageInfo,
-      filter: { ...filteredObj },
-    });
   };
 
   const onUpdatePagination = (pagination: TablePaginationConfig) => {

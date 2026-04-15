@@ -29,6 +29,7 @@ import AddStaff from './AddStaff';
 import ResetStaffPassword from './ResetStaffPassword';
 import { filterKeys } from '@/utils/tool';
 import { SelectStaffOptions } from '../config';
+import { updateSearchFilter } from '@/utils/filter';
 
 const StaffManage: React.FC = () => {
   const { message } = App.useApp();
@@ -151,18 +152,12 @@ const StaffManage: React.FC = () => {
   };
 
   const onUpdateSearch = (info?: SysStaffParams | unknown) => {
-    const filteredObj = Object.fromEntries(
-      Object.entries(info ?? {}).filter(([, value]) => value !== undefined)
-    );
-    let pageInfo = filterKeys(
+    updateSearchFilter(
       searchDefaultForm,
+      setSearchDefaultForm,
       ['pageIndex', 'pageSize'],
-      true
+      info,
     );
-    setSearchDefaultForm({
-      ...pageInfo,
-      filter: JSON.stringify(filteredObj),
-    });
   };
 
   const onUpdatePagination = (pagination: TablePaginationConfig) => {
@@ -211,7 +206,7 @@ const StaffManage: React.FC = () => {
   };
 
   const resetStaffPassword = (
-    row: SysStaffType & SysStaffResetPasswordType
+    row: SysStaffType & SysStaffResetPasswordType,
   ) => {
     modal.confirm({
       title: `重置${row.username}的密码`,
@@ -222,7 +217,7 @@ const StaffManage: React.FC = () => {
           ...filterKeys(
             row,
             ['phone', 'password', 'verifyCode', 'verifyKey'],
-            true
+            true,
           ),
         }).then(() => {
           message.success('重置成功');

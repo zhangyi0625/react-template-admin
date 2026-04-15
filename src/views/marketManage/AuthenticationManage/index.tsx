@@ -31,8 +31,8 @@ import type {
   AuthenticationAuditUrlType,
   AuthenticationManageParams,
 } from '@/services/marketManage/authenticationManage/authenticationManageModel';
-import { filterKeys } from '@/utils/tool';
 import { getFileUrl } from '@/services/upload';
+import { updateSearchFilter } from '@/utils/filter';
 
 type FileType = Parameters<GetProp<UploadProps, 'beforeUpload'>>[0];
 
@@ -128,7 +128,7 @@ const AuthenticationManage: React.FC = () => {
             onClick={() => preview(value.credentials, 'BC01')}
           >
             {value.credentials.find(
-              (item: AuthenticationAuditUrlType) => item.type === 'BC01'
+              (item: AuthenticationAuditUrlType) => item.type === 'BC01',
             )?.name || ''}
           </div>
         );
@@ -146,7 +146,7 @@ const AuthenticationManage: React.FC = () => {
             onClick={() => preview(value.credentials, 'BC02')}
           >
             {value.credentials.find(
-              (item: AuthenticationAuditUrlType) => item.type === 'BC02'
+              (item: AuthenticationAuditUrlType) => item.type === 'BC02',
             )?.name || ''}
           </div>
         );
@@ -180,7 +180,7 @@ const AuthenticationManage: React.FC = () => {
                     defaultActiveTabKey === 'authentication'
                       ? 'strValue'
                       : 'intValue'
-                  ] === value.status
+                  ] === value.status,
               )?.label
             }
           </div>
@@ -286,7 +286,7 @@ const AuthenticationManage: React.FC = () => {
       filter: {
         status: (
           AuthenticationStatusOptions.find(
-            (item) => item.label === '待审核'
+            (item) => item.label === '待审核',
           ) as AuthenticationStatusType
         )[key === 'authentication' ? 'strValue' : 'intValue'],
       },
@@ -302,26 +302,18 @@ const AuthenticationManage: React.FC = () => {
   };
 
   const onUpdateSearch = (info?: AuthenticationManageParams | unknown) => {
-    const filteredObj = Object.fromEntries(
-      Object.entries(info ?? {}).filter(
-        ([, value]) => !!value && value !== undefined
-      )
-    );
-    let pageInfo = filterKeys(
+    updateSearchFilter(
       searchDefaultForm,
+      setSearchDefaultForm,
       ['pageIndex', 'pageSize'],
-      true
+      info,
     );
-    setSearchDefaultForm({
-      ...pageInfo,
-      filter: { ...filteredObj },
-    });
   };
 
   const changeStatus = async (
     id: string,
     type: string,
-    params: { rejectReason: string } = { rejectReason: '' }
+    params: { rejectReason: string } = { rejectReason: '' },
   ) => {
     try {
       if (type === 'pass') {

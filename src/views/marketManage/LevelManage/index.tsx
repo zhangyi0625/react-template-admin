@@ -9,9 +9,10 @@ import { SearchForm, SearchTable } from 'customer-search-form-table';
 import { LevelManageSearchColumns, LevelOptions } from './config';
 import { getLevelManageByPage } from '@/services/marketManage/levelManage/levelManageApi';
 import type { LevelManageParams } from '@/services/marketManage/levelManage/levelManageModel';
-import { filterKeys, randomNum } from '@/utils/tool';
+import { randomNum } from '@/utils/tool';
 import useParentSize from '@/hooks/useParentSize';
 import { formatTime } from '@/utils/format';
+import { updateSearchFilter } from '@/utils/filter';
 
 const LevelManage: React.FC = () => {
   const { parentRef, height } = useParentSize();
@@ -87,20 +88,12 @@ const LevelManage: React.FC = () => {
   ];
 
   const onUpdateSearch = (info?: LevelManageParams | unknown) => {
-    const filteredObj = Object.fromEntries(
-      Object.entries(info ?? {}).filter(
-        ([, value]) => !!value && value !== undefined,
-      ),
-    );
-    let pageInfo = filterKeys(
+    updateSearchFilter(
       searchDefaultForm,
+      setSearchDefaultForm,
       ['pageIndex', 'pageSize'],
-      true,
+      info,
     );
-    setSearchDefaultForm({
-      ...pageInfo,
-      filter: { ...filteredObj },
-    });
   };
 
   const onUpdatePagination = (pagination: TablePaginationConfig) => {

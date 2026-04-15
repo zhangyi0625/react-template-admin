@@ -27,11 +27,12 @@ import {
 } from '@/services/system/organization/organization';
 import { SearchTable } from 'customer-search-form-table';
 import AddOrganization from './AddOrganization';
-import { buildTree, filterKeys } from '@/utils/tool';
+import { buildTree } from '@/utils/tool';
 import type {
   SysOrganizationParams,
   SysOrganizationType,
 } from '@/services/system/organization/organizationModel';
+import { updateSearchFilter } from '@/utils/filter';
 
 /**
  * 系统角色维护
@@ -162,14 +163,12 @@ const Organization: React.FC = () => {
   };
 
   const onUpdateSearch = (info?: SysOrganizationType | unknown) => {
-    const filteredObj = Object.fromEntries(
-      Object.entries(info ?? {}).filter(([, value]) => !!value),
+    updateSearchFilter(
+      searchDefaultForm,
+      setSearchDefaultForm,
+      ['page', 'limit'],
+      info,
     );
-    let pageInfo = filterKeys(searchDefaultForm, ['page', 'limit'], true);
-    setSearchDefaultForm({
-      ...pageInfo,
-      ...filteredObj,
-    });
   };
 
   const onUpdatePagination = (pagination: TablePaginationConfig) => {

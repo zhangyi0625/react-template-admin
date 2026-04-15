@@ -22,7 +22,7 @@ const AffiliateFinancialDetail: React.FC<AffiliateFinancialDetailProps> = ({
   };
   return (
     <>
-      <div className="bg-white rounded-[6px] p-[20px] w-full my-[16px]">
+      <div className="bg-white rounded-[6px] p-[20px] w-full mb-[16px]">
         <p className={styles['basic-title']}>用户账户资金</p>
         <div className={styles['wallet-item']}>
           <div className="flex flex-col">

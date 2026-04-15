@@ -51,7 +51,7 @@ const UserDetail: React.FC = () => {
             />
             <UserSearchRecord customerId={userDetail.id} />
           </div>
-          <div className="max-w-[440px] ml-[16px] flex1">
+          <div className="min-w-[440px] ml-[16px] flex1">
             <AffiliateFinancialDetail
               wallet={filterKeys(userDetail, ['bond', 'balance'], true)}
               jumpWalletPage={jumpWalletPage}

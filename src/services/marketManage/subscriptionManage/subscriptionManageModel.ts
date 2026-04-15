@@ -1,4 +1,4 @@
-import { DefaultPaging } from '@/types/global';
+import type { DefaultPaging } from '@/types/global';
 
 export interface SubscriptionManageFilterParams {
   customerId: string;

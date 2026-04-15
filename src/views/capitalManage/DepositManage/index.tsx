@@ -29,9 +29,9 @@ import {
 import DepositManageRemark from './DepositManageRemark';
 import FinancialDetailsParticulars from '../FinancialDetails/FinancialDetailsParticulars';
 import { RootState } from '@/stores/store';
-import { filterKeys } from '@/utils/tool';
 import { ExportTableDataByXLSX } from '@/utils/export';
 import { formatTime } from '@/utils/format';
+import { updateSearchFilter } from '@/utils/filter';
 
 const DepositManage: React.FC = () => {
   const { message } = App.useApp();
@@ -133,7 +133,7 @@ const DepositManage: React.FC = () => {
         return (
           <div>
             {DepositManageStatusOptions?.find(
-              (item) => item.value === value.status
+              (item) => item.value === value.status,
             )?.label ?? ''}
           </div>
         );
@@ -200,20 +200,12 @@ const DepositManage: React.FC = () => {
   }, []);
 
   const onUpdateSearch = (info?: DepositManageSearchFilterParams | unknown) => {
-    const filteredObj = Object.fromEntries(
-      Object.entries(info ?? {}).filter(
-        ([, value]) => !!value && value !== undefined
-      )
-    );
-    let pageInfo = filterKeys(
+    updateSearchFilter(
       searchDefaultForm,
+      setSearchDefaultForm,
       ['pageIndex', 'pageSize'],
-      true
+      info,
     );
-    setSearchDefaultForm({
-      ...pageInfo,
-      filter: { ...filteredObj },
-    });
   };
 
   const onUpdatePagination = (pagination: TablePaginationConfig) => {
@@ -226,7 +218,7 @@ const DepositManage: React.FC = () => {
 
   const onEditOk = async (
     customerRow: DepositManageType,
-    disposeStatus: string
+    disposeStatus: string,
   ) => {
     try {
       if (disposeStatus === 'accept') {
@@ -235,7 +227,7 @@ const DepositManage: React.FC = () => {
         await postRejectDepositManage(customerRow);
       }
       message.success(
-        disposeStatus === 'accept' ? '接受已提现~' : '提现已驳回~'
+        disposeStatus === 'accept' ? '接受已提现~' : '提现已驳回~',
       );
       // 操作成功，关闭弹窗，刷新数据
       setDepositRemark({ visible: false, currentRow: null });
@@ -254,7 +246,7 @@ const DepositManage: React.FC = () => {
       ExportTableDataByXLSX(
         resp.entries,
         columns.splice(0, columns.length - 1),
-        '提现管理导出列表'
+        '提现管理导出列表',
       );
       setDownLoading(false);
     } catch {

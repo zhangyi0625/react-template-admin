@@ -17,7 +17,8 @@ import type { RegularBookingSearchParams } from '@/services/orderManage/regularB
 import { getRegularBookingByPage } from '@/services/orderManage/regularBooking/regularBookingApi';
 import { getPublicData, getPublicSetting } from '@/services/system/setting';
 import { formatTime } from '@/utils/format';
-import { filterKeys, getPublicSettingByKey } from '@/utils/tool';
+import { getPublicSettingByKey } from '@/utils/tool';
+import { updateSearchFilter } from '@/utils/filter';
 
 const RegularBooking: React.FC = () => {
   const navigate = useNavigate();
@@ -101,8 +102,8 @@ const RegularBooking: React.FC = () => {
                   {!value.refundStatus
                     ? ''
                     : value.refundStatus === 'SUCCESS'
-                    ? '退款成功'
-                    : '退款失败'}
+                      ? '退款成功'
+                      : '退款失败'}
                 </span>
               ) : null}
             </p>
@@ -185,20 +186,12 @@ const RegularBooking: React.FC = () => {
   }, []);
 
   const onUpdateSearch = (info?: RegularBookingSearchParams | unknown) => {
-    const filteredObj = Object.fromEntries(
-      Object.entries(info ?? {}).filter(
-        ([, value]) => !!value && value !== undefined
-      )
-    );
-    let pageInfo = filterKeys(
+    updateSearchFilter(
       searchDefaultForm,
+      setSearchDefaultForm,
       ['pageIndex', 'pageSize'],
-      true
+      info,
     );
-    setSearchDefaultForm({
-      ...pageInfo,
-      filter: { ...filteredObj },
-    });
   };
 
   const onUpdatePagination = (pagination: TablePaginationConfig) => {

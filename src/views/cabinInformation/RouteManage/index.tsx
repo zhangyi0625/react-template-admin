@@ -27,8 +27,8 @@ import RouteManageModal from './RouteManageModal';
 import { CabinManageChannelOptions } from '../CabinManage/config';
 import useCacheData from '@/hooks/useCacheData';
 import useParentSize from '@/hooks/useParentSize';
-import { filterKeys } from '@/utils/tool';
 import { formatTime } from '@/utils/format';
+import { updateSearchFilter } from '@/utils/filter';
 
 const RouteManage: React.FC = () => {
   const { message, modal } = App.useApp();
@@ -79,7 +79,7 @@ const RouteManage: React.FC = () => {
       render(value) {
         let text =
           CabinManageChannelOptions?.find(
-            (item) => item.value === value.channel
+            (item) => item.value === value.channel,
           )?.label ?? '';
         return <div>{String(text).replace(/\舱位/g, '')}</div>;
       },
@@ -196,20 +196,12 @@ const RouteManage: React.FC = () => {
   ];
 
   const onUpdateSearch = (info?: RouteManageSearchFilterParams | unknown) => {
-    const filteredObj = Object.fromEntries(
-      Object.entries(info ?? {}).filter(
-        ([, value]) => !!value && value !== undefined
-      )
-    );
-    let pageInfo = filterKeys(
+    updateSearchFilter(
       searchDefaultForm,
+      setSearchDefaultForm,
       ['pageIndex', 'pageSize', 'sort'],
-      true
+      info,
     );
-    setSearchDefaultForm({
-      ...pageInfo,
-      filter: { ...filteredObj },
-    });
   };
 
   const onUpdatePagination = (pagination: TablePaginationConfig) => {

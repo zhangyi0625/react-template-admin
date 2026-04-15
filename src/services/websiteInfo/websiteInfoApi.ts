@@ -41,10 +41,14 @@ export const getUserFeedbackByPage = (params: UserFeedbackParams) => {
 export const getShippingCompanyZoneByPage = (
   params: ShippingCompanyZoneParams,
 ) => {
+  let qsParams = {
+    ...params,
+    filter: JSON.stringify(params.filter),
+  };
   return HttpRequest.get(
     {
       url: WebsiteInfoApi.ShippingCompanyZoneByPage,
-      params: params,
+      params: qsParams,
     },
     {
       isTransformResponse: false,

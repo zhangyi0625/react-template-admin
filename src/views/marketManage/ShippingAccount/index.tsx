@@ -13,7 +13,6 @@ import {
   ShippingAccountSearchColumns,
   ShippingAccountStatusOptions,
 } from './config';
-import { filterKeys } from '@/utils/tool';
 import type {
   ShippingAccountAuditType,
   ShippingAccountManageParams,
@@ -24,6 +23,7 @@ import {
   getShippingAccountManageByPage,
 } from '@/services/marketManage/shippingAccount/shippingAccountApi';
 import AuditShippingAccount from './AuditShippingAccount';
+import { updateSearchFilter } from '@/utils/filter';
 
 const ShippingAccount: React.FC = () => {
   const { message } = App.useApp();
@@ -89,7 +89,7 @@ const ShippingAccount: React.FC = () => {
           <div>
             {
               ShippingAccountStatusOptions?.find(
-                (item) => item.value === value.isCheck
+                (item) => item.value === value.isCheck,
               )?.label
             }
           </div>
@@ -132,20 +132,12 @@ const ShippingAccount: React.FC = () => {
   ];
 
   const onUpdateSearch = (info?: ShippingAccountManageParams | unknown) => {
-    const filteredObj = Object.fromEntries(
-      Object.entries(info ?? {}).filter(
-        ([, value]) => !!value && value !== undefined
-      )
-    );
-    let pageInfo = filterKeys(
+    updateSearchFilter(
       searchDefaultForm,
+      setSearchDefaultForm,
       ['pageIndex', 'pageSize'],
-      true
+      info,
     );
-    setSearchDefaultForm({
-      ...pageInfo,
-      filter: { ...filteredObj },
-    });
   };
 
   const onUpdatePagination = (pagination: TablePaginationConfig) => {

@@ -26,9 +26,9 @@ import {
 import AddUser from './AddUser';
 import FollowUpModal from './FollowUpModal';
 import useParentSize from '@/hooks/useParentSize';
-import { filterKeys } from '@/utils/tool';
 import { formatTime } from '@/utils/format';
 import { useNavigate } from 'react-router-dom';
+import { updateSearchFilter } from '@/utils/filter';
 
 const UserManage: React.FC = () => {
   const { message } = App.useApp();
@@ -186,20 +186,12 @@ const UserManage: React.FC = () => {
   };
 
   const onUpdateSearch = (info?: StaffManageParams | unknown) => {
-    const filteredObj = Object.fromEntries(
-      Object.entries(info ?? {}).filter(
-        ([, value]) => !!value && value !== undefined,
-      ),
-    );
-    let pageInfo = filterKeys(
+    updateSearchFilter(
       searchDefaultForm,
+      setSearchDefaultForm,
       ['pageIndex', 'pageSize', 'sort'],
-      true,
+      info,
     );
-    setSearchDefaultForm({
-      ...pageInfo,
-      filter: { ...filteredObj },
-    });
   };
 
   const onUpdatePagination = (pagination: TablePaginationConfig) => {

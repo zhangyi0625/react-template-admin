@@ -30,9 +30,9 @@ const App: React.FC = () => {
    */
   const getMenuData = async () => {
     setLoading(true);
-    const userId = sessionStorage.getItem('roleId') || '';
-    const userData = await getUserDetail(userId);
-    const roleId = userData?.roles[0]?.roleId || userId;
+    // const userId = sessionStorage.getItem('roleId') || '';
+    // const userData = await getUserDetail(userId);
+    // const roleId = userData?.roles[0]?.roleId || userId;
     try {
       // const menu = await getRoleMenu(roleId);
       const menu = JSON.parse(sessionStorage.getItem('menu') || '[]');

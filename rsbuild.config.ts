@@ -6,6 +6,7 @@ import { pluginSass } from '@rsbuild/plugin-sass';
 import { pluginImageCompress } from '@rsbuild/plugin-image-compress';
 import { pluginHtmlMinifierTerser } from 'rsbuild-plugin-html-minifier-terser';
 import { pluginSvgr } from '@rsbuild/plugin-svgr';
+import { RsdoctorRspackPlugin } from '@rsdoctor/rspack-plugin';
 
 const { publicVars } = loadEnv({ prefixes: ['RS_'] });
 
@@ -40,7 +41,7 @@ export default defineConfig({
       },
     }),
   ],
-  // 配置html模板
+  // 配置 html 模板
   html: {
     favicon: path.resolve(__dirname, './src/assets/images/favicon.ico'),
     title: '在舱管理系统',
@@ -71,21 +72,62 @@ export default defineConfig({
   },
   // 构建优化相关
   performance: {
-    chunkSplit: {
-      strategy: 'split-by-experience',
-      // 下面的部分单独分包
-      forceSplitting: {
-        axios: /node_modules[\\/]axios/,
-        react: /node_modules[\\/]react/,
-        antd: /node_modules[\\/]antd/,
-        redux: /node_modules[\\/]redux/,
-        lodash: /node_modules[\\/]lodash/,
-        echarts: /node_modules[\\/]echarts/,
-        antdIcons: /node_modules[\\/]@ant-design\/icons/,
-      },
-    },
     // 移除console.[method]语句
     removeConsole: true,
+  },
+  splitChunks: {
+    preset: 'default',
+    cacheGroups: {
+      axios: {
+        test: /node_modules[\\/]axios/,
+        name: 'axios',
+        priority: 0,
+        chunks: 'all',
+        enforce: true,
+      },
+      react: {
+        test: /node_modules[\\/]react/,
+        name: 'react',
+        priority: 0,
+        chunks: 'all',
+        enforce: true,
+      },
+      antd: {
+        test: /node_modules[\\/]antd/,
+        name: 'antd',
+        priority: 0,
+        chunks: 'all',
+        enforce: true,
+      },
+      redux: {
+        test: /node_modules[\\/]redux/,
+        name: 'redux',
+        priority: 0,
+        chunks: 'all',
+        enforce: true,
+      },
+      lodash: {
+        test: /node_modules[\\/]lodash/,
+        name: 'lodash',
+        priority: 0,
+        chunks: 'all',
+        enforce: true,
+      },
+      echarts: {
+        test: /node_modules[\\/]echarts/,
+        name: 'echarts',
+        priority: 0,
+        chunks: 'all',
+        enforce: true,
+      },
+      antdIcons: {
+        test: /node_modules[\\/]@ant-design\/icons/,
+        name: 'antdIcons',
+        priority: 0,
+        chunks: 'all',
+        enforce: true,
+      },
+    },
   },
   // 服务相关
   server: {
@@ -106,6 +148,33 @@ export default defineConfig({
       //   changeOrigin: true,
       //   pathRewrite: (path) => path.replace(/^\/api/, ''),
       // },
+    },
+  },
+  // 添加 rsdoctor 插件
+  tools: {
+    rspack: {
+      plugins: [
+        new RsdoctorRspackPlugin({
+          linter: {
+            level: 'Error',
+            rules: {
+              'duplicate-package': [
+                'Error',
+                {
+                  checkVersion: 'minor',
+                  ignore: ['clsx'],
+                },
+              ],
+              'esm-resolved-to-cjs': [
+                'Warn',
+                {
+                  ignore: ['antd', 'echarts', 'redux-persist', 'react-error-boundary'],
+                },
+              ],
+            },
+          },
+        }),
+      ],
     },
   },
 });

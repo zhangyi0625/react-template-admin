@@ -5,6 +5,7 @@ import {
   Card,
   ConfigProvider,
   Space,
+  Input,
   TablePaginationConfig,
   TableProps,
   Tabs,
@@ -82,6 +83,8 @@ const MyBrashBoxList: React.FC = () => {
 
   const [brashBoxDrawerVisible, setBrashBoxDrawerVisible] =
     useState<boolean>(false);
+
+  const [cancelReason, setCancelReason] = useState<string>('');
 
   const tableColumns: TableProps['columns'] = [
     {
@@ -191,6 +194,13 @@ const MyBrashBoxList: React.FC = () => {
       width: 150,
     },
     {
+      title: '取消原因',
+      dataIndex: 'remark',
+      align: 'left',
+      hidden: defaultActiveKey !== 'CANCEL',
+      width: 150,
+    },
+    {
       title: '上次执行时间',
       align: 'left',
       width: 150,
@@ -240,10 +250,12 @@ const MyBrashBoxList: React.FC = () => {
             <Button
               variant="link"
               color="danger"
-              hidden={defaultActiveKey !== 'RUNNING'}
+              hidden={
+                defaultActiveKey !== 'RUNNING' && defaultActiveKey !== 'SUCCESS'
+              }
               onClick={() => cancelItem(_.id)}
             >
-              取消
+              {defaultActiveKey === 'RUNNING' ? '取消' : '过期取消'}
             </Button>
           </Space>
         );
@@ -365,12 +377,26 @@ const MyBrashBoxList: React.FC = () => {
 
   const cancelItem = async (id: string) => {
     try {
+      // 使用 ref 来获取输入框的值
+      let cancelReasonValue = '';
+
       modal.confirm({
         title: `取消刷箱任务`,
         icon: <ExclamationCircleFilled />,
-        content: `确定取消刷箱任务吗？`,
+        content: (
+          <div>
+            <Input
+              onChange={(e) => {
+                console.log(e.target.value);
+                cancelReasonValue = e.target.value;
+              }}
+              type="text"
+              placeholder="请输入取消原因"
+            />
+          </div>
+        ),
         async onOk() {
-          await cancelBrashBoxList(id);
+          await cancelBrashBoxList(id, cancelReasonValue);
           message.success('取消成功');
           setSearchDefaultForm({ ...searchDefaultForm });
         },

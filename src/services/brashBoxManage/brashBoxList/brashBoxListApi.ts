@@ -157,13 +157,10 @@ export const deleteBrashBoxList = (id: string) => {
  * @param id 刷箱任务id
  * @returns 结果
  */
-export const cancelBrashBoxList = (id: string) => {
+export const cancelBrashBoxList = (id: string, remark: string) => {
   return HttpRequest.post(
     {
-      url: BrashBoxManageApi.BrashBoxListCancel + id,
-      params: {
-        id: id,
-      },
+      url: BrashBoxManageApi.BrashBoxListCancel + id + '?remark=' + remark,
     },
     {
       successMessageMode: 'none',

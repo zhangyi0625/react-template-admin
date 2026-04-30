@@ -2,7 +2,7 @@ import path from 'node:path';
 import { defineConfig, loadEnv } from '@rsbuild/core';
 import { pluginReact } from '@rsbuild/plugin-react';
 import { pluginSass } from '@rsbuild/plugin-sass';
-// import { pluginMockServer } from 'rspack-plugin-mock/rsbuild';
+import { pluginMockServer } from 'rspack-plugin-mock/rsbuild';
 import { pluginImageCompress } from '@rsbuild/plugin-image-compress';
 import { pluginHtmlMinifierTerser } from 'rsbuild-plugin-html-minifier-terser';
 import { pluginSvgr } from '@rsbuild/plugin-svgr';
@@ -26,10 +26,10 @@ export default defineConfig({
       },
     }),
     // mock 插件
-    // pluginMockServer({
-    //   // 表示拦截以路径/api开头的
-    //   prefix: '/api',
-    // }),
+    pluginMockServer({
+      // 表示拦截以路径/api开头的
+      prefix: '/api',
+    }),
     // 启动图片压缩
     pluginImageCompress(),
     // 启动html压缩
@@ -168,7 +168,12 @@ export default defineConfig({
               'esm-resolved-to-cjs': [
                 'Warn',
                 {
-                  ignore: ['antd', 'echarts', 'redux-persist', 'react-error-boundary'],
+                  ignore: [
+                    'antd',
+                    'echarts',
+                    'redux-persist',
+                    'react-error-boundary',
+                  ],
                 },
               ],
             },

@@ -6,9 +6,15 @@ import { pluginMockServer } from 'rspack-plugin-mock/rsbuild';
 import { pluginImageCompress } from '@rsbuild/plugin-image-compress';
 import { pluginHtmlMinifierTerser } from 'rsbuild-plugin-html-minifier-terser';
 import { pluginSvgr } from '@rsbuild/plugin-svgr';
-import { RsdoctorRspackPlugin } from '@rsdoctor/rspack-plugin';
 
 const { publicVars } = loadEnv({ prefixes: ['RS_'] });
+
+// 只有在设置了 RSDOCTOR=true 环境变量时才导入 Rsdoctor 插件
+const enableRsdoctor = process.env.RSDOCTOR === 'true';
+let RsdoctorRspackPlugin;
+if (enableRsdoctor) {
+  ({ RsdoctorRspackPlugin } = await import('@rsdoctor/rspack-plugin'));
+}
 
 export default defineConfig({
   plugins: [
@@ -150,36 +156,46 @@ export default defineConfig({
       // },
     },
   },
-  // 添加 rsdoctor 插件
-  tools: {
-    rspack: {
-      plugins: [
-        new RsdoctorRspackPlugin({
-          linter: {
-            level: 'Error',
-            rules: {
-              'duplicate-package': [
-                'Error',
-                {
-                  checkVersion: 'minor',
-                  ignore: ['clsx'],
+  ...(enableRsdoctor
+    ? {
+        // 添加 rsdoctor 插件（仅在 RSDOCTOR=true 时启用）
+        tools: {
+          rspack: {
+            plugins: [
+              new RsdoctorRspackPlugin!({
+                linter: {
+                  level: 'Error',
+                  rules: {
+                    'duplicate-package': [
+                      'Error',
+                      {
+                        checkVersion: 'minor',
+                        ignore: ['clsx'],
+                      },
+                    ],
+                    'esm-resolved-to-cjs': [
+                      'Warn',
+                      {
+                        ignore: [
+                          'antd',
+                          'echarts',
+                          'redux-persist',
+                          'react-error-boundary',
+                        ],
+                      },
+                    ],
+                    'cross-chunks-package': [
+                      'off',
+                      {
+                        ignore: ['@rspack/core'],
+                      },
+                    ],
+                  },
                 },
-              ],
-              'esm-resolved-to-cjs': [
-                'Warn',
-                {
-                  ignore: [
-                    'antd',
-                    'echarts',
-                    'redux-persist',
-                    'react-error-boundary',
-                  ],
-                },
-              ],
-            },
+              }),
+            ],
           },
-        }),
-      ],
-    },
-  },
+        },
+      }
+    : {}),
 });

@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "skills": {
+    "rsbuild-v2-upgrade": {
+      "source": "rstackjs/agent-skills",
+      "sourceType": "github",
+      "computedHash": "4bc74b1cda35f7b61cafcb831d4099deca8eecb4d7c0a1d2cb69a2412178038d"
+    }
+  }
+}

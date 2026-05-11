@@ -19,6 +19,7 @@ import BrashBoxDrawer from './BrashBoxDrawer';
 import {
   getBrashBoxListPage,
   cancelBrashBoxList,
+  postRefreshResult,
 } from '@/services/brashBoxManage/brashBoxList/brashBoxListApi';
 import type {
   BrashBoxListSearchParams,
@@ -245,6 +246,13 @@ const BrashBoxList: React.FC = () => {
               有效条形码
             </Button> */}
             <Button
+              type="link"
+              hidden={defaultActiveKey !== 'RUNNING'}
+              onClick={() => updateBrashBoxStatus(_.id as string)}
+            >
+              更新状态
+            </Button>
+            <Button
               variant="link"
               color="danger"
               hidden={defaultActiveKey !== 'RUNNING'}
@@ -257,6 +265,14 @@ const BrashBoxList: React.FC = () => {
       },
     },
   ];
+
+  const updateBrashBoxStatus = async (id: string) => {
+    try {
+      await postRefreshResult(id);
+      message.success('更新成功');
+      onUpdateSearch();
+    } catch (error) {}
+  };
 
   const onChange = (type: string) => {
     setDefaultActiveKey(type);

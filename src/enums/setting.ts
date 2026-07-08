@@ -20,6 +20,7 @@ export enum ComboPermission {
   PORT_WIKI = '港口百科',
   HSCODE_QUERY = 'HSCODE查询',
   SMS_NOTIFY = '短信服务',
+  FREIGHT_BATCH_QUERY = '批量查询',
 }
 
 export enum LevelSetting {

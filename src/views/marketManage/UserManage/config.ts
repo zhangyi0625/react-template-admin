@@ -341,6 +341,14 @@ export const UserManageDetailEditForm: AffiliateManageDetailEditFormProps[] = [
     ExtraKey: 'businessConfig',
     disabled: false,
   },
+  {
+    label: '批量查询：',
+    name: 'FREIGHT_BATCH_QUERY',
+    formType: 'input',
+    span: 12,
+    ExtraKey: 'businessConfig',
+    disabled: false,
+  },
 ];
 
 // export const UserManageEquityExtraOptions:EquityRightsExtraEditType[] = [

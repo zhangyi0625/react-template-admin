@@ -60,7 +60,12 @@ const UserBaseInfo: React.FC<UserBaseInfoProps> = memo(
 
     const [formMaps] = useState(UserManageDetailEditForm);
 
-    const moduleKeys = ['REALTIME_RATE', 'CARGO_TRACE', 'CARRIER_SCHEDULE'];
+    const moduleKeys = [
+      'REALTIME_RATE',
+      'CARGO_TRACE',
+      'CARRIER_SCHEDULE',
+      'FREIGHT_BATCH_QUERY',
+    ];
 
     const [showRemark, setShowRemark] = useState<boolean>(false);
 
@@ -185,6 +190,12 @@ const UserBaseInfo: React.FC<UserBaseInfoProps> = memo(
         key: 'SMS_NOTIFY',
         value: `剩余${getEquityExtraIndexOf('SMS_NOTIFY')}次`,
         limit: getEquityExtraIndexOf('SMS_NOTIFY'),
+      },
+      {
+        label: '批量查询：',
+        key: 'FREIGHT_BATCH_QUERY',
+        value: `剩余${getEquityExtraIndexOf('FREIGHT_BATCH_QUERY')}条`,
+        limit: getEquityExtraIndexOf('FREIGHT_BATCH_QUERY'),
       },
     ];
 
